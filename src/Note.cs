@@ -6,6 +6,8 @@ namespace CSCommonSecrets
 {
 	public sealed class Note
 	{
+		public string noteTitle { get; set; } = string.Empty;
+
 		public string noteText { get; set; } = string.Empty;
 
 		public DateTimeOffset creationTime { get; set; } = DateTimeOffset.UtcNow;
@@ -19,13 +21,14 @@ namespace CSCommonSecrets
 			
 		}
 
-		public Note(string newNoteText)
+		public Note(string newNoteTitle, string newNoteText)
 		{
-			this.UpdateNote(newNoteText);
+			this.UpdateNote(newNoteTitle, newNoteText);
 		}
 
-		public void UpdateNote(string updatedNoteText)
+		public void UpdateNote(string newNoteTitle, string updatedNoteText)
 		{
+			this.noteTitle = newNoteTitle;
 			this.noteText = updatedNoteText;
 			this.modificationTime = DateTimeOffset.UtcNow;
 			this.CalculateAndUpdateChecksum();
@@ -40,7 +43,7 @@ namespace CSCommonSecrets
 		{
 			using (SHA256 mySHA256 = SHA256.Create())
 			{
-				string forCalculatingHash = $"{noteText}!{creationTime.ToUnixTimeSeconds()}!{modificationTime}";
+				string forCalculatingHash = $"{this.noteTitle}{this.noteText}{this.creationTime.ToUnixTimeSeconds()}{this.modificationTime.ToUnixTimeSeconds()}";
 				byte[] checksumBytes = mySHA256.ComputeHash(Encoding.UTF8.GetBytes(forCalculatingHash));
 				return Convert.ToBase64String(checksumBytes);
 			}
