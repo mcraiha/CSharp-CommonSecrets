@@ -4,46 +4,40 @@ using System.Security.Cryptography;
 
 namespace CSCommonSecrets
 {
-	public sealed class Note
+	public sealed class FileEntry
 	{
-		public string noteTitle { get; set; } = string.Empty;
+		public string filename { get; set; } = string.Empty;
+		public byte[] fileContent { get; set; } = new byte[0];
 
-		public string noteText { get; set; } = string.Empty;
+		private string checksum = string.Empty;
 
 		public DateTimeOffset creationTime { get; set; } = DateTimeOffset.UtcNow;
 
 		public DateTimeOffset modificationTime { get; set; } = DateTimeOffset.UtcNow;
 
-		private string checksum = string.Empty;
-
-		public Note()
+		public FileEntry()
 		{
 			
 		}
 
-		public Note(string newNoteTitle, string newNoteText)
+		public FileEntry(string newFilename, byte[] newFileContent)
 		{
-			this.UpdateNote(newNoteTitle, newNoteText);
+			this.UpdateFileEntry(newFilename, newFileContent);
 		}
 
-		public void UpdateNote(string updatedNoteTitle, string updatedNoteText)
+		public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent)
 		{
-			this.noteTitle = updatedNoteTitle;
-			this.noteText = updatedNoteText;
+			this.filename = updatedFilename;
+			this.fileContent = updatedFileContent;
 			this.modificationTime = DateTimeOffset.UtcNow;
 			this.CalculateAndUpdateChecksum();
-		}
-
-		public bool CheckIfChecksumMatchesContent()
-		{
-			return checksum == CalculateBase64Checksum();
 		}
 
 		private string CalculateBase64Checksum()
 		{
 			using (SHA256 mySHA256 = SHA256.Create())
 			{
-				string forCalculatingHash = $"{this.noteTitle}{this.noteText}{this.creationTime.ToUnixTimeSeconds()}{this.modificationTime.ToUnixTimeSeconds()}";
+				string forCalculatingHash = $"{this.filename}{Convert.ToBase64String(this.fileContent)}{this.creationTime.ToUnixTimeSeconds()}{this.modificationTime.ToUnixTimeSeconds()}";
 				byte[] checksumBytes = mySHA256.ComputeHash(Encoding.UTF8.GetBytes(forCalculatingHash));
 				return Convert.ToBase64String(checksumBytes);
 			}
@@ -54,5 +48,4 @@ namespace CSCommonSecrets
 			this.checksum = this.CalculateBase64Checksum();
 		}
 	}
-
 }

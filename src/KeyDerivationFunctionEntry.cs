@@ -16,6 +16,8 @@ namespace CSCommonSecrets
 
 		public string identifier;
 
+		private string checksum = string.Empty;
+
 		public KeyDerivationFunctionEntry(byte[] saltBytes, int iterationsCount, string id)
 		{
 			// TODO: Check salt bytes
