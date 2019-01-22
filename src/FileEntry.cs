@@ -15,6 +15,9 @@ namespace CSCommonSecrets
 
 		public DateTimeOffset modificationTime { get; set; } = DateTimeOffset.UtcNow;
 
+		/// <summary>
+		/// For deserialization purposes
+		/// </summary>
 		public FileEntry()
 		{
 			
@@ -31,6 +34,11 @@ namespace CSCommonSecrets
 			this.fileContent = updatedFileContent;
 			this.modificationTime = DateTimeOffset.UtcNow;
 			this.CalculateAndUpdateChecksum();
+		}
+
+		public string GetChecksumAsBase64()
+		{
+			return this.checksum;
 		}
 
 		private string CalculateBase64Checksum()
