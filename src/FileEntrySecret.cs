@@ -7,5 +7,13 @@ namespace CSCommonSecrets
 
 		public SymmetricKeyAlgorithm algorithm { get; set; }
 		private string checksum = string.Empty;
+
+		/// <summary>
+		/// For deserialization
+		/// </summary>
+		public FileEntrySecret()
+		{
+
+		}
 	}
 }

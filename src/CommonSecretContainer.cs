@@ -5,7 +5,7 @@ namespace CSCommonSecrets
 {
 	public sealed class CommonSecretsContainer
 	{
-		public readonly int currentVersionNumber = 1;
+		public static readonly int currentVersionNumber = 1;
 
 		public int version;
 
