@@ -16,6 +16,9 @@ namespace CSCommonSecrets
 
 		private string checksum = string.Empty;
 
+		/// <summary>
+		/// For deserialization purposes
+		/// </summary>
 		public Note()
 		{
 			
@@ -32,6 +35,11 @@ namespace CSCommonSecrets
 			this.noteText = updatedNoteText;
 			this.modificationTime = DateTimeOffset.UtcNow;
 			this.CalculateAndUpdateChecksum();
+		}
+
+		public string GetChecksumAsBase64()
+		{
+			return this.checksum;
 		}
 
 		public bool CheckIfChecksumMatchesContent()
