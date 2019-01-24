@@ -1,3 +1,6 @@
+using System;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace CSCommonSecrets
 {
@@ -8,31 +11,69 @@ namespace CSCommonSecrets
 
 	public sealed class KeyDerivationFunctionEntry
 	{
+		public static readonly int saltMinLengthInBytes = 16;
+
+		public static readonly int iterationsMin = 5000;
+
 		public KDFAlgorithm algorithm;
 
+		public KeyDerivationPrf pseudorandomFunction;
+
+		/// <summary>
+		/// Salt bytes
+		/// </summary>
 		public byte[] salt;
 
+		/// <summary>
+		/// How many iterations should be done
+		/// </summary>
 		public int iterations;
 
+		public int derivedKeyLengthInBytes;
+
+		/// <summary>
+		/// Identifier, e.g. "primary"
+		/// </summary>
 		public string identifier;
 
 		private string checksum = string.Empty;
 
-		public KeyDerivationFunctionEntry(byte[] saltBytes, int iterationsCount, string id)
+		public KeyDerivationFunctionEntry(KeyDerivationPrf prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id)
 		{
-			// TODO: Check salt bytes
+			// Check salt bytes
+			if (saltBytes == null)
+			{
+				throw new ArgumentNullException(nameof(saltBytes));
+			}
+			else if (saltBytes.Length < 16)
+			{
+				throw new ArgumentException($"{nameof(saltBytes)} should be at least {saltMinLengthInBytes} bytes!");
+			}
 
-			// TODO: Check iterations count
+			// Check iterations count
+			if (iterationsCount < iterationsMin)
+			{
+				throw new ArgumentException($"{nameof(iterationsCount)} should be at least {iterationsMin}!");
+			}
 
 			// TODO: Check ID
 
 			this.algorithm = KDFAlgorithm.PBKDF2;
+
+			this.pseudorandomFunction = prf;
 			
 			this.salt = saltBytes;
 
 			this.iterations = iterationsCount;
 
+			this.derivedKeyLengthInBytes = howManyBytesAreWanted;
+
 			this.identifier = id;
+		}
+
+		public byte[] GeneratePasswordBytes(string regularPassword)
+		{
+			return KeyDerivation.Pbkdf2(regularPassword, this.salt, this.pseudorandomFunction, this.iterations, this.derivedKeyLengthInBytes);
 		}
 	}
 
