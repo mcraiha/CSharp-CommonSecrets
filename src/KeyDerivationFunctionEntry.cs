@@ -29,6 +29,9 @@ namespace CSCommonSecrets
 		/// </summary>
 		public int iterations;
 
+		/// <summary>
+		/// How many bytes should be returned
+		/// </summary>
 		public int derivedKeyLengthInBytes;
 
 		/// <summary>
@@ -56,7 +59,11 @@ namespace CSCommonSecrets
 				throw new ArgumentException($"{nameof(iterationsCount)} should be at least {iterationsMin}!");
 			}
 
-			// TODO: Check ID
+			// Check ID
+			if (string.IsNullOrEmpty(id))
+			{
+				throw new ArgumentException($"{nameof(id)} should contain something!");
+			}
 
 			this.algorithm = KDFAlgorithm.PBKDF2;
 
