@@ -35,7 +35,7 @@ namespace CSCommonSecrets
 			}
 			else if (this.algorithm == SymmetricEncryptionAlgorithm.ChaCha20)
 			{
-				if (ChaCha20.allowedKeyLength != keySizeInBits)
+				if (ChaCha20.allowedKeyLength * 8 != keySizeInBits)
 				{
 					throw new ArgumentException($"{keySizeInBits} is not valid ChaCha20 key size!");
 				}
@@ -48,6 +48,32 @@ namespace CSCommonSecrets
 			}
 
 			this.keySizeInBits = keySizeInBits;
+		}
+
+		public byte[] EncryptBytes(byte[] bytesToEncrypt, byte[] key)
+		{
+			byte[] returnArray = new byte[bytesToEncrypt.Length];
+
+			if (this.algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
+			{
+				using (AES_CTR forEncrypting = new AES_CTR(key, this.settingsAES_CTR.initialCounter))
+				{
+					forEncrypting.EncryptBytes(returnArray, bytesToEncrypt, bytesToEncrypt.Length);
+				}
+			}
+			else if (this.algorithm == SymmetricEncryptionAlgorithm.ChaCha20)
+			{
+				using (ChaCha20 forEncrypting = new ChaCha20(key, this.settingsChaCha20.nonce, settingsChaCha20.counter))
+				{
+					forEncrypting.EncryptBytes(returnArray, bytesToEncrypt, bytesToEncrypt.Length);
+				}
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
+
+			return returnArray;
 		}
     }
 
