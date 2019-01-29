@@ -26,7 +26,7 @@ namespace CSCommonSecrets
 
 			if (this.algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
 			{
-				if (!Array.Exists(AES_CTR.allowedKeyLengths, allowed => allowed == keySizeInBits))
+				if (!Array.Exists(AES_CTR.allowedKeyLengths, allowed => allowed * 8 == keySizeInBits))
 				{
 					throw new ArgumentException($"{keySizeInBits} is not valid AES-CTR key size!");
 				}
