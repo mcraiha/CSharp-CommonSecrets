@@ -34,13 +34,13 @@ namespace Tests
 			LoginInformation li3 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newUsername: "dragon", newPassword: "password1");
 
 			// Act
-			string checksum1 = li1.GetChecksumAsBase64();
-			string checksum2 = li2.GetChecksumAsBase64();
-			string checksum3 = li3.GetChecksumAsBase64();
+			string checksum1 = li1.GetChecksumAsHex();
+			string checksum2 = li2.GetChecksumAsHex();
+			string checksum3 = li3.GetChecksumAsHex();
 
 			string updatedPassword = li3.password + "A";
 			li3.UpdatePassword(updatedPassword);
-			string checksum4 = li3.GetChecksumAsBase64();
+			string checksum4 = li3.GetChecksumAsHex();
 
 			// Assert
 			Assert.AreNotEqual(checksum1, checksum2);

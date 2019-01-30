@@ -86,30 +86,30 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
-		public string GetChecksumAsBase64()
+		public string GetChecksumAsHex()
 		{
 			return this.checksum;
 		}
 
 		public bool CheckIfChecksumMatchesContent()
 		{
-			return checksum == CalculateBase64Checksum();
+			return checksum == CalculateHexChecksum();
 		}
 
-		private string CalculateBase64Checksum()
+		private string CalculateHexChecksum()
 		{
-			using (SHA256 mySHA256 = SHA256.Create())
-			{
-				string iconAsBase64 = Convert.ToBase64String(icon);
-				string forCalculatingHash = $"{this.title}{this.url}{this.username}{this.password}{this.notes}{this.creationTime.ToUnixTimeSeconds()}{this.modificationTime.ToUnixTimeSeconds()}{iconAsBase64}{this.category}{this.tags}";
-				byte[] checksumBytes = mySHA256.ComputeHash(Encoding.UTF8.GetBytes(forCalculatingHash));
-				return Convert.ToBase64String(checksumBytes);
-			}
+			return ChecksumHelper.CalculateHexChecksum(Encoding.UTF8.GetBytes(this.title), Encoding.UTF8.GetBytes(this.url), 
+														Encoding.UTF8.GetBytes(this.username), Encoding.UTF8.GetBytes(this.password), 
+														Encoding.UTF8.GetBytes(this.notes), 
+														BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()),
+														BitConverter.GetBytes(this.modificationTime.ToUnixTimeSeconds()),
+														this.icon,
+														Encoding.UTF8.GetBytes(this.category), Encoding.UTF8.GetBytes(this.tags) );
 		}
 
 		private void CalculateAndUpdateChecksum()
 		{
-			this.checksum = this.CalculateBase64Checksum();
+			this.checksum = this.CalculateHexChecksum();
 		}
 	}
 
