@@ -36,24 +36,20 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
-		public string GetChecksumAsBase64()
+		public string GetChecksumAsHex()
 		{
 			return this.checksum;
 		}
 
-		private string CalculateBase64Checksum()
+		private string CalculateHexChecksum()
 		{
-			using (SHA256 mySHA256 = SHA256.Create())
-			{
-				string forCalculatingHash = $"{this.filename}{Convert.ToBase64String(this.fileContent)}{this.creationTime.ToUnixTimeSeconds()}{this.modificationTime.ToUnixTimeSeconds()}";
-				byte[] checksumBytes = mySHA256.ComputeHash(Encoding.UTF8.GetBytes(forCalculatingHash));
-				return Convert.ToBase64String(checksumBytes);
-			}
+			return ChecksumHelper.CalculateHexChecksum(Encoding.UTF8.GetBytes(this.filename), this.fileContent, BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()),
+														BitConverter.GetBytes(this.modificationTime.ToUnixTimeSeconds()));
 		}
 
 		private void CalculateAndUpdateChecksum()
 		{
-			this.checksum = this.CalculateBase64Checksum();
+			this.checksum = this.CalculateHexChecksum();
 		}
 	}
 }

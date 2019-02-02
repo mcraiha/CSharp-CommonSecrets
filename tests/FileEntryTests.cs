@@ -66,15 +66,15 @@ namespace Tests
 			FileEntry fe3 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
 
 			// Act
-			string checksum1 = fe1.GetChecksumAsBase64();
-			string checksum2 = fe2.GetChecksumAsBase64();
-			string checksum3 = fe3.GetChecksumAsBase64();
+			string checksum1 = fe1.GetChecksumAsHex();
+			string checksum2 = fe2.GetChecksumAsHex();
+			string checksum3 = fe3.GetChecksumAsHex();
 
 			byte[] newContent = new byte[fe3.fileContent.Length];
 			Array.Copy(fe3.fileContent, newContent, fe3.fileContent.Length);
 			newContent[0] = 127;
 			fe3.UpdateFileEntry(fe3.filename, newContent);
-			string checksum4 = fe3.GetChecksumAsBase64();
+			string checksum4 = fe3.GetChecksumAsHex();
 
 			// Assert
 			Assert.AreNotEqual(checksum1, checksum2);
