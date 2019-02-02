@@ -66,13 +66,13 @@ namespace Tests
 			Note note3 = new Note("Some topic here", "Some text here, yes.");
 
 			// Act
-			string checksum1 = note1.GetChecksumAsBase64();
-			string checksum2 = note2.GetChecksumAsBase64();
-			string checksum3 = note3.GetChecksumAsBase64();
+			string checksum1 = note1.GetChecksumAsHex();
+			string checksum2 = note2.GetChecksumAsHex();
+			string checksum3 = note3.GetChecksumAsHex();
 
 			string newContent = note3.noteText + "A";
 			note3.UpdateNote(note3.noteTitle, newContent);
-			string checksum4 = note3.GetChecksumAsBase64();
+			string checksum4 = note3.GetChecksumAsHex();
 
 			// Assert
 			Assert.AreNotEqual(checksum1, checksum2);

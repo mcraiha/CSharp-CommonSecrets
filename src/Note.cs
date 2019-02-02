@@ -1,6 +1,5 @@
 using System;
 using System.Text;
-using System.Security.Cryptography;
 
 namespace CSCommonSecrets
 {
@@ -37,29 +36,25 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
-		public string GetChecksumAsBase64()
+		public string GetChecksumAsHex()
 		{
 			return this.checksum;
 		}
 
 		public bool CheckIfChecksumMatchesContent()
 		{
-			return checksum == CalculateBase64Checksum();
+			return checksum == CalculateHexChecksum();
 		}
 
-		private string CalculateBase64Checksum()
+		private string CalculateHexChecksum()
 		{
-			using (SHA256 mySHA256 = SHA256.Create())
-			{
-				string forCalculatingHash = $"{this.noteTitle}{this.noteText}{this.creationTime.ToUnixTimeSeconds()}{this.modificationTime.ToUnixTimeSeconds()}";
-				byte[] checksumBytes = mySHA256.ComputeHash(Encoding.UTF8.GetBytes(forCalculatingHash));
-				return Convert.ToBase64String(checksumBytes);
-			}
+			return ChecksumHelper.CalculateHexChecksum(Encoding.UTF8.GetBytes(this.noteTitle), Encoding.UTF8.GetBytes(this.noteText), BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()),
+														BitConverter.GetBytes(this.modificationTime.ToUnixTimeSeconds()));
 		}
 
 		private void CalculateAndUpdateChecksum()
 		{
-			this.checksum = this.CalculateBase64Checksum();
+			this.checksum = this.CalculateHexChecksum();
 		}
 	}
 
