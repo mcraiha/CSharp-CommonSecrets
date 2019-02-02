@@ -75,6 +75,34 @@ namespace CSCommonSecrets
 
 			return returnArray;
 		}
+
+		public byte[] GetSettingsAsBytes()
+		{
+			byte[] returnValue = null;
+
+			if (this.algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
+			{
+				returnValue = ChecksumHelper.JoinByteArrays(
+										BitConverter.GetBytes((int)SymmetricEncryptionAlgorithm.AES_CTR), 
+										BitConverter.GetBytes(keySizeInBits), 
+										settingsAES_CTR.GetSettingsAsBytes()
+										);
+			}
+			else if (this.algorithm == SymmetricEncryptionAlgorithm.ChaCha20)
+			{
+				returnValue = ChecksumHelper.JoinByteArrays(
+										BitConverter.GetBytes((int)SymmetricEncryptionAlgorithm.ChaCha20), 
+										BitConverter.GetBytes(keySizeInBits), 
+										settingsChaCha20.GetSettingsAsBytes()
+										);
+			}
+			else
+			{
+				throw new NotImplementedException();
+			}
+
+			return returnValue;
+		}
     }
 
 	public sealed class SettingsAES_CTR
@@ -93,6 +121,12 @@ namespace CSCommonSecrets
 			}
 
 			this.initialCounter = initialCounter;
+		}
+
+		public byte[] GetSettingsAsBytes()
+		{
+			// Since AES_CTR settings only contains initial counter, return it
+			return this.initialCounter;
 		}
 	}
 
@@ -114,6 +148,12 @@ namespace CSCommonSecrets
 
 			this.nonce = nonce;
 			this.counter = counter;
+		}
+
+		public byte[] GetSettingsAsBytes()
+		{
+			// Join them together
+			return ChecksumHelper.JoinByteArrays(this.nonce, BitConverter.GetBytes(counter));
 		}
 	}
 }
