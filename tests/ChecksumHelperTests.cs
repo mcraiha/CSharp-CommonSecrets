@@ -1,5 +1,7 @@
 using NUnit.Framework;
-using CSCommonSecrets; 
+using CSCommonSecrets;
+using System.Collections;
+using System.Linq;
 
 namespace Tests
 {
@@ -38,6 +40,39 @@ namespace Tests
 			Assert.AreEqual(hex1, hex2);
 			Assert.AreNotEqual(hex2, hex3);
 			Assert.AreNotEqual(hex2, hex4);
+		}
+
+		[Test]
+		public void JoinByteArraysTest()
+		{
+			// Arrange
+			byte[] byteArray1 = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+			byte[] byteArray2 = new byte[] { 123, 255, 13, 3, 33 };
+			byte[] byteArray3 = new byte[0];
+			byte[] byteArray4 = new byte[] { 100, 100, 100, 100};
+
+			// Act
+			byte[] joined1 = ChecksumHelper.JoinByteArrays(byteArray1, byteArray2);
+
+			// Assert
+			Assert.IsNotNull(joined1);
+			Assert.AreEqual(byteArray1.Length + byteArray2.Length, joined1.Length);
+			Assert.IsTrue(CheckSequence(joined1, byteArray1));
+			Assert.IsTrue(CheckSequence(joined1, byteArray2));
+			Assert.IsFalse(CheckSequence(joined1, byteArray4));
+		}
+
+		private static bool CheckSequence(byte[] ba1, byte[] ba2)
+		{
+			for (int i = 0; i <= ba1.Count(); i++)
+			{
+				if (ba2.SequenceEqual(ba1.Skip(i).Take(ba2.Count())))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 }

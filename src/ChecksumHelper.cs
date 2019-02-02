@@ -17,7 +17,7 @@ namespace CSCommonSecrets
 			}
 		}
 
-		private static byte[] JoinByteArrays(params byte[][] arrays)
+		public static byte[] JoinByteArrays(params byte[][] arrays)
 		{
 			int joinedLength = 0;
 			foreach (byte[] byteArray in arrays)
