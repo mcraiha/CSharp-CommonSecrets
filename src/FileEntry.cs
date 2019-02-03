@@ -6,6 +6,8 @@ namespace CSCommonSecrets
 	public sealed class FileEntry
 	{
 		public string filename { get; set; } = string.Empty;
+		public static readonly string filenameKey = nameof(filename);
+
 		public byte[] fileContent { get; set; } = new byte[0];
 
 		private string checksum = string.Empty;
