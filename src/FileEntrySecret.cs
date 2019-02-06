@@ -19,10 +19,33 @@ namespace CSCommonSecrets
 
 		}
 
+		public FileEntrySecret(FileEntry fileEntry, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+		{
+			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+			{
+				{ FileEntry.filenameKey, fileEntry.filename },
+				{ FileEntry.fileContentKey, fileEntry.fileContent },
+				{ FileEntry.creationTimeKey, fileEntry.creationTime },
+				{ FileEntry.modificationTimeKey, fileEntry.modificationTime },
+			};
+
+			this.algorithm = algorithm;
+
+			// Create AUDALF payload from dictionary
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
+
+			// Encrypt the AUDALF payload with given algorithm
+			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+		}
+
+		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
+
 		public FileEntrySecret(Dictionary<string, object> fileEntryAsDictionary, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
+			this.algorithm = algorithm;
+
 			// Create AUDALF payload from dictionary
-			byte[] serializedBytes = AUDALF_Serialize.Serialize(fileEntryAsDictionary);
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(fileEntryAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
 
 			// Encrypt the AUDALF payload with given algorithm
 			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);

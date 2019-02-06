@@ -9,12 +9,16 @@ namespace CSCommonSecrets
 		public static readonly string filenameKey = nameof(filename);
 
 		public byte[] fileContent { get; set; } = new byte[0];
+		public static readonly string fileContentKey = nameof(fileContent);
 
-		private string checksum = string.Empty;
 
 		public DateTimeOffset creationTime { get; set; } = DateTimeOffset.UtcNow;
+		public static readonly string creationTimeKey = nameof(creationTime);
 
 		public DateTimeOffset modificationTime { get; set; } = DateTimeOffset.UtcNow;
+		public static readonly string modificationTimeKey = nameof(modificationTime);
+
+		private string checksum = string.Empty;
 
 		/// <summary>
 		/// For deserialization purposes
