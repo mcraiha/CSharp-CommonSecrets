@@ -55,21 +55,38 @@ namespace CSCommonSecrets
 
 		public string GetFilename(byte[] derivedPassword)
 		{
-			if (derivedPassword == null || derivedPassword.Length < 1)
+			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
+			return (string)fileEntryAsDictionary[FileEntry.filenameKey];
+		}
+
+		public byte[] GetFileContent(byte[] derivedPassword)
+		{
+			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
+			return (byte[])fileEntryAsDictionary[FileEntry.fileContentKey];
+		}
+
+		private Dictionary<string, object> GetFileEntryAsDictionary(byte[] derivedPassword)
+		{
+			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
+
+			if (!passwordCheck.valid)
 			{
-				// TODO: Throw here
+				throw passwordCheck.exception;
 			}
 
 			// Try to decrypt the binary
 			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
 
-			if (!AUDALF_Deserialize.IsAUDALF(decryptedAUDALF))
+			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
+
+			if (!audalfCheck.valid)
 			{
-				// TODO: exit here
+				throw audalfCheck.exception;
 			}
 
 			Dictionary<string, object> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF);
-			return (string)fileEntryAsDictionary[FileEntry.filenameKey];
+
+			return fileEntryAsDictionary;
 		}
 
 		#endregion // Common getters
