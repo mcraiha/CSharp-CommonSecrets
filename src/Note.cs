@@ -6,12 +6,16 @@ namespace CSCommonSecrets
 	public sealed class Note
 	{
 		public string noteTitle { get; set; } = string.Empty;
+		public static readonly string noteTitleKey = nameof(noteTitle);
 
 		public string noteText { get; set; } = string.Empty;
+		public static readonly string noteTextKey = nameof(noteText);
 
 		public DateTimeOffset creationTime { get; set; } = DateTimeOffset.UtcNow;
+		public static readonly string creationTimeKey = nameof(creationTime);
 
 		public DateTimeOffset modificationTime { get; set; } = DateTimeOffset.UtcNow;
+		public static readonly string modificationTimeKey = nameof(modificationTime);
 
 		private string checksum = string.Empty;
 
