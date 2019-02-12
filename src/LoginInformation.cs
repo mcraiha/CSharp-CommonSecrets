@@ -6,24 +6,34 @@ namespace CSCommonSecrets
 	public sealed class LoginInformation
 	{
 		public string title { get; set; } = string.Empty;
+		public static readonly string titleKey = nameof(title);
 
 		public string url { get; set; } = string.Empty;
+		public static readonly string urlKey = nameof(url);
 
 		public string username { get; set; } = string.Empty;
+		public static readonly string usernameKey = nameof(username);
 
 		public string password { get; set; } = string.Empty;
+		public static readonly string passwordKey = nameof(password);
 
 		public string notes { get; set; } = string.Empty;
+		public static readonly string notesKey = nameof(notes);
 
 		public DateTimeOffset creationTime { get; set; } = DateTimeOffset.UtcNow;
+		public static readonly string creationTimeKey = nameof(creationTime);
 
 		public DateTimeOffset modificationTime { get; set; } = DateTimeOffset.UtcNow;
+		public static readonly string modificationTimeKey = nameof(modificationTime);
 
 		public byte[] icon { get; set; } = new byte[0];
+		public static readonly string iconKey = nameof(icon);
 
 		public string category { get; set; } = string.Empty;
+		public static readonly string categoryKey = nameof(category);
 
 		public string tags { get; set; } = string.Empty;
+		public static readonly string tagsKey = nameof(tags);
 
 		private string checksum = string.Empty;
 
