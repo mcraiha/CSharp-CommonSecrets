@@ -51,6 +51,8 @@ namespace CSCommonSecrets
 			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
 		}
 
+		#region Common getters
+
 		public string GetNoteTitle(byte[] derivedPassword)
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
@@ -86,6 +88,9 @@ namespace CSCommonSecrets
 
 			return noteAsDictionary;
 		}
+
+		#endregion // Common getters
+
 
 		#region Checksum
 
