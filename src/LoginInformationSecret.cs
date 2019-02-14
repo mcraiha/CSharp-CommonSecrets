@@ -60,10 +60,28 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
-		public string GetNoteTitle(byte[] derivedPassword)
+		public string GetTitle(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.titleKey];
+		}
+
+		public string GetUrl(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (string)loginInformationAsDictionary[LoginInformation.urlKey];
+		}
+
+		public string GetUsername(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (string)loginInformationAsDictionary[LoginInformation.usernameKey];
+		}
+
+		public string GetPassword(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (string)loginInformationAsDictionary[LoginInformation.passwordKey];
 		}
 
 		private Dictionary<string, object> GetLoginInformationAsDictionary(byte[] derivedPassword)

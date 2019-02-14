@@ -12,6 +12,8 @@ namespace Tests
 			
 		}
 
+		private static readonly LoginInformation loginInformation = new LoginInformation("Wishlist for holidays", "https://example.com", "dragon6", "password1");
+
 		[Test]
 		public void ConstructorTest()
 		{
@@ -48,21 +50,77 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			string title = "Wishlist for holidays";
-			string url = "https://example.com";
-			string username = "dragon6";
-			string password = "password1";
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
 
-			LoginInformation loginInformation = new LoginInformation(title, url, username, password);
+			// Act
+			string loginInformationTitle = loginInformationSecret.GetTitle(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle));
+			Assert.AreEqual(loginInformation.title, loginInformationTitle);
+		}
+
+		[Test]
+		public void GetLoginInformationUrlTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 88, 9, 107, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xf5, 0xf6, 0xcc, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 192, settingsAES_CTR);
 
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
 
-
 			// Act
-			string loginInformationTitle = loginInformationSecret.GetNoteTitle(derivedKey);
+			string loginInformationUrl = loginInformationSecret.GetUrl(derivedKey);
 
 			// Assert
-			Assert.AreEqual(title, loginInformationTitle);
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUrl));
+			Assert.AreEqual(loginInformation.url, loginInformationUrl);
+		}
+
+		[Test]
+		public void GetLoginInformationUsernameTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 66, 27, 83, 9, 10, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0x30, 0x41, 0x5b, 0x63, 0xaa, 0xf5, 0xf6, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+
+			// Act
+			string loginInformationUsername = loginInformationSecret.GetUsername(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUsername));
+			Assert.AreEqual(loginInformation.username, loginInformationUsername);
+		}
+
+		[Test]
+		public void GetLoginInformationPasswordTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 83, 9, 110, 211, 12, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xc5, 0xd6, 0xbb, 0xf8, 0x19, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+
+			// Act
+			string loginInformationPassword = loginInformationSecret.GetPassword(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationPassword));
+			Assert.AreEqual(loginInformation.password, loginInformationPassword);
 		}
 	}
 }
