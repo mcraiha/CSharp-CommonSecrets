@@ -55,6 +55,11 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		public LoginInformation ShallowCopy()
+		{
+			return (LoginInformation) this.MemberwiseClone();
+		}
+
 		public void UpdateTitle(string updatedTitle)
 		{
 			this.title = updatedTitle;
