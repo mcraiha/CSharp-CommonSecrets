@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using CSCommonSecrets;
+using System;
+using System.Threading;
 using System.Collections.Generic;
 
 namespace Tests
@@ -145,6 +147,51 @@ namespace Tests
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationNotes));
 			Assert.AreEqual(loginInformationModified.notes, loginInformationNotes);
+		}
+
+		[Test]
+		public void GetCreationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 68, 78, 83, 9, 110, 211, 128, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xc5, 0xd6, 0xbb, 0xf8, 0x19, 0x11, 0xfb, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+
+			// Act
+			DateTimeOffset loginInformationCreationTime = loginInformationSecret.GetCreationTime(derivedKey);
+
+			// Assert
+			Assert.AreEqual(loginInformation.creationTime.ToUnixTimeSeconds(), loginInformationCreationTime.ToUnixTimeSeconds());
+		}
+
+		[Test]
+		public void GetModificationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 68, 78, 83, 9, 110, 211, 128, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xc5, 0xd6, 0xbb, 0xf8, 0x19, 0x11, 0xfb, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
+			Thread.Sleep(60);
+			loginInformationModified.UpdateNotes("Some text to here so modification time triggers");
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
+
+			// Act
+			DateTimeOffset loginInformationModificationTime = loginInformationSecret.GetModificationTime(derivedKey);
+
+			// Assert
+			Assert.IsTrue(loginInformationModified.modificationTime > loginInformationModified.creationTime);
+			Assert.AreEqual(loginInformationModified.modificationTime.ToUnixTimeSeconds(), loginInformationModificationTime.ToUnixTimeSeconds());
 		}
 	}
 }

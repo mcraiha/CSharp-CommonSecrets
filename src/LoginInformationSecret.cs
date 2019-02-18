@@ -90,6 +90,23 @@ namespace CSCommonSecrets
 			return (string)loginInformationAsDictionary[LoginInformation.notesKey];
 		}
 
+		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (DateTimeOffset)loginInformationAsDictionary[LoginInformation.creationTimeKey];
+		}
+
+		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (DateTimeOffset)loginInformationAsDictionary[LoginInformation.modificationTimeKey];
+		}
+
+		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
+		{
+			wantedDateTimeType = typeof(DateTimeOffset)
+		};
+
 		private Dictionary<string, object> GetLoginInformationAsDictionary(byte[] derivedPassword)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
@@ -109,7 +126,7 @@ namespace CSCommonSecrets
 				throw audalfCheck.exception;
 			}
 
-			Dictionary<string, object> loginInformationAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF);
+			Dictionary<string, object> loginInformationAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 			return loginInformationAsDictionary;
 		}
