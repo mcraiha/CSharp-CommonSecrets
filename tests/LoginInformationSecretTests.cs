@@ -122,5 +122,29 @@ namespace Tests
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationPassword));
 			Assert.AreEqual(loginInformation.password, loginInformationPassword);
 		}
+
+		[Test]
+		public void GetLoginInformationNotesTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 68, 78, 83, 9, 110, 211, 128, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xc5, 0xd6, 0xbb, 0xf8, 0x19, 0x11, 0xfb, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
+			loginInformationModified.UpdateNotes("Nice story about how I found the missing tapes of ...");
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
+
+			// Act
+			string loginInformationNotes = loginInformationSecret.GetNotes(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationNotes));
+			Assert.AreEqual(loginInformationModified.notes, loginInformationNotes);
+		}
 	}
 }

@@ -84,6 +84,12 @@ namespace CSCommonSecrets
 			return (string)loginInformationAsDictionary[LoginInformation.passwordKey];
 		}
 
+		public string GetNotes(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (string)loginInformationAsDictionary[LoginInformation.notesKey];
+		}
+
 		private Dictionary<string, object> GetLoginInformationAsDictionary(byte[] derivedPassword)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
