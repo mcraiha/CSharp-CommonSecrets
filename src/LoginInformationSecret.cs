@@ -114,6 +114,12 @@ namespace CSCommonSecrets
 			return (string)loginInformationAsDictionary[LoginInformation.categoryKey];
 		}
 
+		public string GetTags(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (string)loginInformationAsDictionary[LoginInformation.tagsKey];
+		}
+
 		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
 		{
 			wantedDateTimeType = typeof(DateTimeOffset)

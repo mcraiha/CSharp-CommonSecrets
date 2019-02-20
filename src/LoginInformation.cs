@@ -114,6 +114,13 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		public void UpdateTags(string updatedTags)
+		{
+			this.tags = updatedTags;
+
+			this.CalculateAndUpdateChecksum();
+		}
+
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;

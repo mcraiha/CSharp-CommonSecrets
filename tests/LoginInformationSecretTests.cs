@@ -245,5 +245,29 @@ namespace Tests
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationCategory));
 			Assert.AreEqual(loginInformationModified.category, loginInformationCategory);
 		}
+
+		[Test]
+		public void GetLoginInformationTagsTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 75, 168, 78, 83, 91, 110, 221, 18, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xfd, 0xaa, 0xc5, 0xd5, 0xb5, 0x58, 0x59, 0x15, 0xfb, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+
+			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
+			loginInformationModified.UpdateTags("personal");
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
+
+			// Act
+			string loginInformationTags = loginInformationSecret.GetTags(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTags));
+			Assert.AreEqual(loginInformationModified.tags, loginInformationTags);
+		}
 	}
 }
