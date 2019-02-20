@@ -181,7 +181,7 @@ namespace Tests
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
 			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
-			Thread.Sleep(60);
+			Thread.Sleep(100);
 			loginInformationModified.UpdateNotes("Some text to here so modification time triggers");
 
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
