@@ -41,6 +41,14 @@ namespace CSCommonSecrets
 
 		private string checksum = string.Empty;
 
+		/// <summary>
+		/// For (de)serialization
+		/// </summary>
+		public KeyDerivationFunctionEntry()
+		{
+
+		}
+
 		public KeyDerivationFunctionEntry(KeyDerivationPrf prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id)
 		{
 			// Check salt bytes

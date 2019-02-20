@@ -20,6 +20,14 @@ namespace CSCommonSecrets
 
 		public SettingsChaCha20 settingsChaCha20 { get; set; }
 
+		/// <summary>
+		/// For (de)serialization
+		/// </summary>
+		public SymmetricKeyAlgorithm()
+		{
+
+		}
+
 		public SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm algorithm, int keySizeInBits, object settings)
 		{
 			this.algorithm = algorithm;
@@ -109,6 +117,14 @@ namespace CSCommonSecrets
 	{
 		public byte[] initialCounter { get; set; }
 
+		/// <summary>
+		/// For (de)serialization
+		/// </summary>
+		public SettingsAES_CTR()
+		{
+
+		}
+
 		public SettingsAES_CTR(byte[] initialCounter)
 		{
 			if (initialCounter == null)
@@ -134,6 +150,14 @@ namespace CSCommonSecrets
 	{
 		public byte[] nonce { get; set; }
 		public uint counter { get; set; }
+
+		/// <summary>
+		/// For (de)serialization
+		/// </summary>
+		public SettingsChaCha20()
+		{
+
+		}
 
 		public SettingsChaCha20(byte[] nonce, uint counter)
 		{
