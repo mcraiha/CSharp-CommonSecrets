@@ -193,5 +193,33 @@ namespace Tests
 			Assert.IsTrue(loginInformationModified.modificationTime > loginInformationModified.creationTime);
 			Assert.AreEqual(loginInformationModified.modificationTime.ToUnixTimeSeconds(), loginInformationModificationTime.ToUnixTimeSeconds());
 		}
+
+		[Test]
+		public void GetLoginInformationIconTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 181, 229, 31, 44, 55, 61, 7, 8, 9, 110, 211, 128, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0x10, 0x21, 0x3b, 0xf3, 0xaa, 0xc5, 0xd6, 0xbb, 0xf8, 0x19, 0x11, 0xfb, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			Random rng = new Random(Seed: 1337);
+			byte[] iconBytes = new byte[2048];
+			rng.NextBytes(iconBytes);
+
+			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
+			loginInformationModified.UpdateIcon(iconBytes);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
+
+			// Act
+			byte[] loginInformationIcon = loginInformationSecret.GetIcon(derivedKey);
+
+			// Assert
+			Assert.IsNotNull(loginInformationIcon);
+			CollectionAssert.AreEqual(iconBytes, loginInformationIcon);
+		}
 	}
 }

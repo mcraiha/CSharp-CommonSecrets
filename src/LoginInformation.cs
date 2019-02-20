@@ -100,6 +100,13 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		public void UpdateIcon(byte[] updatedIcon)
+		{
+			this.icon = updatedIcon;
+
+			this.CalculateAndUpdateChecksum();
+		}
+
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;

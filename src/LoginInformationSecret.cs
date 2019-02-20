@@ -102,6 +102,12 @@ namespace CSCommonSecrets
 			return (DateTimeOffset)loginInformationAsDictionary[LoginInformation.modificationTimeKey];
 		}
 
+		public byte[] GetIcon(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (byte[])loginInformationAsDictionary[LoginInformation.iconKey];
+		}
+
 		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
 		{
 			wantedDateTimeType = typeof(DateTimeOffset)
