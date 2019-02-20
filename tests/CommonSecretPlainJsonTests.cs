@@ -25,6 +25,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsNotNull(json);
+			Assert.IsTrue(json.Contains("version"));
 		}
 	}
 }
