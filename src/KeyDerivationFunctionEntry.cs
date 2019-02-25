@@ -13,7 +13,7 @@ namespace CSCommonSecrets
 	{
 		public static readonly int saltMinLengthInBytes = 16;
 
-		public static readonly int iterationsMin = 5000;
+		public static readonly int iterationsMin = 4000;
 
 		public KDFAlgorithm algorithm;
 
