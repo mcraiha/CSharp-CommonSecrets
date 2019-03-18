@@ -1,6 +1,7 @@
 using System;
 using CS_AES_CTR;
 using CSChaCha20;
+using System.Security.Cryptography;
 
 namespace CSCommonSecrets
 {
@@ -197,6 +198,20 @@ namespace CSCommonSecrets
 		{
 			// Join them together
 			return ChecksumHelper.JoinByteArrays(this.nonce, BitConverter.GetBytes(counter));
+		}
+
+		public static SettingsChaCha20 CreateWithCryptographicRandomNumbers()
+		{
+			byte[] nonce = new byte[ChaCha20.allowedNonceLength];
+			byte[] uintBytes = new byte[4];
+
+			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+			{
+				rngCsp.GetBytes(nonce, 0, 8);
+				rngCsp.GetBytes(uintBytes, 0, 2);
+			}
+
+			return new SettingsChaCha20(nonce, BitConverter.ToUInt32(uintBytes, 0)); 
 		}
 	}
 }

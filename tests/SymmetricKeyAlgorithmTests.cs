@@ -185,5 +185,27 @@ namespace Tests
 			CollectionAssert.AreEqual(expected2, settingsChaCha20_2.nonce);
 			CollectionAssert.AreEqual(expected3, settingsChaCha20_3.nonce);
 		}
+
+		[Test]
+		public void CreateWithCryptographicRandomNumbersTest()
+		{
+			// Arrange
+			SettingsChaCha20 settingsChaCha20_1 = SettingsChaCha20.CreateWithCryptographicRandomNumbers();
+			SettingsChaCha20 settingsChaCha20_2 = SettingsChaCha20.CreateWithCryptographicRandomNumbers();
+			SettingsChaCha20 settingsChaCha20_3 = SettingsChaCha20.CreateWithCryptographicRandomNumbers();
+			SettingsChaCha20 settingsChaCha20_4 = SettingsChaCha20.CreateWithCryptographicRandomNumbers();
+
+			// Act
+
+			// Assert
+			CollectionAssert.AreNotEqual(settingsChaCha20_1.nonce, settingsChaCha20_2.nonce);
+			CollectionAssert.AreNotEqual(settingsChaCha20_1.nonce, settingsChaCha20_3.nonce);
+			CollectionAssert.AreNotEqual(settingsChaCha20_1.nonce, settingsChaCha20_4.nonce);
+			CollectionAssert.AreNotEqual(settingsChaCha20_2.nonce, settingsChaCha20_3.nonce);
+			CollectionAssert.AreNotEqual(settingsChaCha20_2.nonce, settingsChaCha20_4.nonce);
+			CollectionAssert.AreNotEqual(settingsChaCha20_3.nonce, settingsChaCha20_4.nonce);
+
+			Assert.AreNotEqual(0, settingsChaCha20_1.counter + settingsChaCha20_2.counter + settingsChaCha20_3.counter + settingsChaCha20_4.counter);
+		}
 	}
 }
