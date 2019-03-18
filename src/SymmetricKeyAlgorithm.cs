@@ -111,7 +111,7 @@ namespace CSCommonSecrets
 
 			return returnValue;
 		}
-    }
+  }
 
 	public sealed class SettingsAES_CTR
 	{
@@ -172,6 +172,25 @@ namespace CSCommonSecrets
 
 			this.nonce = nonce;
 			this.counter = counter;
+		}
+
+		public void IncreaseNonce()
+		{
+			int index = 0;
+			bool done = false;
+			while (!done && index < this.nonce.Length)
+			{
+				if (this.nonce[index] < byte.MaxValue)
+				{
+					this.nonce[index]++;
+					done = true;
+				}
+				else
+				{
+					this.nonce[index] = 0;
+				}
+				index++;
+			}
 		}
 
 		public byte[] GetSettingsAsBytes()
