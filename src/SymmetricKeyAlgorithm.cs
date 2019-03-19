@@ -145,6 +145,18 @@ namespace CSCommonSecrets
 			// Since AES_CTR settings only contains initial counter, return it
 			return this.initialCounter;
 		}
+
+		public static SettingsAES_CTR CreateWithCryptographicRandomNumbers()
+		{
+			byte[] initialCounter = new byte[AES_CTR.allowedCounterLength];
+
+			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+			{
+				rngCsp.GetBytes(initialCounter);
+			}
+
+			return new SettingsAES_CTR(initialCounter); 
+		}
 	}
 
 	public sealed class SettingsChaCha20

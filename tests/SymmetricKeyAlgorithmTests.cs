@@ -187,7 +187,7 @@ namespace Tests
 		}
 
 		[Test]
-		public void CreateWithCryptographicRandomNumbersTest()
+		public void CreateSettingsChaCha20WithCryptographicRandomNumbersTest()
 		{
 			// Arrange
 			SettingsChaCha20 settingsChaCha20_1 = SettingsChaCha20.CreateWithCryptographicRandomNumbers();
@@ -206,6 +206,26 @@ namespace Tests
 			CollectionAssert.AreNotEqual(settingsChaCha20_3.nonce, settingsChaCha20_4.nonce);
 
 			Assert.AreNotEqual(0, settingsChaCha20_1.counter + settingsChaCha20_2.counter + settingsChaCha20_3.counter + settingsChaCha20_4.counter);
+		}
+
+		[Test]
+		public void CreateSettingsAES_CTRWithCryptographicRandomNumbersTest()
+		{
+			// Arrange
+			SettingsAES_CTR settingsAES_CTR_1 = SettingsAES_CTR.CreateWithCryptographicRandomNumbers();
+			SettingsAES_CTR settingsAES_CTR_2 = SettingsAES_CTR.CreateWithCryptographicRandomNumbers();
+			SettingsAES_CTR settingsAES_CTR_3 = SettingsAES_CTR.CreateWithCryptographicRandomNumbers();
+			SettingsAES_CTR settingsAES_CTR_4 = SettingsAES_CTR.CreateWithCryptographicRandomNumbers();
+
+			// Act
+
+			// Assert
+			CollectionAssert.AreNotEqual(settingsAES_CTR_1.initialCounter, settingsAES_CTR_2.initialCounter);
+			CollectionAssert.AreNotEqual(settingsAES_CTR_1.initialCounter, settingsAES_CTR_3.initialCounter);
+			CollectionAssert.AreNotEqual(settingsAES_CTR_1.initialCounter, settingsAES_CTR_4.initialCounter);
+			CollectionAssert.AreNotEqual(settingsAES_CTR_2.initialCounter, settingsAES_CTR_3.initialCounter);
+			CollectionAssert.AreNotEqual(settingsAES_CTR_2.initialCounter, settingsAES_CTR_4.initialCounter);
+			CollectionAssert.AreNotEqual(settingsAES_CTR_3.initialCounter, settingsAES_CTR_4.initialCounter);
 		}
 	}
 }
