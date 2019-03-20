@@ -54,5 +54,34 @@ namespace Tests
 			Assert.AreEqual(filename1, cscDerialized.files[0].filename);
 			CollectionAssert.AreEqual(file1Content, cscDerialized.files[0].fileContent);
 		}
+
+		[Test]
+		public void RoundTripComplexTest()
+		{
+			// Arrange
+			CommonSecretsContainer csc = new CommonSecretsContainer();
+
+			int notesAmount = 17;
+
+			for (int i = 0; i < notesAmount; i++)
+			{
+				csc.notes.Add(ContentGenerator.GenerateRandomNote());
+			}
+
+			//int notesSecretAmount = 11;
+
+			// Act
+			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
+
+			CommonSecretsContainer cscDerialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
+
+			// Assert
+			Assert.AreEqual(notesAmount, csc.notes.Count);
+			Assert.AreEqual(notesAmount, cscDerialized.notes.Count);
+			for (int i = 0; i < notesAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreNotesEqual(csc.notes[i], cscDerialized.notes[i]));
+			}
+		}
 	}
 }
