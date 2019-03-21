@@ -79,5 +79,37 @@ namespace Tests
 			CollectionAssert.AreEqual(bytesShouldBe1, bytes1);
 			CollectionAssert.AreEqual(bytesShouldBe2, bytes2);
 		}
+
+		[Test]
+		public void CreateHMACSHA256KeyDerivationFunctionEntryTest()
+		{
+			// Arrange
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry("does not matter");
+			string password = "tooeasy";
+
+			// Act
+			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
+
+			// Assert
+			Assert.GreaterOrEqual(kdfe.iterations, KeyDerivationFunctionEntry.iterationsMin);
+			Assert.AreEqual(32, derivedPassword.Length);
+			Assert.Greater(CalculateEntropy.ShannonEntropy(derivedPassword), 4.0);
+		}
+
+		[Test]
+		public void CreateHMACSHA512KeyDerivationFunctionEntryTest()
+		{
+			// Arrange
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA512KeyDerivationFunctionEntry("does not matter anymore");
+			string password = "tooeasypart2";
+
+			// Act
+			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
+
+			// Assert
+			Assert.GreaterOrEqual(kdfe.iterations, KeyDerivationFunctionEntry.iterationsMin);
+			Assert.AreEqual(64, derivedPassword.Length);
+			Assert.Greater(CalculateEntropy.ShannonEntropy(derivedPassword), 4.0);
+		}
 	}
 }

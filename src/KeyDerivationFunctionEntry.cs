@@ -15,6 +15,8 @@ namespace CSCommonSecrets
 
 		public static readonly int iterationsMin = 4000;
 
+		public static readonly int suggestedMinIterationsCount = 100_000;
+
 		public KDFAlgorithm algorithm;
 
 		public KeyDerivationPrf pseudorandomFunction;
@@ -89,6 +91,44 @@ namespace CSCommonSecrets
 		public byte[] GeneratePasswordBytes(string regularPassword)
 		{
 			return KeyDerivation.Pbkdf2(regularPassword, this.salt, this.pseudorandomFunction, this.iterations, this.derivedKeyLengthInBytes);
+		}
+
+		public static KeyDerivationFunctionEntry CreateHMACSHA256KeyDerivationFunctionEntry(string id)
+		{
+			int iterationsToDo = suggestedMinIterationsCount;
+			byte[] salt = new byte[saltMinLengthInBytes];
+			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+			{
+				// First add some iterations
+				byte[] fourBytes = new byte[4];
+				rngCsp.GetBytes(fourBytes);
+				iterationsToDo += (int)(BitConverter.ToUInt32(fourBytes, 0) % 4096);
+
+				// Then fill salt
+				rngCsp.GetBytes(salt);
+			}
+
+			int neededBytes = 32;
+			return new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, salt, iterationsToDo, neededBytes, id);
+		}
+
+		public static KeyDerivationFunctionEntry CreateHMACSHA512KeyDerivationFunctionEntry(string id)
+		{
+			int iterationsToDo = suggestedMinIterationsCount;
+			byte[] salt = new byte[saltMinLengthInBytes];
+			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
+			{
+				// First add some iterations
+				byte[] fourBytes = new byte[4];
+				rngCsp.GetBytes(fourBytes);
+				iterationsToDo += (int)(BitConverter.ToUInt32(fourBytes, 0) % 4096);
+
+				// Then fill salt
+				rngCsp.GetBytes(salt);
+			}
+
+			int neededBytes = 64;
+			return new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA512, salt, iterationsToDo, neededBytes, id);
 		}
 	}
 
