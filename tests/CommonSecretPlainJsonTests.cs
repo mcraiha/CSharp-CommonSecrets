@@ -61,16 +61,29 @@ namespace Tests
 			// Arrange
 			CommonSecretsContainer csc = new CommonSecretsContainer();
 
+			string password = "dragon667";
+			byte[] initialCounter1 = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+			SettingsAES_CTR settingsAES_CTR1 = new SettingsAES_CTR(initialCounter1);
+			SymmetricKeyAlgorithm skaAES = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR1);
+
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry("does not matter");
+
 			int notesAmount = 17;
+			int notesSecretAmount = 11;
+
+			// Act
+			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 			for (int i = 0; i < notesAmount; i++)
 			{
 				csc.notes.Add(ContentGenerator.GenerateRandomNote());
 			}
 
-			//int notesSecretAmount = 11;
+			for (int i = 0; i < notesSecretAmount; i++)
+			{
+				csc.noteSecrets.Add(new NoteSecret(ContentGenerator.GenerateRandomNote(), skaAES, derivedPassword));
+			}
 
-			// Act
 			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
 
 			CommonSecretsContainer cscDerialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
@@ -81,6 +94,13 @@ namespace Tests
 			for (int i = 0; i < notesAmount; i++)
 			{
 				Assert.IsTrue(ComparisonHelper.AreNotesEqual(csc.notes[i], cscDerialized.notes[i]));
+			}
+
+			Assert.AreEqual(notesSecretAmount, csc.noteSecrets.Count);
+			Assert.AreEqual(notesSecretAmount, cscDerialized.noteSecrets.Count);
+			for (int i = 0; i < notesSecretAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreNotesSecretEqual(csc.noteSecrets[i], cscDerialized.noteSecrets[i]));
 			}
 		}
 	}
