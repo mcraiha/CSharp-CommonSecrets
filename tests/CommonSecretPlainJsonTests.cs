@@ -39,20 +39,20 @@ namespace Tests
 			csc.notes.Add(new Note(noteTitle1, noteText1));
 
 			string filename1 = "test.txt";
-			byte[] file1Content = new byte[] { 1, 34, 46, 47,24, 33, 4};
+			byte[] file1Content = new byte[] { 1, 34, 46, 47, 24, 33, 4};
 			csc.files.Add(new FileEntry(filename1, file1Content));
 
 			// Act
 			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
 
-			CommonSecretsContainer cscDerialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
+			CommonSecretsContainer cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
 
 			// Assert
-			Assert.AreEqual(noteTitle1, cscDerialized.notes[0].noteTitle);
-			Assert.AreEqual(noteText1, cscDerialized.notes[0].noteText);
+			Assert.AreEqual(noteTitle1, cscDeserialized.notes[0].noteTitle);
+			Assert.AreEqual(noteText1, cscDeserialized.notes[0].noteText);
 
-			Assert.AreEqual(filename1, cscDerialized.files[0].filename);
-			CollectionAssert.AreEqual(file1Content, cscDerialized.files[0].fileContent);
+			Assert.AreEqual(filename1, cscDeserialized.files[0].filename);
+			CollectionAssert.AreEqual(file1Content, cscDeserialized.files[0].fileContent);
 		}
 
 		[Test]
@@ -86,21 +86,21 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
 
-			CommonSecretsContainer cscDerialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
+			CommonSecretsContainer cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
 
 			// Assert
 			Assert.AreEqual(notesAmount, csc.notes.Count);
-			Assert.AreEqual(notesAmount, cscDerialized.notes.Count);
+			Assert.AreEqual(notesAmount, cscDeserialized.notes.Count);
 			for (int i = 0; i < notesAmount; i++)
 			{
-				Assert.IsTrue(ComparisonHelper.AreNotesEqual(csc.notes[i], cscDerialized.notes[i]));
+				Assert.IsTrue(ComparisonHelper.AreNotesEqual(csc.notes[i], cscDeserialized.notes[i]));
 			}
 
 			Assert.AreEqual(notesSecretAmount, csc.noteSecrets.Count);
-			Assert.AreEqual(notesSecretAmount, cscDerialized.noteSecrets.Count);
+			Assert.AreEqual(notesSecretAmount, cscDeserialized.noteSecrets.Count);
 			for (int i = 0; i < notesSecretAmount; i++)
 			{
-				Assert.IsTrue(ComparisonHelper.AreNotesSecretEqual(csc.noteSecrets[i], cscDerialized.noteSecrets[i]));
+				Assert.IsTrue(ComparisonHelper.AreNotesSecretEqual(csc.noteSecrets[i], cscDeserialized.noteSecrets[i]));
 			}
 		}
 	}
