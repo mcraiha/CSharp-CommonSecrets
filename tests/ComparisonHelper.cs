@@ -2,6 +2,7 @@ using CSCommonSecrets;
 using System;
 using System.IO;
 using System.Text;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Tests
@@ -12,6 +13,16 @@ namespace Tests
 		public static bool AreNotesEqual(Note note1, Note note2)
 		{
 			return note1.noteTitle == note2.noteTitle && note1.noteText == note2.noteText;
+		}
+
+		public static bool AreNotesSecretEqual(NoteSecret noteSecret1, NoteSecret noteSecret2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(noteSecret1.audalfData, noteSecret2.audalfData) && AreSymmetricKeyAlgorithmsEqual(noteSecret1.algorithm, noteSecret2.algorithm);
+		}
+
+		public static bool AreSymmetricKeyAlgorithmsEqual(SymmetricKeyAlgorithm symmetricKeyAlgorithm1, SymmetricKeyAlgorithm symmetricKeyAlgorithm2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(symmetricKeyAlgorithm1.GetSettingsAsBytes(), symmetricKeyAlgorithm2.GetSettingsAsBytes());
 		}
 	}
 
