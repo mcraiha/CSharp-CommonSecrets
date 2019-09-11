@@ -56,7 +56,7 @@ namespace Tests
 			FileEntrySecret fes = new FileEntrySecret(fe, skaAES_CTR, derivedKey);
 
 			// Act
-			string rtFilename = fes.GetFilename(derivedKey);
+			string rtFilename = System.Text.Encoding.UTF8.GetString(fes.GetFilenameUTF8Bytes(derivedKey));
 
 			// Assert
 			Assert.AreEqual(filename, rtFilename);

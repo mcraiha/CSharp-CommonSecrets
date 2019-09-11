@@ -50,7 +50,7 @@ namespace Tests
 
 			// Act
 			var modificationTime1 = fe.modificationTime;
-			fe.UpdateFileEntry(fe.filename, new byte[] { });
+			fe.UpdateFileEntry(fe.GetFilename(), new byte[] { });
 			var modificationTime2 = fe.modificationTime;
 
 			// Assert
@@ -73,7 +73,7 @@ namespace Tests
 			byte[] newContent = new byte[fe3.fileContent.Length];
 			Array.Copy(fe3.fileContent, newContent, fe3.fileContent.Length);
 			newContent[0] = 127;
-			fe3.UpdateFileEntry(fe3.filename, newContent);
+			fe3.UpdateFileEntry(fe3.GetFilename(), newContent);
 			string checksum4 = fe3.GetChecksumAsHex();
 
 			// Assert

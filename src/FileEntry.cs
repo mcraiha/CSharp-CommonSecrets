@@ -5,7 +5,8 @@ namespace CSCommonSecrets
 {
 	public sealed class FileEntry
 	{
-		public string filename { get; set; } = string.Empty;
+		// Keep filename as byte array so that special characters won't cause issues
+		public byte[] filename { get; set; } = new byte[0];
 		public static readonly string filenameKey = nameof(filename);
 
 		public byte[] fileContent { get; set; } = new byte[0];
@@ -35,11 +36,17 @@ namespace CSCommonSecrets
 
 		public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent)
 		{
-			this.filename = updatedFilename;
+			this.filename = Encoding.UTF8.GetBytes(updatedFilename);
 			this.fileContent = updatedFileContent;
 			this.modificationTime = DateTimeOffset.UtcNow;
 			this.CalculateAndUpdateChecksum();
 		}
+
+		public string GetFilename()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.filename);
+		}
+
 
 		public string GetChecksumAsHex()
 		{
@@ -48,7 +55,7 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(Encoding.UTF8.GetBytes(this.filename), this.fileContent, BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()),
+			return ChecksumHelper.CalculateHexChecksum(this.filename, this.fileContent, BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()),
 														BitConverter.GetBytes(this.modificationTime.ToUnixTimeSeconds()));
 		}
 

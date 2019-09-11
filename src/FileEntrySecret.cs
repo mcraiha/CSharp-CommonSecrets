@@ -53,10 +53,10 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
-		public string GetFilename(byte[] derivedPassword)
+		public byte[] GetFilenameUTF8Bytes(byte[] derivedPassword)
 		{
 			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
-			return (string)fileEntryAsDictionary[FileEntry.filenameKey];
+			return (byte[])fileEntryAsDictionary[FileEntry.filenameKey];
 		}
 
 		public byte[] GetFileContent(byte[] derivedPassword)
