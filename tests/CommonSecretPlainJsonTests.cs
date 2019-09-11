@@ -34,20 +34,33 @@ namespace Tests
 			// Arrange
 			CommonSecretsContainer csc = new CommonSecretsContainer();
 
+			string loginTitle1 = "Some nice website";
+			string loginUrl1 = "https://hopefullynobodybuysthisdomain.com";
+			string loginUsername1 = "superniceuser";
+			string loginPassword1 = "dragon77!"; 
+
 			string noteTitle1 = "some notes";
 			string noteText1 = "words are so hard sometimes 😠";
-			csc.notes.Add(new Note(noteTitle1, noteText1));
 
 			string filename1 = "test.txt";
 			byte[] file1Content = new byte[] { 1, 34, 46, 47, 24, 33, 4};
+			
+			// Act
+			csc.loginInformations.Add(new LoginInformation(loginTitle1, loginUrl1, loginUsername1, loginPassword1));
+			csc.notes.Add(new Note(noteTitle1, noteText1));
 			csc.files.Add(new FileEntry(filename1, file1Content));
 
-			// Act
 			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
+			Console.WriteLine(json);
 
 			CommonSecretsContainer cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
 
 			// Assert
+			Assert.AreEqual(loginTitle1, cscDeserialized.loginInformations[0].title);
+			Assert.AreEqual(loginUrl1, cscDeserialized.loginInformations[0].url);
+			Assert.AreEqual(loginUsername1, cscDeserialized.loginInformations[0].username);
+			Assert.AreEqual(loginPassword1, cscDeserialized.loginInformations[0].password);
+
 			Assert.AreEqual(noteTitle1, cscDeserialized.notes[0].noteTitle);
 			Assert.AreEqual(noteText1, cscDeserialized.notes[0].noteText);
 
