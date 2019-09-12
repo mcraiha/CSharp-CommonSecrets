@@ -69,10 +69,10 @@ namespace Tests
 			}
 
 			// Assert
-			Assert.AreEqual(noteTitle1, cscDeserialized.notes[0].noteTitle);
-			Assert.AreEqual(noteText1, cscDeserialized.notes[0].noteText);
+			Assert.AreEqual(noteTitle1, System.Text.Encoding.UTF8.GetString(cscDeserialized.notes[0].noteTitle));
+			Assert.AreEqual(noteText1, System.Text.Encoding.UTF8.GetString(cscDeserialized.notes[0].noteText));
 
-			Assert.AreEqual(filename1, cscDeserialized.files[0].filename);
+			Assert.AreEqual(filename1, System.Text.Encoding.UTF8.GetString(cscDeserialized.files[0].filename));
 			CollectionAssert.AreEqual(file1Content, cscDeserialized.files[0].fileContent);
 		}
 	}

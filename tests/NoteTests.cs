@@ -50,7 +50,7 @@ namespace Tests
 
 			// Act
 			var modificationTime1 = note.modificationTime;
-			note.UpdateNote(note.noteTitle, "Some text here, yes. part 2");
+			note.UpdateNote(note.GetNoteTitle(), "Some text here, yes. part 2");
 			var modificationTime2 = note.modificationTime;
 
 			// Assert
@@ -71,7 +71,7 @@ namespace Tests
 			string checksum3 = note3.GetChecksumAsHex();
 
 			string newContent = note3.noteText + "A";
-			note3.UpdateNote(note3.noteTitle, newContent);
+			note3.UpdateNote(note3.GetNoteTitle(), newContent);
 			string checksum4 = note3.GetChecksumAsHex();
 
 			// Assert

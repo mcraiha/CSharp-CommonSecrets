@@ -12,7 +12,7 @@ namespace Tests
 	{
 		public static bool AreNotesEqual(Note note1, Note note2)
 		{
-			return note1.noteTitle == note2.noteTitle && note1.noteText == note2.noteText;
+			return StructuralComparisons.StructuralEqualityComparer.Equals(note1.noteTitle, note2.noteTitle) && StructuralComparisons.StructuralEqualityComparer.Equals(note1.noteText, note2.noteText);
 		}
 
 		public static bool AreNotesSecretEqual(NoteSecret noteSecret1, NoteSecret noteSecret2)

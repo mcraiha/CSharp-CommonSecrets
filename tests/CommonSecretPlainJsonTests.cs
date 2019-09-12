@@ -51,7 +51,7 @@ namespace Tests
 			csc.files.Add(new FileEntry(filename1, file1Content));
 
 			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
-			Console.WriteLine(json);
+			TestContext.Out.WriteLine(json);
 
 			CommonSecretsContainer cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
 
@@ -61,8 +61,8 @@ namespace Tests
 			Assert.AreEqual(loginUsername1, cscDeserialized.loginInformations[0].username);
 			Assert.AreEqual(loginPassword1, cscDeserialized.loginInformations[0].password);
 
-			Assert.AreEqual(noteTitle1, cscDeserialized.notes[0].noteTitle);
-			Assert.AreEqual(noteText1, cscDeserialized.notes[0].noteText);
+			Assert.AreEqual(noteTitle1, System.Text.Encoding.UTF8.GetString(cscDeserialized.notes[0].noteTitle));
+			Assert.AreEqual(noteText1, System.Text.Encoding.UTF8.GetString(cscDeserialized.notes[0].noteText));
 
 			Assert.AreEqual(filename1, cscDeserialized.files[0].filename);
 			CollectionAssert.AreEqual(file1Content, cscDeserialized.files[0].fileContent);

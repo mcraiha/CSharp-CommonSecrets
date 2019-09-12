@@ -56,7 +56,7 @@ namespace Tests
 			NoteSecret noteSecret = new NoteSecret(note, skaAES_CTR, derivedKey);
 
 			// Act
-			string noteTitle = noteSecret.GetNoteTitle(derivedKey);
+			string noteTitle = System.Text.Encoding.UTF8.GetString(noteSecret.GetNoteTitleUTF8Bytes(derivedKey));
 
 			// Assert
 			Assert.AreEqual(title, noteTitle);
@@ -81,7 +81,7 @@ namespace Tests
 			NoteSecret noteSecret = new NoteSecret(note, skaAES_CTR, derivedKey);
 
 			// Act
-			string noteText = noteSecret.GetNoteText(derivedKey);
+			string noteText = System.Text.Encoding.UTF8.GetString(noteSecret.GetNoteTextUTF8Bytes(derivedKey));
 
 			// Assert
 			Assert.AreEqual(text, noteText);

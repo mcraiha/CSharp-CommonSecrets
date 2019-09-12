@@ -53,16 +53,16 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
-		public string GetNoteTitle(byte[] derivedPassword)
+		public byte[] GetNoteTitleUTF8Bytes(byte[] derivedPassword)
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
-			return (string)noteAsDictionary[Note.noteTitleKey];
+			return (byte[])noteAsDictionary[Note.noteTitleKey];
 		}
 
-		public string GetNoteText(byte[] derivedPassword)
+		public byte[] GetNoteTextUTF8Bytes(byte[] derivedPassword)
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
-			return (string)noteAsDictionary[Note.noteTextKey];
+			return (byte[])noteAsDictionary[Note.noteTextKey];
 		}
 
 		private Dictionary<string, object> GetNoteAsDictionary(byte[] derivedPassword)
