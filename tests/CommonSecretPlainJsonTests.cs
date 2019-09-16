@@ -81,11 +81,24 @@ namespace Tests
 
 			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry("does not matter");
 
+			int loginsAmount = 12;
+			int loginsSecretAmount = 14;
+
 			int notesAmount = 17;
 			int notesSecretAmount = 11;
 
 			// Act
 			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
+
+			for (int i = 0; i < loginsAmount; i++)
+			{
+				csc.loginInformations.Add(ContentGenerator.GenerateRandomLoginInformation());
+			}
+
+			for (int i = 0; i < loginsSecretAmount; i++)
+			{
+				csc.loginInformationSecrets.Add(new LoginInformationSecret(ContentGenerator.GenerateRandomLoginInformation(), skaAES, derivedPassword));
+			}
 
 			for (int i = 0; i < notesAmount; i++)
 			{
@@ -102,6 +115,13 @@ namespace Tests
 			CommonSecretsContainer cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
 
 			// Assert
+			Assert.AreEqual(loginsAmount, csc.loginInformations.Count);
+			Assert.AreEqual(loginsAmount, cscDeserialized.loginInformations.Count);
+			for (int i = 0; i < loginsAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreLoginInformationsEqual(csc.loginInformations[i], cscDeserialized.loginInformations[i]));
+			}
+
 			Assert.AreEqual(notesAmount, csc.notes.Count);
 			Assert.AreEqual(notesAmount, cscDeserialized.notes.Count);
 			for (int i = 0; i < notesAmount; i++)
