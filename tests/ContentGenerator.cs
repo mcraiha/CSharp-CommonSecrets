@@ -24,6 +24,11 @@ namespace Tests
             return new string(charArray);
         }
 
+        public static LoginInformation GenerateRandomLoginInformation()
+        {
+            return new LoginInformation(Path.GetRandomFileName(), $"https://{Path.GetRandomFileName()}", Path.GetRandomFileName(), Path.GetRandomFileName());
+        }
+
         public static Note GenerateRandomNote()
         {
             int noteTitleLength = rng.Next(6, 20);
