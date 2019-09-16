@@ -5,19 +5,19 @@ namespace CSCommonSecrets
 {
 	public sealed class LoginInformation
 	{
-		public string title { get; set; } = string.Empty;
+		public byte[] title { get; set; } = new byte[0];
 		public static readonly string titleKey = nameof(title);
 
-		public string url { get; set; } = string.Empty;
+		public byte[] url { get; set; } = new byte[0];
 		public static readonly string urlKey = nameof(url);
 
-		public string username { get; set; } = string.Empty;
+		public byte[] username { get; set; } = new byte[0];
 		public static readonly string usernameKey = nameof(username);
 
-		public string password { get; set; } = string.Empty;
+		public byte[] password { get; set; } = new byte[0];
 		public static readonly string passwordKey = nameof(password);
 
-		public string notes { get; set; } = string.Empty;
+		public byte[] notes { get; set; } = new byte[0];
 		public static readonly string notesKey = nameof(notes);
 
 		public DateTimeOffset creationTime { get; set; } = DateTimeOffset.UtcNow;
@@ -29,10 +29,10 @@ namespace CSCommonSecrets
 		public byte[] icon { get; set; } = new byte[0];
 		public static readonly string iconKey = nameof(icon);
 
-		public string category { get; set; } = string.Empty;
+		public byte[] category { get; set; } = new byte[0];
 		public static readonly string categoryKey = nameof(category);
 
-		public string tags { get; set; } = string.Empty;
+		public byte[] tags { get; set; } = new byte[0];
 		public static readonly string tagsKey = nameof(tags);
 
 		private string checksum = string.Empty;
@@ -47,10 +47,10 @@ namespace CSCommonSecrets
 
 		public LoginInformation(string newTitle, string newUrl, string newUsername, string newPassword)
 		{
-			this.title = newTitle;
-			this.url = newUrl;
-			this.username = newUsername;
-			this.password = newPassword;
+			this.title = Encoding.UTF8.GetBytes(newTitle);
+			this.url = Encoding.UTF8.GetBytes(newUrl);
+			this.username = Encoding.UTF8.GetBytes(newUsername);
+			this.password = Encoding.UTF8.GetBytes(newPassword);
 
 			this.CalculateAndUpdateChecksum();
 		}
@@ -60,30 +60,31 @@ namespace CSCommonSecrets
 			return (LoginInformation) this.MemberwiseClone();
 		}
 
+		#region Updates
 		public void UpdateTitle(string updatedTitle)
 		{
-			this.title = updatedTitle;
+			this.title = Encoding.UTF8.GetBytes(updatedTitle);
 
 			this.CalculateAndUpdateChecksum();
 		}
 
 		public void UpdateUrl(string updatedUrl)
 		{
-			this.url = updatedUrl;
+			this.url = Encoding.UTF8.GetBytes(updatedUrl);
 
 			this.CalculateAndUpdateChecksum();
 		}
 
 		public void UpdateUsername(string updatedUsername)
 		{
-			this.username = updatedUsername;
+			this.username = Encoding.UTF8.GetBytes(updatedUsername);
 
 			this.CalculateAndUpdateChecksum();
 		}
 
 		public void UpdatePassword(string updatedPassword)
 		{
-			this.password = updatedPassword;
+			this.password = Encoding.UTF8.GetBytes(updatedPassword);
 
 			this.CalculateAndUpdateChecksum();
 		}
@@ -95,7 +96,7 @@ namespace CSCommonSecrets
 
 		public void UpdateNotes(string updatedNotes)
 		{
-			this.notes = updatedNotes;
+			this.notes = Encoding.UTF8.GetBytes(updatedNotes);
 
 			this.CalculateAndUpdateChecksum();
 		}
@@ -109,17 +110,63 @@ namespace CSCommonSecrets
 
 		public void UpdateCategory(string updatedCategory)
 		{
-			this.category = updatedCategory;
+			this.category = Encoding.UTF8.GetBytes(updatedCategory);
 
 			this.CalculateAndUpdateChecksum();
 		}
 
 		public void UpdateTags(string updatedTags)
 		{
-			this.tags = updatedTags;
+			this.tags = Encoding.UTF8.GetBytes(updatedTags);
 
 			this.CalculateAndUpdateChecksum();
 		}
+
+		#endregion // Updatesa
+
+		#region Getters
+
+		public string GetTitle()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.title);
+		}
+
+		public string GetURL()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.url);
+		}
+
+		public string GetUsername()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.username);
+		}
+
+		public string GetPassword()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.password);
+		}
+
+		public string GetNotes()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.notes);
+		}
+
+		public byte[] GetIcon()
+		{
+			return this.icon;
+		}
+
+		public string GetCategory()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.category);
+		}
+
+		public string GetTags()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.tags);
+		}
+
+		#endregion // Getters
 
 		public string GetChecksumAsHex()
 		{
@@ -133,13 +180,8 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(Encoding.UTF8.GetBytes(this.title), Encoding.UTF8.GetBytes(this.url), 
-														Encoding.UTF8.GetBytes(this.username), Encoding.UTF8.GetBytes(this.password), 
-														Encoding.UTF8.GetBytes(this.notes), 
-														BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()),
-														BitConverter.GetBytes(this.modificationTime.ToUnixTimeSeconds()),
-														this.icon,
-														Encoding.UTF8.GetBytes(this.category), Encoding.UTF8.GetBytes(this.tags) );
+			return ChecksumHelper.CalculateHexChecksum(this.title, this.url, this.username, this.password, this.notes, BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()), BitConverter.GetBytes(this.modificationTime.ToUnixTimeSeconds()),
+														this.icon, this.category, this.tags);
 		}
 
 		private void CalculateAndUpdateChecksum()

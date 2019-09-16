@@ -23,16 +23,16 @@ namespace CSCommonSecrets
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 			{
-				{ LoginInformation.titleKey, loginInformation.title },
-				{ LoginInformation.urlKey, loginInformation.url },
-				{ LoginInformation.usernameKey, loginInformation.username },
-				{ LoginInformation.passwordKey, loginInformation.password },
-				{ LoginInformation.notesKey, loginInformation.notes },
+				{ LoginInformation.titleKey, loginInformation.GetTitle() },
+				{ LoginInformation.urlKey, loginInformation.GetURL() },
+				{ LoginInformation.usernameKey, loginInformation.GetUsername() },
+				{ LoginInformation.passwordKey, loginInformation.GetPassword() },
+				{ LoginInformation.notesKey, loginInformation.GetNotes() },
 				{ LoginInformation.creationTimeKey, loginInformation.creationTime },
 				{ LoginInformation.modificationTimeKey, loginInformation.modificationTime },
-				{ LoginInformation.iconKey, loginInformation.icon },
-				{ LoginInformation.categoryKey, loginInformation.category },
-				{ LoginInformation.tagsKey, loginInformation.tags },
+				{ LoginInformation.iconKey, loginInformation.GetIcon() },
+				{ LoginInformation.categoryKey, loginInformation.GetCategory() },
+				{ LoginInformation.tagsKey, loginInformation.GetTags() },
 			};
 
 			this.algorithm = algorithm;
