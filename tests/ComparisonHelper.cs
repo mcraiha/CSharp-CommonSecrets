@@ -10,6 +10,15 @@ namespace Tests
 	// Simple class for checking that two things are equal
 	public static class ComparisonHelper
 	{
+		public static bool AreLoginInformationsEqual(LoginInformation login1, LoginInformation login2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(login1.title, login2.title) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(login1.url, login2.url) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(login1.username, login2.username) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(login1.password, login2.password);
+					// Missing code here!!!
+		}
+
 		public static bool AreNotesEqual(Note note1, Note note2)
 		{
 			return StructuralComparisons.StructuralEqualityComparer.Equals(note1.noteTitle, note2.noteTitle) && StructuralComparisons.StructuralEqualityComparer.Equals(note1.noteText, note2.noteText);
