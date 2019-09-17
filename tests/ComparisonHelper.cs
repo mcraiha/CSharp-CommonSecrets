@@ -19,6 +19,11 @@ namespace Tests
 					// Missing code here!!!
 		}
 
+		public static bool AreLoginInformationSecretsEqual(LoginInformationSecret loginSecret1, LoginInformationSecret loginSecret2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(loginSecret1.audalfData, loginSecret2.audalfData) && AreSymmetricKeyAlgorithmsEqual(loginSecret1.algorithm, loginSecret2.algorithm);
+		}
+
 		public static bool AreNotesEqual(Note note1, Note note2)
 		{
 			return StructuralComparisons.StructuralEqualityComparer.Equals(note1.noteTitle, note2.noteTitle) && StructuralComparisons.StructuralEqualityComparer.Equals(note1.noteText, note2.noteText);
