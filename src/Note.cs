@@ -45,7 +45,7 @@ namespace CSCommonSecrets
 			return System.Text.Encoding.UTF8.GetString(this.noteTitle);
 		}
 
-		public string GetNoteTetxt()
+		public string GetNoteText()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.noteText);
 		}
