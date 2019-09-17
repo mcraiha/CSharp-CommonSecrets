@@ -47,6 +47,10 @@ namespace CSCommonSecrets
 			return System.Text.Encoding.UTF8.GetString(this.filename);
 		}
 
+		public byte[] GetFileContent()
+		{
+			return fileContent;
+		}
 
 		public string GetChecksumAsHex()
 		{

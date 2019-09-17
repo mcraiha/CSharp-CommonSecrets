@@ -23,8 +23,8 @@ namespace CSCommonSecrets
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 			{
-				{ FileEntry.filenameKey, fileEntry.filename },
-				{ FileEntry.fileContentKey, fileEntry.fileContent },
+				{ FileEntry.filenameKey, fileEntry.GetFilename() },
+				{ FileEntry.fileContentKey, fileEntry.GetFileContent() },
 				{ FileEntry.creationTimeKey, fileEntry.creationTime },
 				{ FileEntry.modificationTimeKey, fileEntry.modificationTime },
 			};
@@ -53,10 +53,10 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
-		public byte[] GetFilenameUTF8Bytes(byte[] derivedPassword)
+		public string GetFilename(byte[] derivedPassword)
 		{
 			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
-			return (byte[])fileEntryAsDictionary[FileEntry.filenameKey];
+			return (string)fileEntryAsDictionary[FileEntry.filenameKey];
 		}
 
 		public byte[] GetFileContent(byte[] derivedPassword)
