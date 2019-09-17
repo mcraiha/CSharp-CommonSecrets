@@ -122,6 +122,13 @@ namespace Tests
 				Assert.IsTrue(ComparisonHelper.AreLoginInformationsEqual(csc.loginInformations[i], cscDeserialized.loginInformations[i]));
 			}
 
+			Assert.AreEqual(loginsSecretAmount, csc.loginInformationSecrets.Count);
+			Assert.AreEqual(loginsSecretAmount, cscDeserialized.loginInformationSecrets.Count);
+			for (int i = 0; i < loginsSecretAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreLoginInformationSecretsEqual(csc.loginInformationSecrets[i], cscDeserialized.loginInformationSecrets[i]));
+			}
+
 			Assert.AreEqual(notesAmount, csc.notes.Count);
 			Assert.AreEqual(notesAmount, cscDeserialized.notes.Count);
 			for (int i = 0; i < notesAmount; i++)
