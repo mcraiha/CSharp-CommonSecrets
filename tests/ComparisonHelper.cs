@@ -34,6 +34,11 @@ namespace Tests
 			return StructuralComparisons.StructuralEqualityComparer.Equals(noteSecret1.audalfData, noteSecret2.audalfData) && AreSymmetricKeyAlgorithmsEqual(noteSecret1.algorithm, noteSecret2.algorithm);
 		}
 
+		public static bool AreFileEntriesEqual(FileEntry fileEntry1, FileEntry fileEntry2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(fileEntry1.filename, fileEntry2.filename) && StructuralComparisons.StructuralEqualityComparer.Equals(fileEntry1.fileContent, fileEntry2.fileContent);
+		}
+
 		public static bool AreSymmetricKeyAlgorithmsEqual(SymmetricKeyAlgorithm symmetricKeyAlgorithm1, SymmetricKeyAlgorithm symmetricKeyAlgorithm2)
 		{
 			return StructuralComparisons.StructuralEqualityComparer.Equals(symmetricKeyAlgorithm1.GetSettingsAsBytes(), symmetricKeyAlgorithm2.GetSettingsAsBytes());
