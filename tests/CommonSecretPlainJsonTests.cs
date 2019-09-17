@@ -87,6 +87,8 @@ namespace Tests
 			int notesAmount = 17;
 			int notesSecretAmount = 11;
 
+			int filesAmount = 5;
+
 			// Act
 			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
@@ -110,6 +112,11 @@ namespace Tests
 				csc.noteSecrets.Add(new NoteSecret(ContentGenerator.GenerateRandomNote(), skaAES, derivedPassword));
 			}
 
+			for (int i = 0; i < filesAmount; i++)
+			{
+				csc.files.Add(ContentGenerator.GenerateRandomFileEntry());
+			}
+
 			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
 
 			CommonSecretsContainer cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
@@ -129,6 +136,7 @@ namespace Tests
 				Assert.IsTrue(ComparisonHelper.AreLoginInformationSecretsEqual(csc.loginInformationSecrets[i], cscDeserialized.loginInformationSecrets[i]));
 			}
 
+
 			Assert.AreEqual(notesAmount, csc.notes.Count);
 			Assert.AreEqual(notesAmount, cscDeserialized.notes.Count);
 			for (int i = 0; i < notesAmount; i++)
@@ -141,6 +149,14 @@ namespace Tests
 			for (int i = 0; i < notesSecretAmount; i++)
 			{
 				Assert.IsTrue(ComparisonHelper.AreNotesSecretEqual(csc.noteSecrets[i], cscDeserialized.noteSecrets[i]));
+			}
+
+
+			Assert.AreEqual(filesAmount, csc.files.Count);
+			Assert.AreEqual(filesAmount, cscDeserialized.files.Count);
+			for (int i = 0; i < filesAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreFileEntriesEqual(csc.files[i], cscDeserialized.files[i]));
 			}
 		}
 	}
