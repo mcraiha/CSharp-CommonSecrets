@@ -36,5 +36,13 @@ namespace Tests
 
             return new Note(GenerateAsciiCompatibleString(noteTitleLength), GenerateAsciiCompatibleString(noteTextLength));
         }
+
+        public static FileEntry GenerateRandomFileEntry()
+        {
+            int contentLength = rng.Next(20, 1022);
+            byte[] content = new byte[contentLength];
+            rng.NextBytes(content);
+            return new FileEntry(Path.GetRandomFileName(), content);
+        }
     }
 }
