@@ -23,8 +23,8 @@ namespace CSCommonSecrets
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 			{
-				{ Note.noteTitleKey, note.noteTitle },
-				{ Note.noteTextKey, note.noteText },
+				{ Note.noteTitleKey, note.GetNoteTitle() },
+				{ Note.noteTextKey, note.GetNoteText() },
 				{ Note.creationTimeKey, note.creationTime },
 				{ Note.modificationTimeKey, note.modificationTime },
 			};
@@ -53,16 +53,16 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
-		public byte[] GetNoteTitleUTF8Bytes(byte[] derivedPassword)
+		public string GetNoteTitle(byte[] derivedPassword)
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
-			return (byte[])noteAsDictionary[Note.noteTitleKey];
+			return (string)noteAsDictionary[Note.noteTitleKey];
 		}
 
-		public byte[] GetNoteTextUTF8Bytes(byte[] derivedPassword)
+		public string GetNoteText(byte[] derivedPassword)
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
-			return (byte[])noteAsDictionary[Note.noteTextKey];
+			return (string)noteAsDictionary[Note.noteTextKey];
 		}
 
 		private Dictionary<string, object> GetNoteAsDictionary(byte[] derivedPassword)
