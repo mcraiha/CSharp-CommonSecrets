@@ -93,6 +93,11 @@ namespace CSCommonSecrets
 			return KeyDerivation.Pbkdf2(regularPassword, this.salt, this.pseudorandomFunction, this.iterations, this.derivedKeyLengthInBytes);
 		}
 
+		/// <summary>
+		/// Create HMACSHA256 based KeyDerivationFunctionEntry with random salt
+		/// </summary>
+		/// <param name="id">Id of the entry</param>
+		/// <returns>KeyDerivationFunctionEntry</returns>
 		public static KeyDerivationFunctionEntry CreateHMACSHA256KeyDerivationFunctionEntry(string id)
 		{
 			int iterationsToDo = suggestedMinIterationsCount;
@@ -112,6 +117,11 @@ namespace CSCommonSecrets
 			return new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, salt, iterationsToDo, neededBytes, id);
 		}
 
+		/// <summary>
+		/// Create HMACSHA512 based KeyDerivationFunctionEntry with random salt
+		/// </summary>
+		/// <param name="id">Id of the entry</param>
+		/// <returns>KeyDerivationFunctionEntry</returns>
 		public static KeyDerivationFunctionEntry CreateHMACSHA512KeyDerivationFunctionEntry(string id)
 		{
 			int iterationsToDo = suggestedMinIterationsCount;
@@ -131,5 +141,4 @@ namespace CSCommonSecrets
 			return new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA512, salt, iterationsToDo, neededBytes, id);
 		}
 	}
-
 }
