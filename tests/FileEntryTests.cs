@@ -2,6 +2,7 @@ using NUnit.Framework;
 using CSCommonSecrets;
 using System;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Tests
 {
@@ -80,6 +81,23 @@ namespace Tests
 			Assert.AreNotEqual(checksum1, checksum2);
 			Assert.AreEqual(checksum3, checksum2);
 			Assert.AreNotEqual(checksum3, checksum4);
+		}
+
+		[Test]
+		public void ChecksumSurvivesRoundtrip()
+		{
+			// Arrange
+			FileEntry fe1 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
+
+			// Act
+			string checksum1 = fe1.GetChecksumAsHex();
+
+			string json = JsonConvert.SerializeObject(fe1, Formatting.Indented);
+
+			FileEntry fe2 = JsonConvert.DeserializeObject<FileEntry>(json);
+
+			// Assert
+			Assert.AreEqual(checksum1, fe2.GetChecksumAsHex());
 		}
 	}
 }
