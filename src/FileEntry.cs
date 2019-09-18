@@ -19,7 +19,7 @@ namespace CSCommonSecrets
 		public DateTimeOffset modificationTime { get; set; } = DateTimeOffset.UtcNow;
 		public static readonly string modificationTimeKey = nameof(modificationTime);
 
-		private string checksum = string.Empty;
+		public string checksum = string.Empty;
 
 		/// <summary>
 		/// For deserialization purposes
