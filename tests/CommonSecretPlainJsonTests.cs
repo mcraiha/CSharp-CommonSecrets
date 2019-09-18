@@ -88,6 +88,7 @@ namespace Tests
 			int notesSecretAmount = 11;
 
 			int filesAmount = 5;
+			int filesSecretAmount = 3;
 
 			// Act
 			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
@@ -115,6 +116,11 @@ namespace Tests
 			for (int i = 0; i < filesAmount; i++)
 			{
 				csc.files.Add(ContentGenerator.GenerateRandomFileEntry());
+			}
+
+			for (int i = 0; i < filesSecretAmount; i++)
+			{
+				csc.fileSecrets.Add(new FileEntrySecret(ContentGenerator.GenerateRandomFileEntry(), skaAES, derivedPassword));
 			}
 
 			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
@@ -157,6 +163,13 @@ namespace Tests
 			for (int i = 0; i < filesAmount; i++)
 			{
 				Assert.IsTrue(ComparisonHelper.AreFileEntriesEqual(csc.files[i], cscDeserialized.files[i]));
+			}
+
+			Assert.AreEqual(filesSecretAmount, csc.fileSecrets.Count);
+			Assert.AreEqual(filesSecretAmount, cscDeserialized.fileSecrets.Count);
+			for (int i = 0; i < filesSecretAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreFileEntrySecretsEqual(csc.fileSecrets[i], cscDeserialized.fileSecrets[i]));
 			}
 		}
 	}
