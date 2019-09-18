@@ -35,7 +35,7 @@ namespace CSCommonSecrets
 		public byte[] tags { get; set; } = new byte[0];
 		public static readonly string tagsKey = nameof(tags);
 
-		private string checksum = string.Empty;
+		public string checksum = string.Empty;
 
 		/// <summary>
 		/// For deserialization purposes
