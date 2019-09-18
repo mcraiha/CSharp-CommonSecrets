@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using CSCommonSecrets;
+using Newtonsoft.Json;
 
 namespace Tests
 {
@@ -63,6 +64,23 @@ namespace Tests
 			// Assert
 			Assert.IsNotNull(li2);
 			Assert.AreEqual(checksum1, checksum2);
+		}
+
+		[Test]
+		public void ChecksumSurvivesRoundtrip()
+		{
+			// Arrange
+			LoginInformation li1 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newUsername: "dragon123", newPassword: "password13");
+
+			// Act
+			string checksum1 = li1.GetChecksumAsHex();
+
+			string json = JsonConvert.SerializeObject(li1, Formatting.Indented);
+
+			LoginInformation li2 = JsonConvert.DeserializeObject<LoginInformation>(json);
+
+			// Assert
+			Assert.AreEqual(checksum1, li2.GetChecksumAsHex());
 		}
 	}
 }
