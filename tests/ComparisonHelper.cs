@@ -10,6 +10,15 @@ namespace Tests
 	// Simple class for checking that two things are equal
 	public static class ComparisonHelper
 	{
+		public static bool AreKeyDerivationFunctionEntriesEqual(KeyDerivationFunctionEntry kdfe1, KeyDerivationFunctionEntry kdfe2)
+		{
+			return kdfe1.algorithm == kdfe2.algorithm && kdfe1.pseudorandomFunction == kdfe2.pseudorandomFunction &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(kdfe1.salt, kdfe2.salt) &&
+					kdfe1.iterations == kdfe2.iterations &&
+					kdfe1.derivedKeyLengthInBytes == kdfe2.derivedKeyLengthInBytes &&
+					kdfe1.identifier == kdfe2.identifier;
+		}
+
 		public static bool AreLoginInformationsEqual(LoginInformation login1, LoginInformation login2)
 		{
 			return StructuralComparisons.StructuralEqualityComparer.Equals(login1.title, login2.title) &&
