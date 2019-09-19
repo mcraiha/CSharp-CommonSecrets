@@ -101,6 +101,8 @@ namespace Tests
 			// Act
 			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
+			csc.keyDerivationFunctionEntries.Add(kdfe);
+
 			for (int i = 0; i < loginsAmount; i++)
 			{
 				csc.loginInformations.Add(ContentGenerator.GenerateRandomLoginInformation());
@@ -147,12 +149,18 @@ namespace Tests
 			}
 
 			// Assert
+			Assert.AreEqual(1, csc.keyDerivationFunctionEntries.Count);
+			Assert.AreEqual(1, cscDeserialized.keyDerivationFunctionEntries.Count);
+			Assert.IsTrue(ComparisonHelper.AreKeyDerivationFunctionEntriesEqual(csc.keyDerivationFunctionEntries[0], cscDeserialized.keyDerivationFunctionEntries[0]));
+
+
 			Assert.AreEqual(loginsAmount, csc.loginInformations.Count);
 			Assert.AreEqual(loginsAmount, cscDeserialized.loginInformations.Count);
 			for (int i = 0; i < loginsAmount; i++)
 			{
 				Assert.IsTrue(ComparisonHelper.AreLoginInformationsEqual(csc.loginInformations[i], cscDeserialized.loginInformations[i]));
 			}
+
 
 			Assert.AreEqual(loginsSecretAmount, csc.loginInformationSecrets.Count);
 			Assert.AreEqual(loginsSecretAmount, cscDeserialized.loginInformationSecrets.Count);
@@ -168,6 +176,7 @@ namespace Tests
 			{
 				Assert.IsTrue(ComparisonHelper.AreNotesEqual(csc.notes[i], cscDeserialized.notes[i]));
 			}
+
 
 			Assert.AreEqual(notesSecretAmount, csc.noteSecrets.Count);
 			Assert.AreEqual(notesSecretAmount, cscDeserialized.noteSecrets.Count);

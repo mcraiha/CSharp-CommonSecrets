@@ -93,6 +93,8 @@ namespace Tests
 			// Act
 			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
+			csc.keyDerivationFunctionEntries.Add(kdfe);
+
 			for (int i = 0; i < loginsAmount; i++)
 			{
 				csc.loginInformations.Add(ContentGenerator.GenerateRandomLoginInformation());
@@ -128,6 +130,10 @@ namespace Tests
 			CommonSecretsContainer cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
 
 			// Assert
+			Assert.AreEqual(1, csc.keyDerivationFunctionEntries.Count);
+			Assert.AreEqual(1, cscDeserialized.keyDerivationFunctionEntries.Count);
+			Assert.IsTrue(ComparisonHelper.AreKeyDerivationFunctionEntriesEqual(csc.keyDerivationFunctionEntries[0], cscDeserialized.keyDerivationFunctionEntries[0]));
+
 			Assert.AreEqual(loginsAmount, csc.loginInformations.Count);
 			Assert.AreEqual(loginsAmount, cscDeserialized.loginInformations.Count);
 			for (int i = 0; i < loginsAmount; i++)
