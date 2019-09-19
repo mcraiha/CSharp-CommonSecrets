@@ -9,7 +9,7 @@ namespace CSCommonSecrets
 		public byte[] audalfData { get; set; } = new byte[0];
 
 		public SymmetricKeyAlgorithm algorithm { get; set; }
-		private string checksum = string.Empty;
+		public string checksum { get; set; } = string.Empty;
 
 		/// <summary>
 		/// For deserialization
@@ -36,6 +36,9 @@ namespace CSCommonSecrets
 
 			// Encrypt the AUDALF payload with given algorithm
 			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+
+			// Calculate new checksum
+			this.CalculateAndUpdateChecksum();
 		}
 
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
@@ -49,6 +52,9 @@ namespace CSCommonSecrets
 
 			// Encrypt the AUDALF payload with given algorithm
 			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+
+			// Calculate new checksum
+			this.CalculateAndUpdateChecksum();
 		}
 
 		#region Common getters
