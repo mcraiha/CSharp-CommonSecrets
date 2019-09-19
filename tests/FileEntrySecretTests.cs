@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using CSCommonSecrets;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Tests
 {
@@ -85,6 +86,36 @@ namespace Tests
 
 			// Assert
 			CollectionAssert.AreEqual(fileContent, rtFileContent);
+		}
+
+		[Test]
+		public void ChecksumSurvivesRoundtrip()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string filename = "nice.pdf";
+			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+
+			FileEntry fe = new FileEntry(filename, fileContent);
+
+			FileEntrySecret fes1 = new FileEntrySecret(fe, skaAES_CTR, derivedKey);
+
+			// Act
+			string checksum1 = fes1.GetChecksumAsHex();
+
+			string json = JsonConvert.SerializeObject(fes1, Formatting.Indented);
+
+			FileEntrySecret fes2 = JsonConvert.DeserializeObject<FileEntrySecret>(json);
+
+			// Assert
+			Assert.AreEqual(64, checksum1.Length);
+			Assert.AreEqual(checksum1, fes2.GetChecksumAsHex());
 		}
 	}
 }
