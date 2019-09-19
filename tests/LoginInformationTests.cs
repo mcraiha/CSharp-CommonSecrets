@@ -80,6 +80,7 @@ namespace Tests
 			LoginInformation li2 = JsonConvert.DeserializeObject<LoginInformation>(json);
 
 			// Assert
+			Assert.AreEqual(64, checksum1.Length);
 			Assert.AreEqual(checksum1, li2.GetChecksumAsHex());
 		}
 	}
