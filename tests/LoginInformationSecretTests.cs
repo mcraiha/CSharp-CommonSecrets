@@ -3,6 +3,7 @@ using CSCommonSecrets;
 using System;
 using System.Threading;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Tests
 {
@@ -268,6 +269,31 @@ namespace Tests
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTags));
 			Assert.AreEqual(loginInformationModified.tags, loginInformationTags);
+		}
+
+		[Test]
+		public void ChecksumSurvivesRoundtrip()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 88, 9, 107, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xf5, 0xf6, 0xcc, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 192, settingsAES_CTR);
+
+			LoginInformationSecret loginInformationSecret1 = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+
+			// Act
+			string checksum1 = loginInformationSecret1.GetChecksumAsHex();
+
+			string json = JsonConvert.SerializeObject(loginInformationSecret1, Formatting.Indented);
+
+			LoginInformationSecret loginInformationSecret2 = JsonConvert.DeserializeObject<LoginInformationSecret>(json);
+
+			// Assert
+			Assert.AreEqual(64, checksum1.Length);
+			Assert.AreEqual(checksum1, loginInformationSecret2.GetChecksumAsHex());
 		}
 	}
 }
