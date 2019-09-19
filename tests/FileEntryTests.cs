@@ -97,6 +97,7 @@ namespace Tests
 			FileEntry fe2 = JsonConvert.DeserializeObject<FileEntry>(json);
 
 			// Assert
+			Assert.AreEqual(64, checksum1.Length);
 			Assert.AreEqual(checksum1, fe2.GetChecksumAsHex());
 		}
 	}
