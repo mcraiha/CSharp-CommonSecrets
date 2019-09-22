@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using CSharp_AUDALF;
+using System.Text;
 
 namespace CSCommonSecrets
 {
 	public sealed class LoginInformationSecret
 	{
+		public byte[] keyIdentifier { get; set; }
+
 		public byte[] audalfData { get; set; } = new byte[0];
 
 		public SymmetricKeyAlgorithm algorithm { get; set; }
@@ -19,7 +22,7 @@ namespace CSCommonSecrets
 
 		}
 
-		public LoginInformationSecret(LoginInformation loginInformation, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+		public LoginInformationSecret(LoginInformation loginInformation, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 			{
@@ -35,6 +38,8 @@ namespace CSCommonSecrets
 				{ LoginInformation.tagsKey, loginInformation.GetTags() },
 			};
 
+			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
+
 			this.algorithm = algorithm;
 
 			// Create AUDALF payload from dictionary
@@ -49,8 +54,10 @@ namespace CSCommonSecrets
 
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
-		public LoginInformationSecret(Dictionary<string, object> loginInformationAsDictionary, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+		public LoginInformationSecret(Dictionary<string, object> loginInformationAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
+			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
+
 			this.algorithm = algorithm;
 
 			// Create AUDALF payload from dictionary
@@ -126,6 +133,11 @@ namespace CSCommonSecrets
 			return (string)loginInformationAsDictionary[LoginInformation.tagsKey];
 		}
 
+		public string GetKeyIdentifier()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
+		}
+
 		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
 		{
 			wantedDateTimeType = typeof(DateTimeOffset)
@@ -167,7 +179,7 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(this.audalfData, algorithm.GetSettingsAsBytes());
+			return ChecksumHelper.CalculateHexChecksum(this.keyIdentifier, this.audalfData, this.algorithm.GetSettingsAsBytes());
 		}
 
 		private void CalculateAndUpdateChecksum()
