@@ -16,7 +16,7 @@ namespace Tests
 					StructuralComparisons.StructuralEqualityComparer.Equals(kdfe1.salt, kdfe2.salt) &&
 					kdfe1.iterations == kdfe2.iterations &&
 					kdfe1.derivedKeyLengthInBytes == kdfe2.derivedKeyLengthInBytes &&
-					kdfe1.identifier == kdfe2.identifier;
+					StructuralComparisons.StructuralEqualityComparer.Equals(kdfe1.keyIdentifier, kdfe2.keyIdentifier);
 		}
 
 		public static bool AreLoginInformationsEqual(LoginInformation login1, LoginInformation login2)

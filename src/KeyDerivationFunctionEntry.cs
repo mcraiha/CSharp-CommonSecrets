@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
@@ -37,9 +38,9 @@ namespace CSCommonSecrets
 		public int derivedKeyLengthInBytes;
 
 		/// <summary>
-		/// Identifier, e.g. "primary"
+		/// Key identifier, e.g. "primary" as byte array
 		/// </summary>
-		public string identifier;
+		public byte[] keyIdentifier;
 
 		private string checksum = string.Empty;
 
@@ -85,13 +86,21 @@ namespace CSCommonSecrets
 
 			this.derivedKeyLengthInBytes = howManyBytesAreWanted;
 
-			this.identifier = id;
+			this.keyIdentifier = Encoding.UTF8.GetBytes(id);
 		}
 
 		public byte[] GeneratePasswordBytes(string regularPassword)
 		{
 			return KeyDerivation.Pbkdf2(regularPassword, this.salt, this.pseudorandomFunction, this.iterations, this.derivedKeyLengthInBytes);
 		}
+
+		public string GetKeyIdentifier()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
+		}
+
+
+		#region Static helpers
 
 		/// <summary>
 		/// Create HMACSHA256 based KeyDerivationFunctionEntry with random salt
@@ -140,5 +149,7 @@ namespace CSCommonSecrets
 			int neededBytes = 64;
 			return new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA512, salt, iterationsToDo, neededBytes, id);
 		}
+
+		#endregion // Static helpers
 	}
 }
