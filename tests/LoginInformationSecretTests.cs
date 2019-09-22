@@ -33,7 +33,7 @@ namespace Tests
 				{ LoginInformation.titleKey, "Shopping site"}
 			};
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(testDictionary, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 
@@ -53,7 +53,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string loginInformationTitle = loginInformationSecret.GetTitle(derivedKey);
@@ -74,7 +74,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 192, settingsAES_CTR);
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string loginInformationUrl = loginInformationSecret.GetUrl(derivedKey);
@@ -95,7 +95,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string loginInformationUsername = loginInformationSecret.GetUsername(derivedKey);
@@ -116,7 +116,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string loginInformationPassword = loginInformationSecret.GetPassword(derivedKey);
@@ -140,7 +140,7 @@ namespace Tests
 			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
 			loginInformationModified.UpdateNotes("Nice story about how I found the missing tapes of ...");
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string loginInformationNotes = loginInformationSecret.GetNotes(derivedKey);
@@ -161,7 +161,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			DateTimeOffset loginInformationCreationTime = loginInformationSecret.GetCreationTime(derivedKey);
@@ -185,7 +185,7 @@ namespace Tests
 			Thread.Sleep(100);
 			loginInformationModified.UpdateNotes("Some text to here so modification time triggers");
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			DateTimeOffset loginInformationModificationTime = loginInformationSecret.GetModificationTime(derivedKey);
@@ -213,7 +213,7 @@ namespace Tests
 			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
 			loginInformationModified.UpdateIcon(iconBytes);
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			byte[] loginInformationIcon = loginInformationSecret.GetIcon(derivedKey);
@@ -237,7 +237,7 @@ namespace Tests
 			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
 			loginInformationModified.UpdateCategory("Shopping");
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string loginInformationCategory = loginInformationSecret.GetCategory(derivedKey);
@@ -261,7 +261,7 @@ namespace Tests
 			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
 			loginInformationModified.UpdateTags("personal");
 
-			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string loginInformationTags = loginInformationSecret.GetTags(derivedKey);
@@ -282,7 +282,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 192, settingsAES_CTR);
 
-			LoginInformationSecret loginInformationSecret1 = new LoginInformationSecret(loginInformation, skaAES_CTR, derivedKey);
+			LoginInformationSecret loginInformationSecret1 = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string checksum1 = loginInformationSecret1.GetChecksumAsHex();

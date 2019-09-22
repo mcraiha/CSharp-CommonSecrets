@@ -102,7 +102,7 @@ namespace Tests
 
 			for (int i = 0; i < loginsSecretAmount; i++)
 			{
-				csc.loginInformationSecrets.Add(new LoginInformationSecret(ContentGenerator.GenerateRandomLoginInformation(), skaAES, derivedPassword));
+				csc.loginInformationSecrets.Add(new LoginInformationSecret(ContentGenerator.GenerateRandomLoginInformation(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			for (int i = 0; i < notesAmount; i++)
