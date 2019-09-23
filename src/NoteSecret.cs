@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using CSharp_AUDALF;
 
 namespace CSCommonSecrets
 {
 	public sealed class NoteSecret
 	{
+		public byte[] keyIdentifier { get; set; }
+
 		public byte[] audalfData { get; set; } = new byte[0];
 
 		public SymmetricKeyAlgorithm algorithm { get; set; }
@@ -19,7 +22,7 @@ namespace CSCommonSecrets
 
 		}
 
-		public NoteSecret(Note note, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+		public NoteSecret(Note note, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 			{
@@ -28,6 +31,8 @@ namespace CSCommonSecrets
 				{ Note.creationTimeKey, note.creationTime },
 				{ Note.modificationTimeKey, note.modificationTime },
 			};
+
+			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
 
 			this.algorithm = algorithm;
 
@@ -43,8 +48,10 @@ namespace CSCommonSecrets
 
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
-		public NoteSecret(Dictionary<string, object> noteAsDictionary, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+		public NoteSecret(Dictionary<string, object> noteAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
+			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
+
 			this.algorithm = algorithm;
 
 			// Create AUDALF payload from dictionary
@@ -93,6 +100,11 @@ namespace CSCommonSecrets
 			Dictionary<string, object> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF);
 
 			return noteAsDictionary;
+		}
+
+		public string GetKeyIdentifier()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
 		}
 
 		#endregion // Common getters

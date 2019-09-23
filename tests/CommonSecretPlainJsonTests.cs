@@ -112,7 +112,7 @@ namespace Tests
 
 			for (int i = 0; i < notesSecretAmount; i++)
 			{
-				csc.noteSecrets.Add(new NoteSecret(ContentGenerator.GenerateRandomNote(), skaAES, derivedPassword));
+				csc.noteSecrets.Add(new NoteSecret(ContentGenerator.GenerateRandomNote(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			for (int i = 0; i < filesAmount; i++)

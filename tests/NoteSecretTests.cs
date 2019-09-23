@@ -29,7 +29,7 @@ namespace Tests
 				{ Note.noteTitleKey, "My shopping list for tomorrow"}
 			};
 
-			NoteSecret noteSecret = new NoteSecret(testDictionary, skaAES_CTR, derivedKey);
+			NoteSecret noteSecret = new NoteSecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 
@@ -54,7 +54,7 @@ namespace Tests
 
 			Note note = new Note(title, text);
 
-			NoteSecret noteSecret = new NoteSecret(note, skaAES_CTR, derivedKey);
+			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string noteTitle = noteSecret.GetNoteTitle(derivedKey);
@@ -79,7 +79,7 @@ namespace Tests
 
 			Note note = new Note(title, text);
 
-			NoteSecret noteSecret = new NoteSecret(note, skaAES_CTR, derivedKey);
+			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string noteText = noteSecret.GetNoteText(derivedKey);
@@ -104,7 +104,7 @@ namespace Tests
 
 			Note note = new Note(title, text);
 
-			NoteSecret noteSecret1 = new NoteSecret(note, skaAES_CTR, derivedKey);
+			NoteSecret noteSecret1 = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string checksum1 = noteSecret1.GetChecksumAsHex();
