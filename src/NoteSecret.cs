@@ -119,7 +119,7 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(this.audalfData, algorithm.GetSettingsAsBytes());
+			return ChecksumHelper.CalculateHexChecksum(this.keyIdentifier, this.audalfData, algorithm.GetSettingsAsBytes());
 		}
 
 		private void CalculateAndUpdateChecksum()
