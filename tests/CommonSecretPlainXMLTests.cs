@@ -130,7 +130,7 @@ namespace Tests
 
 			for (int i = 0; i < filesSecretAmount; i++)
 			{
-				csc.fileSecrets.Add(new FileEntrySecret(ContentGenerator.GenerateRandomFileEntry(), skaAES, derivedPassword));
+				csc.fileSecrets.Add(new FileEntrySecret(ContentGenerator.GenerateRandomFileEntry(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			string xml = null;

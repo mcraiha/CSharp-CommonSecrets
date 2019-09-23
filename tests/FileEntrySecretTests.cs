@@ -29,7 +29,7 @@ namespace Tests
 				{ FileEntry.filenameKey, "filename.txt"}
 			};
 
-			FileEntrySecret fes = new FileEntrySecret(testDictionary, skaAES_CTR, derivedKey);
+			FileEntrySecret fes = new FileEntrySecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 
@@ -54,7 +54,7 @@ namespace Tests
 
 			FileEntry fe = new FileEntry(filename, fileContent);
 
-			FileEntrySecret fes = new FileEntrySecret(fe, skaAES_CTR, derivedKey);
+			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string rtFilename = fes.GetFilename(derivedKey);
@@ -79,7 +79,7 @@ namespace Tests
 
 			FileEntry fe = new FileEntry(filename, fileContent);
 
-			FileEntrySecret fes = new FileEntrySecret(fe, skaAES_CTR, derivedKey);
+			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			byte[] rtFileContent = fes.GetFileContent(derivedKey);
@@ -104,7 +104,7 @@ namespace Tests
 
 			FileEntry fe = new FileEntry(filename, fileContent);
 
-			FileEntrySecret fes1 = new FileEntrySecret(fe, skaAES_CTR, derivedKey);
+			FileEntrySecret fes1 = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
 			string checksum1 = fes1.GetChecksumAsHex();

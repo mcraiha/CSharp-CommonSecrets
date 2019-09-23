@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using CSharp_AUDALF;
 
 namespace CSCommonSecrets
 {
 	public sealed class FileEntrySecret
 	{
+		public byte[] keyIdentifier { get; set; }
+
 		public byte[] audalfData { get; set; } = new byte[0];
 
 		public SymmetricKeyAlgorithm algorithm { get; set; }
@@ -19,7 +22,7 @@ namespace CSCommonSecrets
 
 		}
 
-		public FileEntrySecret(FileEntry fileEntry, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+		public FileEntrySecret(FileEntry fileEntry, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 			{
@@ -28,6 +31,8 @@ namespace CSCommonSecrets
 				{ FileEntry.creationTimeKey, fileEntry.creationTime },
 				{ FileEntry.modificationTimeKey, fileEntry.modificationTime },
 			};
+
+			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
 
 			this.algorithm = algorithm;
 
@@ -43,8 +48,10 @@ namespace CSCommonSecrets
 
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
-		public FileEntrySecret(Dictionary<string, object> fileEntryAsDictionary, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+		public FileEntrySecret(Dictionary<string, object> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
+			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
+
 			this.algorithm = algorithm;
 
 			// Create AUDALF payload from dictionary
@@ -107,7 +114,7 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(this.audalfData, algorithm.GetSettingsAsBytes());
+			return ChecksumHelper.CalculateHexChecksum(this.keyIdentifier, this.audalfData, algorithm.GetSettingsAsBytes());
 		}
 
 		private void CalculateAndUpdateChecksum()
