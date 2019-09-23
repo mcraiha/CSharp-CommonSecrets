@@ -23,9 +23,37 @@ namespace CSCommonSecrets
 		public List<FileEntry> files = new List<FileEntry>();
 		public List<FileEntrySecret> fileSecrets = new List<FileEntrySecret>();
 
+		/// <summary>
+		/// Constructor without parameters for creating empty CommonSecretsContainer
+		/// </summary>
 		public CommonSecretsContainer()
 		{
 			this.version = currentVersionNumber;
 		}
+
+		#region Helpers
+
+		/// <summary>
+		/// Find KeyDerivationFunctionEntry with key identifier
+		/// </summary>
+		/// <param name="keyIdentifier">Key identifier to seek</param>
+		/// <returns>KeyDerivationFunctionEntry if match is found; null otherwise</returns>
+		public KeyDerivationFunctionEntry FindKeyDerivationFunctionEntryWithKeyIdentifier(string keyIdentifier)
+		{
+			KeyDerivationFunctionEntry returnValue = null;
+
+			foreach (KeyDerivationFunctionEntry kdfe in keyDerivationFunctionEntries)
+			{
+				if (keyIdentifier == kdfe.GetKeyIdentifier())
+				{
+					returnValue = kdfe;
+					break;
+				}
+			}
+
+			return returnValue;
+		}
+
+		#endregion // Helpers
 	}
 }
