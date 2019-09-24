@@ -3,6 +3,7 @@ using CSCommonSecrets;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace Tests
 {
@@ -110,6 +111,25 @@ namespace Tests
 			Assert.GreaterOrEqual(kdfe.iterations, KeyDerivationFunctionEntry.iterationsMin);
 			Assert.AreEqual(64, derivedPassword.Length);
 			Assert.Greater(CalculateEntropy.ShannonEntropy(derivedPassword), 4.0);
+		}
+
+		[Test]
+		public void ChecksumSurvivesRoundtrip()
+		{
+			// Arrange
+			byte[] salt = Encoding.UTF8.GetBytes("saltKEYbcTcXHCBxtjD");
+			KeyDerivationFunctionEntry kdfe1 = new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA512, salt, 100000, 64, "master_key" );
+
+			// Act
+			string checksum1 = kdfe1.GetChecksumAsHex();
+
+			string json = JsonConvert.SerializeObject(kdfe1, Formatting.Indented);
+
+			KeyDerivationFunctionEntry kdfe2 = JsonConvert.DeserializeObject<KeyDerivationFunctionEntry>(json);
+
+			// Assert
+			Assert.AreEqual(64, checksum1.Length);
+			Assert.AreEqual(checksum1, kdfe2.GetChecksumAsHex());
 		}
 	}
 }

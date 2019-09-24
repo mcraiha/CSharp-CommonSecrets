@@ -18,9 +18,9 @@ namespace CSCommonSecrets
 
 		public static readonly int suggestedMinIterationsCount = 100_000;
 
-		public KDFAlgorithm algorithm;
+		public string algorithm;
 
-		public KeyDerivationPrf pseudorandomFunction;
+		public string pseudorandomFunction;
 
 		/// <summary>
 		/// Salt bytes
@@ -42,7 +42,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		public byte[] keyIdentifier;
 
-		private string checksum = string.Empty;
+		public string checksum { get; set; } = string.Empty;
 
 		/// <summary>
 		/// For (de)serialization
@@ -76,9 +76,9 @@ namespace CSCommonSecrets
 				throw new ArgumentException($"{nameof(id)} should contain something!");
 			}
 
-			this.algorithm = KDFAlgorithm.PBKDF2;
+			this.algorithm = KDFAlgorithm.PBKDF2.ToString();
 
-			this.pseudorandomFunction = prf;
+			this.pseudorandomFunction = prf.ToString();
 			
 			this.salt = saltBytes;
 
@@ -87,17 +87,42 @@ namespace CSCommonSecrets
 			this.derivedKeyLengthInBytes = howManyBytesAreWanted;
 
 			this.keyIdentifier = Encoding.UTF8.GetBytes(id);
+
+			// Calculate new checksum
+			this.CalculateAndUpdateChecksum();
 		}
 
 		public byte[] GeneratePasswordBytes(string regularPassword)
 		{
-			return KeyDerivation.Pbkdf2(regularPassword, this.salt, this.pseudorandomFunction, this.iterations, this.derivedKeyLengthInBytes);
+			Enum.TryParse(this.pseudorandomFunction, out KeyDerivationPrf keyDerivationPrf);
+
+			return KeyDerivation.Pbkdf2(regularPassword, this.salt, keyDerivationPrf, this.iterations, this.derivedKeyLengthInBytes);
 		}
 
 		public string GetKeyIdentifier()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
 		}
+
+		#region Checksum
+
+		public string GetChecksumAsHex()
+		{
+			return this.checksum;
+		}
+
+		private string CalculateHexChecksum()
+		{
+			return ChecksumHelper.CalculateHexChecksum(Encoding.UTF8.GetBytes(this.algorithm), Encoding.UTF8.GetBytes(this.pseudorandomFunction), this.salt,
+														BitConverter.GetBytes(this.iterations), BitConverter.GetBytes(this.derivedKeyLengthInBytes), this.keyIdentifier);
+		}
+
+		private void CalculateAndUpdateChecksum()
+		{
+			this.checksum = this.CalculateHexChecksum();
+		}
+
+		#endregion // Checksum
 
 
 		#region Static helpers
