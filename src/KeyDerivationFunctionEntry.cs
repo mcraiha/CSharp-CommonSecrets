@@ -18,8 +18,14 @@ namespace CSCommonSecrets
 
 		public static readonly int suggestedMinIterationsCount = 100_000;
 
+		/// <summary>
+		/// Algorithm can only be "PBKDF2"
+		/// </summary>
 		public string algorithm;
 
+		/// <summary>
+		/// Pseudo-random function can be either "HMAC-SHA256" or "HMAC-SHA512". It is casted to enum.
+		/// </summary>
 		public string pseudorandomFunction;
 
 		/// <summary>
