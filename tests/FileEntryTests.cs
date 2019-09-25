@@ -51,6 +51,7 @@ namespace Tests
 
 			// Act
 			var modificationTime1 = fe.modificationTime;
+			System.Threading.Thread.Sleep(1100);
 			fe.UpdateFileEntry(fe.GetFilename(), new byte[] { });
 			var modificationTime2 = fe.modificationTime;
 

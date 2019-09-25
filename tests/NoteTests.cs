@@ -51,6 +51,7 @@ namespace Tests
 
 			// Act
 			var modificationTime1 = note.modificationTime;
+			System.Threading.Thread.Sleep(1100);
 			note.UpdateNote(note.GetNoteTitle(), "Some text here, yes. part 2");
 			var modificationTime2 = note.modificationTime;
 

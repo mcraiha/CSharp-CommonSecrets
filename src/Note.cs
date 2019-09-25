@@ -11,10 +11,10 @@ namespace CSCommonSecrets
 		public byte[] noteText { get; set; } = new byte[0];
 		public static readonly string noteTextKey = nameof(noteText);
 
-		public DateTimeOffset creationTime { get; set; } = DateTimeOffset.UtcNow;
+		public long creationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		public static readonly string creationTimeKey = nameof(creationTime);
 
-		public DateTimeOffset modificationTime { get; set; } = DateTimeOffset.UtcNow;
+		public long modificationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		public static readonly string modificationTimeKey = nameof(modificationTime);
 
 		public string checksum { get; set; } = string.Empty;
@@ -36,7 +36,7 @@ namespace CSCommonSecrets
 		{
 			this.noteTitle = Encoding.UTF8.GetBytes(updatedNoteTitle);
 			this.noteText = Encoding.UTF8.GetBytes(updatedNoteText);
-			this.modificationTime = DateTimeOffset.UtcNow;
+			this.modificationTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 			this.CalculateAndUpdateChecksum();
 		}
 
@@ -48,6 +48,16 @@ namespace CSCommonSecrets
 		public string GetNoteText()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.noteText);
+		}
+
+		public DateTimeOffset GetCreationTime()
+		{
+			return DateTimeOffset.FromUnixTimeSeconds(this.creationTime);
+		}
+
+		public DateTimeOffset GetModificationTime()
+		{
+			return DateTimeOffset.FromUnixTimeSeconds(this.modificationTime);
 		}
 
 		public string GetChecksumAsHex()
@@ -62,8 +72,8 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(this.noteTitle, this.noteText, BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()),
-														BitConverter.GetBytes(this.modificationTime.ToUnixTimeSeconds()));
+			return ChecksumHelper.CalculateHexChecksum(this.noteTitle, this.noteText, BitConverter.GetBytes(this.creationTime),
+														BitConverter.GetBytes(this.modificationTime));
 		}
 
 		private void CalculateAndUpdateChecksum()

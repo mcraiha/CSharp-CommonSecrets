@@ -28,8 +28,8 @@ namespace CSCommonSecrets
 			{
 				{ Note.noteTitleKey, note.GetNoteTitle() },
 				{ Note.noteTextKey, note.GetNoteText() },
-				{ Note.creationTimeKey, note.creationTime },
-				{ Note.modificationTimeKey, note.modificationTime },
+				{ Note.creationTimeKey, DateTimeOffset.FromUnixTimeSeconds(note.creationTime) },
+				{ Note.modificationTimeKey, DateTimeOffset.FromUnixTimeSeconds(note.modificationTime) },
 			};
 
 			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);

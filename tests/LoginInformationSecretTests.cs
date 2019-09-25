@@ -167,7 +167,7 @@ namespace Tests
 			DateTimeOffset loginInformationCreationTime = loginInformationSecret.GetCreationTime(derivedKey);
 
 			// Assert
-			Assert.AreEqual(loginInformation.creationTime.ToUnixTimeSeconds(), loginInformationCreationTime.ToUnixTimeSeconds());
+			Assert.AreEqual(loginInformation.GetCreationTime(), loginInformationCreationTime);
 		}
 
 		[Test]
@@ -182,7 +182,7 @@ namespace Tests
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
 			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
-			Thread.Sleep(100);
+			Thread.Sleep(1100);
 			loginInformationModified.UpdateNotes("Some text to here so modification time triggers");
 
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
@@ -192,7 +192,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(loginInformationModified.modificationTime > loginInformationModified.creationTime);
-			Assert.AreEqual(loginInformationModified.modificationTime.ToUnixTimeSeconds(), loginInformationModificationTime.ToUnixTimeSeconds());
+			Assert.AreEqual(loginInformationModified.GetModificationTime(), loginInformationModificationTime);
 		}
 
 		[Test]

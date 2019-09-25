@@ -13,10 +13,10 @@ namespace CSCommonSecrets
 		public static readonly string fileContentKey = nameof(fileContent);
 
 
-		public DateTimeOffset creationTime { get; set; } = DateTimeOffset.UtcNow;
+		public long creationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		public static readonly string creationTimeKey = nameof(creationTime);
 
-		public DateTimeOffset modificationTime { get; set; } = DateTimeOffset.UtcNow;
+		public long modificationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		public static readonly string modificationTimeKey = nameof(modificationTime);
 
 		public string checksum { get; set; } = string.Empty;
@@ -38,7 +38,7 @@ namespace CSCommonSecrets
 		{
 			this.filename = Encoding.UTF8.GetBytes(updatedFilename);
 			this.fileContent = updatedFileContent;
-			this.modificationTime = DateTimeOffset.UtcNow;
+			this.modificationTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 			this.CalculateAndUpdateChecksum();
 		}
 
@@ -52,6 +52,16 @@ namespace CSCommonSecrets
 			return fileContent;
 		}
 
+		public DateTimeOffset GetCreationTime()
+		{
+			return DateTimeOffset.FromUnixTimeSeconds(this.creationTime);
+		}
+
+		public DateTimeOffset GetModificationTime()
+		{
+			return DateTimeOffset.FromUnixTimeSeconds(this.modificationTime);
+		}
+
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;
@@ -59,8 +69,7 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(this.filename, this.fileContent, BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()),
-														BitConverter.GetBytes(this.modificationTime.ToUnixTimeSeconds()));
+			return ChecksumHelper.CalculateHexChecksum(this.filename, this.fileContent, BitConverter.GetBytes(this.creationTime), BitConverter.GetBytes(this.modificationTime));
 		}
 
 		private void CalculateAndUpdateChecksum()

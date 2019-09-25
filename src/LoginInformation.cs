@@ -20,10 +20,10 @@ namespace CSCommonSecrets
 		public byte[] notes { get; set; } = new byte[0];
 		public static readonly string notesKey = nameof(notes);
 
-		public DateTimeOffset creationTime { get; set; } = DateTimeOffset.UtcNow;
+		public long creationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		public static readonly string creationTimeKey = nameof(creationTime);
 
-		public DateTimeOffset modificationTime { get; set; } = DateTimeOffset.UtcNow;
+		public long modificationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		public static readonly string modificationTimeKey = nameof(modificationTime);
 
 		public byte[] icon { get; set; } = new byte[0];
@@ -65,12 +65,16 @@ namespace CSCommonSecrets
 		{
 			this.title = Encoding.UTF8.GetBytes(updatedTitle);
 
+			this.UpdateModificationTime();
+
 			this.CalculateAndUpdateChecksum();
 		}
 
 		public void UpdateUrl(string updatedUrl)
 		{
 			this.url = Encoding.UTF8.GetBytes(updatedUrl);
+
+			this.UpdateModificationTime();
 
 			this.CalculateAndUpdateChecksum();
 		}
@@ -79,6 +83,8 @@ namespace CSCommonSecrets
 		{
 			this.username = Encoding.UTF8.GetBytes(updatedUsername);
 
+			this.UpdateModificationTime();
+
 			this.CalculateAndUpdateChecksum();
 		}
 
@@ -86,17 +92,21 @@ namespace CSCommonSecrets
 		{
 			this.password = Encoding.UTF8.GetBytes(updatedPassword);
 
+			this.UpdateModificationTime();
+
 			this.CalculateAndUpdateChecksum();
 		}
 
 		private void UpdateModificationTime()
 		{
-			this.modificationTime = DateTimeOffset.UtcNow;
+			this.modificationTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		}
 
 		public void UpdateNotes(string updatedNotes)
 		{
 			this.notes = Encoding.UTF8.GetBytes(updatedNotes);
+
+			this.UpdateModificationTime();
 
 			this.CalculateAndUpdateChecksum();
 		}
@@ -105,12 +115,16 @@ namespace CSCommonSecrets
 		{
 			this.icon = updatedIcon;
 
+			this.UpdateModificationTime();
+
 			this.CalculateAndUpdateChecksum();
 		}
 
 		public void UpdateCategory(string updatedCategory)
 		{
 			this.category = Encoding.UTF8.GetBytes(updatedCategory);
+
+			this.UpdateModificationTime();
 
 			this.CalculateAndUpdateChecksum();
 		}
@@ -119,10 +133,12 @@ namespace CSCommonSecrets
 		{
 			this.tags = Encoding.UTF8.GetBytes(updatedTags);
 
+			this.UpdateModificationTime();
+
 			this.CalculateAndUpdateChecksum();
 		}
 
-		#endregion // Updatesa
+		#endregion // Updates
 
 		#region Getters
 
@@ -166,6 +182,16 @@ namespace CSCommonSecrets
 			return System.Text.Encoding.UTF8.GetString(this.tags);
 		}
 
+		public DateTimeOffset GetCreationTime()
+		{
+			return DateTimeOffset.FromUnixTimeSeconds(this.creationTime);
+		}
+
+		public DateTimeOffset GetModificationTime()
+		{
+			return DateTimeOffset.FromUnixTimeSeconds(this.modificationTime);
+		}
+
 		#endregion // Getters
 
 		public string GetChecksumAsHex()
@@ -180,7 +206,7 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(this.title, this.url, this.username, this.password, this.notes, BitConverter.GetBytes(this.creationTime.ToUnixTimeSeconds()), BitConverter.GetBytes(this.modificationTime.ToUnixTimeSeconds()),
+			return ChecksumHelper.CalculateHexChecksum(this.title, this.url, this.username, this.password, this.notes, BitConverter.GetBytes(this.creationTime), BitConverter.GetBytes(this.modificationTime),
 														this.icon, this.category, this.tags);
 		}
 

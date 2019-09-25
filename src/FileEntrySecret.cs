@@ -28,8 +28,8 @@ namespace CSCommonSecrets
 			{
 				{ FileEntry.filenameKey, fileEntry.GetFilename() },
 				{ FileEntry.fileContentKey, fileEntry.GetFileContent() },
-				{ FileEntry.creationTimeKey, fileEntry.creationTime },
-				{ FileEntry.modificationTimeKey, fileEntry.modificationTime },
+				{ FileEntry.creationTimeKey, DateTimeOffset.FromUnixTimeSeconds(fileEntry.creationTime) },
+				{ FileEntry.modificationTimeKey, DateTimeOffset.FromUnixTimeSeconds(fileEntry.modificationTime) },
 			};
 
 			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
