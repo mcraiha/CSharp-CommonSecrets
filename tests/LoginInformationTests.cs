@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using NUnit.Framework;
 using CSCommonSecrets;
 using Newtonsoft.Json;
@@ -24,6 +26,22 @@ namespace Tests
 			// Assert
 			Assert.IsNotNull(li1);
 			Assert.IsNotNull(li2);
+		}
+
+		[Test]
+		public void ModificationTimeTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newUsername: "dragon", newPassword: "password1");
+
+			// Act
+			DateTimeOffset modificationTime1 = li.GetModificationTime();
+			Thread.Sleep(1100);
+			li.UpdateUsername("dragon2");
+			DateTimeOffset modificationTime2 = li.GetModificationTime();
+
+			// Assert
+			Assert.Greater(modificationTime2, modificationTime1);
 		}
 
 		[Test]
