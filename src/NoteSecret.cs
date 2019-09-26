@@ -78,6 +78,18 @@ namespace CSCommonSecrets
 			return (string)noteAsDictionary[Note.noteTextKey];
 		}
 
+		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
+		{
+			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
+			return (DateTimeOffset)noteAsDictionary[Note.creationTimeKey];
+		}
+
+		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
+		{
+			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
+			return (DateTimeOffset)noteAsDictionary[Note.modificationTimeKey];
+		}
+
 		private Dictionary<string, object> GetNoteAsDictionary(byte[] derivedPassword)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
@@ -97,7 +109,7 @@ namespace CSCommonSecrets
 				throw audalfCheck.exception;
 			}
 
-			Dictionary<string, object> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF);
+			Dictionary<string, object> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: new DeserializationSettings() { wantedDateTimeType = typeof(DateTimeOffset) });
 
 			return noteAsDictionary;
 		}
@@ -108,6 +120,27 @@ namespace CSCommonSecrets
 		}
 
 		#endregion // Common getters
+
+
+		#region Common setters
+
+		public void SetNoteTitle(byte[] derivedPassword, string newNoteTitle)
+		{
+			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
+			noteAsDictionary[Note.noteTitleKey] = newNoteTitle;
+			noteAsDictionary[Note.modificationTimeKey] = DateTimeOffset.UtcNow;
+
+			// Create AUDALF payload from dictionary
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+
+			// Encrypt the AUDALF payload with given algorithm
+			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+
+			// Calculate new checksum
+			this.CalculateAndUpdateChecksum();
+		}
+
+		#endregion // Common setters
 
 
 		#region Checksum
