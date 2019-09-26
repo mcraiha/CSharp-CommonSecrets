@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using CSCommonSecrets;
+using System;
+using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -64,6 +66,36 @@ namespace Tests
 		}
 
 		[Test]
+		public void SetNoteTitleTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string title1 = "Wishlist for holidays";
+			string title2 = "Something nices";
+			string text = "peace, happiness, freedom";
+
+			Note note = new Note(title1, text);
+
+			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			string noteTitle1 = noteSecret.GetNoteTitle(derivedKey);
+			noteSecret.SetNoteTitle(derivedKey, title2);
+			string noteTitle2 = noteSecret.GetNoteTitle(derivedKey);
+
+			// Assert
+			Assert.AreEqual(title1, noteTitle1);
+			Assert.AreEqual(title2, noteTitle2);
+			Assert.AreNotEqual(noteTitle1, noteTitle2);
+		}
+
+		[Test]
 		public void GetNoteTextTest()
 		{
 			// Arrange
@@ -86,6 +118,34 @@ namespace Tests
 
 			// Assert
 			Assert.AreEqual(text, noteText);
+		}
+
+		[Test]
+		public void GetModificationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 15, 200, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xf3, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string title = "Wishlist for holidays";
+			string text = "peace, happiness, freedom";
+
+			Note note = new Note(title, text);
+
+			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+			
+			// Act
+			DateTimeOffset modificationTime1 = noteSecret.GetModificationTime(derivedKey);
+			Thread.Sleep(1100);
+			noteSecret.SetNoteTitle(derivedKey, "1234567");
+			DateTimeOffset modificationTime2 = noteSecret.GetModificationTime(derivedKey);
+
+			// Assert
+			Assert.Greater(modificationTime2, modificationTime1);
 		}
 
 		[Test]
