@@ -78,6 +78,11 @@ namespace CSCommonSecrets
 			return (byte[])fileEntryAsDictionary[FileEntry.fileContentKey];
 		}
 
+		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
+		{
+			wantedDateTimeType = typeof(DateTimeOffset)
+		};
+
 		private Dictionary<string, object> GetFileEntryAsDictionary(byte[] derivedPassword)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
@@ -97,7 +102,7 @@ namespace CSCommonSecrets
 				throw audalfCheck.exception;
 			}
 
-			Dictionary<string, object> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF);
+			Dictionary<string, object> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 			return fileEntryAsDictionary;
 		}
