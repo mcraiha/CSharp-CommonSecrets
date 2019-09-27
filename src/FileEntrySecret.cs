@@ -78,6 +78,18 @@ namespace CSCommonSecrets
 			return (byte[])fileEntryAsDictionary[FileEntry.fileContentKey];
 		}
 
+		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
+		{
+			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
+			return (DateTimeOffset)fileEntryAsDictionary[FileEntry.creationTimeKey];
+		}
+
+		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
+		{
+			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
+			return (DateTimeOffset)fileEntryAsDictionary[FileEntry.modificationTimeKey];
+		}
+
 		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
 		{
 			wantedDateTimeType = typeof(DateTimeOffset)
@@ -108,6 +120,27 @@ namespace CSCommonSecrets
 		}
 
 		#endregion // Common getters
+
+
+		#region Common setters
+
+		public void SetFilename(byte[] derivedPassword, string newFilename)
+		{
+			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
+			fileEntryAsDictionary[FileEntry.filenameKey] = newFilename;
+			fileEntryAsDictionary[FileEntry.modificationTimeKey] = DateTimeOffset.UtcNow;
+
+			// Create AUDALF payload from dictionary
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(fileEntryAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+
+			// Encrypt the AUDALF payload with given algorithm
+			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+
+			// Calculate new checksum
+			this.CalculateAndUpdateChecksum();
+		}
+
+		#endregion // Common setters
 
 
 		#region Checksum
