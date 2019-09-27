@@ -1,5 +1,7 @@
 using NUnit.Framework;
 using CSCommonSecrets;
+using System;
+using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -86,6 +88,59 @@ namespace Tests
 
 			// Assert
 			CollectionAssert.AreEqual(fileContent, rtFileContent);
+		}
+
+		[Test]
+		public void GetCreationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string filename = "nice.pdf";
+			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+
+			FileEntry fe = new FileEntry(filename, fileContent);
+
+			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			DateTimeOffset fileEntryCreationTime = fes.GetCreationTime(derivedKey);
+
+			// Assert
+			Assert.AreEqual(fe.GetCreationTime(), fileEntryCreationTime);
+		}
+
+		[Test]
+		public void GetModificationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string filename = "nice.pdf";
+			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+
+			FileEntry fe = new FileEntry(filename, fileContent);
+
+			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			DateTimeOffset fileEntryModificationTime1 = fes.GetModificationTime(derivedKey);
+			Thread.Sleep(1100);
+			fes.SetFilename(derivedKey, "much_nicer.pdf");
+			DateTimeOffset fileEntryModificationTime2 = fes.GetModificationTime(derivedKey);
+
+			// Assert
+			Assert.Greater(fileEntryModificationTime2, fileEntryModificationTime1);
 		}
 
 		[Test]
