@@ -90,6 +90,11 @@ namespace CSCommonSecrets
 			return (DateTimeOffset)noteAsDictionary[Note.modificationTimeKey];
 		}
 
+		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
+		{
+			wantedDateTimeType = typeof(DateTimeOffset)
+		};
+
 		private Dictionary<string, object> GetNoteAsDictionary(byte[] derivedPassword)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
@@ -109,7 +114,7 @@ namespace CSCommonSecrets
 				throw audalfCheck.exception;
 			}
 
-			Dictionary<string, object> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: new DeserializationSettings() { wantedDateTimeType = typeof(DateTimeOffset) });
+			Dictionary<string, object> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 			return noteAsDictionary;
 		}
