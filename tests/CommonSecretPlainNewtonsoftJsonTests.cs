@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Tests
 {
-	public class CommonSecretPlainJsonTests
+	public class CommonSecretPlainNewtonsoftJsonTests
 	{
 		[SetUp]
 		public void Setup()
@@ -178,5 +178,40 @@ namespace Tests
 				Assert.IsTrue(ComparisonHelper.AreFileEntrySecretsEqual(csc.fileSecrets[i], cscDeserialized.fileSecrets[i]));
 			}
 		}
+
+		/*[Test]
+		public void WriteJsonTest()
+		{
+			// Arrange
+			CommonSecretsContainer csc = new CommonSecretsContainer();
+
+			string password = "dragon667";
+			byte[] initialCounter1 = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+			SettingsAES_CTR settingsAES_CTR1 = new SettingsAES_CTR(initialCounter1);
+			SymmetricKeyAlgorithm skaAES = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR1);
+
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry("does not matter");
+
+			// Act
+			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
+
+			csc.keyDerivationFunctionEntries.Add(kdfe);
+
+			csc.loginInformations.Add(ContentGenerator.GenerateRandomLoginInformation());
+
+			csc.loginInformationSecrets.Add(new LoginInformationSecret(ContentGenerator.GenerateRandomLoginInformation(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+			
+			csc.notes.Add(ContentGenerator.GenerateRandomNote());
+
+			csc.noteSecrets.Add(new NoteSecret(ContentGenerator.GenerateRandomNote(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+	
+			csc.files.Add(ContentGenerator.GenerateRandomFileEntry());
+
+			csc.fileSecrets.Add(new FileEntrySecret(ContentGenerator.GenerateRandomFileEntry(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+
+			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
+
+			//System.IO.File.WriteAllText("commonsecrets.json", json);
+		}*/
 	}
 }
