@@ -7,21 +7,21 @@ namespace CSCommonSecrets
 	{
 		public static readonly int currentVersionNumber = 1;
 
-		public int version;
+		public int version { get; set; }
 
-		public List<KeyDerivationFunctionEntry> keyDerivationFunctionEntries = new List<KeyDerivationFunctionEntry>();
+		public List<KeyDerivationFunctionEntry> keyDerivationFunctionEntries { get; set; } = new List<KeyDerivationFunctionEntry>();
 
 		// Login informations
-		public List<LoginInformation> loginInformations = new List<LoginInformation>();
-		public List<LoginInformationSecret> loginInformationSecrets = new List<LoginInformationSecret>();
+		public List<LoginInformation> loginInformations { get; set; } = new List<LoginInformation>();
+		public List<LoginInformationSecret> loginInformationSecrets { get; set; } = new List<LoginInformationSecret>();
 
 		// Notes
-		public List<Note> notes = new List<Note>();
-		public List<NoteSecret> noteSecrets = new List<NoteSecret>();
+		public List<Note> notes { get; set; } = new List<Note>();
+		public List<NoteSecret> noteSecrets { get; set; } = new List<NoteSecret>();
 
 		// Files
-		public List<FileEntry> files = new List<FileEntry>();
-		public List<FileEntrySecret> fileSecrets = new List<FileEntrySecret>();
+		public List<FileEntry> files { get; set; } = new List<FileEntry>();
+		public List<FileEntrySecret> fileSecrets { get; set; } = new List<FileEntrySecret>();
 
 		/// <summary>
 		/// Constructor without parameters for creating empty CommonSecretsContainer
