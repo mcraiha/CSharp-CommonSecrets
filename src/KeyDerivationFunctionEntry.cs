@@ -21,32 +21,32 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Algorithm can only be "PBKDF2"
 		/// </summary>
-		public string algorithm;
+		public string algorithm { get; set; }
 
 		/// <summary>
 		/// Pseudo-random function can be either "HMAC-SHA256" or "HMAC-SHA512". It is casted to enum.
 		/// </summary>
-		public string pseudorandomFunction;
+		public string pseudorandomFunction { get; set; }
 
 		/// <summary>
 		/// Salt bytes
 		/// </summary>
-		public byte[] salt;
+		public byte[] salt { get; set; }
 
 		/// <summary>
 		/// How many iterations should be done
 		/// </summary>
-		public int iterations;
+		public int iterations { get; set; }
 
 		/// <summary>
 		/// How many bytes should be returned
 		/// </summary>
-		public int derivedKeyLengthInBytes;
+		public int derivedKeyLengthInBytes { get; set; }
 
 		/// <summary>
-		/// Key identifier, e.g. "primary" as byte array
+		/// Key identifier, e.g. "primary" as UTF-8 byte array
 		/// </summary>
-		public byte[] keyIdentifier;
+		public byte[] keyIdentifier { get; set; }
 
 		public string checksum { get; set; } = string.Empty;
 
