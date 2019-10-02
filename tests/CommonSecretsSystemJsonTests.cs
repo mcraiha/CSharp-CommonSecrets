@@ -9,7 +9,7 @@ namespace Tests
 {
 	public class CommonSecretsSystemJsonTests
 	{
-		private JsonSerializerOptions serializerOptions = new JsonSerializerOptions
+		private static readonly JsonSerializerOptions serializerOptions = new JsonSerializerOptions
 		{
 			WriteIndented = true
 		};
