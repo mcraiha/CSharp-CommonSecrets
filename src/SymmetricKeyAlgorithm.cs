@@ -1,4 +1,5 @@
 using System;
+using System.Text;
 using CS_AES_CTR;
 using CSChaCha20;
 using System.Security.Cryptography;
@@ -13,7 +14,7 @@ namespace CSCommonSecrets
 
 	public sealed class SymmetricKeyAlgorithm
 	{
-		public SymmetricEncryptionAlgorithm algorithm { get; set; }
+		public string algorithm { get; set; }
 
 		public int keySizeInBits { get; set; }
 
@@ -31,9 +32,9 @@ namespace CSCommonSecrets
 
 		public SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm algorithm, int keySizeInBits, object settings)
 		{
-			this.algorithm = algorithm;
+			this.algorithm = algorithm.ToString();
 
-			if (this.algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
+			if (algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
 			{
 				if (!Array.Exists(AES_CTR.allowedKeyLengths, allowed => allowed * 8 == keySizeInBits))
 				{
@@ -42,7 +43,7 @@ namespace CSCommonSecrets
 
 				this.settingsAES_CTR = (SettingsAES_CTR)settings;
 			}
-			else if (this.algorithm == SymmetricEncryptionAlgorithm.ChaCha20)
+			else if (algorithm == SymmetricEncryptionAlgorithm.ChaCha20)
 			{
 				if (ChaCha20.allowedKeyLength * 8 != keySizeInBits)
 				{
@@ -63,14 +64,16 @@ namespace CSCommonSecrets
 		{
 			byte[] returnArray = new byte[bytesToEncrypt.Length];
 
-			if (this.algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
+			Enum.TryParse(this.algorithm, out SymmetricEncryptionAlgorithm actualAlgorithm);
+
+			if (actualAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR)
 			{
 				using (AES_CTR forEncrypting = new AES_CTR(key, this.settingsAES_CTR.initialCounter))
 				{
 					forEncrypting.EncryptBytes(returnArray, bytesToEncrypt, bytesToEncrypt.Length);
 				}
 			}
-			else if (this.algorithm == SymmetricEncryptionAlgorithm.ChaCha20)
+			else if (actualAlgorithm == SymmetricEncryptionAlgorithm.ChaCha20)
 			{
 				using (ChaCha20 forEncrypting = new ChaCha20(key, this.settingsChaCha20.nonce, settingsChaCha20.counter))
 				{
@@ -89,19 +92,21 @@ namespace CSCommonSecrets
 		{
 			byte[] returnValue = null;
 
-			if (this.algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
+			Enum.TryParse(this.algorithm, out SymmetricEncryptionAlgorithm actualAlgorithm);
+
+			if (actualAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR)
 			{
 				returnValue = ChecksumHelper.JoinByteArrays(
-										BitConverter.GetBytes((int)SymmetricEncryptionAlgorithm.AES_CTR), 
-										BitConverter.GetBytes(keySizeInBits), 
+										Encoding.UTF8.GetBytes(this.algorithm), 
+										BitConverter.GetBytes(this.keySizeInBits), 
 										settingsAES_CTR.GetSettingsAsBytes()
 										);
 			}
-			else if (this.algorithm == SymmetricEncryptionAlgorithm.ChaCha20)
+			else if (actualAlgorithm == SymmetricEncryptionAlgorithm.ChaCha20)
 			{
 				returnValue = ChecksumHelper.JoinByteArrays(
-										BitConverter.GetBytes((int)SymmetricEncryptionAlgorithm.ChaCha20), 
-										BitConverter.GetBytes(keySizeInBits), 
+										Encoding.UTF8.GetBytes(this.algorithm), 
+										BitConverter.GetBytes(this.keySizeInBits), 
 										settingsChaCha20.GetSettingsAsBytes()
 										);
 			}
