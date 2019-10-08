@@ -12,13 +12,13 @@ CommonSecrets is specification for storing encrypted and plaintext login informa
 
 ## What could I do with it
 
-You can e.g. create you password manager that is compatible with CommonSecrets specifications.
+You can e.g. create your own password manager that is compatible with CommonSecrets specifications.
 
 ## How to use
 
 1. Either use nuget package (that is upcoming) OR download **src** folder content and add it to your project
 2. Create CommonSecretsContainer and add stuff to it
-3. Serialize to your chosen data-interchange format (JSON, XML, YAML etc.)
+3. Serialize it to your chosen data-interchange format (JSON, XML, YAML etc.)
 4. Deserialize the content and continue to add stuff to it
 5. Jump back to step 3.
 
