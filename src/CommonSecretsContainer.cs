@@ -31,6 +31,15 @@ namespace CSCommonSecrets
 			this.version = currentVersionNumber;
 		}
 
+		/// <summary>
+		/// Constructor for creating CommonSecretsContainer with one Key Derivation Function
+		/// </summary>
+		/// <param name="primaryKDF">"Primary" key derivation function</param>
+		public CommonSecretsContainer(KeyDerivationFunctionEntry primaryKDF)
+		{
+			this.keyDerivationFunctionEntries.Add(primaryKDF);
+		}
+
 		#region Helpers
 
 		/// <summary>
@@ -52,6 +61,29 @@ namespace CSCommonSecrets
 			}
 
 			return returnValue;
+		}
+
+		public (bool success, string possibleError) AddLoginInformationSecret(string password, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (loginInformation == null)
+			{
+				return (success: false, possibleError: "LoginInformation cannot be null");
+			}
+
+			KeyDerivationFunctionEntry kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+
+			if (kdfe == null)
+			{
+				return (success: false, possibleError: $"Cannot find key identifier matching to: {keyIdentifier}");
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
+
+			this.loginInformationSecrets.Add(new LoginInformationSecret(loginInformation, kdfe.GetKeyIdentifier(), ska, derivedPassword));
+
+			return (success: true, possibleError: "");
 		}
 
 		#endregion // Helpers
