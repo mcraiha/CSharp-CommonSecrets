@@ -88,6 +88,45 @@ namespace Tests
 		}
 
 		[Test]
+		public void GenerateNewTest()
+		{
+			// Arrange
+			byte[] keyAES = new byte[16] { 0x2b, 0x7e, 0x12, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0x17, 0x15, 0x88, 0x09, 0xcf, 0x43, 0x3c };
+			byte[] keyChaCha20 = new byte[validChaCha20KeyLength] { 
+														0x07, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 
+														0x08, 0x59, 0x0a, 0x0b, 0x2c, 0x0d, 0x0e, 0x0f, 
+														0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17, 
+														0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f 
+													};
+			byte[] content = new byte[] { 0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a };
+
+			SymmetricKeyAlgorithm skaAES = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+			SymmetricKeyAlgorithm skaChaCha20 = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.ChaCha20);
+
+			// Act
+			byte[] outputAES = skaAES.EncryptBytes(content, keyAES);
+			byte[] outputChaCha20 = skaChaCha20.EncryptBytes(content, keyChaCha20);
+
+			byte[] decryptedAES = skaAES.EncryptBytes(outputAES,keyAES);
+			byte[] decryptedChaCha20 = skaChaCha20.EncryptBytes(outputChaCha20, keyChaCha20);
+
+			// Assert
+			Assert.IsNotNull(skaAES);
+			Assert.IsNotNull(skaAES.settingsAES_CTR);
+			Assert.IsNull(skaAES.settingsChaCha20);
+
+			Assert.IsNotNull(skaChaCha20);
+			Assert.IsNotNull(skaChaCha20.settingsChaCha20);
+			Assert.IsNull(skaChaCha20.settingsAES_CTR);
+
+			CollectionAssert.AreNotEqual(content, outputAES);
+			CollectionAssert.AreNotEqual(content, outputChaCha20);
+
+			CollectionAssert.AreEqual(content, decryptedAES);
+			CollectionAssert.AreEqual(content, decryptedChaCha20);
+		}
+
+		[Test]
 		public void SymmetricKeyAlgorithmGetAsBytesTest()
 		{
 			// Arrange

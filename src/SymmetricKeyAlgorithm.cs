@@ -117,6 +117,16 @@ namespace CSCommonSecrets
 
 			return returnValue;
 		}
+
+		/// <summary>
+		/// Generate new SymmetricKeyAlgorithm
+		/// </summary>
+		/// <param name="symmetricEncryptionAlgorithm">Symmetric encryption algorithm</param>
+		/// <returns>SymmetricKeyAlgorithm</returns>
+		public static SymmetricKeyAlgorithm GenerateNew(SymmetricEncryptionAlgorithm symmetricEncryptionAlgorithm)
+		{
+			return new SymmetricKeyAlgorithm(symmetricEncryptionAlgorithm, 256, (symmetricEncryptionAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR ) ? (object)SettingsAES_CTR.CreateWithCryptographicRandomNumbers() : (object)SettingsChaCha20.CreateWithCryptographicRandomNumbers() );
+		}
   }
 
 	public sealed class SettingsAES_CTR
@@ -225,7 +235,7 @@ namespace CSCommonSecrets
 			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
 			{
 				rngCsp.GetBytes(nonce, 0, 8);
-				rngCsp.GetBytes(uintBytes, 0, 2);
+				rngCsp.GetBytes(uintBytes, 0, 3);
 			}
 
 			return new SettingsChaCha20(nonce, BitConverter.ToUInt32(uintBytes, 0)); 
