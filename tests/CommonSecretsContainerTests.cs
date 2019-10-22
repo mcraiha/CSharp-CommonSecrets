@@ -17,11 +17,15 @@ namespace Tests
 		public void WithOneParameterTest()
 		{
 			// Arrange
+			string kdfeIdentifier = "just a random";
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 
 			// Act
+			KeyDerivationFunctionEntry result = csc.FindKeyDerivationFunctionEntryWithKeyIdentifier(kdfeIdentifier);
 
 			// Assert
-
+			Assert.AreSame(kdfe, result);
 		}
 
 		[Test]
