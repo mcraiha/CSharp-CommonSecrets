@@ -43,7 +43,25 @@ namespace Tests
 			// Assert
 			Assert.IsTrue(addResult.success);
 			Assert.AreEqual("", addResult.possibleError);
+			Assert.AreEqual(1, csc.loginInformationSecrets.Count);
+		}
+
+		[Test]
+		public void AddNoteSecretTest()
+		{
+			// Arrange
+			string kdfeIdentifier = "somethinghere";
+			string password = "notdragon42";
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			
+			// Act
+			var addResult = csc.AddNoteSecret(password, ContentGenerator.GenerateRandomNote(), kdfeIdentifier);
+
+			// Assert
+			Assert.IsTrue(addResult.success);
+			Assert.AreEqual("", addResult.possibleError);
+			Assert.AreEqual(1, csc.noteSecrets.Count);
 		}
 	}
-
 }
