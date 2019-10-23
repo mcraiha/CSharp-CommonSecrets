@@ -15,7 +15,7 @@ namespace Tests
 			
 		}
 
-		private static readonly LoginInformation loginInformation = new LoginInformation("Wishlist for holidays", "https://example.com", "dragon6", "password1");
+		private static readonly LoginInformation loginInformation = new LoginInformation("Wishlist for holidays", "https://example.com", "someone@noexistent.com", "dragon6", "password1");
 
 		[Test]
 		public void ConstructorTest()

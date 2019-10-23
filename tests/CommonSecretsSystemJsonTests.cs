@@ -42,6 +42,7 @@ namespace Tests
 
 			string loginTitle1 = "Some nice website";
 			string loginUrl1 = "https://hopefullynobodybuysthisdomain.com";
+			string loginEmail1 = "nospam@spam.com";
 			string loginUsername1 = "superniceuser";
 			string loginPassword1 = "dragon77!"; 
 
@@ -52,7 +53,7 @@ namespace Tests
 			byte[] file1Content = new byte[] { 1, 34, 46, 47, 24, 33, 4};
 			
 			// Act
-			csc.loginInformations.Add(new LoginInformation(loginTitle1, loginUrl1, loginUsername1, loginPassword1));
+			csc.loginInformations.Add(new LoginInformation(loginTitle1, loginUrl1, loginEmail1, loginUsername1, loginPassword1));
 			csc.notes.Add(new Note(noteTitle1, noteText1));
 			csc.files.Add(new FileEntry(filename1, file1Content));
 
@@ -64,6 +65,7 @@ namespace Tests
 			// Assert
 			Assert.AreEqual(loginTitle1, cscDeserialized.loginInformations[0].title);
 			Assert.AreEqual(loginUrl1, cscDeserialized.loginInformations[0].url);
+			Assert.AreEqual(loginEmail1, cscDeserialized.loginInformations[0].email);
 			Assert.AreEqual(loginUsername1, cscDeserialized.loginInformations[0].username);
 			Assert.AreEqual(loginPassword1, cscDeserialized.loginInformations[0].password);
 

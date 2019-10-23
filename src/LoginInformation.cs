@@ -11,6 +11,9 @@ namespace CSCommonSecrets
 		public byte[] url { get; set; } = new byte[0];
 		public static readonly string urlKey = nameof(url);
 
+		public byte[] email { get; set; } = new byte[0];
+		public static readonly string emailKey = nameof(email);
+
 		public byte[] username { get; set; } = new byte[0];
 		public static readonly string usernameKey = nameof(username);
 
@@ -45,10 +48,11 @@ namespace CSCommonSecrets
 
 		}
 
-		public LoginInformation(string newTitle, string newUrl, string newUsername, string newPassword)
+		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword)
 		{
 			this.title = Encoding.UTF8.GetBytes(newTitle);
 			this.url = Encoding.UTF8.GetBytes(newUrl);
+			this.email = Encoding.UTF8.GetBytes(newEmail);
 			this.username = Encoding.UTF8.GetBytes(newUsername);
 			this.password = Encoding.UTF8.GetBytes(newPassword);
 
@@ -73,6 +77,15 @@ namespace CSCommonSecrets
 		public void UpdateUrl(string updatedUrl)
 		{
 			this.url = Encoding.UTF8.GetBytes(updatedUrl);
+
+			this.UpdateModificationTime();
+
+			this.CalculateAndUpdateChecksum();
+		}
+
+		public void UpdateEmail(string updatedEmail)
+		{
+			this.url = Encoding.UTF8.GetBytes(updatedEmail);
 
 			this.UpdateModificationTime();
 
@@ -152,6 +165,11 @@ namespace CSCommonSecrets
 			return System.Text.Encoding.UTF8.GetString(this.url);
 		}
 
+		public string GetEmail()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.email);
+		}
+
 		public string GetUsername()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.username);
@@ -206,7 +224,7 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(this.title, this.url, this.username, this.password, this.notes, BitConverter.GetBytes(this.creationTime), BitConverter.GetBytes(this.modificationTime),
+			return ChecksumHelper.CalculateHexChecksum(this.title, this.url, this.email, this.username, this.password, this.notes, BitConverter.GetBytes(this.creationTime), BitConverter.GetBytes(this.modificationTime),
 														this.icon, this.category, this.tags);
 		}
 

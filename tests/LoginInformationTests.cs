@@ -19,7 +19,7 @@ namespace Tests
 		{
 			// Arrange
 			LoginInformation li1 = new LoginInformation();
-			LoginInformation li2 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newUsername: "dragon", newPassword: "password1");
+			LoginInformation li2 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
 
 			// Act
 
@@ -32,7 +32,7 @@ namespace Tests
 		public void ModificationTimeTest()
 		{
 			// Arrange
-			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newUsername: "dragon", newPassword: "password1");
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
 
 			// Act
 			DateTimeOffset modificationTime1 = li.GetModificationTime();
@@ -49,8 +49,8 @@ namespace Tests
 		{
 			// Arrange
 			LoginInformation li1 = new LoginInformation();
-			LoginInformation li2 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newUsername: "dragon", newPassword: "password1");			
-			LoginInformation li3 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newUsername: "dragon", newPassword: "password1");
+			LoginInformation li2 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");			
+			LoginInformation li3 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
 
 			// Act
 			string checksum1 = li1.GetChecksumAsHex();
@@ -71,7 +71,7 @@ namespace Tests
 		public void ShallowCopyTest()
 		{
 			// Arrange
-			LoginInformation li1 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newUsername: "dragon123", newPassword: "password13");
+			LoginInformation li1 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13");
 			
 			// Act
 			LoginInformation li2 = li1.ShallowCopy();
@@ -88,7 +88,7 @@ namespace Tests
 		public void ChecksumSurvivesRoundtrip()
 		{
 			// Arrange
-			LoginInformation li1 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newUsername: "dragon123", newPassword: "password13");
+			LoginInformation li1 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13");
 
 			// Act
 			string checksum1 = li1.GetChecksumAsHex();
