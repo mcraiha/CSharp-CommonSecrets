@@ -28,6 +28,7 @@ namespace CSCommonSecrets
 			{
 				{ LoginInformation.titleKey, loginInformation.GetTitle() },
 				{ LoginInformation.urlKey, loginInformation.GetURL() },
+				{ LoginInformation.emailKey, loginInformation.GetEmail() },
 				{ LoginInformation.usernameKey, loginInformation.GetUsername() },
 				{ LoginInformation.passwordKey, loginInformation.GetPassword() },
 				{ LoginInformation.notesKey, loginInformation.GetNotes() },
@@ -83,6 +84,12 @@ namespace CSCommonSecrets
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.urlKey];
+		}
+
+		public string GetEmail(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (string)loginInformationAsDictionary[LoginInformation.emailKey];
 		}
 
 		public string GetUsername(byte[] derivedPassword)

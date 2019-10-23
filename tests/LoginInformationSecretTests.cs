@@ -85,6 +85,27 @@ namespace Tests
 		}
 
 		[Test]
+		public void GetLoginInformatioEmailTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 8, 5, 6, 7, 88, 9, 107, 101, 12, 13, 104, 159, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0x22, 0xfb, 0xf3, 0xaa, 0xf5, 0xf6, 0xcc, 0xf8, 0xf9, 0xfa, 0x11, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			string loginInformationEmail = loginInformationSecret.GetEmail(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationEmail));
+			Assert.AreEqual(loginInformation.email, loginInformationEmail);
+		}
+
+		[Test]
 		public void GetLoginInformationUsernameTest()
 		{
 			// Arrange
