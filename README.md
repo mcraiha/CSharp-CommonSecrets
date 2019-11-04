@@ -16,7 +16,7 @@ You can e.g. create your own password manager that is compatible with CommonSecr
 
 ## How to use
 
-1. Either use nuget package (that is upcoming) OR download **src** folder content and add it to your project
+1. Either use [nuget](https://www.nuget.org/packages/LibCommonSecrets) package OR download **src** folder content, build it and add it to your project
 2. Create CommonSecretsContainer and add stuff to it
 3. Serialize it to your chosen data-interchange format (JSON, XML, YAML etc.)
 4. Deserialize the content and continue to add stuff to it
@@ -68,6 +68,6 @@ CommonSecretsContainer cscDeserialized = JsonSerializer.Deserialize<CommonSecret
 
 Library and its source code are licensed under [Unlicense](LICENSE), so you might use these as you wish.
 
-## Version history
+## Version history of this document
 
-0.1 First public release (this has NOT happened yet)
+0.1 First public release
