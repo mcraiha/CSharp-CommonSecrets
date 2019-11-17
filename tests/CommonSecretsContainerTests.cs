@@ -84,12 +84,17 @@ namespace Tests
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 			
 			// Act
-			var addResult = csc.AddFileEntrySecret(password, ContentGenerator.GenerateRandomFileEntry(), kdfeIdentifier);
+			var addResult1 = csc.AddFileEntrySecret(password, ContentGenerator.GenerateRandomFileEntry(), kdfeIdentifier);
+			var addResult2 = csc.AddFileEntrySecret(kdfe.GeneratePasswordBytes(password), ContentGenerator.GenerateRandomFileEntry(), kdfeIdentifier);
 
 			// Assert
-			Assert.IsTrue(addResult.success);
-			Assert.AreEqual("", addResult.possibleError);
-			Assert.AreEqual(1, csc.fileSecrets.Count);
+			Assert.IsTrue(addResult1.success);
+			Assert.AreEqual("", addResult1.possibleError);
+
+			Assert.IsTrue(addResult2.success);
+			Assert.AreEqual("", addResult2.possibleError);
+
+			Assert.AreEqual(2, csc.fileSecrets.Count);
 		}
 	}
 }
