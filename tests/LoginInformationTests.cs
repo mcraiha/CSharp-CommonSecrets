@@ -48,9 +48,10 @@ namespace Tests
 		public void ChecksumChangesTest()
 		{
 			// Arrange
+			DateTimeOffset dto = DateTimeOffset.UtcNow;
 			LoginInformation li1 = new LoginInformation();
-			LoginInformation li2 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");			
-			LoginInformation li3 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
+			LoginInformation li2 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", dto);			
+			LoginInformation li3 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", dto);
 
 			// Act
 			string checksum1 = li1.GetChecksumAsHex();
