@@ -80,7 +80,7 @@ namespace CSCommonSecrets
 			return (string)loginInformationAsDictionary[LoginInformation.titleKey];
 		}
 
-		public string GetUrl(byte[] derivedPassword)
+		public string GetURL(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.urlKey];

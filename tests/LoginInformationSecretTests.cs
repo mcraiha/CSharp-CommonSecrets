@@ -77,7 +77,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationUrl = loginInformationSecret.GetUrl(derivedKey);
+			string loginInformationUrl = loginInformationSecret.GetURL(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUrl));
