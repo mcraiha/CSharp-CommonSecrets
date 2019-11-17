@@ -38,12 +38,17 @@ namespace Tests
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 			
 			// Act
-			var addResult = csc.AddLoginInformationSecret(password, ContentGenerator.GenerateRandomLoginInformation(), kdfeIdentifier);
+			var addResult1 = csc.AddLoginInformationSecret(password, ContentGenerator.GenerateRandomLoginInformation(), kdfeIdentifier);
+			var addResult2 = csc.AddLoginInformationSecret(kdfe.GeneratePasswordBytes(password), ContentGenerator.GenerateRandomLoginInformation(), kdfeIdentifier);
 
 			// Assert
-			Assert.IsTrue(addResult.success);
-			Assert.AreEqual("", addResult.possibleError);
-			Assert.AreEqual(1, csc.loginInformationSecrets.Count);
+			Assert.IsTrue(addResult1.success);
+			Assert.AreEqual("", addResult1.possibleError);
+
+			Assert.IsTrue(addResult2.success);
+			Assert.AreEqual("", addResult2.possibleError);
+
+			Assert.AreEqual(2, csc.loginInformationSecrets.Count);
 		}
 
 		[Test]

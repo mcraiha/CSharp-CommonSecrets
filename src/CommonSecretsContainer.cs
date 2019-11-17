@@ -86,6 +86,27 @@ namespace CSCommonSecrets
 			return (success: true, possibleError: "");
 		}
 
+		public (bool success, string possibleError) AddLoginInformationSecret(byte[] derivedPassword, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (loginInformation == null)
+			{
+				return (success: false, possibleError: "LoginInformation cannot be null");
+			}
+
+			KeyDerivationFunctionEntry kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+
+			if (kdfe == null)
+			{
+				return (success: false, possibleError: $"Cannot find key identifier matching to: {keyIdentifier}");
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			this.loginInformationSecrets.Add(new LoginInformationSecret(loginInformation, kdfe.GetKeyIdentifier(), ska, derivedPassword));
+
+			return (success: true, possibleError: "");
+		}
+
 		public (bool success, string possibleError) AddNoteSecret(string password, Note note, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
 			if (note == null)
