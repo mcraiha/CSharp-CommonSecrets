@@ -29,12 +29,23 @@ namespace CSCommonSecrets
 			
 		}
 
-		public FileEntry(string newFilename, byte[] newFileContent)
+		public FileEntry(string newFilename, byte[] newFileContent) : this (newFilename, newFileContent, DateTimeOffset.UtcNow)
 		{
+
+		}
+
+		public FileEntry(string newFilename, byte[] newFileContent, DateTimeOffset time)
+		{
+			this.creationTime = time.ToUnixTimeSeconds();
 			this.UpdateFileEntry(newFilename, newFileContent);
 		}
 
 		public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent)
+		{
+			this.UpdateFileEntry(updatedFilename, updatedFileContent, DateTimeOffset.UtcNow);
+		}
+
+		public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent, DateTimeOffset time)
 		{
 			this.filename = Encoding.UTF8.GetBytes(updatedFilename);
 			this.fileContent = updatedFileContent;

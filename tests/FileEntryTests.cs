@@ -63,9 +63,10 @@ namespace Tests
 		public void ChecksumChangesTest()
 		{
 			// Arrange
+			DateTimeOffset dto = DateTimeOffset.UtcNow;
 			FileEntry fe1 = new FileEntry();
-			FileEntry fe2 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
-			FileEntry fe3 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
+			FileEntry fe2 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto);
+			FileEntry fe3 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto);
 
 			// Act
 			string checksum1 = fe1.GetChecksumAsHex();
