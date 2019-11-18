@@ -27,12 +27,23 @@ namespace CSCommonSecrets
 			
 		}
 
-		public Note(string newNoteTitle, string newNoteText)
+		public Note(string newNoteTitle, string newNoteText) : this (newNoteTitle, newNoteText, DateTimeOffset.UtcNow)
 		{
-			this.UpdateNote(newNoteTitle, newNoteText);
+			
+		}
+
+		public Note(string newNoteTitle, string newNoteText, DateTimeOffset time)
+		{
+			this.creationTime = time.ToUnixTimeSeconds();
+			this.UpdateNote(newNoteTitle, newNoteText, time);
 		}
 
 		public void UpdateNote(string updatedNoteTitle, string updatedNoteText)
+		{
+			this.UpdateNote(updatedNoteTitle, updatedNoteText, DateTimeOffset.UtcNow);
+		}
+
+		public void UpdateNote(string updatedNoteTitle, string updatedNoteText, DateTimeOffset time)
 		{
 			this.noteTitle = Encoding.UTF8.GetBytes(updatedNoteTitle);
 			this.noteText = Encoding.UTF8.GetBytes(updatedNoteText);

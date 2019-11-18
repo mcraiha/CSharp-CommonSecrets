@@ -63,9 +63,10 @@ namespace Tests
 		public void ChecksumChangesTest()
 		{
 			// Arrange
+			DateTimeOffset dto = DateTimeOffset.UtcNow;
 			Note note1 = new Note();
-			Note note2 = new Note("Some topic here", "Some text here, yes.");
-			Note note3 = new Note("Some topic here", "Some text here, yes.");
+			Note note2 = new Note("Some topic here", "Some text here, yes.", dto);
+			Note note3 = new Note("Some topic here", "Some text here, yes.", dto);
 
 			// Act
 			string checksum1 = note1.GetChecksumAsHex();
