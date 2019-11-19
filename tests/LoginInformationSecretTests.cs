@@ -293,6 +293,253 @@ namespace Tests
 		}
 
 		[Test]
+		public void SetLoginInformationTitleTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			string newTitle = "new and fresh!";
+
+			// Act
+			string loginInformationTitle1 = loginInformationSecret.GetTitle(derivedKey);
+			loginInformationSecret.SetTitle(newTitle, derivedKey);
+			string loginInformationTitle2 = loginInformationSecret.GetTitle(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle1));
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle2));
+			Assert.AreEqual(loginInformation.title, loginInformationTitle1);
+			Assert.AreEqual(newTitle, loginInformationTitle2);
+		}
+
+		[Test]
+		public void SetLoginInformationURLTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			string newURL = "https://newandbetter.future";
+
+			// Act
+			string loginInformationURL1 = loginInformationSecret.GetURL(derivedKey);
+			loginInformationSecret.SetURL(newURL, derivedKey);
+			string loginInformationURL2 = loginInformationSecret.GetURL(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationURL1));
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationURL2));
+			Assert.AreEqual(loginInformation.url, loginInformationURL1);
+			Assert.AreEqual(newURL, loginInformationURL2);
+		}
+
+		[Test]
+		public void SetLoginInformationEmailTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			string newEmail = "tomorrow@newandbetter.future";
+
+			// Act
+			string loginInformationEmail1 = loginInformationSecret.GetEmail(derivedKey);
+			loginInformationSecret.SetEmail(newEmail, derivedKey);
+			string loginInformationEmail2 = loginInformationSecret.GetEmail(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationEmail1));
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationEmail2));
+			Assert.AreEqual(loginInformation.email, loginInformationEmail1);
+			Assert.AreEqual(newEmail, loginInformationEmail2);
+		}
+
+		[Test]
+		public void SetLoginInformationUsernameTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			string newUsername = "futuredragon";
+
+			// Act
+			string loginInformationUsername1 = loginInformationSecret.GetUsername(derivedKey);
+			loginInformationSecret.SetUsername(newUsername, derivedKey);
+			string loginInformationUsername2 = loginInformationSecret.GetUsername(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUsername1));
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUsername2));
+			Assert.AreEqual(loginInformation.username, loginInformationUsername1);
+			Assert.AreEqual(newUsername, loginInformationUsername2);
+		}
+
+		[Test]
+		public void SetLoginInformationPasswordTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			string newPassword = "ag#%23,.67Hngrewn";
+
+			// Act
+			string loginInformationPassword1 = loginInformationSecret.GetPassword(derivedKey);
+			loginInformationSecret.SetPassword(newPassword, derivedKey);
+			string loginInformationPassword2 = loginInformationSecret.GetPassword(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationPassword1));
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationPassword2));
+			Assert.AreEqual(loginInformation.password, loginInformationPassword1);
+			Assert.AreEqual(newPassword, loginInformationPassword2);
+		}
+
+		[Test]
+		public void SetLoginInformationNotesTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			string newNotes = "future text that is happy and joyful for all purposes...";
+
+			// Act
+			loginInformationSecret.SetNotes(newNotes, derivedKey);
+			string loginInformationNotes2 = loginInformationSecret.GetNotes(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationNotes2));
+			Assert.AreEqual(newNotes, loginInformationNotes2);
+		}
+
+		[Test]
+		public void SetLoginInformationCreationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			DateTimeOffset newCreationTime = DateTimeOffset.UtcNow.AddDays(1); 
+
+			// Act
+			DateTimeOffset loginInformationCreationTime1 = loginInformationSecret.GetCreationTime(derivedKey);
+			loginInformationSecret.SetCreationTime(newCreationTime, derivedKey);
+			DateTimeOffset loginInformationCreationTime2 = loginInformationSecret.GetCreationTime(derivedKey);
+
+			// Assert
+			Assert.AreEqual(loginInformation.creationTime, loginInformationCreationTime1.ToUnixTimeSeconds());
+			Assert.AreEqual(newCreationTime.ToUnixTimeSeconds(), loginInformationCreationTime2.ToUnixTimeSeconds());
+		}
+
+		[Test]
+		public void SetLoginInformationModificationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			DateTimeOffset newModificationTime = DateTimeOffset.UtcNow.AddDays(1); 
+
+			// Act
+			DateTimeOffset loginInformationModificationTime1 = loginInformationSecret.GetModificationTime(derivedKey);
+			loginInformationSecret.SetModificationTime(newModificationTime, derivedKey);
+			DateTimeOffset loginInformationModificationTime2 = loginInformationSecret.GetModificationTime(derivedKey);
+
+			// Assert
+			Assert.AreEqual(loginInformation.modificationTime, loginInformationModificationTime1.ToUnixTimeSeconds());
+			Assert.AreEqual(newModificationTime.ToUnixTimeSeconds(), loginInformationModificationTime2.ToUnixTimeSeconds());
+		}
+
+		[Test]
+		public void SetLoginInformationIconTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			byte[] newIcon = new byte[] { 1, 2, 44, 55, 66, 33, 89, 23, 222, 111, 100, 99, 45, 127, 198, 255 };
+
+			// Act
+			loginInformationSecret.SetIcon(newIcon, derivedKey);
+			byte[] loginInformationIcon2 = loginInformationSecret.GetIcon(derivedKey);
+
+			// Assert
+			CollectionAssert.AreEqual(newIcon, loginInformationIcon2);
+		}
+
+		[Test]
+		public void SetLoginInformationCategoryTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			string newCategory = "Finance";
+
+			// Act
+			loginInformationSecret.SetCategory(newCategory, derivedKey);
+			string loginInformationCategory2 = loginInformationSecret.GetCategory(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationCategory2));
+			Assert.AreEqual(newCategory, loginInformationCategory2);
+		}
+
+		[Test]
+		public void SetLoginInformationTagsTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			string newTags = "Finance; Home; Travel; Future";
+
+			// Act
+			loginInformationSecret.SetTags(newTags, derivedKey);
+			string loginInformationTags2 = loginInformationSecret.GetTags(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTags2));
+			Assert.AreEqual(newTags, loginInformationTags2);
+		}
+
+		[Test]
 		public void ChecksumSurvivesRoundtrip()
 		{
 			// Arrange

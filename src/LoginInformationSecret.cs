@@ -71,7 +71,6 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
-
 		#region Common getters
 
 		public string GetTitle(byte[] derivedPassword)
@@ -176,6 +175,91 @@ namespace CSCommonSecrets
 
 		#endregion // Common getters
 
+		#region Common setters
+
+		public bool SetTitle(string newTitle, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.titleKey, newTitle, derivedPassword);
+		}
+
+		public bool SetURL(string newURL, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.urlKey, newURL, derivedPassword);
+		}
+
+		public bool SetEmail(string newEmail, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.emailKey, newEmail, derivedPassword);
+		}
+
+		public bool SetUsername(string newUsername, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.usernameKey, newUsername, derivedPassword);
+		}
+
+		public bool SetPassword(string newPassword, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.passwordKey, newPassword, derivedPassword);
+		}
+
+		public bool SetNotes(string newNotes, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.notesKey, newNotes, derivedPassword);
+		}
+
+		public bool SetCreationTime(DateTimeOffset newCreationTime, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.creationTimeKey, newCreationTime, derivedPassword);
+		}
+
+		public bool SetModificationTime(DateTimeOffset newModificationTime, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.modificationTimeKey, newModificationTime, derivedPassword);
+		}
+
+		public bool SetIcon(byte[] newIcon, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.iconKey, newIcon, derivedPassword);
+		}
+
+		public bool SetCategory(string newCategory, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.categoryKey, newCategory, derivedPassword);
+		}
+
+		public bool SetTags(string newTags, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.tagsKey, newTags, derivedPassword);
+		}
+
+		private bool GenericSet(string key, object value, byte[]  derivedPassword)
+		{
+			try 
+			{
+				Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+				loginInformationAsDictionary[key] = value;
+
+				// Generate new algorithm since data has changed
+				this.algorithm = SymmetricKeyAlgorithm.GenerateNew(this.algorithm.GetSymmetricEncryptionAlgorithm());
+
+				// Create AUDALF payload from dictionary
+				byte[] serializedBytes = AUDALF_Serialize.Serialize(loginInformationAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+
+				// Encrypt the AUDALF payload with given algorithm
+				this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+
+				// Calculate new checksum
+				this.CalculateAndUpdateChecksum();
+
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
+		#endregion // Common setters
 
 		#region Checksum
 
