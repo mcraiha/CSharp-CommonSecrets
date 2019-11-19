@@ -88,6 +88,16 @@ namespace CSCommonSecrets
 			return returnArray;
 		}
 
+		public SymmetricEncryptionAlgorithm GetSymmetricEncryptionAlgorithm()
+		{
+			if (Enum.TryParse(this.algorithm, out SymmetricEncryptionAlgorithm actualAlgorithm))
+			{
+				return actualAlgorithm;
+			}
+
+			throw new Exception("Cannot parse algorithm");
+		}
+
 		public byte[] GetSettingsAsBytes()
 		{
 			byte[] returnValue = null;
