@@ -232,7 +232,7 @@ namespace CSCommonSecrets
 			return this.GenericSet(LoginInformation.tagsKey, newTags, derivedPassword);
 		}
 
-		private bool GenericSet(string key, object value, byte[]  derivedPassword)
+		private bool GenericSet(string key, object value, byte[] derivedPassword)
 		{
 			try 
 			{
