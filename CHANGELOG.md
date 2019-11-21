@@ -4,6 +4,7 @@
 - Add AddLoginInformationSecret with derived password (**FEATURE**)
 - Add AddNoteSecret with derived password (**FEATURE**)
 - Add AddFileEntrySecret with derived password (**FEATURE**)
+- Add invidual setters to LoginInformationSecret, NoteSecret and FileEntrySecret (**FEATURE**)
 
 ## Version 0.9.0 (released 2019-11-04)
 - First nuget release
