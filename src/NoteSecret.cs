@@ -129,20 +129,44 @@ namespace CSCommonSecrets
 
 		#region Common setters
 
-		public void SetNoteTitle(byte[] derivedPassword, string newNoteTitle)
+		public bool SetNoteTitle(string newNoteTitle, byte[] derivedPassword)
 		{
-			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
-			noteAsDictionary[Note.noteTitleKey] = newNoteTitle;
-			noteAsDictionary[Note.modificationTimeKey] = DateTimeOffset.UtcNow;
+			return this.GenericSet(Note.noteTitleKey, newNoteTitle, DateTimeOffset.UtcNow, derivedPassword);
+		}
 
-			// Create AUDALF payload from dictionary
-			byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+		public bool SetNoteText(string newNoteText, byte[] derivedPassword)
+		{
+			return this.GenericSet(Note.noteTextKey, newNoteText, DateTimeOffset.UtcNow, derivedPassword);
+		}
 
-			// Encrypt the AUDALF payload with given algorithm
-			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+		private bool GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword)
+		{
+			try 
+			{
+				Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
+				// Update wanted value
+				noteAsDictionary[key] = value;
+				// Update modification time
+				noteAsDictionary[Note.modificationTimeKey] = modificationTime;
 
-			// Calculate new checksum
-			this.CalculateAndUpdateChecksum();
+				// Generate new algorithm since data has changed
+				this.algorithm = SymmetricKeyAlgorithm.GenerateNew(this.algorithm.GetSymmetricEncryptionAlgorithm());
+
+				// Create AUDALF payload from dictionary
+				byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+
+				// Encrypt the AUDALF payload with given algorithm
+				this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+
+				// Calculate new checksum
+				this.CalculateAndUpdateChecksum();
+
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 
 		#endregion // Common setters

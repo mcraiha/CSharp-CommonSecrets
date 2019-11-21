@@ -66,36 +66,6 @@ namespace Tests
 		}
 
 		[Test]
-		public void SetNoteTitleTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
-
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
-
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
-
-			string title1 = "Wishlist for holidays";
-			string title2 = "Something nices";
-			string text = "peace, happiness, freedom";
-
-			Note note = new Note(title1, text);
-
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
-
-			// Act
-			string noteTitle1 = noteSecret.GetNoteTitle(derivedKey);
-			noteSecret.SetNoteTitle(derivedKey, title2);
-			string noteTitle2 = noteSecret.GetNoteTitle(derivedKey);
-
-			// Assert
-			Assert.AreEqual(title1, noteTitle1);
-			Assert.AreEqual(title2, noteTitle2);
-			Assert.AreNotEqual(noteTitle1, noteTitle2);
-		}
-
-		[Test]
 		public void GetNoteTextTest()
 		{
 			// Arrange
@@ -141,11 +111,69 @@ namespace Tests
 			// Act
 			DateTimeOffset modificationTime1 = noteSecret.GetModificationTime(derivedKey);
 			Thread.Sleep(1100);
-			noteSecret.SetNoteTitle(derivedKey, "1234567");
+			noteSecret.SetNoteTitle("1234567", derivedKey);
 			DateTimeOffset modificationTime2 = noteSecret.GetModificationTime(derivedKey);
 
 			// Assert
 			Assert.Greater(modificationTime2, modificationTime1);
+		}
+
+		[Test]
+		public void SetNoteTitleTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			string title = "Wishlist for holidays part IV";
+			string text = "peace, happiness, freedom and something...";
+
+			Note note = new Note(title, text);
+
+			NoteSecret noteSecret = new NoteSecret(note, "does not matter", ska, derivedKey);
+
+			string noteTitle1 = "future text that is happy and joyful for all holiday purposes...";
+
+			// Act
+			bool shouldBeTrue = noteSecret.SetNoteTitle(noteTitle1, derivedKey);
+			string noteTitle2 = noteSecret.GetNoteTitle(derivedKey);
+			bool shouldBeFalse = noteSecret.SetNoteTitle(noteTitle1,  new byte[] { 1, 2, 3 });
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+			Assert.IsFalse(string.IsNullOrEmpty(noteTitle2));
+			Assert.AreEqual(noteTitle1, noteTitle2);
+		}
+
+		[Test]
+		public void SetNoteTextTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			string title = "Top three";
+			string text = "Another long and super boring text for testing purposes.";
+
+			Note note = new Note(title, text);
+
+			NoteSecret noteSecret = new NoteSecret(note, "does not matter", ska, derivedKey);
+
+			string noteText1 = "Not so boring but still bit something text for test case";
+
+			// Act
+			bool shouldBeTrue = noteSecret.SetNoteText(noteText1, derivedKey);
+			string noteText2 = noteSecret.GetNoteText(derivedKey);
+			bool shouldBeFalse = noteSecret.SetNoteText(noteText1,  new byte[] { 1, 2, 3 });
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+			Assert.IsFalse(string.IsNullOrEmpty(noteText2));
+			Assert.AreEqual(noteText1, noteText2);
 		}
 
 		[Test]
