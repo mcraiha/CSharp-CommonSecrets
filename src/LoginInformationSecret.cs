@@ -179,65 +179,70 @@ namespace CSCommonSecrets
 
 		public bool SetTitle(string newTitle, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.titleKey, newTitle, derivedPassword);
+			return this.GenericSet(LoginInformation.titleKey, newTitle, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetURL(string newURL, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.urlKey, newURL, derivedPassword);
+			return this.GenericSet(LoginInformation.urlKey, newURL, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetEmail(string newEmail, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.emailKey, newEmail, derivedPassword);
+			return this.GenericSet(LoginInformation.emailKey, newEmail, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetUsername(string newUsername, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.usernameKey, newUsername, derivedPassword);
+			return this.GenericSet(LoginInformation.usernameKey, newUsername, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetPassword(string newPassword, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.passwordKey, newPassword, derivedPassword);
+			return this.GenericSet(LoginInformation.passwordKey, newPassword, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetNotes(string newNotes, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.notesKey, newNotes, derivedPassword);
+			return this.GenericSet(LoginInformation.notesKey, newNotes, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetCreationTime(DateTimeOffset newCreationTime, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.creationTimeKey, newCreationTime, derivedPassword);
+			return this.GenericSet(LoginInformation.creationTimeKey, newCreationTime,  DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetModificationTime(DateTimeOffset newModificationTime, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.modificationTimeKey, newModificationTime, derivedPassword);
+			return this.GenericSet(LoginInformation.modificationTimeKey, newModificationTime,  DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetIcon(byte[] newIcon, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.iconKey, newIcon, derivedPassword);
+			return this.GenericSet(LoginInformation.iconKey, newIcon, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetCategory(string newCategory, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.categoryKey, newCategory, derivedPassword);
+			return this.GenericSet(LoginInformation.categoryKey, newCategory, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		public bool SetTags(string newTags, byte[] derivedPassword)
 		{
-			return this.GenericSet(LoginInformation.tagsKey, newTags, derivedPassword);
+			return this.GenericSet(LoginInformation.tagsKey, newTags, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
-		private bool GenericSet(string key, object value, byte[] derivedPassword)
+		private bool GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword)
 		{
 			try 
 			{
 				Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 				loginInformationAsDictionary[key] = value;
+
+				if (key != LoginInformation.creationTimeKey && key != LoginInformation.modificationTimeKey)
+				{
+					loginInformationAsDictionary[LoginInformation.modificationTimeKey] = modificationTime;
+				}
 
 				// Generate new algorithm since data has changed
 				this.algorithm = SymmetricKeyAlgorithm.GenerateNew(this.algorithm.GetSymmetricEncryptionAlgorithm());
