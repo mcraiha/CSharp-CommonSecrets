@@ -124,20 +124,44 @@ namespace CSCommonSecrets
 
 		#region Common setters
 
-		public void SetFilename(byte[] derivedPassword, string newFilename)
+		public bool SetFilename(string newFilename, byte[] derivedPassword)
 		{
-			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
-			fileEntryAsDictionary[FileEntry.filenameKey] = newFilename;
-			fileEntryAsDictionary[FileEntry.modificationTimeKey] = DateTimeOffset.UtcNow;
+			return this.GenericSet(FileEntry.filenameKey, newFilename, DateTimeOffset.UtcNow, derivedPassword);
+		}
 
-			// Create AUDALF payload from dictionary
-			byte[] serializedBytes = AUDALF_Serialize.Serialize(fileEntryAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+		public bool SetFileContent(byte[] newFileContent, byte[] derivedPassword)
+		{
+			return this.GenericSet(FileEntry.fileContentKey, newFileContent, DateTimeOffset.UtcNow, derivedPassword);
+		}
 
-			// Encrypt the AUDALF payload with given algorithm
-			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+		private bool GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword)
+		{
+			try 
+			{
+				Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
+				// Update wanted value
+				fileEntryAsDictionary[key] = value;
+				// Update modification time
+				fileEntryAsDictionary[FileEntry.modificationTimeKey] = modificationTime;
 
-			// Calculate new checksum
-			this.CalculateAndUpdateChecksum();
+				// Generate new algorithm since data has changed
+				this.algorithm = SymmetricKeyAlgorithm.GenerateNew(this.algorithm.GetSymmetricEncryptionAlgorithm());
+
+				// Create AUDALF payload from dictionary
+				byte[] serializedBytes = AUDALF_Serialize.Serialize(fileEntryAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+
+				// Encrypt the AUDALF payload with given algorithm
+				this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
+
+				// Calculate new checksum
+				this.CalculateAndUpdateChecksum();
+
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 
 		#endregion // Common setters

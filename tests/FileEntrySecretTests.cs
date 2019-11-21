@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using CSCommonSecrets;
 using System;
+using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json;
@@ -136,11 +137,68 @@ namespace Tests
 			// Act
 			DateTimeOffset fileEntryModificationTime1 = fes.GetModificationTime(derivedKey);
 			Thread.Sleep(1100);
-			fes.SetFilename(derivedKey, "much_nicer.pdf");
+			fes.SetFilename("much_nicer.pdf", derivedKey);
 			DateTimeOffset fileEntryModificationTime2 = fes.GetModificationTime(derivedKey);
 
 			// Assert
 			Assert.Greater(fileEntryModificationTime2, fileEntryModificationTime1);
+		}
+
+		[Test]
+		public void SetFilenameTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			string filename = "backup.zip";
+			byte[] fileContent = Encoding.UTF8.GetBytes("peace, happiness, freedom and something...");
+
+			FileEntry fileEntry = new FileEntry(filename, fileContent);
+
+			FileEntrySecret fes = new FileEntrySecret(fileEntry, "does not matter", ska, derivedKey);
+
+			string filename1 = "another_backup.zip";
+
+			// Act
+			bool shouldBeTrue = fes.SetFilename(filename1, derivedKey);
+			string filename2 = fes.GetFilename(derivedKey);
+			bool shouldBeFalse = fes.SetFilename(filename1,  new byte[] { 1, 2, 3 });
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+			Assert.IsFalse(string.IsNullOrEmpty(filename2));
+			Assert.AreEqual(filename1, filename2);
+		}
+
+		[Test]
+		public void SetFileContentTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			string filename = "backup.zip";
+			byte[] fileContent = Encoding.UTF8.GetBytes("peace, happiness, freedom and something...");
+
+			FileEntry fileEntry = new FileEntry(filename, fileContent);
+
+			FileEntrySecret fes = new FileEntrySecret(fileEntry, "does not matter", ska, derivedKey);
+
+			byte[] fileContent1 = Encoding.UTF8.GetBytes("this is a wrong backup for this situation");
+
+			// Act
+			bool shouldBeTrue = fes.SetFileContent(fileContent1, derivedKey);
+			byte[] fileContent2 = fes.GetFileContent(derivedKey);
+			bool shouldBeFalse = fes.SetFileContent(fileContent1,  new byte[] { 1, 2, 3 });
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+			CollectionAssert.AreEqual(fileContent1, fileContent2);
 		}
 
 		[Test]
