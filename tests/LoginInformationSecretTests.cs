@@ -306,10 +306,13 @@ namespace Tests
 
 			// Act
 			string loginInformationTitle1 = loginInformationSecret.GetTitle(derivedKey);
-			loginInformationSecret.SetTitle(newTitle, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetTitle(newTitle, derivedKey);
 			string loginInformationTitle2 = loginInformationSecret.GetTitle(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetTitle(newTitle, new byte[] { 1, 2, 3});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle1));
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle2));
 			Assert.AreEqual(loginInformation.title, loginInformationTitle1);
@@ -330,10 +333,13 @@ namespace Tests
 
 			// Act
 			string loginInformationURL1 = loginInformationSecret.GetURL(derivedKey);
-			loginInformationSecret.SetURL(newURL, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetURL(newURL, derivedKey);
 			string loginInformationURL2 = loginInformationSecret.GetURL(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetURL(newURL, new byte[] { 1, 2, 3});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationURL1));
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationURL2));
 			Assert.AreEqual(loginInformation.url, loginInformationURL1);
@@ -354,10 +360,13 @@ namespace Tests
 
 			// Act
 			string loginInformationEmail1 = loginInformationSecret.GetEmail(derivedKey);
-			loginInformationSecret.SetEmail(newEmail, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetEmail(newEmail, derivedKey);
 			string loginInformationEmail2 = loginInformationSecret.GetEmail(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetEmail(newEmail, new byte[] { 1, 2, 3});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationEmail1));
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationEmail2));
 			Assert.AreEqual(loginInformation.email, loginInformationEmail1);
@@ -378,10 +387,13 @@ namespace Tests
 
 			// Act
 			string loginInformationUsername1 = loginInformationSecret.GetUsername(derivedKey);
-			loginInformationSecret.SetUsername(newUsername, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetUsername(newUsername, derivedKey);
 			string loginInformationUsername2 = loginInformationSecret.GetUsername(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetUsername(newUsername, new byte[] { 1, 2, 3});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUsername1));
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUsername2));
 			Assert.AreEqual(loginInformation.username, loginInformationUsername1);
@@ -402,10 +414,13 @@ namespace Tests
 
 			// Act
 			string loginInformationPassword1 = loginInformationSecret.GetPassword(derivedKey);
-			loginInformationSecret.SetPassword(newPassword, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetPassword(newPassword, derivedKey);
 			string loginInformationPassword2 = loginInformationSecret.GetPassword(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetPassword(newPassword, new byte[] { 1, 2, 3});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationPassword1));
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationPassword2));
 			Assert.AreEqual(loginInformation.password, loginInformationPassword1);
@@ -425,10 +440,13 @@ namespace Tests
 			string newNotes = "future text that is happy and joyful for all purposes...";
 
 			// Act
-			loginInformationSecret.SetNotes(newNotes, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetNotes(newNotes, derivedKey);
 			string loginInformationNotes2 = loginInformationSecret.GetNotes(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetNotes(newNotes, new byte[] { 1, 2, 3});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationNotes2));
 			Assert.AreEqual(newNotes, loginInformationNotes2);
 		}
@@ -447,10 +465,13 @@ namespace Tests
 
 			// Act
 			DateTimeOffset loginInformationCreationTime1 = loginInformationSecret.GetCreationTime(derivedKey);
-			loginInformationSecret.SetCreationTime(newCreationTime, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetCreationTime(newCreationTime, derivedKey);
 			DateTimeOffset loginInformationCreationTime2 = loginInformationSecret.GetCreationTime(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetCreationTime(newCreationTime, new byte[] { 1, 29, 3});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.AreEqual(loginInformation.creationTime, loginInformationCreationTime1.ToUnixTimeSeconds());
 			Assert.AreEqual(newCreationTime.ToUnixTimeSeconds(), loginInformationCreationTime2.ToUnixTimeSeconds());
 		}
@@ -469,10 +490,13 @@ namespace Tests
 
 			// Act
 			DateTimeOffset loginInformationModificationTime1 = loginInformationSecret.GetModificationTime(derivedKey);
-			loginInformationSecret.SetModificationTime(newModificationTime, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetModificationTime(newModificationTime, derivedKey);
 			DateTimeOffset loginInformationModificationTime2 = loginInformationSecret.GetModificationTime(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetModificationTime(newModificationTime, new byte[] { 1, 29, 3, 99, 134, 255, 0});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.AreEqual(loginInformation.modificationTime, loginInformationModificationTime1.ToUnixTimeSeconds());
 			Assert.AreEqual(newModificationTime.ToUnixTimeSeconds(), loginInformationModificationTime2.ToUnixTimeSeconds());
 		}
@@ -490,10 +514,13 @@ namespace Tests
 			byte[] newIcon = new byte[] { 1, 2, 44, 55, 66, 33, 89, 23, 222, 111, 100, 99, 45, 127, 198, 255 };
 
 			// Act
-			loginInformationSecret.SetIcon(newIcon, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetIcon(newIcon, derivedKey);
 			byte[] loginInformationIcon2 = loginInformationSecret.GetIcon(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetIcon(newIcon, new byte[] { 13, 129, 3, 99, 134, 255, 0});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			CollectionAssert.AreEqual(newIcon, loginInformationIcon2);
 		}
 
@@ -510,10 +537,13 @@ namespace Tests
 			string newCategory = "Finance";
 
 			// Act
-			loginInformationSecret.SetCategory(newCategory, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetCategory(newCategory, derivedKey);
 			string loginInformationCategory2 = loginInformationSecret.GetCategory(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetCategory(newCategory, new byte[] { 13, 129, 0, 99, 134, 255, 0});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationCategory2));
 			Assert.AreEqual(newCategory, loginInformationCategory2);
 		}
@@ -531,10 +561,13 @@ namespace Tests
 			string newTags = "Finance; Home; Travel; Future";
 
 			// Act
-			loginInformationSecret.SetTags(newTags, derivedKey);
+			bool shouldBeTrue = loginInformationSecret.SetTags(newTags, derivedKey);
 			string loginInformationTags2 = loginInformationSecret.GetTags(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetTags(newTags, new byte[] { 13, 129, 0, 91, 194, 255, 0});
 
 			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTags2));
 			Assert.AreEqual(newTags, loginInformationTags2);
 		}
