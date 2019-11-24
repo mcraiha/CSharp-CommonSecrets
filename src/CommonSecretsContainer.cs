@@ -65,120 +65,105 @@ namespace CSCommonSecrets
 
 		public (bool success, string possibleError) AddLoginInformationSecret(string password, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			if (loginInformation == null)
+			(bool checkResult, string possibleError) = MandatoryChecks(loginInformation, "LoginInformation", keyIdentifier);
+			if (!checkResult)
 			{
-				return (success: false, possibleError: "LoginInformation cannot be null");
-			}
-
-			KeyDerivationFunctionEntry kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
-
-			if (kdfe == null)
-			{
-				return (success: false, possibleError: $"Cannot find key identifier matching to: {keyIdentifier}");
+				return (checkResult, possibleError);
 			}
 
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
 
-			this.loginInformationSecrets.Add(new LoginInformationSecret(loginInformation, kdfe.GetKeyIdentifier(), ska, derivedPassword));
+			this.loginInformationSecrets.Add(new LoginInformationSecret(loginInformation, keyIdentifier, ska, derivedPassword));
 
 			return (success: true, possibleError: "");
 		}
 
 		public (bool success, string possibleError) AddLoginInformationSecret(byte[] derivedPassword, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			if (loginInformation == null)
+			(bool checkResult, string possibleError) = MandatoryChecks(loginInformation, "LoginInformation", keyIdentifier);
+			if (!checkResult)
 			{
-				return (success: false, possibleError: "LoginInformation cannot be null");
-			}
-
-			KeyDerivationFunctionEntry kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
-
-			if (kdfe == null)
-			{
-				return (success: false, possibleError: $"Cannot find key identifier matching to: {keyIdentifier}");
+				return (checkResult, possibleError);
 			}
 
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-			this.loginInformationSecrets.Add(new LoginInformationSecret(loginInformation, kdfe.GetKeyIdentifier(), ska, derivedPassword));
+			this.loginInformationSecrets.Add(new LoginInformationSecret(loginInformation, keyIdentifier, ska, derivedPassword));
 
 			return (success: true, possibleError: "");
 		}
 
 		public (bool success, string possibleError) AddNoteSecret(string password, Note note, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			if (note == null)
+			(bool checkResult, string possibleError) = MandatoryChecks(note, "Note", keyIdentifier);
+			if (!checkResult)
 			{
-				return (success: false, possibleError: "Note cannot be null");
-			}
-
-			KeyDerivationFunctionEntry kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
-
-			if (kdfe == null)
-			{
-				return (success: false, possibleError: $"Cannot find key identifier matching to: {keyIdentifier}");
+				return (checkResult, possibleError);
 			}
 
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
 
-			this.noteSecrets.Add(new NoteSecret(note, kdfe.GetKeyIdentifier(), ska, derivedPassword));
+			this.noteSecrets.Add(new NoteSecret(note, keyIdentifier, ska, derivedPassword));
 
 			return (success: true, possibleError: "");
 		}
 
 		public (bool success, string possibleError) AddNoteSecret(byte[] derivedPassword, Note note, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			if (note == null)
+			(bool checkResult, string possibleError) = MandatoryChecks(note, "Note", keyIdentifier);
+			if (!checkResult)
 			{
-				return (success: false, possibleError: "Note cannot be null");
-			}
-
-			KeyDerivationFunctionEntry kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
-
-			if (kdfe == null)
-			{
-				return (success: false, possibleError: $"Cannot find key identifier matching to: {keyIdentifier}");
+				return (checkResult, possibleError);
 			}
 
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-			this.noteSecrets.Add(new NoteSecret(note, kdfe.GetKeyIdentifier(), ska, derivedPassword));
+			this.noteSecrets.Add(new NoteSecret(note, keyIdentifier, ska, derivedPassword));
 
 			return (success: true, possibleError: "");
 		}
 
 		public (bool success, string possibleError) AddFileEntrySecret(string password, FileEntry fileEntry, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			if (fileEntry == null)
+			(bool checkResult, string possibleError) = MandatoryChecks(fileEntry, "FileEntry", keyIdentifier);
+			if (!checkResult)
 			{
-				return (success: false, possibleError: "FileEntry cannot be null");
-			}
-
-			KeyDerivationFunctionEntry kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
-
-			if (kdfe == null)
-			{
-				return (success: false, possibleError: $"Cannot find key identifier matching to: {keyIdentifier}");
+				return (checkResult, possibleError);
 			}
 
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
 
-			this.fileSecrets.Add(new FileEntrySecret(fileEntry, kdfe.GetKeyIdentifier(), ska, derivedPassword));
+			this.fileSecrets.Add(new FileEntrySecret(fileEntry, keyIdentifier, ska, derivedPassword));
 
 			return (success: true, possibleError: "");
 		}
 
 		public (bool success, string possibleError) AddFileEntrySecret(byte[] derivedPassword, FileEntry fileEntry, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			if (fileEntry == null)
+			(bool checkResult, string possibleError) = MandatoryChecks(fileEntry, "FileEntry", keyIdentifier);
+			if (!checkResult)
 			{
-				return (success: false, possibleError: "FileEntry cannot be null");
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			this.fileSecrets.Add(new FileEntrySecret(fileEntry, keyIdentifier, ska, derivedPassword));
+
+			return (success: true, possibleError: "");
+		}
+
+		private (bool success, string possibleError) MandatoryChecks(object checkForNull, string objectToCheckForError, string keyIdentifier)
+		{
+			if (checkForNull == null)
+			{
+				return (success: false, possibleError: $"{objectToCheckForError} cannot be null");
 			}
 
 			KeyDerivationFunctionEntry kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
@@ -187,10 +172,6 @@ namespace CSCommonSecrets
 			{
 				return (success: false, possibleError: $"Cannot find key identifier matching to: {keyIdentifier}");
 			}
-
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
-
-			this.fileSecrets.Add(new FileEntrySecret(fileEntry, kdfe.GetKeyIdentifier(), ska, derivedPassword));
 
 			return (success: true, possibleError: "");
 		}
