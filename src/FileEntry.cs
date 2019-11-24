@@ -37,7 +37,7 @@ namespace CSCommonSecrets
 		public FileEntry(string newFilename, byte[] newFileContent, DateTimeOffset time)
 		{
 			this.creationTime = time.ToUnixTimeSeconds();
-			this.UpdateFileEntry(newFilename, newFileContent);
+			this.UpdateFileEntry(newFilename, newFileContent, time);
 		}
 
 		public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent)
