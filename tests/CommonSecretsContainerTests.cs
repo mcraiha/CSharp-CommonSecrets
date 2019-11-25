@@ -43,6 +43,7 @@ namespace Tests
 
 			var addResultFailure1 = csc.AddLoginInformationSecret(password, null, kdfeIdentifier);
 			var addResultFailure2 = csc.AddLoginInformationSecret(password, ContentGenerator.GenerateRandomLoginInformation(), "not existing");
+			var addResultFailure3 = csc.AddLoginInformationSecret("", ContentGenerator.GenerateRandomLoginInformation(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -56,6 +57,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure2.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure2.possibleError));
+
+			Assert.IsFalse(addResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
 
 			Assert.AreEqual(2, csc.loginInformationSecrets.Count);
 		}
@@ -75,6 +79,7 @@ namespace Tests
 
 			var addResultFailure1 = csc.AddNoteSecret(password, null, kdfeIdentifier);
 			var addResultFailure2 = csc.AddNoteSecret(password, ContentGenerator.GenerateRandomNote(), "not existing");
+			var addResultFailure3 = csc.AddNoteSecret("", ContentGenerator.GenerateRandomNote(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -88,6 +93,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure2.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure2.possibleError));
+
+			Assert.IsFalse(addResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
 
 			Assert.AreEqual(2, csc.noteSecrets.Count);
 		}
@@ -107,6 +115,7 @@ namespace Tests
 
 			var addResultFailure1 = csc.AddFileEntrySecret(password, null, kdfeIdentifier);
 			var addResultFailure2 = csc.AddFileEntrySecret(password, ContentGenerator.GenerateRandomFileEntry(), "not existing");
+			var addResultFailure3 = csc.AddFileEntrySecret("", ContentGenerator.GenerateRandomFileEntry(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -120,6 +129,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure2.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure2.possibleError));
+
+			Assert.IsFalse(addResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
 
 			Assert.AreEqual(2, csc.fileSecrets.Count);
 		}

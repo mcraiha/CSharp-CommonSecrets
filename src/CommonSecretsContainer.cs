@@ -65,7 +65,7 @@ namespace CSCommonSecrets
 
 		public (bool success, string possibleError) AddLoginInformationSecret(string password, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			(bool checkResult, string possibleError) = MandatoryChecks(loginInformation, "LoginInformation", keyIdentifier);
+			(bool checkResult, string possibleError) = MandatoryChecks(loginInformation, "LoginInformation", keyIdentifier, password);
 			if (!checkResult)
 			{
 				return (checkResult, possibleError);
@@ -82,7 +82,7 @@ namespace CSCommonSecrets
 
 		public (bool success, string possibleError) AddLoginInformationSecret(byte[] derivedPassword, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			(bool checkResult, string possibleError) = MandatoryChecks(loginInformation, "LoginInformation", keyIdentifier);
+			(bool checkResult, string possibleError) = MandatoryChecks(loginInformation, "LoginInformation", keyIdentifier, derivedPassword);
 			if (!checkResult)
 			{
 				return (checkResult, possibleError);
@@ -97,7 +97,7 @@ namespace CSCommonSecrets
 
 		public (bool success, string possibleError) AddNoteSecret(string password, Note note, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			(bool checkResult, string possibleError) = MandatoryChecks(note, "Note", keyIdentifier);
+			(bool checkResult, string possibleError) = MandatoryChecks(note, "Note", keyIdentifier, password);
 			if (!checkResult)
 			{
 				return (checkResult, possibleError);
@@ -114,7 +114,7 @@ namespace CSCommonSecrets
 
 		public (bool success, string possibleError) AddNoteSecret(byte[] derivedPassword, Note note, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			(bool checkResult, string possibleError) = MandatoryChecks(note, "Note", keyIdentifier);
+			(bool checkResult, string possibleError) = MandatoryChecks(note, "Note", keyIdentifier, derivedPassword);
 			if (!checkResult)
 			{
 				return (checkResult, possibleError);
@@ -129,7 +129,7 @@ namespace CSCommonSecrets
 
 		public (bool success, string possibleError) AddFileEntrySecret(string password, FileEntry fileEntry, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			(bool checkResult, string possibleError) = MandatoryChecks(fileEntry, "FileEntry", keyIdentifier);
+			(bool checkResult, string possibleError) = MandatoryChecks(fileEntry, "FileEntry", keyIdentifier, password);
 			if (!checkResult)
 			{
 				return (checkResult, possibleError);
@@ -146,7 +146,7 @@ namespace CSCommonSecrets
 
 		public (bool success, string possibleError) AddFileEntrySecret(byte[] derivedPassword, FileEntry fileEntry, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			(bool checkResult, string possibleError) = MandatoryChecks(fileEntry, "FileEntry", keyIdentifier);
+			(bool checkResult, string possibleError) = MandatoryChecks(fileEntry, "FileEntry", keyIdentifier, derivedPassword);
 			if (!checkResult)
 			{
 				return (checkResult, possibleError);
@@ -159,7 +159,43 @@ namespace CSCommonSecrets
 			return (success: true, possibleError: "");
 		}
 
-		private (bool success, string possibleError) MandatoryChecks(object checkForNull, string objectToCheckForError, string keyIdentifier)
+		private (bool success, string possibleError) MandatoryChecks(object checkForNull, string objectToCheckForError, string keyIdentifier, string password)
+		{
+			(bool commonCheckResult, string possibleCommonCheckError) = this.MandatoryCommonChecks(checkForNull, objectToCheckForError, keyIdentifier);
+
+			if (!commonCheckResult)
+			{
+				return (commonCheckResult, possibleCommonCheckError);
+			}
+
+			if (string.IsNullOrEmpty(password))
+			{
+				return (false, "Password must contain something!");
+			}
+
+			return (success: true, possibleError: "");
+		}
+
+		private (bool success, string possibleError) MandatoryChecks(object checkForNull, string objectToCheckForError, string keyIdentifier, byte[] derivedPassword)
+		{
+			(bool commonCheckResult, string possibleCommonCheckError) = this.MandatoryCommonChecks(checkForNull, objectToCheckForError, keyIdentifier);
+
+			if (!commonCheckResult)
+			{
+				return (commonCheckResult, possibleCommonCheckError);
+			}
+
+			(bool derivedPasswordValid, Exception exception) = Helpers.CheckDerivedPassword(derivedPassword);
+
+			if (!derivedPasswordValid)
+			{
+				return (derivedPasswordValid, exception.ToString());
+			}
+
+			return (success: true, possibleError: "");
+		}
+
+		private (bool success, string possibleError) MandatoryCommonChecks(object checkForNull, string objectToCheckForError, string keyIdentifier)
 		{
 			if (checkForNull == null)
 			{
