@@ -22,6 +22,13 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Default constructor for LoginInformationSecret
+		/// </summary>
+		/// <param name="loginInformation">LoginInformation that will be stored as secret</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">SymmetricKeyAlgorithm used to encrypt the LoginInformation</param>
+		/// <param name="derivedPassword">Derived password</param>
 		public LoginInformationSecret(LoginInformation loginInformation, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
