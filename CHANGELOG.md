@@ -1,4 +1,4 @@
-## Version 0.9.1 (not released yet)
+## Version 0.9.1 (released 2019-11-28)
 - Update Microsoft.AspNetCore.Cryptography.KeyDerivation 2.2.0 -> 3.0.0
 - Rename GetUrl -> GetURL in LoginInformationSecret (**BREAKING**)
 - Add AddLoginInformationSecret with derived password (**FEATURE**)
