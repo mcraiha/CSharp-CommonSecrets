@@ -37,6 +37,7 @@ namespace CSCommonSecrets
 		/// <param name="primaryKDF">"Primary" key derivation function</param>
 		public CommonSecretsContainer(KeyDerivationFunctionEntry primaryKDF)
 		{
+			this.version = currentVersionNumber;
 			this.keyDerivationFunctionEntries.Add(primaryKDF);
 		}
 

@@ -26,6 +26,7 @@ namespace Tests
 
 			// Assert
 			Assert.AreSame(kdfe, result);
+			Assert.Greater(csc.version, 0);
 		}
 
 		[Test]
