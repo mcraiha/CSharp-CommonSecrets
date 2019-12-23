@@ -20,12 +20,15 @@ namespace Tests
 			// Arrange
 			LoginInformation li1 = new LoginInformation();
 			LoginInformation li2 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
+			LoginInformation li3 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+					newNotes: "funny dialog is funny", newIcon: new byte[] {0, 1, 3, 4, 5, 7}, newCategory: "forums", newTags: "daily\tmodern");
 
 			// Act
 
 			// Assert
 			Assert.IsNotNull(li1);
 			Assert.IsNotNull(li2);
+			Assert.IsNotNull(li3);
 		}
 
 		[Test]
@@ -74,15 +77,25 @@ namespace Tests
 			// Arrange
 			LoginInformation li1 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13");
 			
+			LoginInformation li3 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+					newNotes: "funny dialog is funny", newIcon: new byte[] {0, 1, 3, 4, 5, 7}, newCategory: "forums", newTags: "daily\tmodern");
+
 			// Act
 			LoginInformation li2 = li1.ShallowCopy();
+
+			LoginInformation li4 = li3.ShallowCopy();
 
 			string checksum1 = li1.GetChecksumAsHex();
 			string checksum2 = li2.GetChecksumAsHex();
 
+			string checksum3 = li3.GetChecksumAsHex();
+			string checksum4 = li4.GetChecksumAsHex();
+
 			// Assert
 			Assert.IsNotNull(li2);
+			Assert.IsNotNull(li4);
 			Assert.AreEqual(checksum1, checksum2);
+			Assert.AreEqual(checksum3, checksum4);
 		}
 
 		[Test]

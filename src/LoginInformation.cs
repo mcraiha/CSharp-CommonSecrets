@@ -66,6 +66,33 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, 
+									byte[] newIcon, string newCategory, string newTags) : this (newTitle, newUrl, newEmail, newUsername, newPassword, newNotes, 
+									newIcon, newCategory, newTags, DateTimeOffset.UtcNow)
+		{
+
+		}
+
+		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, 
+									byte[] newIcon, string newCategory, string newTags, DateTimeOffset time)
+		{
+			this.title = Encoding.UTF8.GetBytes(newTitle);
+			this.url = Encoding.UTF8.GetBytes(newUrl);
+			this.email = Encoding.UTF8.GetBytes(newEmail);
+			this.username = Encoding.UTF8.GetBytes(newUsername);
+			this.password = Encoding.UTF8.GetBytes(newPassword);
+
+			this.notes = Encoding.UTF8.GetBytes(newNotes);
+			this.icon = newIcon;
+			this.category = Encoding.UTF8.GetBytes(newCategory);
+			this.tags = Encoding.UTF8.GetBytes(newTags);
+
+			this.creationTime = time.ToUnixTimeSeconds();
+			this.modificationTime = time.ToUnixTimeSeconds();
+
+			this.CalculateAndUpdateChecksum();
+		}
+
 		public LoginInformation ShallowCopy()
 		{
 			return (LoginInformation) this.MemberwiseClone();
