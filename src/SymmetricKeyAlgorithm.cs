@@ -6,12 +6,20 @@ using System.Security.Cryptography;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// Symmetric Encryption Algorithm enum
+	/// </summary>
 	public enum SymmetricEncryptionAlgorithm
 	{
+		/// AES in CTR mode
 		AES_CTR,
+		/// ChaCha20
 		ChaCha20
 	}
 
+	/// <summary>
+	/// Symmetric key algorithm contains all needed info for encryption/decryption
+	/// </summary>
 	public sealed class SymmetricKeyAlgorithm
 	{
 		public string algorithm { get; set; }
@@ -30,6 +38,12 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Default constructor for Symmetric key algorithm
+		/// </summary>
+		/// <param name="algorithm">Algorithm to use</param>
+		/// <param name="keySizeInBits">Key size in bits, e.g. 256</param>
+		/// <param name="settings">Settings for chosen algorithm</param>
 		public SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm algorithm, int keySizeInBits, object settings)
 		{
 			this.algorithm = algorithm.ToString();
@@ -60,6 +74,12 @@ namespace CSCommonSecrets
 			this.keySizeInBits = keySizeInBits;
 		}
 
+		/// <summary>
+		/// Encrypt given bytes with given key. Returns new array with encrypted bytes
+		/// </summary>
+		/// <param name="bytesToEncrypt">Byte array to encrypu</param>
+		/// <param name="key"></param>
+		/// <returns>Encrypted bytes in new array</returns>
 		public byte[] EncryptBytes(byte[] bytesToEncrypt, byte[] key)
 		{
 			byte[] returnArray = new byte[bytesToEncrypt.Length];
@@ -88,6 +108,10 @@ namespace CSCommonSecrets
 			return returnArray;
 		}
 
+		/// <summary>
+		/// Get symmetric encryption algorithm
+		/// </summary>
+		/// <returns></returns>
 		public SymmetricEncryptionAlgorithm GetSymmetricEncryptionAlgorithm()
 		{
 			if (Enum.TryParse(this.algorithm, out SymmetricEncryptionAlgorithm actualAlgorithm))
@@ -98,6 +122,10 @@ namespace CSCommonSecrets
 			throw new Exception("Cannot parse algorithm");
 		}
 
+		/// <summary>
+		/// Get settings as byte array
+		/// </summary>
+		/// <returns>Byte array</returns>
 		public byte[] GetSettingsAsBytes()
 		{
 			byte[] returnValue = null;
@@ -129,18 +157,25 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Generate new SymmetricKeyAlgorithm
+		/// Generate new SymmetricKeyAlgorithm, you should use this instead of constructor
 		/// </summary>
-		/// <param name="symmetricEncryptionAlgorithm">Symmetric encryption algorithm</param>
+		/// <param name="symmetricEncryptionAlgorithm">Wanted Symmetric encryption algorithm</param>
 		/// <returns>SymmetricKeyAlgorithm</returns>
 		public static SymmetricKeyAlgorithm GenerateNew(SymmetricEncryptionAlgorithm symmetricEncryptionAlgorithm)
 		{
 			return new SymmetricKeyAlgorithm(symmetricEncryptionAlgorithm, 256, (symmetricEncryptionAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR ) ? (object)SettingsAES_CTR.CreateWithCryptographicRandomNumbers() : (object)SettingsChaCha20.CreateWithCryptographicRandomNumbers() );
 		}
-  }
+	}
 
+	/// <summary>
+	/// AES CTR settings
+	/// </summary>
 	public sealed class SettingsAES_CTR
 	{
+		/// <summary>
+		/// Initial counter as byte array
+		/// </summary>
+		/// <value></value>
 		public byte[] initialCounter { get; set; }
 
 		/// <summary>
@@ -151,6 +186,10 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Default constructor for SettingsAES_CTR
+		/// </summary>
+		/// <param name="initialCounter">Byte array of initial counter</param>
 		public SettingsAES_CTR(byte[] initialCounter)
 		{
 			if (initialCounter == null)
@@ -165,12 +204,20 @@ namespace CSCommonSecrets
 			this.initialCounter = initialCounter;
 		}
 
+		/// <summary>
+		/// Get settings as byte array
+		/// </summary>
+		/// <returns>Byte array</returns>
 		public byte[] GetSettingsAsBytes()
 		{
 			// Since AES_CTR settings only contains initial counter, return it
 			return this.initialCounter;
 		}
 
+		/// <summary>
+		/// Create SettingsAES_CTR with Cryptographic random numbers, you should use this instead of constructor
+		/// </summary>
+		/// <returns>SettingsAES_CTR</returns>
 		public static SettingsAES_CTR CreateWithCryptographicRandomNumbers()
 		{
 			byte[] initialCounter = new byte[AES_CTR.allowedCounterLength];
@@ -184,9 +231,21 @@ namespace CSCommonSecrets
 		}
 	}
 
+	/// <summary>
+	/// ChaCha20 settings
+	/// </summary>
 	public sealed class SettingsChaCha20
 	{
+		/// <summary>
+		/// Nonce byte array
+		/// </summary>
+		/// <value></value>
 		public byte[] nonce { get; set; }
+
+		/// <summary>
+		/// Counter
+		/// </summary>
+		/// <value></value>
 		public uint counter { get; set; }
 
 		/// <summary>
@@ -197,6 +256,11 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Default constructor for SettingsChaCha20
+		/// </summary>
+		/// <param name="nonce">Nonce as byte array</param>
+		/// <param name="counter">Counter</param>
 		public SettingsChaCha20(byte[] nonce, uint counter)
 		{
 			if (nonce == null)
@@ -212,6 +276,9 @@ namespace CSCommonSecrets
 			this.counter = counter;
 		}
 
+		/// <summary>
+		/// Increase nonce
+		/// </summary>
 		public void IncreaseNonce()
 		{
 			int index = 0;
@@ -231,12 +298,20 @@ namespace CSCommonSecrets
 			}
 		}
 
+		/// <summary>
+		/// Get settings as byte array
+		/// </summary>
+		/// <returns>Byte array</returns>
 		public byte[] GetSettingsAsBytes()
 		{
 			// Join them together
 			return ChecksumHelper.JoinByteArrays(this.nonce, BitConverter.GetBytes(counter));
 		}
 
+		/// <summary>
+		/// Create SettingsChaCha20 with Cryptographic random numbers, you should use this instead of constructor
+		/// </summary>
+		/// <returns>SettingsChaCha20</returns>
 		public static SettingsChaCha20 CreateWithCryptographicRandomNumbers()
 		{
 			byte[] nonce = new byte[ChaCha20.allowedNonceLength];
