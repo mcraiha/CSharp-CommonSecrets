@@ -48,11 +48,28 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Default small LoginInformation constructor
+		/// </summary>
+		/// <param name="newTitle">Title</param>
+		/// <param name="newUrl">URL</param>
+		/// <param name="newEmail">Email</param>
+		/// <param name="newUsername">Username</param>
+		/// <param name="newPassword">Password</param>
 		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword) : this (newTitle, newUrl, newEmail, newUsername, newPassword, DateTimeOffset.UtcNow)
 		{
 
 		}
 
+		/// <summary>
+		/// Small LoginInformation constructor
+		/// </summary>
+		/// <param name="newTitle">Title</param>
+		/// <param name="newUrl">URL</param>
+		/// <param name="newEmail">Email</param>
+		/// <param name="newUsername">Username</param>
+		/// <param name="newPassword">Password</param>
+		/// <param name="time">Creation and modification timestamps</param>
 		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, DateTimeOffset time)
 		{
 			this.title = Encoding.UTF8.GetBytes(newTitle);
@@ -66,6 +83,18 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Default full LoginInformation constructor
+		/// </summary>
+		/// <param name="newTitle">Title</param>
+		/// <param name="newUrl">URL</param>
+		/// <param name="newEmail">Email</param>
+		/// <param name="newUsername">Username</param>
+		/// <param name="newPassword">Password</param>
+		/// <param name="newNotes">Notes</param>
+		/// <param name="newIcon">Icon</param>
+		/// <param name="newCategory">Category</param>
+		/// <param name="newTags">Tags (as tab separated)</param>
 		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, 
 									byte[] newIcon, string newCategory, string newTags) : this (newTitle, newUrl, newEmail, newUsername, newPassword, newNotes, 
 									newIcon, newCategory, newTags, DateTimeOffset.UtcNow)
@@ -73,6 +102,19 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Full LoginInformation constructor
+		/// </summary>
+		/// <param name="newTitle">Title</param>
+		/// <param name="newUrl">URL</param>
+		/// <param name="newEmail">Email</param>
+		/// <param name="newUsername">Username</param>
+		/// <param name="newPassword">Password</param>
+		/// <param name="newNotes">Notes</param>
+		/// <param name="newIcon">Icon</param>
+		/// <param name="newCategory">Category</param>
+		/// <param name="newTags">Tags (as tab separated)</param>
+		/// <param name="time">Creation and modification timestamps</param>
 		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, 
 									byte[] newIcon, string newCategory, string newTags, DateTimeOffset time)
 		{
@@ -99,6 +141,12 @@ namespace CSCommonSecrets
 		}
 
 		#region Updates
+
+		/// <summary>
+		/// Update title
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedTitle">Updated title</param>
 		public void UpdateTitle(string updatedTitle)
 		{
 			this.title = Encoding.UTF8.GetBytes(updatedTitle);
@@ -107,7 +155,12 @@ namespace CSCommonSecrets
 
 			this.CalculateAndUpdateChecksum();
 		}
-
+		
+		/// <summary>
+		/// Update URL
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedUrl">Updated URL</param>
 		public void UpdateUrl(string updatedUrl)
 		{
 			this.url = Encoding.UTF8.GetBytes(updatedUrl);
@@ -117,6 +170,11 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Update email
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedEmail">Updated email</param>
 		public void UpdateEmail(string updatedEmail)
 		{
 			this.url = Encoding.UTF8.GetBytes(updatedEmail);
@@ -126,6 +184,11 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Update username
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedUsername">Updated username</param>
 		public void UpdateUsername(string updatedUsername)
 		{
 			this.username = Encoding.UTF8.GetBytes(updatedUsername);
@@ -135,6 +198,11 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Update password
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedPassword">Updated password</param>
 		public void UpdatePassword(string updatedPassword)
 		{
 			this.password = Encoding.UTF8.GetBytes(updatedPassword);
@@ -144,11 +212,19 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Update modification time from current UTC timestamp
+		/// </summary>
 		private void UpdateModificationTime()
 		{
 			this.modificationTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 		}
 
+		/// <summary>
+		/// Update notes
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedNotes">Updated notes</param>
 		public void UpdateNotes(string updatedNotes)
 		{
 			this.notes = Encoding.UTF8.GetBytes(updatedNotes);
@@ -158,6 +234,11 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Update icon
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedIcon">Updated icon</param>
 		public void UpdateIcon(byte[] updatedIcon)
 		{
 			this.icon = updatedIcon;
@@ -167,6 +248,11 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Update category
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedCategory">Updated category</param>
 		public void UpdateCategory(string updatedCategory)
 		{
 			this.category = Encoding.UTF8.GetBytes(updatedCategory);
@@ -176,6 +262,11 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Update tags
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedTags">Updated tags (as tab separated)</param>
 		public void UpdateTags(string updatedTags)
 		{
 			this.tags = Encoding.UTF8.GetBytes(updatedTags);
