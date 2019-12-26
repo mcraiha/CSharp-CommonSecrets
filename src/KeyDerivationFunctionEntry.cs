@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// Key derivation function algorithms
+	/// </summary>
 	public enum KDFAlgorithm
 	{
 		PBKDF2
@@ -12,10 +15,19 @@ namespace CSCommonSecrets
 
 	public sealed class KeyDerivationFunctionEntry
 	{
+		/// <summary>
+		/// Minimun salt length in bytes
+		/// </summary>
 		public static readonly int saltMinLengthInBytes = 16;
 
+		/// <summary>
+		/// Minimum amount of iterations
+		/// </summary>
 		public static readonly int iterationsMin = 4000;
 
+		/// <summary>
+		/// Suggested amount of iterations
+		/// </summary>
 		public static readonly int suggestedMinIterationsCount = 100_000;
 
 		/// <summary>
@@ -58,6 +70,14 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Default constructor for Key Derivation Function Entry
+		/// </summary>
+		/// <param name="prf">KeyDerivationPrf to use</param>
+		/// <param name="saltBytes">Salt byte array</param>
+		/// <param name="iterationsCount">How many iterations</param>
+		/// <param name="howManyBytesAreWanted">How many output bytes are wanted</param>
+		/// <param name="id">Key identifier</param>
 		public KeyDerivationFunctionEntry(KeyDerivationPrf prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id)
 		{
 			// Check salt bytes
@@ -98,6 +118,11 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Generate derived password
+		/// </summary>
+		/// <param name="regularPassword">"Normal" plaintext password</param>
+		/// <returns></returns>
 		public byte[] GeneratePasswordBytes(string regularPassword)
 		{
 			Enum.TryParse(this.pseudorandomFunction, out KeyDerivationPrf keyDerivationPrf);
@@ -105,6 +130,10 @@ namespace CSCommonSecrets
 			return KeyDerivation.Pbkdf2(regularPassword, this.salt, keyDerivationPrf, this.iterations, this.derivedKeyLengthInBytes);
 		}
 
+		/// <summary>
+		/// Get key identifier
+		/// </summary>
+		/// <returns>Key identifier as string</returns>
 		public string GetKeyIdentifier()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
@@ -112,6 +141,10 @@ namespace CSCommonSecrets
 
 		#region Checksum
 
+		/// <summary>
+		/// Get checksum as hex
+		/// </summary>
+		/// <returns>Hex string</returns>
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;
@@ -136,7 +169,7 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Create HMACSHA256 based KeyDerivationFunctionEntry with random salt
 		/// </summary>
-		/// <param name="id">Id of the entry</param>
+		/// <param name="id">Key identifier of this entry</param>
 		/// <returns>KeyDerivationFunctionEntry</returns>
 		public static KeyDerivationFunctionEntry CreateHMACSHA256KeyDerivationFunctionEntry(string id)
 		{
@@ -160,7 +193,7 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Create HMACSHA512 based KeyDerivationFunctionEntry with random salt
 		/// </summary>
-		/// <param name="id">Id of the entry</param>
+		/// <param name="id">Key identifier of this entry</param>
 		/// <returns>KeyDerivationFunctionEntry</returns>
 		public static KeyDerivationFunctionEntry CreateHMACSHA512KeyDerivationFunctionEntry(string id)
 		{

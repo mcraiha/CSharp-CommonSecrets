@@ -6,6 +6,9 @@ namespace CSCommonSecrets
 {
 	public static class Helpers
 	{
+		/// <summary>
+		/// Generic null and empty check for derived password
+		/// </summary>
 		public static (bool valid, Exception exception) CheckDerivedPassword(byte[] derivedPassword)
 		{
 			if (derivedPassword == null)
@@ -20,6 +23,9 @@ namespace CSCommonSecrets
 			return (valid: true, exception: null);
 		}
 		
+		/// <summary>
+		/// Check validity of audalf data
+		/// </summary>
 		public static (bool valid, Exception exception) CheckAUDALFbytes(byte[] audalfBytes)
 		{
 			if (audalfBytes == null)
