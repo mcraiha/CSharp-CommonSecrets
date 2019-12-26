@@ -22,12 +22,24 @@ namespace CSCommonSecrets
 	/// </summary>
 	public sealed class SymmetricKeyAlgorithm
 	{
+		/// <summary>
+		/// Symmetric Encryption Algorithm as string
+		/// </summary>
 		public string algorithm { get; set; }
 
+		/// <summary>
+		/// Key size in bits
+		/// </summary>
 		public int keySizeInBits { get; set; }
 
+		/// <summary>
+		/// AES_CTR settings, might be null
+		/// </summary>
 		public SettingsAES_CTR settingsAES_CTR { get; set; }
 
+		/// <summary>
+		/// ChaCha20 settings, might be null
+		/// </summary>
 		public SettingsChaCha20 settingsChaCha20 { get; set; }
 
 		/// <summary>
@@ -175,7 +187,6 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Initial counter as byte array
 		/// </summary>
-		/// <value></value>
 		public byte[] initialCounter { get; set; }
 
 		/// <summary>
@@ -239,13 +250,11 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Nonce byte array
 		/// </summary>
-		/// <value></value>
 		public byte[] nonce { get; set; }
 
 		/// <summary>
 		/// Counter
 		/// </summary>
-		/// <value></value>
 		public uint counter { get; set; }
 
 		/// <summary>

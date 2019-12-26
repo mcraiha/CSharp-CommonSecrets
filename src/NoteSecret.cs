@@ -7,11 +7,24 @@ namespace CSCommonSecrets
 {
 	public sealed class NoteSecret
 	{
+		/// <summary>
+		/// Key identifier
+		/// </summary>
 		public byte[] keyIdentifier { get; set; }
 
+		/// <summary>
+		/// Audalf data
+		/// </summary>
 		public byte[] audalfData { get; set; } = new byte[0];
 
+		/// <summary>
+		/// Symmetric Key Algorithm used for encryption
+		/// </summary>
 		public SymmetricKeyAlgorithm algorithm { get; set; }
+
+		/// <summary>
+		/// Calculated checksum
+		/// </summary>
 		public string checksum { get; set; } = string.Empty;
 
 		/// <summary>
@@ -22,6 +35,13 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Default constructor for NoteSecret
+		/// </summary>
+		/// <param name="note">Note to encrypt</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
+		/// <param name="derivedPassword">Derived password</param>
 		public NoteSecret(Note note, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
@@ -66,24 +86,44 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
+		/// <summary>
+		/// Get note title
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Note title as string</returns>
 		public string GetNoteTitle(byte[] derivedPassword)
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
 			return (string)noteAsDictionary[Note.noteTitleKey];
 		}
 
+		/// <summary>
+		/// Get note text
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Note text as string</returns>
 		public string GetNoteText(byte[] derivedPassword)
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
 			return (string)noteAsDictionary[Note.noteTextKey];
 		}
 
+		/// <summary>
+		/// Get note creation time
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Note creation time as DateTimeOffset</returns>
 		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
 			return (DateTimeOffset)noteAsDictionary[Note.creationTimeKey];
 		}
 
+		/// <summary>
+		/// Get note modification time
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Note modification time as DateTimeOffset</returns>
 		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
@@ -119,6 +159,10 @@ namespace CSCommonSecrets
 			return noteAsDictionary;
 		}
 
+		/// <summary>
+		/// Get key identifier
+		/// </summary>
+		/// <returns>Key identifier as string</returns>
 		public string GetKeyIdentifier()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
@@ -129,11 +173,23 @@ namespace CSCommonSecrets
 
 		#region Common setters
 
+		/// <summary>
+		/// Set note title
+		/// </summary>
+		/// <param name="newNoteTitle">New title</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set was success; False otherwise</returns>
 		public bool SetNoteTitle(string newNoteTitle, byte[] derivedPassword)
 		{
 			return this.GenericSet(Note.noteTitleKey, newNoteTitle, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Set note text
+		/// </summary>
+		/// <param name="newNoteText">New text</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set was success; False otherwise</returns>
 		public bool SetNoteText(string newNoteText, byte[] derivedPassword)
 		{
 			return this.GenericSet(Note.noteTextKey, newNoteText, DateTimeOffset.UtcNow, derivedPassword);
@@ -174,6 +230,10 @@ namespace CSCommonSecrets
 
 		#region Checksum
 
+		/// <summary>
+		/// Get checksum as hex
+		/// </summary>
+		/// <returns>Hex string</returns>
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;
