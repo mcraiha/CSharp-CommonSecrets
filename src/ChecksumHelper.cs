@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using System.Security.Cryptography;
 
@@ -6,6 +5,11 @@ namespace CSCommonSecrets
 {
 	public static class ChecksumHelper
 	{
+		/// <summary>
+		/// Calculate SHA256 checksum from given byte arrays
+		/// </summary>
+		/// <param name="arrays">Byte arrays</param>
+		/// <returns>Uppercase hex string</returns>
 		public static string CalculateHexChecksum(params byte[][] arrays)
 		{
 			byte[] joinedArray = JoinByteArrays(arrays);
@@ -17,6 +21,11 @@ namespace CSCommonSecrets
 			}
 		}
 
+		/// <summary>
+		/// Join byte arrays to single byte array
+		/// </summary>
+		/// <param name="arrays">Byte arrays to join</param>
+		/// <returns>Byte array</returns>
 		public static byte[] JoinByteArrays(params byte[][] arrays)
 		{
 			int joinedLength = 0;
