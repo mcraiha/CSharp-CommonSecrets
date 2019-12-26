@@ -7,11 +7,24 @@ namespace CSCommonSecrets
 {
 	public sealed class FileEntrySecret
 	{
+		/// <summary>
+		/// Key identifier
+		/// </summary>
 		public byte[] keyIdentifier { get; set; }
 
+		/// <summary>
+		/// Audalf data
+		/// </summary>
 		public byte[] audalfData { get; set; } = new byte[0];
 
+		/// <summary>
+		/// Symmetric Key Algorithm used for encryption
+		/// </summary>
 		public SymmetricKeyAlgorithm algorithm { get; set; }
+
+		/// <summary>
+		/// Calculated checksum
+		/// </summary>
 		public string checksum { get; set; } = string.Empty;
 
 		/// <summary>
@@ -22,6 +35,13 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Default constructor for FileEntrySecret
+		/// </summary>
+		/// <param name="fileEntry">File entry to encrypt</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
+		/// <param name="derivedPassword">Derived password</param>
 		public FileEntrySecret(FileEntry fileEntry, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
@@ -66,24 +86,44 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
+		/// <summary>
+		/// Get filename
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Filename as string</returns>
 		public string GetFilename(byte[] derivedPassword)
 		{
 			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
 			return (string)fileEntryAsDictionary[FileEntry.filenameKey];
 		}
 
+		/// <summary>
+		/// Get file content as byte array
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Content as byte array</returns>
 		public byte[] GetFileContent(byte[] derivedPassword)
 		{
 			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
 			return (byte[])fileEntryAsDictionary[FileEntry.fileContentKey];
 		}
 
+		/// <summary>
+		/// Get file entry creation time
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>File entry creation time as DateTimeOffset</returns>
 		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
 		{
 			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
 			return (DateTimeOffset)fileEntryAsDictionary[FileEntry.creationTimeKey];
 		}
 
+		/// <summary>
+		/// Get file entry modification time
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>File entry modification time as DateTimeOffset</returns>
 		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
 		{
 			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
@@ -124,11 +164,23 @@ namespace CSCommonSecrets
 
 		#region Common setters
 
+		/// <summary>
+		/// Set filename
+		/// </summary>
+		/// <param name="newFilename">New filename</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set was success; False otherwise</returns>
 		public bool SetFilename(string newFilename, byte[] derivedPassword)
 		{
 			return this.GenericSet(FileEntry.filenameKey, newFilename, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Set file content
+		/// </summary>
+		/// <param name="newFileContent">New file content</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set was success; False otherwise</returns>
 		public bool SetFileContent(byte[] newFileContent, byte[] derivedPassword)
 		{
 			return this.GenericSet(FileEntry.fileContentKey, newFileContent, DateTimeOffset.UtcNow, derivedPassword);
@@ -169,6 +221,10 @@ namespace CSCommonSecrets
 
 		#region Checksum
 
+		/// <summary>
+		/// Get checksum as hex
+		/// </summary>
+		/// <returns>Hex string</returns>
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;
