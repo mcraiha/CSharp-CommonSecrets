@@ -48,6 +48,8 @@ namespace Tests
 			// Act
 
 			// Assert
+			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA1, new byte[16], 100_000, 32, "master_key" ));
+
 			Assert.Throws<ArgumentNullException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, invalidSalt1, 100_000, 32, "master_key" ));
 			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, invalidSalt2, 100_000, 32, "master_key" ));
 			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, invalidSalt3, 100_000, 32, "master_key" ));

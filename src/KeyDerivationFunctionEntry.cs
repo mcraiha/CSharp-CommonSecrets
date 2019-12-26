@@ -80,6 +80,12 @@ namespace CSCommonSecrets
 		/// <param name="id">Key identifier</param>
 		public KeyDerivationFunctionEntry(KeyDerivationPrf prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id)
 		{
+			// Block SHA-1
+			if (prf == KeyDerivationPrf.HMACSHA1)
+			{
+				throw new ArgumentException($"{nameof(prf)} cannot be SHA1 for security reasons");
+			}
+
 			// Check salt bytes
 			if (saltBytes == null)
 			{
