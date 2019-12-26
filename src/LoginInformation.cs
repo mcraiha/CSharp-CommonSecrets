@@ -280,56 +280,100 @@ namespace CSCommonSecrets
 
 		#region Getters
 
+		/// <summary>
+		/// Get title
+		/// </summary>
+		/// <returns>Title as string</returns>
 		public string GetTitle()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.title);
 		}
 
+		/// <summary>
+		/// Get URL
+		/// </summary>
+		/// <returns>URL as string</returns>
 		public string GetURL()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.url);
 		}
 
+		/// <summary>
+		/// Get email
+		/// </summary>
+		/// <returns>Email as string</returns>
 		public string GetEmail()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.email);
 		}
 
+		/// <summary>
+		/// Get username
+		/// </summary>
+		/// <returns>Username as string</returns>
 		public string GetUsername()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.username);
 		}
 
+		/// <summary>
+		/// Get password
+		/// </summary>
+		/// <returns>Password as string</returns>
 		public string GetPassword()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.password);
 		}
 
+		/// <summary>
+		/// Get notes
+		/// </summary>
+		/// <returns>Notes as string</returns>
 		public string GetNotes()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.notes);
 		}
 
+		/// <summary>
+		/// Get icon (small image file)
+		/// </summary>
+		/// <returns>Icon as byte array</returns>
 		public byte[] GetIcon()
 		{
 			return this.icon;
 		}
 
+		/// <summary>
+		/// Get category
+		/// </summary>
+		/// <returns>Category as string</returns>
 		public string GetCategory()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.category);
 		}
 
+		/// <summary>
+		/// Get tags
+		/// </summary>
+		/// <returns>Tags as string (tab separated)</returns>
 		public string GetTags()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.tags);
 		}
 
+		/// <summary>
+		/// Get creation time
+		/// </summary>
+		/// <returns>Creation time as DateTimeOffset</returns>
 		public DateTimeOffset GetCreationTime()
 		{
 			return DateTimeOffset.FromUnixTimeSeconds(this.creationTime);
 		}
 
+		/// <summary>
+		/// Get modification time
+		/// </summary>
+		/// <returns>Modification time as DateTimeOffset</returns>
 		public DateTimeOffset GetModificationTime()
 		{
 			return DateTimeOffset.FromUnixTimeSeconds(this.modificationTime);
@@ -337,6 +381,10 @@ namespace CSCommonSecrets
 
 		#endregion // Getters
 
+		/// <summary>
+		/// Get checksum as hex
+		/// </summary>
+		/// <returns>Hex string</returns>
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;

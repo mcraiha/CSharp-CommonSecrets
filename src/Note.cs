@@ -5,10 +5,24 @@ namespace CSCommonSecrets
 {
 	public sealed class Note
 	{
+		/// <summary>
+		/// Note title as byte array
+		/// </summary>
 		public byte[] noteTitle { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Note title key
+		/// </summary>
 		public static readonly string noteTitleKey = nameof(noteTitle);
 
+		/// <summary>
+		/// Note text as byte array
+		/// </summary>
 		public byte[] noteText { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Note text key
+		/// </summary>
 		public static readonly string noteTextKey = nameof(noteText);
 
 		public long creationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -27,6 +41,11 @@ namespace CSCommonSecrets
 			
 		}
 
+		/// <summary>
+		/// Default constructor for note
+		/// </summary>
+		/// <param name="newNoteTitle">Note title</param>
+		/// <param name="newNoteText">Note text</param>
 		public Note(string newNoteTitle, string newNoteText) : this (newNoteTitle, newNoteText, DateTimeOffset.UtcNow)
 		{
 			
@@ -38,6 +57,11 @@ namespace CSCommonSecrets
 			this.UpdateNote(newNoteTitle, newNoteText, time);
 		}
 
+		/// <summary>
+		/// Update note
+		/// </summary>
+		/// <param name="updatedNoteTitle">New title</param>
+		/// <param name="updatedNoteText">New text</param>
 		public void UpdateNote(string updatedNoteTitle, string updatedNoteText)
 		{
 			this.UpdateNote(updatedNoteTitle, updatedNoteText, DateTimeOffset.UtcNow);
@@ -51,26 +75,46 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Get note title
+		/// </summary>
+		/// <returns>Title as string</returns>
 		public string GetNoteTitle()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.noteTitle);
 		}
 
+		/// <summary>
+		/// Get note text
+		/// </summary>
+		/// <returns>Text as string</returns>
 		public string GetNoteText()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.noteText);
 		}
 
+		/// <summary>
+		/// Get creation time
+		/// </summary>
+		/// <returns>Creation time as DateTimeOffset</returns>
 		public DateTimeOffset GetCreationTime()
 		{
 			return DateTimeOffset.FromUnixTimeSeconds(this.creationTime);
 		}
 
+		/// <summary>
+		/// Get modification time
+		/// </summary>
+		/// <returns>Modification time as DateTimeOffset</returns>
 		public DateTimeOffset GetModificationTime()
 		{
 			return DateTimeOffset.FromUnixTimeSeconds(this.modificationTime);
 		}
 
+		/// <summary>
+		/// Get checksum as hex
+		/// </summary>
+		/// <returns>Hex string</returns>
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;

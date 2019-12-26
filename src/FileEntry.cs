@@ -29,6 +29,11 @@ namespace CSCommonSecrets
 			
 		}
 
+		/// <summary>
+		/// Default constructor for file entry
+		/// </summary>
+		/// <param name="newFilename">Filename</param>
+		/// <param name="newFileContent">File content</param>
 		public FileEntry(string newFilename, byte[] newFileContent) : this (newFilename, newFileContent, DateTimeOffset.UtcNow)
 		{
 
@@ -40,6 +45,11 @@ namespace CSCommonSecrets
 			this.UpdateFileEntry(newFilename, newFileContent, time);
 		}
 
+		/// <summary>
+		/// Update file entry
+		/// </summary>
+		/// <param name="updatedFilename">Filename</param>
+		/// <param name="updatedFileContent">File content</param>
 		public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent)
 		{
 			this.UpdateFileEntry(updatedFilename, updatedFileContent, DateTimeOffset.UtcNow);
@@ -53,26 +63,46 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Get filename
+		/// </summary>
+		/// <returns>Filename as string</returns>
 		public string GetFilename()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.filename);
 		}
 
+		/// <summary>
+		/// Get file content
+		/// </summary>
+		/// <returns>File content as byte array</returns>
 		public byte[] GetFileContent()
 		{
 			return fileContent;
 		}
 
+		/// <summary>
+		/// Get creation time
+		/// </summary>
+		/// <returns>Creation time as DateTimeOffset</returns>
 		public DateTimeOffset GetCreationTime()
 		{
 			return DateTimeOffset.FromUnixTimeSeconds(this.creationTime);
 		}
 
+		/// <summary>
+		/// Get modification time
+		/// </summary>
+		/// <returns>Modification time as DateTimeOffset</returns>
 		public DateTimeOffset GetModificationTime()
 		{
 			return DateTimeOffset.FromUnixTimeSeconds(this.modificationTime);
 		}
 
+		/// <summary>
+		/// Get checksum as hex
+		/// </summary>
+		/// <returns>Hex string</returns>
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;
