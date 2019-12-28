@@ -1,4 +1,6 @@
-## Version 0.9.2 (not released yet)
+## Version 0.9.3 (not released yet)
+
+## Version 0.9.2 (released 2019-12-26)
 - Use correct version number with CommonSecretsContainer constructors (**FIX**)
 - Add all parameters constructor for LoginInformation (**FEATURE**)
 - Do not accept SHA1 as KeyDerivationPrf for security reason (**BREAKING**)
