@@ -170,6 +170,34 @@ namespace Tests
 		}
 
 		[Test]
+		public void CanBeDecryptedWithDerivedPassword()
+		{
+			byte[] derivedKey1 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 16 };
+			byte[] derivedKey2 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 15 };
+			byte[] initialCounter = new byte[] { 0xa7, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x51, 0x95, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+
+			string keyIdentifier = "primary";
+
+			string filename = "nice.pdf";
+			byte[] fileContent = new byte[] { 1, 2, 3, 100, 222, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+
+			FileEntry fe = new FileEntry(filename, fileContent);
+
+			// Act
+			FileEntrySecret fes = new FileEntrySecret(fe, keyIdentifier, skaAES_CTR, derivedKey1);
+
+			// Assert
+			Assert.IsTrue(fes.CanBeDecryptedWithDerivedPassword(derivedKey1));
+			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(null));
+			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(new byte[] {}));
+			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(derivedKey2));
+		}
+
+		[Test]
 		public void SetFilenameTest()
 		{
 			// Arrange
