@@ -293,6 +293,26 @@ namespace Tests
 		}
 
 		[Test]
+		public void GetKeyIdentifierTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 75, 168, 78, 83, 91, 110, 221, 18, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x59, 0x15, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+
+			string keyIdentifier = "primary";
+
+			// Act
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, keyIdentifier, skaAES_CTR, derivedKey);
+
+			// Assert
+			Assert.AreEqual(keyIdentifier, loginInformationSecret.GetKeyIdentifier());
+		}
+
+		[Test]
 		public void SetLoginInformationTitleTest()
 		{
 			// Arrange
