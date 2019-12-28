@@ -145,6 +145,31 @@ namespace Tests
 		}
 
 		[Test]
+		public void GetKeyIdentifierTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 25, 138, 78, 83, 111, 110, 221, 18, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0x13, 0xb5, 0x58, 0x59, 0x13, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+
+			string keyIdentifier = "primary";
+
+			string filename = "nice.pdf";
+			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+
+			FileEntry fe = new FileEntry(filename, fileContent);
+
+			// Act
+			FileEntrySecret fes = new FileEntrySecret(fe, keyIdentifier, skaAES_CTR, derivedKey);
+
+			// Assert
+			Assert.AreEqual(keyIdentifier, fes.GetKeyIdentifier());
+		}
+
+		[Test]
 		public void SetFilenameTest()
 		{
 			// Arrange
