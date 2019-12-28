@@ -168,6 +168,33 @@ namespace CSCommonSecrets
 			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
 		}
 
+		/// <summary>
+		/// Can the content be decrypted with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if can be; False otherwise</returns>
+		public bool CanBeDecryptedWithDerivedPassword(byte[] derivedPassword)
+		{
+			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
+
+			if (!passwordCheck.valid)
+			{
+				return false;
+			}
+
+			// Try to decrypt the binary
+			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
+
+			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
+
+			if (!audalfCheck.valid)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
 		#endregion // Common getters
 
 
