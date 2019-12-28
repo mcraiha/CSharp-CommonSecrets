@@ -1,5 +1,8 @@
 ## Version 0.9.3 (not released yet)
 - Add GetKeyIdentifier to FileEntrySecret (**FEATURE**)
+- Add CanBeDecryptedWithDerivedPassword to LoginInformationSecret (**FEATURE**)
+- Add CanBeDecryptedWithDerivedPassword to FileEntrySecret (**FEATURE**)
+- Add CanBeDecryptedWithDerivedPassword to NoteSecret (**FEATURE**)
 
 ## Version 0.9.2 (released 2019-12-26)
 - Use correct version number with CommonSecretsContainer constructors (**FIX**)
