@@ -48,6 +48,136 @@ namespace Tests
 		}
 
 		[Test]
+		public void SetGetTitleTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
+			string newTitle = "Not so random forum";
+
+			// Act
+			li.UpdateTitle(newTitle);
+
+			// Assert
+			Assert.AreEqual(newTitle, li.GetTitle());
+		}
+
+		[Test]
+		public void SetGetURLTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
+			string newURL = "https://otherdomain.com";
+
+			// Act
+			li.UpdateURL(newURL);
+
+			// Assert
+			Assert.AreEqual(newURL, li.GetURL());
+		}
+
+		[Test]
+		public void SetGetEmailTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
+			string newEmail = "somey@me.me";
+
+			// Act
+			li.UpdateEmail(newEmail);
+
+			// Assert
+			Assert.AreEqual(newEmail, li.GetEmail());
+		}
+
+		[Test]
+		public void SetGetUsernameTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
+			string newUsername = "Kitten137";
+
+			// Act
+			li.UpdateUsername(newUsername);
+
+			// Assert
+			Assert.AreEqual(newUsername, li.GetUsername());
+		}
+
+		[Test]
+		public void SetGetPasswordTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
+			string newPassword = "joigjo32%&()";
+
+			// Act
+			li.UpdatePassword(newPassword);
+
+			// Assert
+			Assert.AreEqual(newPassword, li.GetPassword());
+		}
+
+		[Test]
+		public void SetGetNotesTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+														newNotes: "some boring notes for someone", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
+			string newNotes = "Even more text that nobody will read";
+
+			// Act
+			li.UpdateNotes(newNotes);
+
+			// Assert
+			Assert.AreEqual(newNotes, li.GetNotes());
+		}
+
+		[Test]
+		public void SetGetIconTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+														newNotes: "some boring notes for someone", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
+			byte[] newIcon = new byte[] { 4, 127, 0, 255, 1, 2, 3, 45 };
+
+			// Act
+			li.UpdateIcon(newIcon);
+
+			// Assert
+			CollectionAssert.AreEqual(newIcon, li.GetIcon());
+		}
+
+		[Test]
+		public void SetGetCategoryTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+														newNotes: "some boring notes for someone", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
+			string newCategory = "Discussions";
+
+			// Act
+			li.UpdateCategory(newCategory);
+
+			// Assert
+			Assert.AreEqual(newCategory, li.GetCategory());
+		}
+
+		[Test]
+		public void SetGetTagsTest()
+		{
+			// Arrange
+			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+														newNotes: "some boring notes for someone", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
+			string newTags = "Leisure";
+
+			// Act
+			li.UpdateTags(newTags);
+
+			// Assert
+			Assert.AreEqual(newTags, li.GetTags());
+		}
+
+		[Test]
 		public void ChecksumChangesTest()
 		{
 			// Arrange
