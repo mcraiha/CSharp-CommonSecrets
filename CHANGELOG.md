@@ -1,8 +1,12 @@
-## Version 0.9.3 (not released yet)
+## Version 0.9.4 (not released yet)
+
+## Version 0.9.3 (released 2020-01-04)
 - Add GetKeyIdentifier to FileEntrySecret (**FEATURE**)
 - Add CanBeDecryptedWithDerivedPassword to LoginInformationSecret (**FEATURE**)
 - Add CanBeDecryptedWithDerivedPassword to FileEntrySecret (**FEATURE**)
 - Add CanBeDecryptedWithDerivedPassword to NoteSecret (**FEATURE**)
+- Rename UpdateUrl -> UpdateURL in LoginInformation (**BREAKING**)
+- Fix UpdateEmail in LoginInformation, now it stores data to right place (**FIX**)
 
 ## Version 0.9.2 (released 2019-12-26)
 - Use correct version number with CommonSecretsContainer constructors (**FIX**)
