@@ -3,6 +3,9 @@ using System.Security.Cryptography;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// Static class for calculating needed checksums
+	/// </summary>
 	public static class ChecksumHelper
 	{
 		/// <summary>

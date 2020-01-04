@@ -3,41 +3,124 @@ using System.Text;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// LoginInformation stores one plaintext (anyone can read) login information
+	/// </summary>
 	public sealed class LoginInformation
 	{
+		/// <summary>
+		/// Title of login information as bytes, in normal case you want to use GetTitle() and UpdateTitle()
+		/// </summary>
 		public byte[] title { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing title data to AUDALF
+		/// </summary>
 		public static readonly string titleKey = nameof(title);
 
+		/// <summary>
+		/// URL of login information as bytes, in normal case you want to use GetURL() and UpdateURL()
+		/// </summary>
 		public byte[] url { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing URL data to AUDALF
+		/// </summary>
 		public static readonly string urlKey = nameof(url);
 
+		/// <summary>
+		/// Email of login information as bytes, in normal case you want to use GetEmail() and UpdateEmail()
+		/// </summary>
 		public byte[] email { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing email data to AUDALF
+		/// </summary>
 		public static readonly string emailKey = nameof(email);
 
+		/// <summary>
+		/// Username of login information as bytes, in normal case you want to use GetUsername() and UpdateUsername()
+		/// </summary>
 		public byte[] username { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing username data to AUDALF
+		/// </summary>
 		public static readonly string usernameKey = nameof(username);
 
+		/// <summary>
+		/// Password of login information as bytes, in normal case you want to use GetPassword() and UpdatePassword()
+		/// </summary>
 		public byte[] password { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing password data to AUDALF
+		/// </summary>
 		public static readonly string passwordKey = nameof(password);
 
+		/// <summary>
+		/// Notes of login information as bytes, in normal case you want to use GetNotes() and UpdateNotes()
+		/// </summary>
 		public byte[] notes { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing notes data to AUDALF
+		/// </summary>
 		public static readonly string notesKey = nameof(notes);
 
+		/// <summary>
+		/// Creation time of login information, in Unix seconds since epoch
+		/// </summary>
 		public long creationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+		/// <summary>
+		/// Key for storing login information creation time to AUDALF
+		/// </summary>
 		public static readonly string creationTimeKey = nameof(creationTime);
 
+		/// <summary>
+		/// Last modification time of login information, in Unix seconds since epoch
+		/// </summary>
 		public long modificationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+		/// <summary>
+		/// Key for storing login information last modification time to AUDALF
+		/// </summary>
 		public static readonly string modificationTimeKey = nameof(modificationTime);
 
+		/// <summary>
+		/// Icon of login information as bytes, in normal case you want to use GetIcon() and UpdateIcon()
+		/// </summary>
 		public byte[] icon { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing login information icon to AUDALF
+		/// </summary>
 		public static readonly string iconKey = nameof(icon);
 
+		/// <summary>
+		/// Category of login information as bytes, in normal case you want to use GetCategory() and UpdateCategory()
+		/// </summary>
 		public byte[] category { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing login information category to AUDALF
+		/// </summary>
 		public static readonly string categoryKey = nameof(category);
 
+		/// <summary>
+		/// Tags of login information as bytes, in normal case you want to use GetTags() and UpdateTags()
+		/// </summary>
 		public byte[] tags { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing login information tags to AUDALF
+		/// </summary>
 		public static readonly string tagsKey = nameof(tags);
 
+		/// <summary>
+		/// Calculated checksum of Login information
+		/// </summary>
 		public string checksum { get; set; } = string.Empty;
 
 		/// <summary>
@@ -135,6 +218,10 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Creat shallow copy, mostly for testing purposes
+		/// </summary>
+		/// <returns>Shallow copy of LoginInformation</returns>
 		public LoginInformation ShallowCopy()
 		{
 			return (LoginInformation) this.MemberwiseClone();
@@ -161,7 +248,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <remarks>Will calculate checksum after update</remarks>
 		/// <param name="updatedUrl">Updated URL</param>
-		public void UpdateUrl(string updatedUrl)
+		public void UpdateURL(string updatedUrl)
 		{
 			this.url = Encoding.UTF8.GetBytes(updatedUrl);
 
@@ -390,6 +477,10 @@ namespace CSCommonSecrets
 			return this.checksum;
 		}
 
+		/// <summary>
+		/// Check if checksum matches content
+		/// </summary>
+		/// <returns>True if matches; False otherwise</returns>
 		public bool CheckIfChecksumMatchesContent()
 		{
 			return checksum == CalculateHexChecksum();

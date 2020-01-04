@@ -5,6 +5,9 @@ using CSharp_AUDALF;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// LoginInformationSecret stores one encrypted login information
+	/// </summary>
 	public sealed class LoginInformationSecret
 	{
 		/// <summary>
@@ -75,6 +78,13 @@ namespace CSCommonSecrets
 
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
+		/// <summary>
+		/// Constructor for custom dictionary, use this only if you what you are doing
+		/// </summary>
+		/// <param name="loginInformationAsDictionary">Dictionary containing login information keys and values</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
+		/// <param name="derivedPassword">Derived password</param>
 		public LoginInformationSecret(Dictionary<string, object> loginInformationAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
@@ -93,72 +103,131 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
+		/// <summary>
+		/// Get title. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Title</returns>
 		public string GetTitle(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.titleKey];
 		}
 
+		/// <summary>
+		/// Get URL. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>URL</returns>
 		public string GetURL(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.urlKey];
 		}
 
+		/// <summary>
+		/// Get email. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Email</returns>
 		public string GetEmail(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.emailKey];
 		}
 
+		/// <summary>
+		/// Get username. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Username</returns>
 		public string GetUsername(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.usernameKey];
 		}
 
+		/// <summary>
+		/// Get password. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Password</returns>
 		public string GetPassword(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.passwordKey];
 		}
 
+		/// <summary>
+		/// Get notes. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Notes</returns>
 		public string GetNotes(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.notesKey];
 		}
 
+		/// <summary>
+		/// Get creation time of Login Information secret. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Creation time</returns>
 		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (DateTimeOffset)loginInformationAsDictionary[LoginInformation.creationTimeKey];
 		}
 
+		/// <summary>
+		/// Get modification time of Login Information secret. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Modification time</returns>
 		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (DateTimeOffset)loginInformationAsDictionary[LoginInformation.modificationTimeKey];
 		}
 
+		/// <summary>
+		/// Get icon. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Icon</returns>
 		public byte[] GetIcon(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (byte[])loginInformationAsDictionary[LoginInformation.iconKey];
 		}
 
+		/// <summary>
+		/// Get category. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Category</returns>
 		public string GetCategory(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.categoryKey];
 		}
 
+		/// <summary>
+		/// Get tags. This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Tags</returns>
 		public string GetTags(byte[] derivedPassword)
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.tagsKey];
 		}
 
+		/// <summary>
+		/// Get key identifer.
+		/// </summary>
+		/// <returns>Key identifier</returns>
 		public string GetKeyIdentifier()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
@@ -224,56 +293,122 @@ namespace CSCommonSecrets
 
 		#region Common setters
 
+		/// <summary>
+		/// Try to set new title for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newTitle">New title</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetTitle(string newTitle, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.titleKey, newTitle, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new URL for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newURL">New URL</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetURL(string newURL, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.urlKey, newURL, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new email for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newEmail">New email</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetEmail(string newEmail, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.emailKey, newEmail, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new username for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newUsername">New username</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetUsername(string newUsername, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.usernameKey, newUsername, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new password for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newPassword">New password</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetPassword(string newPassword, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.passwordKey, newPassword, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new notes for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newNotes">New notes</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetNotes(string newNotes, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.notesKey, newNotes, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new creation time for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newCreationTime">New creation time</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetCreationTime(DateTimeOffset newCreationTime, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.creationTimeKey, newCreationTime,  DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new modification time for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newModificationTime">New modification time</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetModificationTime(DateTimeOffset newModificationTime, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.modificationTimeKey, newModificationTime,  DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new icon for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newIcon">New icon</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetIcon(byte[] newIcon, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.iconKey, newIcon, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new category for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newCategory">New category</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetCategory(string newCategory, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.categoryKey, newCategory, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
+		/// <summary>
+		/// Try to set new tags for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newTags">New tags</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
 		public bool SetTags(string newTags, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.tagsKey, newTags, DateTimeOffset.UtcNow, derivedPassword);
@@ -315,6 +450,10 @@ namespace CSCommonSecrets
 
 		#region Checksum
 
+		/// <summary>
+		/// Get checksum as hex
+		/// </summary>
+		/// <returns>Hex string</returns>
 		public string GetChecksumAsHex()
 		{
 			return this.checksum;

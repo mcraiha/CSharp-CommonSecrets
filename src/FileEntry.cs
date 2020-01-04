@@ -3,22 +3,54 @@ using System.Text;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// FileEntry stores one plaintext (anyone can read) file
+	/// </summary>
 	public sealed class FileEntry
 	{
-		// Keep filename as byte array so that special characters won't cause issues
+		/// <summary>
+		/// Filename as byte array so that special characters won't cause issues. For normal use case use GetFilename()
+		/// </summary>
 		public byte[] filename { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing filename data to AUDALF
+		/// </summary>
 		public static readonly string filenameKey = nameof(filename);
 
+		/// <summary>
+		/// File content as byte array
+		/// </summary>
 		public byte[] fileContent { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Key for storing file content (actual bytes of file) to AUDALF
+		/// </summary>
 		public static readonly string fileContentKey = nameof(fileContent);
 
-
+		/// <summary>
+		/// Creation time of file entry, in Unix seconds since epoch
+		/// </summary>
 		public long creationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+		/// <summary>
+		/// Key for storing file entry creation time to AUDALF
+		/// </summary>
 		public static readonly string creationTimeKey = nameof(creationTime);
 
+		/// <summary>
+		/// Last modification time of file entry, in Unix seconds since epoch
+		/// </summary>
 		public long modificationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+		/// <summary>
+		/// Key for storing file entry last modification time to AUDALF
+		/// </summary>
 		public static readonly string modificationTimeKey = nameof(modificationTime);
 
+		/// <summary>
+		/// Calculated checksum of File entry
+		/// </summary>
 		public string checksum { get; set; } = string.Empty;
 
 		/// <summary>
@@ -39,6 +71,12 @@ namespace CSCommonSecrets
 
 		}
 
+		/// <summary>
+		/// Constructor with creation time override
+		/// </summary>
+		/// <param name="newFilename">Filename</param>
+		/// <param name="newFileContent">File content</param>
+		/// <param name="time">Creation time</param>
 		public FileEntry(string newFilename, byte[] newFileContent, DateTimeOffset time)
 		{
 			this.creationTime = time.ToUnixTimeSeconds();
@@ -46,7 +84,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Update file entry
+		/// Update file entry, use current DateTimeOffset.UtcNow for modification timestamp
 		/// </summary>
 		/// <param name="updatedFilename">Filename</param>
 		/// <param name="updatedFileContent">File content</param>
@@ -55,6 +93,12 @@ namespace CSCommonSecrets
 			this.UpdateFileEntry(updatedFilename, updatedFileContent, DateTimeOffset.UtcNow);
 		}
 
+		/// <summary>
+		/// Update file entry, use chosen time for modification time
+		/// </summary>
+		/// <param name="updatedFilename">Filename</param>
+		/// <param name="updatedFileContent">File content</param>
+		/// <param name="time">Modification time</param>
 		public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent, DateTimeOffset time)
 		{
 			this.filename = Encoding.UTF8.GetBytes(updatedFilename);

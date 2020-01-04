@@ -3,6 +3,9 @@ using System.Text;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// Note stores one plaintext (anyone can read) note. Basically a text file
+	/// </summary>
 	public sealed class Note
 	{
 		/// <summary>
@@ -25,12 +28,29 @@ namespace CSCommonSecrets
 		/// </summary>
 		public static readonly string noteTextKey = nameof(noteText);
 
+		/// <summary>
+		/// Creation time of note, in Unix seconds since epoch
+		/// </summary>
 		public long creationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+		/// <summary>
+		/// Key for storing note creation time to AUDALF
+		/// </summary>
 		public static readonly string creationTimeKey = nameof(creationTime);
 
+		/// <summary>
+		/// Last modification time of note, in Unix seconds since epoch
+		/// </summary>
 		public long modificationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+		/// <summary>
+		/// Key for storing note last modification time to AUDALF
+		/// </summary>
 		public static readonly string modificationTimeKey = nameof(modificationTime);
 
+		/// <summary>
+		/// Calculated checksum of note
+		/// </summary>
 		public string checksum { get; set; } = string.Empty;
 
 		/// <summary>
@@ -51,6 +71,12 @@ namespace CSCommonSecrets
 			
 		}
 
+		/// <summary>
+		/// Constructor with creation time override
+		/// </summary>
+		/// <param name="newNoteTitle">Note title</param>
+		/// <param name="newNoteText">Note text</param>
+		/// <param name="time">Creation time</param>
 		public Note(string newNoteTitle, string newNoteText, DateTimeOffset time)
 		{
 			this.creationTime = time.ToUnixTimeSeconds();
@@ -67,6 +93,12 @@ namespace CSCommonSecrets
 			this.UpdateNote(updatedNoteTitle, updatedNoteText, DateTimeOffset.UtcNow);
 		}
 
+		/// <summary>
+		/// Update note, use chosen time for modification time
+		/// </summary>
+		/// <param name="updatedNoteTitle">New title</param>
+		/// <param name="updatedNoteText">New text</param>
+		/// <param name="time">Modification time</param>
 		public void UpdateNote(string updatedNoteTitle, string updatedNoteText, DateTimeOffset time)
 		{
 			this.noteTitle = Encoding.UTF8.GetBytes(updatedNoteTitle);
@@ -120,6 +152,10 @@ namespace CSCommonSecrets
 			return this.checksum;
 		}
 
+		/// <summary>
+		/// Check if checksum matches content
+		/// </summary>
+		/// <returns>True if matches; False otherwise</returns>
 		public bool CheckIfChecksumMatchesContent()
 		{
 			return checksum == CalculateHexChecksum();

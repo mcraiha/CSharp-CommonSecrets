@@ -10,9 +10,15 @@ namespace CSCommonSecrets
 	/// </summary>
 	public enum KDFAlgorithm
 	{
+		/// <summary>
+		/// Password-Based Key Derivation Function 2
+		/// </summary>
 		PBKDF2
 	}
 
+	/// <summary>
+	/// Class that stores all needed info generating derived passwords from plain text passwords
+	/// </summary>
 	public sealed class KeyDerivationFunctionEntry
 	{
 		/// <summary>
@@ -60,6 +66,9 @@ namespace CSCommonSecrets
 		/// </summary>
 		public byte[] keyIdentifier { get; set; }
 
+		/// <summary>
+		/// Calculated checksum of Key Derivation Function Entry
+		/// </summary>
 		public string checksum { get; set; } = string.Empty;
 
 		/// <summary>

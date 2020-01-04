@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// CommonSecretsContainer stores all other data. e.g. KeyDerivationFunctionEntries, LoginInformations etc.
+	/// </summary>
 	public sealed class CommonSecretsContainer
 	{
 		/// <summary>

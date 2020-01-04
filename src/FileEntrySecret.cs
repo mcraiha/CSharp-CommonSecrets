@@ -5,6 +5,9 @@ using CSharp_AUDALF;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// FileEntrySecret stores one encrypted file
+	/// </summary>
 	public sealed class FileEntrySecret
 	{
 		/// <summary>
@@ -68,6 +71,13 @@ namespace CSCommonSecrets
 
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
+		/// <summary>
+		/// Constructor for custom dictionary, use this only if you what you are doing
+		/// </summary>
+		/// <param name="fileEntryAsDictionary">Dictionary containing file entry keys and values</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
+		/// <param name="derivedPassword">Derived password</param>
 		public FileEntrySecret(Dictionary<string, object> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);

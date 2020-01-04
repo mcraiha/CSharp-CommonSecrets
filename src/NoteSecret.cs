@@ -5,6 +5,9 @@ using CSharp_AUDALF;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// NoteSecret stores one encrypted note. Note is basically a text file
+	/// </summary>
 	public sealed class NoteSecret
 	{
 		/// <summary>
@@ -68,6 +71,13 @@ namespace CSCommonSecrets
 
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
+		/// <summary>
+		/// Constructor for custom dictionary, use this only if you what you are doing
+		/// </summary>
+		/// <param name="noteAsDictionary">Dictionary containing note keys and values</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
+		/// <param name="derivedPassword">Derived password</param>
 		public NoteSecret(Dictionary<string, object> noteAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);

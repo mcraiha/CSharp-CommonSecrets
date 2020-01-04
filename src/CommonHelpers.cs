@@ -1,9 +1,11 @@
 using System;
-using System.Text;
 using CSharp_AUDALF;
 
 namespace CSCommonSecrets
 {
+	/// <summary>
+	/// Common helper class, e.g. to check that derived password contains something
+	/// </summary>
 	public static class Helpers
 	{
 		/// <summary>
