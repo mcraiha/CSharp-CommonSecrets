@@ -264,7 +264,7 @@ namespace CSCommonSecrets
 		/// <param name="updatedEmail">Updated email</param>
 		public void UpdateEmail(string updatedEmail)
 		{
-			this.url = Encoding.UTF8.GetBytes(updatedEmail);
+			this.email = Encoding.UTF8.GetBytes(updatedEmail);
 
 			this.UpdateModificationTime();
 
