@@ -306,6 +306,66 @@ namespace CSCommonSecrets
 			return (success: true, possibleError: "");
 		}
 
+		/// <summary>
+		/// Replace existing note secret in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of note secret that will be replaced</param>
+		/// <param name="password">Plaintext password</param>
+		/// <param name="note">Note to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplaceNoteSecret(int zeroBasedIndex, string password, Note note, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.noteSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.noteSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(note, "Note", keyIdentifier, password);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+
+			this.noteSecrets[zeroBasedIndex] = new NoteSecret(note, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Replace existing note secret in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of note secret that will be replaced</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="note">Note to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplaceNoteSecret(int zeroBasedIndex, byte[] derivedPassword, Note note, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.noteSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.noteSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(note, "Note", keyIdentifier, derivedPassword);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			this.noteSecrets[zeroBasedIndex] = new NoteSecret(note, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
 		#endregion // Replace helpers
 
 

@@ -202,5 +202,70 @@ namespace Tests
 
 			Assert.AreEqual(2, csc.loginInformationSecrets.Count);
 		}
+
+		[Test]
+		public void ReplaceNoteSecretTest()
+		{
+			// Arrange
+			string kdfeIdentifier = "somet!%&hinghere";
+			string password = "not()=dragon42";
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+
+			Note add1 = ContentGenerator.GenerateRandomNote();
+			Note add2 = ContentGenerator.GenerateRandomNote();
+
+			Note replace1 = ContentGenerator.GenerateRandomNote();
+			Note replace2 = ContentGenerator.GenerateRandomNote();
+			
+			// Act
+			var addResultSuccess1 = csc.AddNoteSecret(password, add1, kdfeIdentifier);
+			var addResultSuccess2 = csc.AddNoteSecret(kdfe.GeneratePasswordBytes(password), add2, kdfeIdentifier);
+
+			var replaceResultSuccess1 = csc.ReplaceNoteSecret(0, password, replace1, kdfeIdentifier);
+			var replaceResultSuccess2 = csc.ReplaceNoteSecret(1, kdfe.GeneratePasswordBytes(password), replace2, kdfeIdentifier);
+
+			var replaceResultFailure1 = csc.ReplaceNoteSecret(0, password, null, kdfeIdentifier);
+			var replaceResultFailure2 = csc.ReplaceNoteSecret(0, password, ContentGenerator.GenerateRandomNote(), "not existing");
+			var replaceResultFailure3 = csc.ReplaceNoteSecret(0, "", ContentGenerator.GenerateRandomNote(), kdfeIdentifier);
+			var replaceResultFailure4 = csc.ReplaceNoteSecret(-1, password, replace1, kdfeIdentifier);
+			var replaceResultFailure5 = csc.ReplaceNoteSecret(2, password, replace1, kdfeIdentifier);
+
+			// Assert
+			Assert.AreNotEqual(add1.GetNoteTitle(), replace1.GetNoteTitle(), "Make sure that random content do not match!");
+			Assert.AreNotEqual(add2.GetNoteTitle(), replace2.GetNoteTitle(), "Make sure that random content do not match!");
+
+			Assert.AreEqual(replace1.GetNoteTitle(), csc.noteSecrets[0].GetNoteTitle(kdfe.GeneratePasswordBytes(password)));
+			Assert.AreEqual(replace2.GetNoteTitle(), csc.noteSecrets[1].GetNoteTitle(kdfe.GeneratePasswordBytes(password)));
+
+			Assert.IsTrue(addResultSuccess1.success);
+			Assert.AreEqual("", addResultSuccess1.possibleError);
+
+			Assert.IsTrue(addResultSuccess2.success);
+			Assert.AreEqual("", addResultSuccess2.possibleError);
+
+			Assert.IsTrue(replaceResultSuccess1.success);
+			Assert.AreEqual("", replaceResultSuccess1.possibleError);
+
+			Assert.IsTrue(replaceResultSuccess2.success);
+			Assert.AreEqual("", replaceResultSuccess2.possibleError);
+
+			Assert.IsFalse(replaceResultFailure1.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure1.possibleError));
+
+			Assert.IsFalse(replaceResultFailure2.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure2.possibleError));
+
+			Assert.IsFalse(replaceResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure3.possibleError));
+
+			Assert.IsFalse(replaceResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure4.possibleError));
+
+			Assert.IsFalse(replaceResultFailure5.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
+
+			Assert.AreEqual(2, csc.noteSecrets.Count);
+		}
 	}
 }
