@@ -366,6 +366,66 @@ namespace CSCommonSecrets
 			return (success: true, possibleError: "");
 		}
 
+		/// <summary>
+		/// Replace existing file entry in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of file entry secret that will be replaced</param>
+		/// <param name="password">Plaintext password</param>
+		/// <param name="fileEntry">File entry to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplaceFileEntrySecret(int zeroBasedIndex, string password, FileEntry fileEntry, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.fileSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.fileSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(fileEntry, "FileEntry", keyIdentifier, password);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+
+			this.fileSecrets[zeroBasedIndex] = new FileEntrySecret(fileEntry, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Replace existing file entry in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of file entry secret that will be replaced</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="fileEntry">File entry to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplaceFileEntrySecret(int zeroBasedIndex, byte[] derivedPassword, FileEntry fileEntry, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.fileSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.fileSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(fileEntry, "FileEntry", keyIdentifier, derivedPassword);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			this.fileSecrets[zeroBasedIndex] = new FileEntrySecret(fileEntry, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
 		#endregion // Replace helpers
 
 

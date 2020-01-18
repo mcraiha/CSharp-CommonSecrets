@@ -267,5 +267,66 @@ namespace Tests
 
 			Assert.AreEqual(2, csc.noteSecrets.Count);
 		}
+
+		[Test]
+		public void ReplaceFileEntrySecretTest()
+		{
+			// Arrange
+			string kdfeIdentifier = ",.-somefile12344";
+			string password = "--!#notthatdragon42";
+
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+
+			FileEntry add1 = ContentGenerator.GenerateRandomFileEntry();
+			FileEntry add2 = ContentGenerator.GenerateRandomFileEntry();
+
+			FileEntry replace1 = ContentGenerator.GenerateRandomFileEntry();
+			FileEntry replace2 = ContentGenerator.GenerateRandomFileEntry();
+			
+			// Act
+			var addResultSuccess1 = csc.AddFileEntrySecret(password, add1, kdfeIdentifier);
+			var addResultSuccess2 = csc.AddFileEntrySecret(kdfe.GeneratePasswordBytes(password), add2, kdfeIdentifier);
+
+			var replaceResultSuccess1 = csc.ReplaceFileEntrySecret(0, password, replace1, kdfeIdentifier);
+			var replaceResultSuccess2 = csc.ReplaceFileEntrySecret(1, kdfe.GeneratePasswordBytes(password), replace2, kdfeIdentifier, SymmetricEncryptionAlgorithm.ChaCha20);
+
+			var replaceResultFailure1 = csc.ReplaceFileEntrySecret(0, password, null, kdfeIdentifier);
+			var replaceResultFailure2 = csc.ReplaceFileEntrySecret(0, password, ContentGenerator.GenerateRandomFileEntry(), "not existing");
+			var replaceResultFailure3 = csc.ReplaceFileEntrySecret(0, "", ContentGenerator.GenerateRandomFileEntry(), kdfeIdentifier);
+			var replaceResultFailure4 = csc.ReplaceFileEntrySecret(-1, password, replace1, kdfeIdentifier);
+			var replaceResultFailure5 = csc.ReplaceFileEntrySecret(2, password, replace1, kdfeIdentifier);
+
+			// Assert
+			Assert.AreNotEqual(add1.GetFilename(), replace1.GetFilename(), "Make sure that random content do not match!");
+			Assert.AreNotEqual(add2.GetFilename(), replace2.GetFilename(), "Make sure that random content do not match!");
+
+			Assert.AreEqual(replace1.GetFilename(), csc.fileSecrets[0].GetFilename(kdfe.GeneratePasswordBytes(password)));
+			Assert.AreEqual(replace2.GetFilename(), csc.fileSecrets[1].GetFilename(kdfe.GeneratePasswordBytes(password)));
+
+			Assert.IsTrue(addResultSuccess1.success);
+			Assert.AreEqual("", addResultSuccess1.possibleError);
+
+			Assert.IsTrue(addResultSuccess2.success);
+			Assert.AreEqual("", addResultSuccess2.possibleError);
+
+			Assert.IsFalse(replaceResultFailure1.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure1.possibleError));
+
+			Assert.IsFalse(replaceResultFailure2.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure2.possibleError));
+
+			Assert.IsFalse(replaceResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure3.possibleError));
+
+			Assert.IsFalse(replaceResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure4.possibleError));
+
+			Assert.IsFalse(replaceResultFailure5.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
+
+			Assert.AreEqual(2, csc.fileSecrets.Count);
+		}
+
 	}
 }
