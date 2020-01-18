@@ -94,6 +94,9 @@ namespace CSCommonSecrets
 			return returnValue;
 		}
 
+
+		#region Add helpers
+
 		/// <summary>
 		/// Add login information secret to Common secret container
 		/// </summary>
@@ -237,6 +240,74 @@ namespace CSCommonSecrets
 
 			return (success: true, possibleError: "");
 		}
+
+		#endregion // Add helpers
+
+
+		#region Replace helpers
+
+		/// <summary>
+		/// Replace existing login information secret in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of login information secret that will be replaced</param>
+		/// <param name="password">Plaintext password</param>
+		/// <param name="loginInformation">Loginiformation to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplaceLoginInformationSecret(int zeroBasedIndex, string password, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.loginInformationSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.loginInformationSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(loginInformation, "LoginInformation", keyIdentifier, password);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+
+			this.loginInformationSecrets[zeroBasedIndex] = new LoginInformationSecret(loginInformation, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Replace existing login information secret in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of login information secret that will be replaced</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="loginInformation">Loginiformation to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplaceLoginInformationSecret(int zeroBasedIndex, byte[] derivedPassword, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.loginInformationSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.loginInformationSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(loginInformation, "LoginInformation", keyIdentifier, derivedPassword);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			this.loginInformationSecrets[zeroBasedIndex] = new LoginInformationSecret(loginInformation, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
+		#endregion // Replace helpers
+
 
 		private (bool success, string possibleError) MandatoryChecks(object checkForNull, string objectToCheckForError, string keyIdentifier, string password)
 		{
