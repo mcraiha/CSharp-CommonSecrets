@@ -120,6 +120,8 @@ namespace Tests
 
 			Assert.AreEqual(note1.modificationTime, note2.modificationTime);
 			Assert.AreEqual(note1.creationTime, note2.creationTime);
+
+			Assert.AreEqual(note1.checksum, note2.checksum);
 		}
 
 		[Test]

@@ -75,6 +75,8 @@ namespace CSCommonSecrets
 
 			this.creationTime = copyThis.creationTime;
 			this.modificationTime = copyThis.modificationTime;
+
+			this.checksum = copyThis.checksum;
 		}
 
 		/// <summary>
