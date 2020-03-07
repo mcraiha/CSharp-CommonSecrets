@@ -84,6 +84,15 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Create shallow copy, mostly for testing purposes
+		/// </summary>
+		/// <returns>Shallow copy of Note</returns>
+		public Note ShallowCopy()
+		{
+			return (Note) this.MemberwiseClone();
+		}
+
+		/// <summary>
 		/// Update note
 		/// </summary>
 		/// <param name="updatedNoteTitle">New title</param>

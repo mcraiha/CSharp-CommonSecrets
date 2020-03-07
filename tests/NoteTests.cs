@@ -84,6 +84,24 @@ namespace Tests
 		}
 
 		[Test]
+		public void ShallowCopyTest()
+		{
+			// Arrange
+			DateTimeOffset dto = DateTimeOffset.UtcNow;
+			Note note1 = new Note("Some topic here", "Some text here, yes.", dto);
+
+			// Act
+			Note note2 = note1.ShallowCopy();
+
+			string checksum1 = note1.GetChecksumAsHex();
+			string checksum2 = note2.GetChecksumAsHex();
+
+			// Assert
+			Assert.IsNotNull(note2);
+			Assert.AreEqual(checksum1, checksum2);
+		}
+
+		[Test]
 		public void ChecksumSurvivesRoundtrip()
 		{
 			// Arrange
