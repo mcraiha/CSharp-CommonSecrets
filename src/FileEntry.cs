@@ -153,6 +153,15 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Get file content lenght in bytes
+		/// </summary>
+		/// <returns>Lenght in bytes</returns>
+		public long GetFileContentLengthInBytes()
+		{
+			return fileContent.LongLength;
+		}
+
+		/// <summary>
 		/// Get creation time
 		/// </summary>
 		/// <returns>Creation time as DateTimeOffset</returns>

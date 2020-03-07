@@ -119,6 +119,16 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Get file content lenght in bytes
+		/// </summary>
+		/// <returns>Lenght in bytes</returns>
+		public long GetFileContentLengthInBytes(byte[] derivedPassword)
+		{
+			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
+			return (long)((byte[])fileEntryAsDictionary[FileEntry.fileContentKey]).LongLength;
+		}
+
+		/// <summary>
 		/// Get file entry creation time
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>

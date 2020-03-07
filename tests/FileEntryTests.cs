@@ -39,7 +39,8 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.AreEqual(filename, fe.filename);
+			Assert.AreEqual(filename, fe.GetFilename());
+			Assert.AreEqual(contentForFile.LongLength, fe.GetFileContentLengthInBytes());
 			CollectionAssert.AreEqual(contentForFile, fe.fileContent);
 		}
 
