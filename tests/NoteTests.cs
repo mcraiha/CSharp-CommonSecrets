@@ -102,6 +102,27 @@ namespace Tests
 		}
 
 		[Test]
+		public void DeepCopyTest()
+		{
+			// Arrange
+			DateTimeOffset dto = DateTimeOffset.UtcNow;
+			Note note1 = new Note("Some topic here", "Some text here, yes. And read more!", dto);
+
+			// Act
+			Note note2 = new Note(note1);
+
+			// Assert
+			Assert.AreNotSame(note1.noteTitle, note2.noteTitle);
+			CollectionAssert.AreEqual(note1.noteTitle, note2.noteTitle);
+
+			Assert.AreNotSame(note1.noteText, note2.noteText);
+			CollectionAssert.AreEqual(note1.noteText, note2.noteText);
+
+			Assert.AreEqual(note1.modificationTime, note2.modificationTime);
+			Assert.AreEqual(note1.creationTime, note2.creationTime);
+		}
+
+		[Test]
 		public void ChecksumSurvivesRoundtrip()
 		{
 			// Arrange

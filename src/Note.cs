@@ -62,6 +62,22 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Deep copy existing Note to new Note
+		/// </summary>
+		/// <param name="copyThis">Note to copy</param>
+		public Note(Note copyThis)
+		{
+			this.noteTitle = new byte[copyThis.noteTitle.Length];
+			Buffer.BlockCopy(copyThis.noteTitle, 0, this.noteTitle, 0, copyThis.noteTitle.Length);
+
+			this.noteText = new byte[copyThis.noteText.Length];
+			Buffer.BlockCopy(copyThis.noteText, 0, this.noteText, 0, copyThis.noteText.Length);
+
+			this.creationTime = copyThis.creationTime;
+			this.modificationTime = copyThis.modificationTime;
+		}
+
+		/// <summary>
 		/// Default constructor for note
 		/// </summary>
 		/// <param name="newNoteTitle">Note title</param>
