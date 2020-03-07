@@ -229,6 +229,58 @@ namespace Tests
 		}
 
 		[Test]
+		public void DeepCopyTest()
+		{
+			// Arrange
+			string title = "Random forum";
+			string url = "https://somedomain.com";
+			string email = "nobbody@me2.me";
+			string username = "dragon1337";
+			string password = "password1!%";
+			string notes = "funny dialog is funny";
+			byte[] icon = new byte[] { 0, 1, 3, 4, 5, 7 };
+			string category = "forums";
+			string tags = "daily\tmodern";
+
+			LoginInformation li1 = new LoginInformation(newTitle: title, newUrl: url, newEmail: email, newUsername: username, newPassword: password, 
+					newNotes: notes, newIcon: icon, newCategory: category, newTags: tags);
+
+			// Act
+			LoginInformation li2 = new LoginInformation(li1);
+
+			// Assert
+			Assert.AreNotSame(li1.title, li2.title);
+			CollectionAssert.AreEqual(li1.title, li2.title);
+
+			Assert.AreNotSame(li1.url, li2.url);
+			CollectionAssert.AreEqual(li1.url, li2.url);
+
+			Assert.AreNotSame(li1.email, li2.email);
+			CollectionAssert.AreEqual(li1.email, li2.email);
+
+			Assert.AreNotSame(li1.username, li2.username);
+			CollectionAssert.AreEqual(li1.username, li2.username);
+
+			Assert.AreNotSame(li1.password, li2.password);
+			CollectionAssert.AreEqual(li1.password, li2.password);
+
+			Assert.AreNotSame(li1.notes, li2.notes);
+			CollectionAssert.AreEqual(li1.notes, li2.notes);
+
+			Assert.AreNotSame(li1.icon, li2.icon);
+			CollectionAssert.AreEqual(li1.icon, li2.icon);
+
+			Assert.AreNotSame(li1.category, li2.category);
+			CollectionAssert.AreEqual(li1.category, li2.category);
+
+			Assert.AreNotSame(li1.tags, li2.tags);
+			CollectionAssert.AreEqual(li1.tags, li2.tags);
+
+			Assert.AreEqual(li1.modificationTime, li2.modificationTime);
+			Assert.AreEqual(li1.creationTime, li2.creationTime);
+		}
+
+		[Test]
 		public void ChecksumSurvivesRoundtrip()
 		{
 			// Arrange

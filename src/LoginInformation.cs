@@ -132,6 +132,43 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Deep copy existing LoginInformation to new LoginInformation
+		/// </summary>
+		/// <param name="copyThis">LoginInformation to copy</param>
+		public LoginInformation(LoginInformation copyThis)
+		{
+			this.title = new byte[copyThis.title.Length];
+			Buffer.BlockCopy(copyThis.title, 0, this.title, 0, copyThis.title.Length);
+
+			this.url = new byte[copyThis.url.Length];
+			Buffer.BlockCopy(copyThis.url, 0, this.url, 0, copyThis.url.Length);
+
+			this.email =  new byte[copyThis.email.Length];
+			Buffer.BlockCopy(copyThis.email, 0, this.email, 0, copyThis.email.Length);
+
+			this.username = new byte[copyThis.username.Length];
+			Buffer.BlockCopy(copyThis.username, 0, this.username, 0, copyThis.username.Length);
+
+			this.password = new byte[copyThis.password.Length];
+			Buffer.BlockCopy(copyThis.password, 0, this.password, 0, copyThis.password.Length);
+
+			this.notes = new byte[copyThis.notes.Length];
+			Buffer.BlockCopy(copyThis.notes, 0, this.notes, 0, copyThis.notes.Length);
+
+			this.icon = new byte[copyThis.icon.Length];
+			Buffer.BlockCopy(copyThis.icon, 0, this.icon, 0, copyThis.icon.Length);
+
+			this.category = new byte[copyThis.category.Length];
+			Buffer.BlockCopy(copyThis.category, 0, this.category, 0, copyThis.category.Length);
+
+			this.tags = new byte[copyThis.tags.Length];
+			Buffer.BlockCopy(copyThis.tags, 0, this.tags, 0, copyThis.tags.Length);
+
+			this.creationTime = copyThis.creationTime;
+			this.modificationTime = copyThis.modificationTime;
+		}
+
+		/// <summary>
 		/// Default small LoginInformation constructor
 		/// </summary>
 		/// <param name="newTitle">Title</param>
