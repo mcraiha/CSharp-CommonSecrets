@@ -62,6 +62,22 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Deep copy existing FileEntry to new FileEntry
+		/// </summary>
+		/// <param name="copyThis">FileEntry to copy</param>
+		public FileEntry(FileEntry copyThis)
+		{
+			this.filename = new byte[copyThis.filename.Length];
+			Buffer.BlockCopy(copyThis.filename, 0, this.filename, 0, copyThis.filename.Length);
+
+			this.fileContent = new byte[copyThis.fileContent.Length];
+			Buffer.BlockCopy(copyThis.fileContent, 0, this.fileContent, 0, copyThis.fileContent.Length);
+
+			this.creationTime = copyThis.creationTime;
+			this.modificationTime = copyThis.modificationTime;
+		}
+
+		/// <summary>
 		/// Default constructor for file entry
 		/// </summary>
 		/// <param name="newFilename">Filename</param>

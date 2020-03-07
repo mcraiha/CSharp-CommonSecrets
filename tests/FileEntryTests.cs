@@ -103,6 +103,28 @@ namespace Tests
 		}
 
 		[Test]
+		public void DeepCopyTest()
+		{
+			// Arrange
+			string filename = "sometext.txt";
+			string fileContent = "Some text here, yes. And even more";
+			FileEntry fe1 = new FileEntry(filename, Encoding.UTF8.GetBytes(fileContent));
+
+			// Act
+			FileEntry fe2 = new FileEntry(fe1);
+
+			// Assert
+			Assert.AreNotSame(fe1.filename, fe2.filename);
+			CollectionAssert.AreEqual(fe1.filename, fe2.filename);
+
+			Assert.AreNotSame(fe1.fileContent, fe2.fileContent);
+			CollectionAssert.AreEqual(fe1.fileContent, fe2.fileContent);
+
+			Assert.AreEqual(fe1.modificationTime, fe2.modificationTime);
+			Assert.AreEqual(fe1.creationTime, fe2.creationTime);
+		}
+
+		[Test]
 		public void ChecksumSurvivesRoundtrip()
 		{
 			// Arrange
