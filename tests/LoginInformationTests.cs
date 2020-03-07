@@ -278,6 +278,8 @@ namespace Tests
 
 			Assert.AreEqual(li1.modificationTime, li2.modificationTime);
 			Assert.AreEqual(li1.creationTime, li2.creationTime);
+
+			Assert.AreEqual(li1.checksum, li2.checksum);
 		}
 
 		[Test]
