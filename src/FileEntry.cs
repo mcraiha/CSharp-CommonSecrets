@@ -100,7 +100,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Creat shallow copy, mostly for testing purposes
+		/// Create shallow copy, mostly for testing purposes
 		/// </summary>
 		/// <returns>Shallow copy of FileEntry</returns>
 		public FileEntry ShallowCopy()
