@@ -84,6 +84,15 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Creat shallow copy, mostly for testing purposes
+		/// </summary>
+		/// <returns>Shallow copy of FileEntry</returns>
+		public FileEntry ShallowCopy()
+		{
+			return (FileEntry) this.MemberwiseClone();
+		}
+
+		/// <summary>
 		/// Update file entry, use current DateTimeOffset.UtcNow for modification timestamp
 		/// </summary>
 		/// <param name="updatedFilename">Filename</param>

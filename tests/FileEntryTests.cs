@@ -86,6 +86,23 @@ namespace Tests
 		}
 
 		[Test]
+		public void ShallowCopyTest()
+		{
+			// Arrange
+			FileEntry fe1 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
+
+			// Act
+			FileEntry fe2 = fe1.ShallowCopy();
+
+			string checksum1 = fe1.GetChecksumAsHex();
+			string checksum2 = fe2.GetChecksumAsHex();
+
+			// Assert
+			Assert.IsNotNull(fe2);
+			Assert.AreEqual(checksum1, checksum2);
+		}
+
+		[Test]
 		public void ChecksumSurvivesRoundtrip()
 		{
 			// Arrange
