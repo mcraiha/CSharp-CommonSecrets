@@ -122,6 +122,8 @@ namespace Tests
 
 			Assert.AreEqual(fe1.modificationTime, fe2.modificationTime);
 			Assert.AreEqual(fe1.creationTime, fe2.creationTime);
+
+			Assert.AreEqual(fe1.checksum, fe2.checksum);
 		}
 
 		[Test]
