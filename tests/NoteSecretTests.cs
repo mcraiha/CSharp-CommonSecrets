@@ -41,6 +41,37 @@ namespace Tests
 		}
 
 		[Test]
+		public void DeepCopyTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 1, 82, 93, 102, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xf5, 0xf6, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string title = "Wishlist for holidays";
+			string text = "peace, happiness, freedom and something";
+
+			Note note = new Note(title, text);
+
+			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			NoteSecret noteSecretCopy = new NoteSecret(noteSecret);
+			string noteTitle = noteSecretCopy.GetNoteTitle(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(noteTitle));
+			Assert.AreEqual(title, noteTitle);
+			Assert.AreNotSame(noteSecret.audalfData, noteSecretCopy.audalfData, "AUDALF byte arrays should be in different memory locations");
+			CollectionAssert.AreEqual(noteSecret.keyIdentifier, noteSecretCopy.keyIdentifier);
+			Assert.AreNotSame(noteSecret.keyIdentifier, noteSecretCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
+			Assert.AreEqual(noteSecret.checksum, noteSecretCopy.checksum);
+		}
+
+		[Test]
 		public void GetNoteTitleTest()
 		{
 			// Arrange

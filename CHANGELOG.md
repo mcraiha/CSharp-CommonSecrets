@@ -3,6 +3,7 @@
 - Add Deep copy for LoginInformationSecret (**FEATURE**)
 - Add Deep copy for FileEntry (**FEATURE**)
 - Add Deep copy for Note (**FEATURE**)
+- Add Deep copy for NoteSecret (**FEATURE**)
 - Add Deep copy for SymmetricKeyAlgorithm (**FEATURE**)
 - Add GetFileContentLengthInBytes for FileEntry and FileEntrySecret (**FEATURE**)
 
