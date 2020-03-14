@@ -42,6 +42,37 @@ namespace Tests
 		}
 
 		[Test]
+		public void DeepCopyTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 1, 82, 93, 102, 112, 120, 103, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0x13, 0xaa, 0xf5, 0x36, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string filename = "nic2e.pdf";
+			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0, 23, 34, 33, 22, 222, 111 };
+
+			FileEntry fe = new FileEntry(filename, fileContent);
+
+			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			FileEntrySecret fesCopy = new FileEntrySecret(fes);
+			string filenameInCopy = fesCopy.GetFilename(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(filenameInCopy));
+			Assert.AreEqual(filename, filenameInCopy);
+			Assert.AreNotSame(fes.audalfData, fesCopy.audalfData, "AUDALF byte arrays should be in different memory locations");
+			CollectionAssert.AreEqual(fes.keyIdentifier, fesCopy.keyIdentifier);
+			Assert.AreNotSame(fes.keyIdentifier, fesCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
+			Assert.AreEqual(fes.checksum, fesCopy.checksum);
+		}
+
+		[Test]
 		public void GetFilenameTest()
 		{
 			// Arrange
