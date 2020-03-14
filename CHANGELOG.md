@@ -2,6 +2,7 @@
 - Add Deep copy for LoginInformation (**FEATURE**)
 - Add Deep copy for FileEntry (**FEATURE**)
 - Add Deep copy for Note (**FEATURE**)
+- Add Deep copy for SymmetricKeyAlgorithm (**FEATURE**)
 - Add GetFileContentLengthInBytes for FileEntry and FileEntrySecret (**FEATURE**)
 
 ## Version 0.9.4 (released 2020-01-18)
