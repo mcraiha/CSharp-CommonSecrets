@@ -1,4 +1,6 @@
-## Version 0.9.5 (not released yet)
+## Version 0.9.6 (not released yet)
+
+## Version 0.9.5 (released 2020-03-14)
 - Add Deep copy for LoginInformation (**FEATURE**)
 - Add Deep copy for LoginInformationSecret (**FEATURE**)
 - Add Deep copy for FileEntry (**FEATURE**)
