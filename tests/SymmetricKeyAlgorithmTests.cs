@@ -88,6 +88,30 @@ namespace Tests
 		}
 
 		[Test]
+		public void DeepCopyTest()
+		{
+			// Arrange
+			SymmetricKeyAlgorithm skaAES = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+			SymmetricKeyAlgorithm skaChaCha20 = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.ChaCha20);
+
+			// Act
+			SymmetricKeyAlgorithm skaAESCopy = new SymmetricKeyAlgorithm(skaAES);
+			SymmetricKeyAlgorithm skaChaCha20Copy = new SymmetricKeyAlgorithm(skaChaCha20);
+
+			// Assert
+			Assert.AreEqual(skaAES.algorithm, skaAESCopy.algorithm);
+			Assert.AreEqual(skaAES.keySizeInBits, skaAESCopy.keySizeInBits);
+			CollectionAssert.AreEqual(skaAES.settingsAES_CTR.initialCounter, skaAESCopy.settingsAES_CTR.initialCounter);
+			Assert.IsNull(skaAESCopy.settingsChaCha20);
+
+			Assert.AreEqual(skaChaCha20.algorithm, skaChaCha20Copy.algorithm);
+			Assert.AreEqual(skaChaCha20.keySizeInBits, skaChaCha20Copy.keySizeInBits);
+			CollectionAssert.AreEqual(skaChaCha20.settingsChaCha20.nonce, skaChaCha20Copy.settingsChaCha20.nonce);
+			Assert.AreEqual(skaChaCha20.settingsChaCha20.counter, skaChaCha20Copy.settingsChaCha20.counter);
+			Assert.IsNull(skaChaCha20.settingsAES_CTR);
+		}
+
+		[Test]
 		public void GenerateNewTest()
 		{
 			// Arrange

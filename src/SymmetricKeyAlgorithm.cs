@@ -87,6 +87,26 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Deep copy constructor
+		/// </summary>
+		/// <param name="copyThis">SymmetricKeyAlgorithm to copy</param>
+		public SymmetricKeyAlgorithm(SymmetricKeyAlgorithm copyThis)
+		{
+			this.algorithm = copyThis.algorithm;
+			this.keySizeInBits = copyThis.keySizeInBits;
+
+			if (copyThis.settingsAES_CTR != null)
+			{
+				this.settingsAES_CTR = new SettingsAES_CTR(copyThis.settingsAES_CTR.initialCounter);
+			}
+
+			if (copyThis.settingsChaCha20 != null)
+			{
+				this.settingsChaCha20 = new SettingsChaCha20(copyThis.settingsChaCha20.nonce, copyThis.settingsChaCha20.counter);
+			}
+		}
+
+		/// <summary>
 		/// Encrypt given bytes with given key. Returns new array with encrypted bytes
 		/// </summary>
 		/// <param name="bytesToEncrypt">Byte array to encrypu</param>
