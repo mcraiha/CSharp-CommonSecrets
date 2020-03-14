@@ -113,6 +113,22 @@ namespace CSCommonSecrets
 		#region Common getters
 
 		/// <summary>
+		/// Get FileEntry. Use this for situation where you want to convert secret -> non secret
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>FileEntry</returns>
+		public FileEntry GetFileEntry(byte[] derivedPassword)
+		{
+			Dictionary<string, object> dict = this.GetFileEntryAsDictionary(derivedPassword);
+			FileEntry returnValue = new FileEntry((string)dict[FileEntry.filenameKey], (byte[])dict[FileEntry.fileContentKey]);
+
+			returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]).ToUnixTimeSeconds();
+			returnValue.modificationTime = ((DateTimeOffset)dict[LoginInformation.modificationTimeKey]).ToUnixTimeSeconds();
+
+			return returnValue;
+		}
+
+		/// <summary>
 		/// Get filename
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>

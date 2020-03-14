@@ -9,6 +9,7 @@
 - Add GetFileContentLengthInBytes for FileEntry and FileEntrySecret (**FEATURE**)
 - Add GetLoginInformation for LoginInformationSecret (**FEATURE**)
 - Add GetNote for NoteSecret (**FEATURE**)
+- Add GetFileEntry for FileEntrySecret (**FEATURE**)
 
 ## Version 0.9.4 (released 2020-01-18)
 - Add ReplaceLoginInformationSecret to CommonSecretsContainer (**FEATURE**)
