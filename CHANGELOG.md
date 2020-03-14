@@ -1,5 +1,6 @@
 ## Version 0.9.5 (not released yet)
 - Add Deep copy for LoginInformation (**FEATURE**)
+- Add Deep copy for LoginInformationSecret (**FEATURE**)
 - Add Deep copy for FileEntry (**FEATURE**)
 - Add Deep copy for Note (**FEATURE**)
 - Add Deep copy for SymmetricKeyAlgorithm (**FEATURE**)

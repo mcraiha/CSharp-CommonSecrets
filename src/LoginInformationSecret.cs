@@ -76,6 +76,22 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		/// <summary>
+		/// Deep copy existing LoginInformationSecret
+		/// </summary>
+		/// <param name="copyThis">Deep copy this</param>
+		public LoginInformationSecret(LoginInformationSecret copyThis)
+		{
+			this.keyIdentifier = new byte[copyThis.keyIdentifier.Length];
+			Buffer.BlockCopy(copyThis.keyIdentifier, 0, this.keyIdentifier, 0, copyThis.keyIdentifier.Length);
+
+			this.audalfData = new byte[copyThis.audalfData.Length];
+			Buffer.BlockCopy(copyThis.audalfData, 0, this.audalfData, 0, copyThis.audalfData.Length);
+
+			this.algorithm = new SymmetricKeyAlgorithm(copyThis.algorithm);
+			this.checksum = copyThis.checksum;
+		}
+
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
 		/// <summary>

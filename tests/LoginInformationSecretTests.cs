@@ -43,6 +43,32 @@ namespace Tests
 		}
 
 		[Test]
+		public void DeepCopyTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xf5, 0xf6, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			LoginInformationSecret loginInformationSecretCopy = new LoginInformationSecret(loginInformationSecret);
+			string loginInformationTitle = loginInformationSecretCopy.GetTitle(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle));
+			Assert.AreEqual(loginInformation.title, loginInformationTitle);
+			Assert.AreNotSame(loginInformationSecret.audalfData, loginInformationSecretCopy.audalfData, "AUDALF byte arrays should be in different memory locations");
+			CollectionAssert.AreEqual(loginInformationSecret.keyIdentifier, loginInformationSecretCopy.keyIdentifier);
+			Assert.AreNotSame(loginInformationSecret.keyIdentifier, loginInformationSecretCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
+			Assert.AreEqual(loginInformationSecret.checksum, loginInformationSecretCopy.checksum);
+		}
+
+		[Test]
 		public void GetLoginInformationTitleTest()
 		{
 			// Arrange
