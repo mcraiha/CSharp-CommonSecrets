@@ -113,6 +113,22 @@ namespace CSCommonSecrets
 		#region Common getters
 
 		/// <summary>
+		/// Get Note. Use this for situation where you want to convert secret -> non secret
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Note</returns>
+		public Note GetNote(byte[] derivedPassword)
+		{
+			Dictionary<string, object> dict = this.GetNoteAsDictionary(derivedPassword);
+			Note returnValue = new Note((string)dict[Note.noteTitleKey], (string)dict[Note.noteTextKey]);
+
+			returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]).ToUnixTimeSeconds();
+			returnValue.modificationTime = ((DateTimeOffset)dict[LoginInformation.modificationTimeKey]).ToUnixTimeSeconds();
+
+			return returnValue;
+		}
+
+		/// <summary>
 		/// Get note title
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
