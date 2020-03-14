@@ -120,6 +120,24 @@ namespace CSCommonSecrets
 		#region Common getters
 
 		/// <summary>
+		/// Get LoginInformation. Use this for situation where you want to convert secret -> non secret
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>LoginInformation</returns>
+		public LoginInformation GetLoginInformation(byte[] derivedPassword)
+		{
+			Dictionary<string, object> dict = this.GetLoginInformationAsDictionary(derivedPassword);
+			LoginInformation returnValue = new LoginInformation((string)dict[LoginInformation.titleKey], (string)dict[LoginInformation.urlKey], (string)dict[LoginInformation.emailKey],
+										(string)dict[LoginInformation.usernameKey], (string)dict[LoginInformation.passwordKey], (string)dict[LoginInformation.notesKey],
+										(byte[])dict[LoginInformation.iconKey], (string)dict[LoginInformation.categoryKey], (string)dict[LoginInformation.tagsKey]
+										);
+			returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]).ToUnixTimeSeconds();
+			returnValue.modificationTime = ((DateTimeOffset)dict[LoginInformation.modificationTimeKey]).ToUnixTimeSeconds();
+			
+			return returnValue;
+		}
+
+		/// <summary>
 		/// Get title. This tries to decrypt data with given derived password
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>

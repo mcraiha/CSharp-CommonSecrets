@@ -69,6 +69,28 @@ namespace Tests
 		}
 
 		[Test]
+		public void GetLoginInformationTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xf5, 0xf6, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			LoginInformation loginInformationCopy = loginInformationSecret.GetLoginInformation(derivedKey);
+
+			// Assert
+			Assert.IsTrue(ComparisonHelper.AreLoginInformationsEqual(loginInformation, loginInformationCopy));
+			Assert.AreEqual(loginInformation.creationTime, loginInformationCopy.creationTime);
+			Assert.AreEqual(loginInformation.modificationTime, loginInformationCopy.modificationTime);
+		}
+
+		[Test]
 		public void GetLoginInformationTitleTest()
 		{
 			// Arrange

@@ -7,6 +7,7 @@
 - Add Deep copy for NoteSecret (**FEATURE**)
 - Add Deep copy for SymmetricKeyAlgorithm (**FEATURE**)
 - Add GetFileContentLengthInBytes for FileEntry and FileEntrySecret (**FEATURE**)
+- Add GetLoginInformation for LoginInformationSecret (**FEATURE**)
 
 ## Version 0.9.4 (released 2020-01-18)
 - Add ReplaceLoginInformationSecret to CommonSecretsContainer (**FEATURE**)
