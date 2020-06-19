@@ -1,4 +1,7 @@
 ## Version 0.9.6 (not released yet)
+- Update LibAES-CTR (**FEATURE**)
+- Update LibChaCha20 (**FEATURE**)
+- Include git short hash in package (**FEATURE**)
 
 ## Version 0.9.5 (released 2020-03-14)
 - Add Deep copy for LoginInformation (**FEATURE**)
