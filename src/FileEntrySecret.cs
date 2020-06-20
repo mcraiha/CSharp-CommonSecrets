@@ -16,7 +16,7 @@ namespace CSCommonSecrets
 		public byte[] keyIdentifier { get; set; }
 
 		/// <summary>
-		/// AUDALF data as byte array (this is secret/ecrypted information)
+		/// AUDALF data as byte array (this is secret/encrypted information)
 		/// </summary>
 		public byte[] audalfData { get; set; } = new byte[0];
 
