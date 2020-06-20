@@ -88,7 +88,7 @@ namespace CSCommonSecrets
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
 		/// <summary>
-		/// Constructor for custom dictionary, use this only if you what you are doing
+		/// Constructor for custom dictionary, use this only if you know what you are doing
 		/// </summary>
 		/// <param name="fileEntryAsDictionary">Dictionary containing file entry keys and values</param>
 		/// <param name="keyIdentifier">Key identifier</param>
