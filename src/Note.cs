@@ -111,7 +111,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Update note
+		/// Update note, uses DateTimeOffset.UtcNow for modification timestamp
 		/// </summary>
 		/// <param name="updatedNoteTitle">New title</param>
 		/// <param name="updatedNoteText">New text</param>
@@ -125,12 +125,12 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="updatedNoteTitle">New title</param>
 		/// <param name="updatedNoteText">New text</param>
-		/// <param name="time">Modification time</param>
-		public void UpdateNote(string updatedNoteTitle, string updatedNoteText, DateTimeOffset time)
+		/// <param name="modificationTime">Modification time</param>
+		public void UpdateNote(string updatedNoteTitle, string updatedNoteText, DateTimeOffset modificationTime)
 		{
 			this.noteTitle = Encoding.UTF8.GetBytes(updatedNoteTitle);
 			this.noteText = Encoding.UTF8.GetBytes(updatedNoteText);
-			this.modificationTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+			this.modificationTime = modificationTime.ToUnixTimeSeconds();
 			this.CalculateAndUpdateChecksum();
 		}
 
