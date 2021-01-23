@@ -133,6 +133,48 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
+		/// <summary>
+		/// Get Contact. Use this for situation where you want to convert secret -> non secret
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact</returns>
+		public Contact GetContact(byte[] derivedPassword)
+		{
+			Dictionary<string, object> dict = this.GetContactAsDictionary(derivedPassword);
+			string firstName = (string)dict[Contact.firstNameKey];
+			string lastName = (string)dict[Contact.lastNameKey];
+			string middleName = (string)dict[Contact.middleNameKey];
+			string namePrefix = (string)dict[Contact.namePrefixKey];
+			string nameSuffix = (string)dict[Contact.nameSuffixKey];
+			string nickname = (string)dict[Contact.nicknameKey];
+			string company = (string)dict[Contact.companyKey];
+			string jobTitle = (string)dict[Contact.jobTitleKey];
+			string department = (string)dict[Contact.departmentKey];
+			string[] emails = ((string)dict[Contact.emailsKey]).Split(Contact.separatorChar);
+			string[] emailDescriptions = ((string)dict[Contact.emailDescriptionsKey]).Split(Contact.separatorChar);
+			string[] phoneNumbers = ((string)dict[Contact.phoneNumbersKey]).Split(Contact.separatorChar);
+			string[] phoneNumberDescriptions = ((string)dict[Contact.phoneNumberDescriptionsKey]).Split(Contact.separatorChar);
+			string country = (string)dict[Contact.countryKey];
+			string streetAddress = (string)dict[Contact.streetAddressKey];
+			string streetAddressAdditional = (string)dict[Contact.streetAddressAdditionalKey];
+			string postalCode = (string)dict[Contact.postalCodeKey];
+			string city = (string)dict[Contact.cityKey];
+			string poBox = (string)dict[Contact.poBoxKey];
+			string birthday = (string)dict[Contact.birthdayKey];
+			string relationship = (string)dict[Contact.relationshipKey];
+			string notes = (string)dict[Contact.notesKey];
+			string[] websites = ((string)dict[Contact.websitesKey]).Split(Contact.separatorChar);
+			Contact returnValue = new Contact(firstName, lastName, middleName, namePrefix, nameSuffix, nickname, company, jobTitle, department, 
+										emails, emailDescriptions, phoneNumbers, phoneNumberDescriptions, 
+										country, streetAddress, streetAddressAdditional, postalCode, city, poBox, birthday,
+										websites, relationship, notes);
+
+			returnValue.creationTime = ((DateTimeOffset)dict[Contact.creationTimeKey]).ToUnixTimeSeconds();
+			returnValue.modificationTime = ((DateTimeOffset)dict[Contact.modificationTimeKey]).ToUnixTimeSeconds();
+
+			return returnValue;
+		}
+
 		#endregion // Common getters
 
 
