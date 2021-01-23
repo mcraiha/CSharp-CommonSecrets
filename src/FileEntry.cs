@@ -111,7 +111,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Update file entry, use current DateTimeOffset.UtcNow for modification timestamp
+		/// Update file entry, uses DateTimeOffset.UtcNow for modification timestamp
 		/// </summary>
 		/// <param name="updatedFilename">Filename</param>
 		/// <param name="updatedFileContent">File content</param>
