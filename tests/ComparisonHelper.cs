@@ -53,6 +53,33 @@ namespace Tests
 			return StructuralComparisons.StructuralEqualityComparer.Equals(fileEntrySecret1.audalfData, fileEntrySecret2.audalfData) && AreSymmetricKeyAlgorithmsEqual(fileEntrySecret1.algorithm, fileEntrySecret2.algorithm);
 		}
 
+		public static bool AreContactsEqual(Contact contact1, Contact contact2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(contact1.firstName, contact2.firstName) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.lastName, contact2.lastName) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.middleName, contact2.middleName) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.namePrefix, contact2.namePrefix) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.nameSuffix, contact2.nameSuffix) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.nickname, contact2.nickname) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.company, contact2.company) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.jobTitle, contact2.jobTitle) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.department, contact2.department) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.emails, contact2.emails) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.emailDescriptions, contact2.emailDescriptions) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.phoneNumbers, contact2.phoneNumbers) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.phoneNumberDescriptions, contact2.phoneNumberDescriptions) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.country, contact2.country) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.streetAddress, contact2.streetAddress) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.streetAddressAdditional, contact2.streetAddressAdditional) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.postalCode, contact2.postalCode) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.city, contact2.city) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.poBox, contact2.poBox) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.birthday, contact2.birthday) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.websites, contact2.websites) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.relationship, contact2.relationship) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.notes, contact2.notes);
+		}
+
 		public static bool AreSymmetricKeyAlgorithmsEqual(SymmetricKeyAlgorithm symmetricKeyAlgorithm1, SymmetricKeyAlgorithm symmetricKeyAlgorithm2)
 		{
 			return StructuralComparisons.StructuralEqualityComparer.Equals(symmetricKeyAlgorithm1.GetSettingsAsBytes(), symmetricKeyAlgorithm2.GetSettingsAsBytes());
