@@ -266,12 +266,12 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Tab \t is used to separate entries in lists
 		/// </summary>
-		public readonly char separatorChar = '\t';
+		public static readonly char separatorChar = '\t';
 
 		/// <summary>
 		/// Tab \t is used to separate entries in lists
 		/// </summary>
-		public readonly string separatorString = '\t'.ToString();
+		public static readonly string separatorString = '\t'.ToString();
 
 		/// <summary>
 		/// For deserialization purposes
