@@ -387,6 +387,8 @@ namespace CSCommonSecrets
 			this.middleName = Encoding.UTF8.GetBytes(middleName);
 			this.creationTime = time.ToUnixTimeSeconds();
 			this.modificationTime = time.ToUnixTimeSeconds();
+
+			this.CalculateAndUpdateChecksum();
 		}
 
 		/// <summary>
@@ -475,6 +477,8 @@ namespace CSCommonSecrets
 			this.notes = Encoding.UTF8.GetBytes(notes);
 			this.creationTime = time.ToUnixTimeSeconds();
 			this.modificationTime = time.ToUnixTimeSeconds();
+
+			this.CalculateAndUpdateChecksum();
 		}
 
 		/// <summary>

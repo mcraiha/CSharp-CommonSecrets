@@ -65,5 +65,48 @@ namespace Tests
 			// Assert
 			Assert.IsNotNull(c1);
 		}
+
+		[Test]
+		public void DeepCopyTest()
+		{
+			// Arrange
+			Contact c1 = new Contact("first", "last", "middle");
+
+			// Act
+			Contact c2 = new Contact(c1);
+
+			// Assert
+			Assert.AreNotSame(c1.firstName, c2.firstName);
+			CollectionAssert.AreEqual(c1.firstName, c2.firstName);
+
+			Assert.AreNotSame(c1.middleName, c2.middleName);
+			CollectionAssert.AreEqual(c1.middleName, c2.middleName);
+
+			Assert.AreNotSame(c1.lastName, c2.lastName);
+			CollectionAssert.AreEqual(c1.lastName, c2.lastName);
+
+			Assert.AreEqual(c1.modificationTime, c2.modificationTime);
+			Assert.AreEqual(c1.creationTime, c2.creationTime);
+
+			Assert.AreEqual(c1.checksum, c2.checksum);
+		}
+
+		[Test]
+		public void ChecksumSurvivesRoundtrip()
+		{
+			// Arrange
+			Contact c1 = new Contact("first", "last", "middle");
+
+			// Act
+			string checksum1 = c1.GetChecksumAsHex();
+
+			string json = JsonConvert.SerializeObject(c1, Formatting.Indented);
+
+			Contact c2 = JsonConvert.DeserializeObject<Contact>(json);
+
+			// Assert
+			Assert.AreEqual(64, checksum1.Length);
+			Assert.AreEqual(checksum1, c2.GetChecksumAsHex());
+		}
 	}
 }
