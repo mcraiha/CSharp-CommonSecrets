@@ -194,7 +194,7 @@ namespace CSCommonSecrets
 		public byte[] poBox { get; set; } = new byte[0];
 
 		/// <summary>
-		/// Contact poBox key
+		/// Contact PO Box key
 		/// </summary>
 		public static readonly string poBoxKey = nameof(poBox);
 
@@ -262,6 +262,16 @@ namespace CSCommonSecrets
 		/// Calculated checksum of contact
 		/// </summary>
 		public string checksum { get; set; } = string.Empty;
+
+		/// <summary>
+		/// Tab \t is used to separate entries in lists
+		/// </summary>
+		public readonly char separatorChar = '\t';
+
+		/// <summary>
+		/// Tab \t is used to separate entries in lists
+		/// </summary>
+		public readonly string separatorString = '\t'.ToString();
 
 		/// <summary>
 		/// For deserialization purposes
@@ -353,7 +363,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Default constructor for Contact
+		/// Default small constructor for Contact
 		/// </summary>
 		/// <param name="firstName">First name</param>
 		/// <param name="lastName">Last name</param>
@@ -364,7 +374,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Constructor with creation time override
+		/// Constructor (small) with creation time override
 		/// </summary>
 		/// <param name="firstName">First name</param>
 		/// <param name="lastName">Last name</param>
@@ -372,8 +382,99 @@ namespace CSCommonSecrets
 		/// <param name="time">Creation time</param>
 		public Contact(string firstName, string lastName, string middleName, DateTimeOffset time)
 		{
-			// TODO: Fill this
+			this.firstName = Encoding.UTF8.GetBytes(firstName);
+			this.lastName = Encoding.UTF8.GetBytes(lastName);
+			this.middleName = Encoding.UTF8.GetBytes(middleName);
 			this.creationTime = time.ToUnixTimeSeconds();
+			this.modificationTime = time.ToUnixTimeSeconds();
+		}
+
+		/// <summary>
+		/// Constuctor (full)
+		/// </summary>
+		/// <param name="firstName">First name</param>
+		/// <param name="lastName">Last name</param>
+		/// <param name="middleName">Middle name</param>
+		/// <param name="namePrefix">Name prefix</param>
+		/// <param name="nameSuffix">Name suffix</param>
+		/// <param name="nickname">Nickname</param>
+		/// <param name="company">Company</param>
+		/// <param name="jobTitle">Job title</param>
+		/// <param name="department">Department</param>
+		/// <param name="emails">Emails</param>
+		/// <param name="emailDescriptions">Email descriptions</param>
+		/// <param name="phoneNumbers">Phone numbers</param>
+		/// <param name="phoneNumberDescriptions">Phone number descriptions</param>
+		/// <param name="country">Country</param>
+		/// <param name="streetAddress">Street address</param>
+		/// <param name="streetAddressAdditional">Street address (additional)</param>
+		/// <param name="postalCode">Postal code</param>
+		/// <param name="city">City</param>
+		/// <param name="poBox">PO Box</param>
+		/// <param name="birthday">Birthday</param>
+		/// <param name="websites">Websites</param>
+		/// <param name="relationship">Relationship</param>
+		/// <param name="notes">Notes</param>
+		public Contact(string firstName, string lastName, string middleName, string namePrefix, string nameSuffix, string nickname, string company, string jobTitle, string department, string[] emails, string[] emailDescriptions, string[] phoneNumbers, string[] phoneNumberDescriptions, string country, string streetAddress, string streetAddressAdditional, string postalCode, string city, string poBox, string birthday, string[] websites, string relationship, string notes)
+		: this (firstName, lastName, middleName, namePrefix, nameSuffix, nickname, company, jobTitle, department, emails, emailDescriptions, phoneNumbers, phoneNumberDescriptions, country, streetAddress, streetAddressAdditional, postalCode, city, poBox, birthday, websites, relationship, notes, DateTimeOffset.UtcNow)
+		{
+
+		}
+
+		/// <summary>
+		/// Constuctor (full) with creation time override
+		/// </summary>
+		/// <param name="firstName">First name</param>
+		/// <param name="lastName">Last name</param>
+		/// <param name="middleName">Middle name</param>
+		/// <param name="namePrefix">Name prefix</param>
+		/// <param name="nameSuffix">Name suffix</param>
+		/// <param name="nickname">Nickname</param>
+		/// <param name="company">Company</param>
+		/// <param name="jobTitle">Job title</param>
+		/// <param name="department">Department</param>
+		/// <param name="emails">Emails</param>
+		/// <param name="emailDescriptions">Email descriptions</param>
+		/// <param name="phoneNumbers">Phone numbers</param>
+		/// <param name="phoneNumberDescriptions">Phone number descriptions</param>
+		/// <param name="country">Country</param>
+		/// <param name="streetAddress">Street address</param>
+		/// <param name="streetAddressAdditional">Street address (additional)</param>
+		/// <param name="postalCode">Postal code</param>
+		/// <param name="city">City</param>
+		/// <param name="poBox">PO Box</param>
+		/// <param name="birthday">Birthday</param>
+		/// <param name="websites">Websites</param>
+		/// <param name="relationship">Relationship</param>
+		/// <param name="notes">Notes</param>
+		/// <param name="time">Creation time</param>
+		public Contact(string firstName, string lastName, string middleName, string namePrefix, string nameSuffix, string nickname, string company, string jobTitle, string department, string[] emails, string[] emailDescriptions, string[] phoneNumbers, string[] phoneNumberDescriptions, string country, string streetAddress, string streetAddressAdditional, string postalCode, string city, string poBox, string birthday, string[] websites, string relationship, string notes, DateTimeOffset time)
+		{
+			this.firstName = Encoding.UTF8.GetBytes(firstName);
+			this.lastName = Encoding.UTF8.GetBytes(lastName);
+			this.middleName = Encoding.UTF8.GetBytes(middleName);
+			this.namePrefix = Encoding.UTF8.GetBytes(namePrefix);
+			this.nameSuffix = Encoding.UTF8.GetBytes(nameSuffix);
+			this.nickname = Encoding.UTF8.GetBytes(nickname);
+			this.company = Encoding.UTF8.GetBytes(company);
+			this.jobTitle = Encoding.UTF8.GetBytes(jobTitle);
+			this.department = Encoding.UTF8.GetBytes(department);
+			this.emails = Encoding.UTF8.GetBytes(string.Join(separatorString, emails));
+			this.emailDescriptions = Encoding.UTF8.GetBytes(string.Join(separatorString, emailDescriptions));
+			this.phoneNumbers = Encoding.UTF8.GetBytes(string.Join(separatorString, phoneNumbers));
+			this.phoneNumberDescriptions = Encoding.UTF8.GetBytes(string.Join(separatorString, phoneNumberDescriptions));
+			this.country = Encoding.UTF8.GetBytes(country);
+			this.streetAddress = Encoding.UTF8.GetBytes(streetAddress);
+			this.streetAddressAdditional = Encoding.UTF8.GetBytes(streetAddressAdditional);
+			this.postalCode = Encoding.UTF8.GetBytes(postalCode);
+			this.city = Encoding.UTF8.GetBytes(city);
+			this.poBox = Encoding.UTF8.GetBytes(poBox);
+			this.birthday = Encoding.UTF8.GetBytes(birthday);
+			this.websites = Encoding.UTF8.GetBytes(string.Join(separatorString, websites));
+			this.relationship = Encoding.UTF8.GetBytes(relationship);
+			this.notes = Encoding.UTF8.GetBytes(notes);
+			this.creationTime = time.ToUnixTimeSeconds();
+			this.modificationTime = time.ToUnixTimeSeconds();
 		}
 
 		/// <summary>
