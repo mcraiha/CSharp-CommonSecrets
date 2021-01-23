@@ -67,6 +67,23 @@ namespace Tests
 		}
 
 		[Test]
+		public void ShallowCopyTest()
+		{
+			// Arrange
+			Contact c1 = new Contact("first", "last", "middle");
+
+			// Act
+			Contact c2 = c1.ShallowCopy();
+
+			string checksum1 = c1.GetChecksumAsHex();
+			string checksum2 = c2.GetChecksumAsHex();
+
+			// Assert
+			Assert.IsNotNull(c2);
+			Assert.AreEqual(checksum1, checksum2);
+		}
+
+		[Test]
 		public void DeepCopyTest()
 		{
 			// Arrange
