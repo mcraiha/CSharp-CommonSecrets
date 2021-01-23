@@ -175,6 +175,281 @@ namespace CSCommonSecrets
 			return returnValue;
 		}
 
+		/// <summary>
+		/// Get contact first name
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact first name as string</returns>
+		public string GetFirstName(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.firstNameKey];
+		}
+
+		/// <summary>
+		/// Get contact last name
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact last name as string</returns>
+		public string GetLastName(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.lastNameKey];
+		}
+
+		/// <summary>
+		/// Get contact middle name
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact middle name as string</returns>
+		public string GetMiddleName(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.middleNameKey];
+		}
+
+		/// <summary>
+		/// Get contact name prefix
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact name prefix as string</returns>
+		public string GetNamePrefix(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.namePrefixKey];
+		}
+
+		/// <summary>
+		/// Get contact name suffix
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact name suffix as string</returns>
+		public string GetNameSuffix(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.nameSuffixKey];
+		}
+
+		/// <summary>
+		/// Get contact nickname
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact nickname as string</returns>
+		public string GetNickname(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.nicknameKey];
+		}
+
+		/// <summary>
+		/// Get contact company
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact company as string</returns>
+		public string GetCompany(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.companyKey];
+		}
+
+		/// <summary>
+		/// Get contact job title
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact job title as string</returns>
+		public string GetJobTitle(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.jobTitleKey];
+		}
+
+		/// <summary>
+		/// Get contact department
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact department as string</returns>
+		public string GetDepartment(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.departmentKey];
+		}
+
+		/// <summary>
+		/// Get email addresses
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact email addresses as string array</returns>
+		public string[] GetEmails(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return ((string)contactAsDictionary[Contact.emailsKey]).Split(Contact.separatorChar);
+		}
+
+		/// <summary>
+		/// Get email address descriptions
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact email address descriptions as string array</returns>
+		public string[] GetEmailDescriptions(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return ((string)contactAsDictionary[Contact.emailDescriptionsKey]).Split(Contact.separatorChar);
+		}
+
+		/// <summary>
+		/// Get phone numbers
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact phone numbers as string array</returns>
+		public string[] GetPhoneNumbers(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return ((string)contactAsDictionary[Contact.phoneNumbersKey]).Split(Contact.separatorChar);
+		}
+
+		/// <summary>
+		/// Get phone numbers descriptions
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact phone numbers descriptions as string array</returns>
+		public string[] GetPhoneNumberDescriptions(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return ((string)contactAsDictionary[Contact.phoneNumberDescriptionsKey]).Split(Contact.separatorChar);
+		}
+
+		/// <summary>
+		/// Get country
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact country as string</returns>
+		public string GetCountry(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.countryKey];
+		}
+
+		/// <summary>
+		/// Get street address
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact street address as string</returns>
+		public string GetStreetAddress(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.streetAddressKey];
+		}
+
+		/// <summary>
+		/// Get street address additional 
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact street address additional  as string</returns>
+		public string GetStreetAddressAdditional(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.streetAddressAdditionalKey];
+		}
+
+		/// <summary>
+		/// Get postal code
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact postal code as string</returns>
+		public string GetPostalCode(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.postalCodeKey];
+		}
+
+		/// <summary>
+		/// Get city
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact city as string</returns>
+		public string GetCity(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.cityKey];
+		}
+
+		/// <summary>
+		/// Get PO Box
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact PO Box as string</returns>
+		public string GetPOBox(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.poBoxKey];
+		}
+
+		/// <summary>
+		/// Get birthday
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact birthday as string</returns>
+		public string GetBirthday(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.birthdayKey];
+		}
+
+		/// <summary>
+		/// Get websites
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact websites as string array</returns>
+		public string[] GetWebsites(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return ((string)contactAsDictionary[Contact.websitesKey]).Split(Contact.separatorChar);
+		}
+
+		/// <summary>
+		/// Get relationship 
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact relationship  as string</returns>
+		public string GetRelationship(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.relationshipKey];
+		}
+
+		/// <summary>
+		/// Get notes 
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact notes  as string</returns>
+		public string GetNotes(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (string)contactAsDictionary[Contact.notesKey];
+		}
+
+		/// <summary>
+		/// Get contact creation time
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact creation time as DateTimeOffset</returns>
+		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (DateTimeOffset)contactAsDictionary[Contact.creationTimeKey];
+		}
+
+		/// <summary>
+		/// Get contact modification time
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>Contact modification time as DateTimeOffset</returns>
+		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
+		{
+			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
+			return (DateTimeOffset)contactAsDictionary[Contact.modificationTimeKey];
+		}
+
 		#endregion // Common getters
 
 
