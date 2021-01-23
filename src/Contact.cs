@@ -890,12 +890,30 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Get emails as string array
+		/// </summary>
+		/// <returns>Emails as string array</returns>
+		public string[] GetEmailsArray()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.emails).Split(separatorChar);
+		}
+
+		/// <summary>
 		/// Get email descriptions
 		/// </summary>
 		/// <returns>Email descriptions as string</returns>
 		public string GetEmailDescriptions()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.emailDescriptions);
+		}
+
+		/// <summary>
+		/// Get email descriptions as string array
+		/// </summary>
+		/// <returns>Email descriptions as string array</returns>
+		public string[] GetEmailDescriptionsArray()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.emailDescriptions).Split(separatorChar);
 		}
 
 		/// <summary>
@@ -908,12 +926,30 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Get phone numbers as string array
+		/// </summary>
+		/// <returns>Phone numbers as string string</returns>
+		public string[] GetPhoneNumbersArray()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.phoneNumbers).Split(separatorChar);
+		}
+
+		/// <summary>
 		/// Get phone number descriptions
 		/// </summary>
 		/// <returns>Phone number descriptions as string</returns>
 		public string GetPhoneNumberDescriptions()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.phoneNumberDescriptions);
+		}
+
+		/// <summary>
+		/// Get phone number descriptions as string array
+		/// </summary>
+		/// <returns>Phone number descriptions as string</returns>
+		public string[] GetPhoneNumberDescriptionsArray()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.phoneNumberDescriptions).Split(separatorChar);
 		}
 
 		/// <summary>
@@ -986,6 +1022,15 @@ namespace CSCommonSecrets
 		public string GetWebsites()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.websites);
+		}
+
+		/// <summary>
+		/// Get websites as string array
+		/// </summary>
+		/// <returns>Websites as string array</returns>
+		public string[] GetWebsitesArray()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.websites).Split(separatorChar);
 		}
 
 		/// <summary>
