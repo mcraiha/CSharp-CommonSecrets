@@ -54,6 +54,16 @@ namespace CSCommonSecrets
 		public List<FileEntrySecret> fileSecrets { get; set; } = new List<FileEntrySecret>();
 
 		/// <summary>
+		/// List of contacts (plain text ones)
+		/// </summary>
+		public List<Contact> contacts { get; set; } = new List<Contact>();
+
+		/// <summary>
+		/// List of contact secrets
+		/// </summary>
+		public List<ContactSecret> contactSecrets { get; set; } = new List<ContactSecret>();
+
+		/// <summary>
 		/// Constructor without parameters for creating empty CommonSecretsContainer
 		/// </summary>
 		public CommonSecretsContainer()
@@ -241,6 +251,54 @@ namespace CSCommonSecrets
 			return (success: true, possibleError: "");
 		}
 
+		/// <summary>
+		/// Add contact to Common secret container
+		/// </summary>
+		/// <param name="password">Plaintext password</param>
+		/// <param name="contact">Contact to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) AddContactSecret(string password, Contact contact, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			(bool checkResult, string possibleError) = MandatoryChecks(contact, "Contact", keyIdentifier, password);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+
+			this.contactSecrets.Add(new ContactSecret(contact, keyIdentifier, ska, derivedPassword));
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Add contact to Common secret container
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="contact">Contact to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) AddContactSecret(byte[] derivedPassword, Contact contact, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			(bool checkResult, string possibleError) = MandatoryChecks(contact, "Contact", keyIdentifier, derivedPassword);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			this.contactSecrets.Add(new ContactSecret(contact, keyIdentifier, ska, derivedPassword));
+
+			return (success: true, possibleError: "");
+		}
+
 		#endregion // Add helpers
 
 
@@ -422,6 +480,66 @@ namespace CSCommonSecrets
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
 			this.fileSecrets[zeroBasedIndex] = new FileEntrySecret(fileEntry, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Replace existing contact in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of contact secret that will be replaced</param>
+		/// <param name="password">Plaintext password</param>
+		/// <param name="contact">Contact to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplaceContactSecret(int zeroBasedIndex, string password, Contact contact, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.contactSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.contactSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(contact, "Contact", keyIdentifier, password);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+
+			this.contactSecrets[zeroBasedIndex] = new ContactSecret(contact, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Replace existing contact in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of contact secret that will be replaced</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="contact">Contact to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplaceContactSecret(int zeroBasedIndex, byte[] derivedPassword, Contact contact, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.contactSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.contactSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(contact, "Contact", keyIdentifier, derivedPassword);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			this.contactSecrets[zeroBasedIndex] = new ContactSecret(contact, keyIdentifier, ska, derivedPassword);
 
 			return (success: true, possibleError: "");
 		}
