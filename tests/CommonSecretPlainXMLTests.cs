@@ -52,6 +52,11 @@ namespace Tests
 			byte[] file1Content = new byte[] { 1, 34, 46, 47, 24, 33, 4};
 			csc.files.Add(new FileEntry(filename1, file1Content));
 
+			string firstname1 = "Dragon";
+			string lastname1 = "Laster";
+			string middlename1 = "Midder";
+			csc.contacts.Add(new Contact(firstname1, lastname1, middlename1));
+
 			// Act
 			string xml = null;
 			var xmlserializer = new XmlSerializer(typeof(CommonSecretsContainer));
@@ -74,6 +79,10 @@ namespace Tests
 
 			Assert.AreEqual(filename1, System.Text.Encoding.UTF8.GetString(cscDeserialized.files[0].filename));
 			CollectionAssert.AreEqual(file1Content, cscDeserialized.files[0].fileContent);
+
+			Assert.AreEqual(firstname1, System.Text.Encoding.UTF8.GetString(cscDeserialized.contacts[0].firstName));
+			Assert.AreEqual(lastname1, System.Text.Encoding.UTF8.GetString(cscDeserialized.contacts[0].lastName));
+			Assert.AreEqual(middlename1, System.Text.Encoding.UTF8.GetString(cscDeserialized.contacts[0].middleName));
 		}
 
 		[Test]
@@ -97,6 +106,9 @@ namespace Tests
 
 			int filesAmount = 5;
 			int filesSecretAmount = 3;
+
+			int contactAmount = 4;
+			int contactSecretAmount = 2;
 
 			// Act
 			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
@@ -131,6 +143,16 @@ namespace Tests
 			for (int i = 0; i < filesSecretAmount; i++)
 			{
 				csc.fileSecrets.Add(new FileEntrySecret(ContentGenerator.GenerateRandomFileEntry(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+			}
+
+			for (int i = 0; i < contactAmount; i++)
+			{
+				csc.contacts.Add(ContentGenerator.GenerateRandomContact());
+			}
+
+			for (int i = 0; i < contactSecretAmount; i++)
+			{
+				csc.contactSecrets.Add(new ContactSecret(ContentGenerator.GenerateRandomContact(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			string xml = null;
@@ -198,6 +220,21 @@ namespace Tests
 			for (int i = 0; i < filesSecretAmount; i++)
 			{
 				Assert.IsTrue(ComparisonHelper.AreFileEntrySecretsEqual(csc.fileSecrets[i], cscDeserialized.fileSecrets[i]));
+			}
+
+
+			Assert.AreEqual(contactAmount, csc.contacts.Count);
+			Assert.AreEqual(contactAmount, cscDeserialized.contacts.Count);
+			for (int i = 0; i < contactAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreContactsEqual(csc.contacts[i], cscDeserialized.contacts[i]));
+			}
+
+			Assert.AreEqual(contactSecretAmount, csc.contactSecrets.Count);
+			Assert.AreEqual(contactSecretAmount, cscDeserialized.contactSecrets.Count);
+			for (int i = 0; i < contactSecretAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreContactSecretsEqual(csc.contactSecrets[i], cscDeserialized.contactSecrets[i]));
 			}
 		}
 	}
