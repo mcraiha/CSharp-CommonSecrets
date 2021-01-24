@@ -80,6 +80,11 @@ namespace Tests
 					StructuralComparisons.StructuralEqualityComparer.Equals(contact1.notes, contact2.notes);
 		}
 
+		public static bool AreContactSecretsEqual(ContactSecret contactSecret1, ContactSecret contactSecret2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(contactSecret1.audalfData, contactSecret2.audalfData) && AreSymmetricKeyAlgorithmsEqual(contactSecret1.algorithm, contactSecret2.algorithm);
+		}
+
 		public static bool AreSymmetricKeyAlgorithmsEqual(SymmetricKeyAlgorithm symmetricKeyAlgorithm1, SymmetricKeyAlgorithm symmetricKeyAlgorithm2)
 		{
 			return StructuralComparisons.StructuralEqualityComparer.Equals(symmetricKeyAlgorithm1.GetSettingsAsBytes(), symmetricKeyAlgorithm2.GetSettingsAsBytes());
