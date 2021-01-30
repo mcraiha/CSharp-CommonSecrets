@@ -634,14 +634,44 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Update emails and descriptions (both are arrays)
+		/// </summary>
+		/// <param name="updatedEmails">Updated emails (array)</param>
+		/// <param name="updatedEmailDescriptions">Updated email descriptions (array</param>
+		public void UpdateEmailsAndDescriptions(string[] updatedEmails, string[] updatedEmailDescriptions)
+		{
+			this.emails = Encoding.UTF8.GetBytes(string.Join(separatorString, updatedEmails));
+			this.emailDescriptions = Encoding.UTF8.GetBytes(string.Join(separatorString, updatedEmailDescriptions));
+
+			this.UpdateModificationTime();
+
+			this.CalculateAndUpdateChecksum();
+		}
+
+		/// <summary>
 		/// Update phone numbers and descriptions (both are tab separated)
 		/// </summary>
-		/// <param name="updatedPhoneNumbers">Updated emails (tab separated)</param>
-		/// <param name="updatedPhoneNumberDescriptions">Updated email descriptions (tab separated</param>
+		/// <param name="updatedPhoneNumbers">Updated phone numbers (tab separated)</param>
+		/// <param name="updatedPhoneNumberDescriptions">Updated phone number descriptions (tab separated</param>
 		public void UpdatePhoneNumbersAndDescriptions(string updatedPhoneNumbers, string updatedPhoneNumberDescriptions)
 		{
 			this.phoneNumbers = Encoding.UTF8.GetBytes(updatedPhoneNumbers);
 			this.phoneNumberDescriptions = Encoding.UTF8.GetBytes(updatedPhoneNumberDescriptions);
+
+			this.UpdateModificationTime();
+
+			this.CalculateAndUpdateChecksum();
+		}
+
+		/// <summary>
+		/// Update phone numbers and descriptions (both are arrays)
+		/// </summary>
+		/// <param name="updatedPhoneNumbers">Updated phone numbers (array)</param>
+		/// <param name="updatedPhoneNumberDescriptions">Updated phone number descriptions (array)</param>
+		public void UpdatePhoneNumbersAndDescriptions(string[] updatedPhoneNumbers, string[] updatedPhoneNumberDescriptions)
+		{
+			this.phoneNumbers = Encoding.UTF8.GetBytes(string.Join(separatorString, updatedPhoneNumbers));
+			this.phoneNumberDescriptions = Encoding.UTF8.GetBytes(string.Join(separatorString, updatedPhoneNumberDescriptions));
 
 			this.UpdateModificationTime();
 
@@ -753,6 +783,19 @@ namespace CSCommonSecrets
 		public void UpdateWebsites(string updatedWebsites)
 		{
 			this.websites = Encoding.UTF8.GetBytes(updatedWebsites);
+
+			this.UpdateModificationTime();
+
+			this.CalculateAndUpdateChecksum();
+		}
+
+		/// <summary>
+		/// Update websites (array)
+		/// </summary>
+		/// <param name="updatedWebsites">Updated websites (array)</param>
+		public void UpdateWebsites(string[] updatedWebsites)
+		{
+			this.websites = Encoding.UTF8.GetBytes(string.Join(separatorString, updatedWebsites));
 
 			this.UpdateModificationTime();
 
