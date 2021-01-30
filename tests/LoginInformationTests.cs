@@ -21,7 +21,7 @@ namespace Tests
 			LoginInformation li1 = new LoginInformation();
 			LoginInformation li2 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1");
 			LoginInformation li3 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
-					newNotes: "funny dialog is funny", newIcon: new byte[] {0, 1, 3, 4, 5, 7}, newCategory: "forums", newTags: "daily\tmodern");
+					newNotes: "funny dialog is funny", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] {0, 1, 3, 4, 5, 7}, newCategory: "forums", newTags: "daily\tmodern");
 
 			// Act
 
@@ -122,7 +122,7 @@ namespace Tests
 		{
 			// Arrange
 			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
-														newNotes: "some boring notes for someone", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
+														newNotes: "some boring notes for someone", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
 			string newNotes = "Even more text that nobody will read";
 
 			// Act
@@ -137,7 +137,7 @@ namespace Tests
 		{
 			// Arrange
 			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
-														newNotes: "some boring notes for someone", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
+														newNotes: "some boring notes for someone", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
 			byte[] newIcon = new byte[] { 4, 127, 0, 255, 1, 2, 3, 45 };
 
 			// Act
@@ -152,7 +152,7 @@ namespace Tests
 		{
 			// Arrange
 			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
-														newNotes: "some boring notes for someone", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
+														newNotes: "some boring notes for someone", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
 			string newCategory = "Discussions";
 
 			// Act
@@ -167,7 +167,7 @@ namespace Tests
 		{
 			// Arrange
 			LoginInformation li = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
-														newNotes: "some boring notes for someone", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
+														newNotes: "some boring notes for someone", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies");
 			string newTags = "Leisure";
 
 			// Act
@@ -208,7 +208,7 @@ namespace Tests
 			LoginInformation li1 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13");
 			
 			LoginInformation li3 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
-					newNotes: "funny dialog is funny", newIcon: new byte[] {0, 1, 3, 4, 5, 7}, newCategory: "forums", newTags: "daily\tmodern");
+					newNotes: "funny dialog is funny", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] {0, 1, 3, 4, 5, 7}, newCategory: "forums", newTags: "daily\tmodern");
 
 			// Act
 			LoginInformation li2 = li1.ShallowCopy();
@@ -238,12 +238,13 @@ namespace Tests
 			string username = "dragon1337";
 			string password = "password1!%";
 			string notes = "funny dialog is funny";
+			string mfa = "otpauth://totp/DRAGON?secret=SECRET";
 			byte[] icon = new byte[] { 0, 1, 3, 4, 5, 7 };
 			string category = "forums";
 			string tags = "daily\tmodern";
 
 			LoginInformation li1 = new LoginInformation(newTitle: title, newUrl: url, newEmail: email, newUsername: username, newPassword: password, 
-					newNotes: notes, newIcon: icon, newCategory: category, newTags: tags);
+					newNotes: notes, newMFA: mfa, newIcon: icon, newCategory: category, newTags: tags);
 
 			// Act
 			LoginInformation li2 = new LoginInformation(li1);
@@ -266,6 +267,9 @@ namespace Tests
 
 			Assert.AreNotSame(li1.notes, li2.notes);
 			CollectionAssert.AreEqual(li1.notes, li2.notes);
+
+			Assert.AreNotSame(li1.mfa, li2.mfa);
+			CollectionAssert.AreEqual(li1.mfa, li2.mfa);
 
 			Assert.AreNotSame(li1.icon, li2.icon);
 			CollectionAssert.AreEqual(li1.icon, li2.icon);

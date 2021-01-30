@@ -220,6 +220,30 @@ namespace Tests
 		}
 
 		[Test]
+		public void GetLoginInformatioMFATest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 231, 42, 5, 68, 78, 83, 9, 110, 211, 128, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfc, 0xf3, 0xaa, 0xc5, 0xd6, 0xbb, 0xf8, 0x19, 0x11, 0xfb, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			LoginInformation loginInformationModified = loginInformation.ShallowCopy();
+			loginInformationModified.UpdateMFA("otpauth://totp/DRAGONFIER?secret=YOUR_DRAGON");
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			string loginInformationMFA = loginInformationSecret.GetMFA(derivedKey);
+
+			// Assert
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationMFA));
+			Assert.AreEqual(loginInformationModified.mfa, loginInformationMFA);
+		}
+
+		[Test]
 		public void GetCreationTimeTest()
 		{
 			// Arrange
@@ -540,6 +564,30 @@ namespace Tests
 			Assert.IsFalse(shouldBeFalse);
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationNotes2));
 			Assert.AreEqual(newNotes, loginInformationNotes2);
+		}
+
+		[Test]
+		public void SetLoginInformationMFATest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 15, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 196 };
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+
+			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", ska, derivedKey);
+
+			string newMFA = "otpauth://totp/BIG_DRAGON?secret=YOUR_FIRE";
+
+			// Act
+			bool shouldBeTrue = loginInformationSecret.SetMFA(newMFA, derivedKey);
+			string loginInformationMFA2 = loginInformationSecret.GetMFA(derivedKey);
+			bool shouldBeFalse = loginInformationSecret.SetMFA(newMFA, new byte[] { 1, 2, 3});
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+			Assert.IsFalse(string.IsNullOrEmpty(loginInformationMFA2));
+			Assert.AreEqual(newMFA, loginInformationMFA2);
 		}
 
 		[Test]

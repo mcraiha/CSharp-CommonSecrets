@@ -69,6 +69,16 @@ namespace CSCommonSecrets
 		public static readonly string notesKey = nameof(notes);
 
 		/// <summary>
+		/// MFA entry (e.g. TOTP URL) as bytes, in normal case you want to use GetMFA() and UpdateMFA()
+		/// </summary>
+		public byte[] mfa { get; set; } = new byte[0];
+
+		/// <summary>
+		/// Ket for storing MFA data to AUDALF
+		/// </summary>
+		public static readonly string mfaKey = nameof(mfa);
+
+		/// <summary>
 		/// Creation time of login information, in Unix seconds since epoch
 		/// </summary>
 		public long creationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -155,6 +165,9 @@ namespace CSCommonSecrets
 			this.notes = new byte[copyThis.notes.Length];
 			Buffer.BlockCopy(copyThis.notes, 0, this.notes, 0, copyThis.notes.Length);
 
+			this.mfa = new byte[copyThis.mfa.Length];
+			Buffer.BlockCopy(copyThis.mfa, 0, this.mfa, 0, copyThis.mfa.Length);
+
 			this.icon = new byte[copyThis.icon.Length];
 			Buffer.BlockCopy(copyThis.icon, 0, this.icon, 0, copyThis.icon.Length);
 
@@ -214,11 +227,12 @@ namespace CSCommonSecrets
 		/// <param name="newUsername">Username</param>
 		/// <param name="newPassword">Password</param>
 		/// <param name="newNotes">Notes</param>
+		/// <param name="newMFA">MFA</param>
 		/// <param name="newIcon">Icon</param>
 		/// <param name="newCategory">Category</param>
 		/// <param name="newTags">Tags (as tab separated)</param>
-		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, 
-									byte[] newIcon, string newCategory, string newTags) : this (newTitle, newUrl, newEmail, newUsername, newPassword, newNotes, 
+		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, string newMFA,
+									byte[] newIcon, string newCategory, string newTags) : this (newTitle, newUrl, newEmail, newUsername, newPassword, newNotes, newMFA,
 									newIcon, newCategory, newTags, DateTimeOffset.UtcNow)
 		{
 
@@ -233,11 +247,12 @@ namespace CSCommonSecrets
 		/// <param name="newUsername">Username</param>
 		/// <param name="newPassword">Password</param>
 		/// <param name="newNotes">Notes</param>
+		/// <param name="newMFA">MFA</param>
 		/// <param name="newIcon">Icon</param>
 		/// <param name="newCategory">Category</param>
 		/// <param name="newTags">Tags (as tab separated)</param>
 		/// <param name="time">Creation and modification timestamps</param>
-		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, 
+		public LoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, string newMFA, 
 									byte[] newIcon, string newCategory, string newTags, DateTimeOffset time)
 		{
 			this.title = Encoding.UTF8.GetBytes(newTitle);
@@ -247,6 +262,7 @@ namespace CSCommonSecrets
 			this.password = Encoding.UTF8.GetBytes(newPassword);
 
 			this.notes = Encoding.UTF8.GetBytes(newNotes);
+			this.mfa = Encoding.UTF8.GetBytes(newMFA);
 			this.icon = newIcon;
 			this.category = Encoding.UTF8.GetBytes(newCategory);
 			this.tags = Encoding.UTF8.GetBytes(newTags);
@@ -361,6 +377,20 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Update MFA
+		/// </summary>
+		/// <remarks>Will calculate checksum after update</remarks>
+		/// <param name="updatedMFA">Updated MFA</param>
+		public void UpdateMFA(string updatedMFA)
+		{
+			this.mfa = Encoding.UTF8.GetBytes(updatedMFA);
+
+			this.UpdateModificationTime();
+
+			this.CalculateAndUpdateChecksum();
+		}
+
+		/// <summary>
 		/// Update icon
 		/// </summary>
 		/// <remarks>Will calculate checksum after update</remarks>
@@ -461,6 +491,15 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
+		/// Get MFA
+		/// </summary>
+		/// <returns>MFA as string</returns>
+		public string GetMFA()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.mfa);
+		}
+
+		/// <summary>
 		/// Get icon (small image file)
 		/// </summary>
 		/// <returns>Icon as byte array</returns>
@@ -527,7 +566,7 @@ namespace CSCommonSecrets
 
 		private string CalculateHexChecksum()
 		{
-			return ChecksumHelper.CalculateHexChecksum(this.title, this.url, this.email, this.username, this.password, this.notes, BitConverter.GetBytes(this.creationTime), BitConverter.GetBytes(this.modificationTime),
+			return ChecksumHelper.CalculateHexChecksum(this.title, this.url, this.email, this.username, this.password, this.notes, this.mfa, BitConverter.GetBytes(this.creationTime), BitConverter.GetBytes(this.modificationTime),
 														this.icon, this.category, this.tags);
 		}
 

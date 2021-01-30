@@ -55,6 +55,7 @@ namespace CSCommonSecrets
 				{ LoginInformation.usernameKey, loginInformation.GetUsername() },
 				{ LoginInformation.passwordKey, loginInformation.GetPassword() },
 				{ LoginInformation.notesKey, loginInformation.GetNotes() },
+				{ LoginInformation.mfaKey, loginInformation.GetMFA() },
 				{ LoginInformation.creationTimeKey, DateTimeOffset.FromUnixTimeSeconds(loginInformation.creationTime) },
 				{ LoginInformation.modificationTimeKey, DateTimeOffset.FromUnixTimeSeconds(loginInformation.modificationTime) },
 				{ LoginInformation.iconKey, loginInformation.GetIcon() },
@@ -128,7 +129,7 @@ namespace CSCommonSecrets
 		{
 			Dictionary<string, object> dict = this.GetLoginInformationAsDictionary(derivedPassword);
 			LoginInformation returnValue = new LoginInformation((string)dict[LoginInformation.titleKey], (string)dict[LoginInformation.urlKey], (string)dict[LoginInformation.emailKey],
-										(string)dict[LoginInformation.usernameKey], (string)dict[LoginInformation.passwordKey], (string)dict[LoginInformation.notesKey],
+										(string)dict[LoginInformation.usernameKey], (string)dict[LoginInformation.passwordKey], (string)dict[LoginInformation.notesKey], (string)dict[LoginInformation.mfaKey],
 										(byte[])dict[LoginInformation.iconKey], (string)dict[LoginInformation.categoryKey], (string)dict[LoginInformation.tagsKey]
 										);
 			returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]).ToUnixTimeSeconds();
@@ -201,6 +202,17 @@ namespace CSCommonSecrets
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			return (string)loginInformationAsDictionary[LoginInformation.notesKey];
+		}
+
+		/// <summary>
+		/// Get MFA (e.g. TOTP Url). This tries to decrypt data with given derived password
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>MFA</returns>
+		public string GetMFA(byte[] derivedPassword)
+		{
+			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
+			return (string)loginInformationAsDictionary[LoginInformation.mfaKey];
 		}
 
 		/// <summary>
@@ -391,6 +403,17 @@ namespace CSCommonSecrets
 		public bool SetNotes(string newNotes, byte[] derivedPassword)
 		{
 			return this.GenericSet(LoginInformation.notesKey, newNotes, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new MFA for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// </summary>
+		/// <param name="newMFA">New MFA</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetMFA(string newMFA, byte[] derivedPassword)
+		{
+			return this.GenericSet(LoginInformation.mfaKey, newMFA, DateTimeOffset.UtcNow, derivedPassword);
 		}
 
 		/// <summary>
