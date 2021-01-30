@@ -133,6 +133,30 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
+		private Dictionary<string, object> GetContactAsDictionary(byte[] derivedPassword)
+		{
+			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
+
+			if (!passwordCheck.valid)
+			{
+				throw passwordCheck.exception;
+			}
+
+			// Try to decrypt the binary
+			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
+
+			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
+
+			if (!audalfCheck.valid)
+			{
+				throw audalfCheck.exception;
+			}
+
+			Dictionary<string, object> contactAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+
+			return contactAsDictionary;
+		}
+
 		/// <summary>
 		/// Get Contact. Use this for situation where you want to convert secret -> non secret
 		/// </summary>
@@ -450,6 +474,15 @@ namespace CSCommonSecrets
 			return (DateTimeOffset)contactAsDictionary[Contact.modificationTimeKey];
 		}
 
+		/// <summary>
+		/// Get key identifier
+		/// </summary>
+		/// <returns>Key identifier as string</returns>
+		public string GetKeyIdentifier()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
+		}
+
 		#endregion // Common getters
 
 
@@ -489,39 +522,6 @@ namespace CSCommonSecrets
 		{
 			wantedDateTimeType = typeof(DateTimeOffset)
 		};
-
-		private Dictionary<string, object> GetContactAsDictionary(byte[] derivedPassword)
-		{
-			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
-
-			if (!passwordCheck.valid)
-			{
-				throw passwordCheck.exception;
-			}
-
-			// Try to decrypt the binary
-			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
-
-			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
-
-			if (!audalfCheck.valid)
-			{
-				throw audalfCheck.exception;
-			}
-
-			Dictionary<string, object> contactAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
-
-			return contactAsDictionary;
-		}
-
-		/// <summary>
-		/// Get key identifier
-		/// </summary>
-		/// <returns>Key identifier as string</returns>
-		public string GetKeyIdentifier()
-		{
-			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
-		}
 
 		/// <summary>
 		/// Can the content be decrypted with given derived password
