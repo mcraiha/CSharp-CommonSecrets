@@ -128,6 +128,85 @@ namespace Tests
 		}
 
 		[Test]
+		public void UpdateTest()
+		{
+			// Arrange
+			string firstName = "Super";
+			string lastName = "Awesome";
+			string middleName = "Mega";
+			string namePrefix = "Sirest";
+			string nameSuffix = "IIIII";
+			string nickname = "MegaDragon";
+			string company = "EverDragons CO";
+			string jobTitle = "Mid dragon";
+			string department = "Cave";
+			string[] emails = { "som24e@dragon663.com", "cooldra14gon123@dragons.com" };
+			string[] emailDescriptions = { "work", "home" };
+			string[] phoneNumbers = { "1234-123-123", "2344-234-234" };
+			string[] phoneNumberDescriptions = { "work", "hotel" };
+			string country = "dragonland II";
+			string streetAddress = "dragon street 122";
+			string streetAddressAdditional = "no addition";
+			string postalCode = "12345";
+			string city = "dragoncave";
+			string poBox = "no po box";
+			string birthday = "11-09-1697";
+			string relationship = "single";
+			string notes = "Very awesome dragon";
+			string[] websites = { "https://dacoolastdragons4life.com", "https://nicevalleyvaults.net" };
+			Contact c1 = new Contact("", "", "");
+
+
+			// Act
+			c1.UpdateFirstName(firstName);
+			c1.UpdateLastName(lastName);
+			c1.UpdateMiddleName(middleName);
+			c1.UpdateNamePrefix(namePrefix);
+			c1.UpdateNameSuffix(nameSuffix);
+			c1.UpdateNickname(nickname);
+			c1.UpdateCompany(company);
+			c1.UpdateJobTitle(jobTitle);
+			c1.UpdateDepartment(department);
+			c1.UpdateEmailsAndDescriptions(emails, emailDescriptions);
+			c1.UpdatePhoneNumbersAndDescriptions(phoneNumbers, phoneNumberDescriptions);
+			c1.UpdateCountry(country);
+			c1.UpdateStreetAddress(streetAddress);
+			c1.UpdateStreetAddressAdditional(streetAddressAdditional);
+			c1.UpdatePostalCode(postalCode);
+			c1.UpdateCity(city);
+			c1.UpdatePOBox(poBox);
+			c1.UpdateBirthday(birthday);
+			c1.UpdateRelationship(relationship);
+			c1.UpdateNotes(notes);
+			c1.UpdateWebsites(websites);
+
+			// Assert
+			Assert.AreEqual(firstName, c1.GetFirstName());
+			Assert.AreEqual(lastName, c1.GetLastName());
+			Assert.AreEqual(middleName, c1.GetMiddleName());
+			Assert.AreEqual(namePrefix, c1.GetNamePrefix());
+			Assert.AreEqual(nameSuffix, c1.GetNameSuffix());
+			Assert.AreEqual(nickname, c1.GetNickname());
+			Assert.AreEqual(company, c1.GetCompany());
+			Assert.AreEqual(jobTitle, c1.GetJobTitle());
+			Assert.AreEqual(department, c1.GetDepartment());
+			CollectionAssert.AreEqual(emails, c1.GetEmailsArray());
+			CollectionAssert.AreEqual(emailDescriptions, c1.GetEmailDescriptionsArray());
+			CollectionAssert.AreEqual(phoneNumbers, c1.GetPhoneNumbersArray());
+			CollectionAssert.AreEqual(phoneNumberDescriptions, c1.GetPhoneNumberDescriptionsArray());
+			Assert.AreEqual(country, c1.GetCountry());
+			Assert.AreEqual(streetAddress, c1.GetStreetAddress());
+			Assert.AreEqual(streetAddressAdditional, c1.GetStreetAddressAdditional());
+			Assert.AreEqual(postalCode, c1.GetPostalCode());
+			Assert.AreEqual(city, c1.GetCity());
+			Assert.AreEqual(poBox, c1.GetPOBox());
+			Assert.AreEqual(birthday, c1.GetBirthday());
+			Assert.AreEqual(relationship, c1.GetRelationship());
+			Assert.AreEqual(notes, c1.GetNotes());
+			CollectionAssert.AreEqual(websites, c1.GetWebsitesArray());
+		}
+
+		[Test]
 		public void ShallowCopyTest()
 		{
 			// Arrange
