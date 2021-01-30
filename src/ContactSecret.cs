@@ -488,6 +488,241 @@ namespace CSCommonSecrets
 
 		#region Common setters
 
+		/// <summary>
+		/// Try to set new first name for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newFirstName">New first name</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetFirstName(string newFirstName, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.firstNameKey, newFirstName, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new last name for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newLastName">New last name</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetLastName(string newLastName, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.lastNameKey, newLastName, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new middle name for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newMiddleName">New middle name</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetMiddleName(string newMiddleName, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.middleNameKey, newMiddleName, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new name prefix for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newNamePrefix">New name prefix</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetNamePrefix(string newNamePrefix, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.namePrefixKey, newNamePrefix, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new name suffix for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newNameSuffix">New name suffix</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetNameSuffix(string newNameSuffix, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.nameSuffixKey, newNameSuffix, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new nickname for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newNickname">New nickname</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetNickname(string newNickname, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.nicknameKey, newNickname, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new company for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newCompany">New company</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetCompany(string newCompany, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.companyKey, newCompany, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new job title for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newJobTitle">New job title</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetJobTitle(string newJobTitle, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.jobTitleKey, newJobTitle, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new department for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newDepartment">New department</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetDepartment(string newDepartment, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.departmentKey, newDepartment, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new emails and email descriptions for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newEmails">New emails</param>
+		/// <param name="newEmailDescriptions">New email descriptions</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetEmailsAndDescriptions(string[] newEmails, string[] newEmailDescriptions, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.emailsKey, string.Join(Contact.separatorString, newEmails), DateTimeOffset.UtcNow, derivedPassword) &&
+					this.GenericSet(Contact.emailDescriptionsKey, string.Join(Contact.separatorString, newEmailDescriptions), DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new phone numbers and phone number descriptions for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newPhoneNumbers">New emails</param>
+		/// <param name="newPhoneNumberDescriptions">New email descriptions</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetPhoneNumbersAndDescriptions(string[] newPhoneNumbers, string[] newPhoneNumberDescriptions, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.phoneNumbersKey, string.Join(Contact.separatorString, newPhoneNumbers), DateTimeOffset.UtcNow, derivedPassword) &&
+					this.GenericSet(Contact.phoneNumberDescriptionsKey, string.Join(Contact.separatorString, newPhoneNumberDescriptions), DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new country for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newCountry">New country</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetCountry(string newCountry, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.countryKey, newCountry, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new street address for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newStreetAddress">New street address</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetStreetAddress(string newStreetAddress, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.streetAddressKey, newStreetAddress, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new street address for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newStreetAddressAdditional">New street address additional</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetStreetAddressAdditional(string newStreetAddressAdditional, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.streetAddressAdditionalKey, newStreetAddressAdditional, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new postal code for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newPostalCode">New postal code</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetPostalCode(string newPostalCode, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.postalCodeKey, newPostalCode, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new city for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newCity">New city</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetCity(string newCity, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.cityKey, newCity, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new PO box for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newPOBox">New PO box</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetPOBox(string newPOBox, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.poBoxKey, newPOBox, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new birthday for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newBirthday">New birthday</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetBirthday(string newBirthday, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.birthdayKey, newBirthday, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new relationship for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newRelationship">New relationship</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetRelationship(string newRelationship, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.relationshipKey, newRelationship, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new notes for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newNotes">New notes</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetNotes(string newNotes, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.notesKey, newNotes, DateTimeOffset.UtcNow, derivedPassword);
+		}
+
+		/// <summary>
+		/// Try to set new websites for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// </summary>
+		/// <param name="newWebsites">New websites</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <returns>True if set goes correctly; False otherwise</returns>
+		public bool SetWebsites(string[] newWebsites, byte[] derivedPassword)
+		{
+			return this.GenericSet(Contact.websitesKey, string.Join(Contact.separatorString, newWebsites), DateTimeOffset.UtcNow, derivedPassword);
+		}
+
 		private bool GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword)
 		{
 			try 
