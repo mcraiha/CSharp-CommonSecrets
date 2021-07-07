@@ -8,7 +8,6 @@ CommonSecrets is specification for storing encrypted and plaintext login informa
 
 ## Build status
 
-[![CircleCI](https://circleci.com/gh/mcraiha/CSharp-CommonSecrets.svg?style=svg)](https://circleci.com/gh/mcraiha/CSharp-CommonSecrets)
 
 ## What could I do with it
 
