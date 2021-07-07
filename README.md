@@ -8,6 +8,7 @@ CommonSecrets is specification for storing encrypted and plaintext login informa
 
 ## Build status
 
+[![.NET](https://github.com/mcraiha/CSharp-CommonSecrets/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/mcraiha/CSharp-CommonSecrets/actions/workflows/dotnet-test.yml)
 
 ## What could I do with it
 
