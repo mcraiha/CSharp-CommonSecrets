@@ -85,6 +85,23 @@ namespace Tests
 			return StructuralComparisons.StructuralEqualityComparer.Equals(contactSecret1.audalfData, contactSecret2.audalfData) && AreSymmetricKeyAlgorithmsEqual(contactSecret1.algorithm, contactSecret2.algorithm);
 		}
 
+		public static bool ArePaymentCardsEqual(PaymentCard paymentCard1, PaymentCard paymentCard2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(paymentCard1.title, paymentCard2.title) &&
+					 StructuralComparisons.StructuralEqualityComparer.Equals(paymentCard1.nameOnCard, paymentCard2.nameOnCard) &&
+					 StructuralComparisons.StructuralEqualityComparer.Equals(paymentCard1.cardType, paymentCard2.cardType) &&
+					 StructuralComparisons.StructuralEqualityComparer.Equals(paymentCard1.number, paymentCard2.number) &&
+					 StructuralComparisons.StructuralEqualityComparer.Equals(paymentCard1.securityCode, paymentCard2.securityCode) &&
+					 StructuralComparisons.StructuralEqualityComparer.Equals(paymentCard1.startDate, paymentCard2.startDate) &&
+					 StructuralComparisons.StructuralEqualityComparer.Equals(paymentCard1.expirationDate, paymentCard2.expirationDate) &&
+					 StructuralComparisons.StructuralEqualityComparer.Equals(paymentCard1.notes, paymentCard2.notes);
+		}
+
+		public static bool ArePaymentCardSecretsEqual(PaymentCardSecret paymentCard1, PaymentCardSecret paymentCard2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(paymentCard1.audalfData, paymentCard2.audalfData) && AreSymmetricKeyAlgorithmsEqual(paymentCard1.algorithm, paymentCard2.algorithm);
+		}
+
 		public static bool AreSymmetricKeyAlgorithmsEqual(SymmetricKeyAlgorithm symmetricKeyAlgorithm1, SymmetricKeyAlgorithm symmetricKeyAlgorithm2)
 		{
 			return StructuralComparisons.StructuralEqualityComparer.Equals(symmetricKeyAlgorithm1.GetSettingsAsBytes(), symmetricKeyAlgorithm2.GetSettingsAsBytes());

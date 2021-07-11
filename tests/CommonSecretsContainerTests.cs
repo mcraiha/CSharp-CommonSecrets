@@ -173,6 +173,42 @@ namespace Tests
 			Assert.AreEqual(2, csc.contactSecrets.Count);
 		}
 
+		[Test]
+		public void AddPaymentSecretTest()
+		{
+			// Arrange
+			string kdfeIdentifier = "somekey122344";
+			string password = "th3atdragon42";
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			
+			// Act
+			var addResultSuccess1 = csc.AddPaymentCardSecret(password, ContentGenerator.GenerateRandomPaymentCard(), kdfeIdentifier);
+			var addResultSuccess2 = csc.AddPaymentCardSecret(kdfe.GeneratePasswordBytes(password), ContentGenerator.GenerateRandomPaymentCard(), kdfeIdentifier);
+
+			var addResultFailure1 = csc.AddPaymentCardSecret(password, null, kdfeIdentifier);
+			var addResultFailure2 = csc.AddPaymentCardSecret(password, ContentGenerator.GenerateRandomPaymentCard(), "not existing");
+			var addResultFailure3 = csc.AddPaymentCardSecret("", ContentGenerator.GenerateRandomPaymentCard(), kdfeIdentifier);
+
+			// Assert
+			Assert.IsTrue(addResultSuccess1.success);
+			Assert.AreEqual("", addResultSuccess1.possibleError);
+
+			Assert.IsTrue(addResultSuccess2.success);
+			Assert.AreEqual("", addResultSuccess2.possibleError);
+
+			Assert.IsFalse(addResultFailure1.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure1.possibleError));
+
+			Assert.IsFalse(addResultFailure2.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure2.possibleError));
+
+			Assert.IsFalse(addResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
+		}
+
 
 		[Test]
 		public void ReplaceLoginInformationSecretTest()
@@ -423,6 +459,66 @@ namespace Tests
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
 
 			Assert.AreEqual(2, csc.contactSecrets.Count);
+		}
+
+		[Test]
+		public void ReplacePaymentSecretTest()
+		{
+			// Arrange
+			string kdfeIdentifier = ",.-4key12344";
+			string password = "--!#n,.ottha2tdragon42";
+
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+
+			PaymentCard add1 = ContentGenerator.GenerateRandomPaymentCard();
+			PaymentCard add2 = ContentGenerator.GenerateRandomPaymentCard();
+
+			PaymentCard replace1 = ContentGenerator.GenerateRandomPaymentCard();
+			PaymentCard replace2 = ContentGenerator.GenerateRandomPaymentCard();
+			
+			// Act
+			var addResultSuccess1 = csc.AddPaymentCardSecret(password, add1, kdfeIdentifier);
+			var addResultSuccess2 = csc.AddPaymentCardSecret(kdfe.GeneratePasswordBytes(password), add2, kdfeIdentifier);
+
+			var replaceResultSuccess1 = csc.ReplacePaymentCardSecret(0, password, replace1, kdfeIdentifier);
+			var replaceResultSuccess2 = csc.ReplacePaymentCardSecret(1, kdfe.GeneratePasswordBytes(password), replace2, kdfeIdentifier, SymmetricEncryptionAlgorithm.ChaCha20);
+
+			var replaceResultFailure1 = csc.ReplacePaymentCardSecret(0, password, null, kdfeIdentifier);
+			var replaceResultFailure2 = csc.ReplacePaymentCardSecret(0, password, ContentGenerator.GenerateRandomPaymentCard(), "not existing");
+			var replaceResultFailure3 = csc.ReplacePaymentCardSecret(0, "", ContentGenerator.GenerateRandomPaymentCard(), kdfeIdentifier);
+			var replaceResultFailure4 = csc.ReplacePaymentCardSecret(-1, password, replace1, kdfeIdentifier);
+			var replaceResultFailure5 = csc.ReplacePaymentCardSecret(2, password, replace1, kdfeIdentifier);
+
+			// Assert
+			Assert.AreNotEqual(add1.GetTitle(), replace1.GetTitle(), "Make sure that random content do not match!");
+			Assert.AreNotEqual(add2.GetTitle(), replace2.GetTitle(), "Make sure that random content do not match!");
+
+			Assert.AreEqual(replace1.GetTitle(), csc.paymentCardSecrets[0].GetTitle(kdfe.GeneratePasswordBytes(password)));
+			Assert.AreEqual(replace2.GetTitle(), csc.paymentCardSecrets[1].GetTitle(kdfe.GeneratePasswordBytes(password)));
+
+			Assert.IsTrue(addResultSuccess1.success);
+			Assert.AreEqual("", addResultSuccess1.possibleError);
+
+			Assert.IsTrue(addResultSuccess2.success);
+			Assert.AreEqual("", addResultSuccess2.possibleError);
+
+			Assert.IsFalse(replaceResultFailure1.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure1.possibleError));
+
+			Assert.IsFalse(replaceResultFailure2.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure2.possibleError));
+
+			Assert.IsFalse(replaceResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure3.possibleError));
+
+			Assert.IsFalse(replaceResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure4.possibleError));
+
+			Assert.IsFalse(replaceResultFailure5.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
+
+			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
 		}
 	}
 }

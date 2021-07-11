@@ -57,6 +57,16 @@ namespace Tests
 			string middlename1 = "Midder";
 			csc.contacts.Add(new Contact(firstname1, lastname1, middlename1));
 
+			string cardTitle1 = "Super payment card";
+			string cardNameOnCard1 = "Cool dragon";
+			string cardCardType1 = "Debit";
+			string cardNumber1 = "000123456789999";
+			string cardSecurityCode1 = "123";
+			string cardStartDate1 = "10/19";
+			string cardExpirationDate1 = "02/25";
+			string cardNotes = "The best payment option";
+			csc.paymentCards.Add(new PaymentCard(cardTitle1, cardNameOnCard1, cardCardType1, cardNumber1, cardSecurityCode1, cardStartDate1, cardExpirationDate1, cardNotes));
+
 			// Act
 			string xml = null;
 			var xmlserializer = new XmlSerializer(typeof(CommonSecretsContainer));
@@ -83,6 +93,15 @@ namespace Tests
 			Assert.AreEqual(firstname1, System.Text.Encoding.UTF8.GetString(cscDeserialized.contacts[0].firstName));
 			Assert.AreEqual(lastname1, System.Text.Encoding.UTF8.GetString(cscDeserialized.contacts[0].lastName));
 			Assert.AreEqual(middlename1, System.Text.Encoding.UTF8.GetString(cscDeserialized.contacts[0].middleName));
+
+			Assert.AreEqual(cardTitle1, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].title));
+			Assert.AreEqual(cardNameOnCard1, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].nameOnCard));
+			Assert.AreEqual(cardCardType1, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].cardType));
+			Assert.AreEqual(cardNumber1, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].number));
+			Assert.AreEqual(cardSecurityCode1, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].securityCode));
+			Assert.AreEqual(cardStartDate1, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].startDate));
+			Assert.AreEqual(cardExpirationDate1, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].expirationDate));
+			Assert.AreEqual(cardNotes, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].notes));
 		}
 
 		[Test]
@@ -109,6 +128,9 @@ namespace Tests
 
 			int contactAmount = 4;
 			int contactSecretAmount = 2;
+
+			int paymentAmount = 3;
+			int paymentSecretAmount = 7;
 
 			// Act
 			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
@@ -153,6 +175,16 @@ namespace Tests
 			for (int i = 0; i < contactSecretAmount; i++)
 			{
 				csc.contactSecrets.Add(new ContactSecret(ContentGenerator.GenerateRandomContact(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+			}
+
+			for (int i = 0; i < paymentAmount; i++)
+			{
+				csc.paymentCards.Add(ContentGenerator.GenerateRandomPaymentCard());
+			}
+
+			for (int i = 0; i < paymentSecretAmount; i++)
+			{
+				csc.paymentCardSecrets.Add(new PaymentCardSecret(ContentGenerator.GenerateRandomPaymentCard(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			string xml = null;
@@ -235,6 +267,21 @@ namespace Tests
 			for (int i = 0; i < contactSecretAmount; i++)
 			{
 				Assert.IsTrue(ComparisonHelper.AreContactSecretsEqual(csc.contactSecrets[i], cscDeserialized.contactSecrets[i]));
+			}
+
+
+			Assert.AreEqual(paymentAmount, csc.paymentCards.Count);
+			Assert.AreEqual(paymentAmount, cscDeserialized.paymentCards.Count);
+			for (int i = 0; i < paymentAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.ArePaymentCardsEqual(csc.paymentCards[i], cscDeserialized.paymentCards[i]));
+			}
+
+			Assert.AreEqual(paymentSecretAmount, csc.paymentCardSecrets.Count);
+			Assert.AreEqual(paymentSecretAmount, cscDeserialized.paymentCardSecrets.Count);
+			for (int i = 0; i < paymentSecretAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.ArePaymentCardSecretsEqual(csc.paymentCardSecrets[i], cscDeserialized.paymentCardSecrets[i]));
 			}
 		}
 	}

@@ -64,6 +64,16 @@ namespace CSCommonSecrets
 		public List<ContactSecret> contactSecrets { get; set; } = new List<ContactSecret>();
 
 		/// <summary>
+		/// List of payment cards (plain text ones)
+		/// </summary>
+		public List<PaymentCard> paymentCards { get; set; } = new List<PaymentCard>();
+
+		/// <summary>
+		/// List of payment card secrets
+		/// </summary>
+		public List<PaymentCardSecret> paymentCardSecrets { get; set; } = new List<PaymentCardSecret>();
+
+		/// <summary>
 		/// Constructor without parameters for creating empty CommonSecretsContainer
 		/// </summary>
 		public CommonSecretsContainer()
@@ -295,6 +305,54 @@ namespace CSCommonSecrets
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
 			this.contactSecrets.Add(new ContactSecret(contact, keyIdentifier, ska, derivedPassword));
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Add payment card to Common secret container
+		/// </summary>
+		/// <param name="password">Plaintext password</param>
+		/// <param name="paymentCard">Payment card to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) AddPaymentCardSecret(string password, PaymentCard paymentCard, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			(bool checkResult, string possibleError) = MandatoryChecks(paymentCard, "PaymentCard", keyIdentifier, password);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+
+			this.paymentCardSecrets.Add(new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword));
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Add payment card to Common secret container
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="paymentCard">Payment card to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) AddPaymentCardSecret(byte[] derivedPassword, PaymentCard paymentCard, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			(bool checkResult, string possibleError) = MandatoryChecks(paymentCard, "PaymentCard", keyIdentifier, derivedPassword);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			this.paymentCardSecrets.Add(new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword));
 
 			return (success: true, possibleError: "");
 		}
@@ -540,6 +598,66 @@ namespace CSCommonSecrets
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
 			this.contactSecrets[zeroBasedIndex] = new ContactSecret(contact, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Replace existing payment card in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of payment card secret that will be replaced</param>
+		/// <param name="password">Plaintext password</param>
+		/// <param name="paymentCard">Payment card to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplacePaymentCardSecret(int zeroBasedIndex, string password, PaymentCard paymentCard, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.paymentCardSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.paymentCardSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(paymentCard, "PaymentCard", keyIdentifier, password);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+
+			this.paymentCardSecrets[zeroBasedIndex] = new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword);
+
+			return (success: true, possibleError: "");
+		}
+
+		/// <summary>
+		/// Replace existing payment card in Common secret container with another one (basically for editing purposes)
+		/// </summary>
+		/// <param name="zeroBasedIndex">Zero based index of payment card secret that will be replaced</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="paymentCard">Payment card to add</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+		/// <returns>Tuple that tells if add was success, and possible error</returns>
+		public (bool success, string possibleError) ReplacePaymentCardSecret(int zeroBasedIndex, byte[] derivedPassword, PaymentCard paymentCard, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+		{
+			if (zeroBasedIndex < 0 || zeroBasedIndex >= this.paymentCardSecrets.Count)
+			{
+				return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.paymentCardSecrets.Count})");
+			}
+
+			(bool checkResult, string possibleError) = MandatoryChecks(paymentCard, "PaymentCard", keyIdentifier, derivedPassword);
+			if (!checkResult)
+			{
+				return (checkResult, possibleError);
+			}
+
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+			this.paymentCardSecrets[zeroBasedIndex] = new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword);
 
 			return (success: true, possibleError: "");
 		}

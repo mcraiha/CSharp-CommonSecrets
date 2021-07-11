@@ -14,6 +14,9 @@ namespace Tests
 		private static readonly int asciiPrintableCharsStart = 32;
 		private static readonly int asciiPrintableCharsEnd = 126;
 
+		private static readonly int asciiPrintableNumberCharsStart = 48;
+		private static readonly int asciiPrintableNumberCharsEnd = 57;
+
 		private static string GenerateAsciiCompatibleString(int wantedLength)
 		{
 			char[] charArray = new char[wantedLength];
@@ -28,6 +31,20 @@ namespace Tests
 			return new string(charArray);
 		}
 
+		private static string GenerateAsciiCompatibleNumberString(int wantedLength)
+		{
+			char[] charArray = new char[wantedLength];
+			for (int i = 0; i < wantedLength; i++)
+			{
+				lock (rngLock)
+				{
+					charArray[i] = (char)rng.Next(asciiPrintableNumberCharsStart, asciiPrintableNumberCharsEnd + 1);
+				}
+			}
+
+			return new string(charArray);
+		}
+
 		private static string GenerateEmailAddress()
 		{
 			return $"{Path.GetRandomFileName()}@{Path.GetRandomFileName()}";
@@ -36,6 +53,18 @@ namespace Tests
 		private static string GenerateWebsiteAddress()
 		{
 			return $"https://{Path.GetRandomFileName()}";
+		}
+
+		private static string GenerateAsciiCompatibleMonthSlashYear()
+		{
+			int month = 0;
+			int year = 0;
+			lock (rngLock)
+			{
+				month = rng.Next(1, 13);
+				year = rng.Next(0, 100);
+			}
+			return $"{month.ToString("D2")}/{year.ToString("D2")}";
 		}
 
 		public static LoginInformation GenerateRandomLoginInformation()
@@ -104,6 +133,19 @@ namespace Tests
 			}
 
 			return returnValue;        
+		}
+
+		public static PaymentCard GenerateRandomPaymentCard()
+		{
+			PaymentCard returnValue = null;
+			lock (rngLock)
+			{
+				returnValue = new PaymentCard(GenerateAsciiCompatibleString(rng.Next(4, 20)), GenerateAsciiCompatibleString(rng.Next(4, 20)), 
+												GenerateAsciiCompatibleString(rng.Next(4, 8)), GenerateAsciiCompatibleNumberString(16), GenerateAsciiCompatibleNumberString(3),
+												GenerateAsciiCompatibleMonthSlashYear(), GenerateAsciiCompatibleMonthSlashYear(), GenerateAsciiCompatibleString(rng.Next(0, 200)));
+			}
+
+			return returnValue;     
 		}
 	}
 }
