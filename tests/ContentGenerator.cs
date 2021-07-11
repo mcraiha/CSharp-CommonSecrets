@@ -122,8 +122,8 @@ namespace Tests
 				string city = GenerateAsciiCompatibleString(rng.Next(4, 20));
 				string poBox = GenerateAsciiCompatibleString(rng.Next(4, 20));
 				string birthday = GenerateAsciiCompatibleString(rng.Next(8, 9));
-				string relationship = GenerateAsciiCompatibleString(rng.Next(4, 20));;
-				string notes = GenerateAsciiCompatibleString(rng.Next(0, 200));;
+				string relationship = GenerateAsciiCompatibleString(rng.Next(4, 20));
+				string notes = GenerateAsciiCompatibleString(rng.Next(0, 200));
 				string[] websites = { GenerateWebsiteAddress(), GenerateWebsiteAddress() };
 
 				returnValue = new Contact(firstName, lastName, middleName, namePrefix, nameSuffix, nickname, company, jobTitle, department, 
