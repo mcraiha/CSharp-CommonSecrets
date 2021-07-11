@@ -2,6 +2,8 @@
 - Update LibAES-CTR (**FEATURE**)
 - Update LibChaCha20 (**FEATURE**)
 - Include git short hash in package (**FEATURE**)
+- Add Contact and ContactSecret support (**FEATURE**)
+- Add PaymentCard and PaymentCardSecret support (**FEATURE**)
 
 ## Version 0.9.5 (released 2020-03-14)
 - Add Deep copy for LoginInformation (**FEATURE**)
