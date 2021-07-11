@@ -73,7 +73,7 @@ namespace Tests
 			string checksum2 = note2.GetChecksumAsHex();
 			string checksum3 = note3.GetChecksumAsHex();
 
-			string newContent = note3.noteText + "A";
+			string newContent = note3.GetNoteText() + "A";
 			note3.UpdateNote(note3.GetNoteTitle(), newContent);
 			string checksum4 = note3.GetChecksumAsHex();
 

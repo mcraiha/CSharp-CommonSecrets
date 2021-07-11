@@ -191,7 +191,7 @@ namespace Tests
 			string checksum2 = li2.GetChecksumAsHex();
 			string checksum3 = li3.GetChecksumAsHex();
 
-			string updatedPassword = li3.password + "A";
+			string updatedPassword = li3.GetPassword() + "A";
 			li3.UpdatePassword(updatedPassword);
 			string checksum4 = li3.GetChecksumAsHex();
 
