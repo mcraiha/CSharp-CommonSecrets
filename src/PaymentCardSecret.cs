@@ -75,39 +75,23 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
-		/// <summary>
-		/// Deep copy existing NoteSecret
-		/// </summary>
-		/// <param name="copyThis">Deep copy this</param>
-		public PaymentCardSecret(NoteSecret copyThis)
-		{
-			this.keyIdentifier = new byte[copyThis.keyIdentifier.Length];
-			Buffer.BlockCopy(copyThis.keyIdentifier, 0, this.keyIdentifier, 0, copyThis.keyIdentifier.Length);
-
-			this.audalfData = new byte[copyThis.audalfData.Length];
-			Buffer.BlockCopy(copyThis.audalfData, 0, this.audalfData, 0, copyThis.audalfData.Length);
-
-			this.algorithm = new SymmetricKeyAlgorithm(copyThis.algorithm);
-			this.checksum = copyThis.checksum;
-		}
-
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
 		/// <summary>
 		/// Constructor for custom dictionary, use this only if you know what you are doing
 		/// </summary>
-		/// <param name="noteAsDictionary">Dictionary containing note keys and values</param>
+		/// <param name="paymentCardAsDictionary">Dictionary containing payment card keys and values</param>
 		/// <param name="keyIdentifier">Key identifier</param>
 		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 		/// <param name="derivedPassword">Derived password</param>
-		public PaymentCardSecret(Dictionary<string, object> noteAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+		public PaymentCardSecret(Dictionary<string, object> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 		{
 			this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
 
 			this.algorithm = algorithm;
 
 			// Create AUDALF payload from dictionary
-			byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(paymentCardAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
 
 			// Encrypt the AUDALF payload with given algorithm
 			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
