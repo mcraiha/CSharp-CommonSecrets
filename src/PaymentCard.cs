@@ -94,7 +94,7 @@ namespace CSCommonSecrets
 		public long creationTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
 		/// <summary>
-		/// Key for storing note creation time to AUDALF
+		/// Key for storing payment card creation time to AUDALF
 		/// </summary>
 		public static readonly string creationTimeKey = nameof(creationTime);
 
