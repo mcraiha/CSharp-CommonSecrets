@@ -70,5 +70,5 @@ Library and its source code are licensed under [Unlicense](LICENSE), so you migh
 
 ## Version history of this document
 
-0.2 Mention some additions
+0.2 Mention some additions  
 0.1 First public release
