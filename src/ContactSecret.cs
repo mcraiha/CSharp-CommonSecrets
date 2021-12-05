@@ -157,6 +157,28 @@ namespace CSCommonSecrets
 			return contactAsDictionary;
 		}
 
+		private object GetSingleValue(byte[] derivedPassword, string key)
+		{
+			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
+
+			if (!passwordCheck.valid)
+			{
+				throw passwordCheck.exception;
+			}
+
+			// Try to decrypt the binary
+			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
+
+			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
+
+			if (!audalfCheck.valid)
+			{
+				throw audalfCheck.exception;
+			}
+
+			return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
+		}
+
 		/// <summary>
 		/// Get Contact. Use this for situation where you want to convert secret -> non secret
 		/// </summary>
@@ -206,8 +228,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact first name as string</returns>
 		public string GetFirstName(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.firstNameKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.firstNameKey);
 		}
 
 		/// <summary>
@@ -217,8 +238,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact last name as string</returns>
 		public string GetLastName(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.lastNameKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.lastNameKey);
 		}
 
 		/// <summary>
@@ -228,8 +248,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact middle name as string</returns>
 		public string GetMiddleName(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.middleNameKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.middleNameKey);
 		}
 
 		/// <summary>
@@ -239,8 +258,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact name prefix as string</returns>
 		public string GetNamePrefix(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.namePrefixKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.namePrefixKey);
 		}
 
 		/// <summary>
@@ -250,8 +268,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact name suffix as string</returns>
 		public string GetNameSuffix(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.nameSuffixKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.nameSuffixKey);
 		}
 
 		/// <summary>
@@ -261,8 +278,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact nickname as string</returns>
 		public string GetNickname(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.nicknameKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.nicknameKey);
 		}
 
 		/// <summary>
@@ -272,8 +288,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact company as string</returns>
 		public string GetCompany(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.companyKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.companyKey);
 		}
 
 		/// <summary>
@@ -283,8 +298,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact job title as string</returns>
 		public string GetJobTitle(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.jobTitleKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.jobTitleKey);
 		}
 
 		/// <summary>
@@ -294,8 +308,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact department as string</returns>
 		public string GetDepartment(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.departmentKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.departmentKey);
 		}
 
 		/// <summary>
@@ -305,8 +318,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact email addresses as string array</returns>
 		public string[] GetEmails(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return ((string)contactAsDictionary[Contact.emailsKey]).Split(Contact.separatorChar);
+			return ((string)this.GetSingleValue(derivedPassword, Contact.emailsKey)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -316,8 +328,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact email address descriptions as string array</returns>
 		public string[] GetEmailDescriptions(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return ((string)contactAsDictionary[Contact.emailDescriptionsKey]).Split(Contact.separatorChar);
+			return ((string)this.GetSingleValue(derivedPassword, Contact.emailDescriptionsKey)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -327,8 +338,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact phone numbers as string array</returns>
 		public string[] GetPhoneNumbers(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return ((string)contactAsDictionary[Contact.phoneNumbersKey]).Split(Contact.separatorChar);
+			return ((string)this.GetSingleValue(derivedPassword, Contact.phoneNumbersKey)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -338,8 +348,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact phone numbers descriptions as string array</returns>
 		public string[] GetPhoneNumberDescriptions(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return ((string)contactAsDictionary[Contact.phoneNumberDescriptionsKey]).Split(Contact.separatorChar);
+			return ((string)this.GetSingleValue(derivedPassword, Contact.phoneNumberDescriptionsKey)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -349,8 +358,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact country as string</returns>
 		public string GetCountry(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.countryKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.countryKey);
 		}
 
 		/// <summary>
@@ -360,8 +368,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact street address as string</returns>
 		public string GetStreetAddress(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.streetAddressKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.streetAddressKey);
 		}
 
 		/// <summary>
@@ -371,8 +378,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact street address additional  as string</returns>
 		public string GetStreetAddressAdditional(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.streetAddressAdditionalKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.streetAddressAdditionalKey);
 		}
 
 		/// <summary>
@@ -382,8 +388,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact postal code as string</returns>
 		public string GetPostalCode(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.postalCodeKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.postalCodeKey);
 		}
 
 		/// <summary>
@@ -393,8 +398,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact city as string</returns>
 		public string GetCity(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.cityKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.cityKey);
 		}
 
 		/// <summary>
@@ -404,8 +408,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact PO Box as string</returns>
 		public string GetPOBox(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.poBoxKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.poBoxKey);
 		}
 
 		/// <summary>
@@ -415,8 +418,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact birthday as string</returns>
 		public string GetBirthday(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.birthdayKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.birthdayKey);
 		}
 
 		/// <summary>
@@ -426,8 +428,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact websites as string array</returns>
 		public string[] GetWebsites(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return ((string)contactAsDictionary[Contact.websitesKey]).Split(Contact.separatorChar);
+			return ((string)this.GetSingleValue(derivedPassword, Contact.websitesKey)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -437,8 +438,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact relationship  as string</returns>
 		public string GetRelationship(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.relationshipKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.relationshipKey);
 		}
 
 		/// <summary>
@@ -448,8 +448,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact notes  as string</returns>
 		public string GetNotes(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (string)contactAsDictionary[Contact.notesKey];
+			return (string)this.GetSingleValue(derivedPassword, Contact.notesKey);
 		}
 
 		/// <summary>
@@ -459,8 +458,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact creation time as DateTimeOffset</returns>
 		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (DateTimeOffset)contactAsDictionary[Contact.creationTimeKey];
+			return (DateTimeOffset)this.GetSingleValue(derivedPassword, Contact.creationTimeKey);
 		}
 
 		/// <summary>
@@ -470,8 +468,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact modification time as DateTimeOffset</returns>
 		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
 		{
-			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
-			return (DateTimeOffset)contactAsDictionary[Contact.modificationTimeKey];
+			return (DateTimeOffset)this.GetSingleValue(derivedPassword, Contact.modificationTimeKey);
 		}
 
 		/// <summary>
