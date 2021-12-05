@@ -109,7 +109,7 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Encrypt given bytes with given key. Returns new array with encrypted bytes
 		/// </summary>
-		/// <param name="bytesToEncrypt">Byte array to encrypu</param>
+		/// <param name="bytesToEncrypt">Byte array to encrypt</param>
 		/// <param name="key"></param>
 		/// <returns>Encrypted bytes in new array</returns>
 		public byte[] EncryptBytes(byte[] bytesToEncrypt, byte[] key)
