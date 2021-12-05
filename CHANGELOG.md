@@ -1,6 +1,8 @@
 ## Version 0.9.6 (not released yet)
 - Update LibAES-CTR (**FEATURE**)
 - Update LibChaCha20 (**FEATURE**)
+- Update LibAUDALF (**FEATURE**)
+- Update Microsoft.AspNetCore.Cryptography.KeyDerivation (**FEATURE**)
 - Include git short hash in package (**FEATURE**)
 - Add Contact and ContactSecret support (**FEATURE**)
 - Add PaymentCard and PaymentCardSecret support (**FEATURE**)
