@@ -135,8 +135,7 @@ namespace CSCommonSecrets
 		/// <returns>Filename as string</returns>
 		public string GetFilename(byte[] derivedPassword)
 		{
-			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
-			return (string)fileEntryAsDictionary[FileEntry.filenameKey];
+			return (string)this.GetSingleValue(derivedPassword, FileEntry.filenameKey);
 		}
 
 		/// <summary>
@@ -146,8 +145,7 @@ namespace CSCommonSecrets
 		/// <returns>Content as byte array</returns>
 		public byte[] GetFileContent(byte[] derivedPassword)
 		{
-			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
-			return (byte[])fileEntryAsDictionary[FileEntry.fileContentKey];
+			return (byte[])this.GetSingleValue(derivedPassword, FileEntry.fileContentKey);
 		}
 
 		/// <summary>
@@ -156,8 +154,7 @@ namespace CSCommonSecrets
 		/// <returns>Lenght in bytes</returns>
 		public long GetFileContentLengthInBytes(byte[] derivedPassword)
 		{
-			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
-			return (long)((byte[])fileEntryAsDictionary[FileEntry.fileContentKey]).LongLength;
+			return GetFileContent(derivedPassword).LongLength;
 		}
 
 		/// <summary>
@@ -167,8 +164,7 @@ namespace CSCommonSecrets
 		/// <returns>File entry creation time as DateTimeOffset</returns>
 		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
 		{
-			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
-			return (DateTimeOffset)fileEntryAsDictionary[FileEntry.creationTimeKey];
+			return (DateTimeOffset)this.GetSingleValue(derivedPassword, FileEntry.creationTimeKey);
 		}
 
 		/// <summary>
@@ -178,8 +174,7 @@ namespace CSCommonSecrets
 		/// <returns>File entry modification time as DateTimeOffset</returns>
 		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
 		{
-			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
-			return (DateTimeOffset)fileEntryAsDictionary[FileEntry.modificationTimeKey];
+			return (DateTimeOffset)this.GetSingleValue(derivedPassword, FileEntry.modificationTimeKey);
 		}
 
 		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
@@ -209,6 +204,28 @@ namespace CSCommonSecrets
 			Dictionary<string, object> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 			return fileEntryAsDictionary;
+		}
+
+		private object GetSingleValue(byte[] derivedPassword, string key)
+		{
+			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
+
+			if (!passwordCheck.valid)
+			{
+				throw passwordCheck.exception;
+			}
+
+			// Try to decrypt the binary
+			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
+
+			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
+
+			if (!audalfCheck.valid)
+			{
+				throw audalfCheck.exception;
+			}
+
+			return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
 		}
 
 		/// <summary>
