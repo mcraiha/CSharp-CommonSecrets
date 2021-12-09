@@ -60,10 +60,12 @@ namespace Tests
 															};
 
 			// Act
-			byte[] output = skaChaCha20.EncryptBytes(content, key);
+			byte[] output1 = skaChaCha20.EncryptBytes(content, key);
+			byte[] output2 = skaChaCha20.DecryptBytes(content, key);
 
 			// Assert
-			CollectionAssert.AreEqual(expected, output);
+			CollectionAssert.AreEqual(expected, output1);
+			CollectionAssert.AreEqual(expected, output2);
 		}
 
 		[Test]
@@ -81,10 +83,12 @@ namespace Tests
 			byte[] expected = new byte[] { 0x87, 0x4d, 0x61, 0x91, 0xb6, 0x20, 0xe3, 0x26, 0x1b, 0xef, 0x68, 0x64, 0x99, 0x0d, 0xb6, 0xce };
 
 			// Act
-			byte[] output = skaAES_CTR.EncryptBytes(content, key);
+			byte[] output1 = skaAES_CTR.EncryptBytes(content, key);
+			byte[] output2 = skaAES_CTR.DecryptBytes(content, key);
 
 			// Assert
-			CollectionAssert.AreEqual(expected, output);
+			CollectionAssert.AreEqual(expected, output1);
+			CollectionAssert.AreEqual(expected, output2);
 		}
 
 		[Test]
