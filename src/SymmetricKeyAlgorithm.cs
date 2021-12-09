@@ -110,7 +110,7 @@ namespace CSCommonSecrets
 		/// Encrypt given bytes with given key. Returns new array with encrypted bytes
 		/// </summary>
 		/// <param name="bytesToEncrypt">Byte array to encrypt</param>
-		/// <param name="key"></param>
+		/// <param name="key">Key</param>
 		/// <returns>Encrypted bytes in new array</returns>
 		public byte[] EncryptBytes(byte[] bytesToEncrypt, byte[] key)
 		{
@@ -138,6 +138,17 @@ namespace CSCommonSecrets
 			}
 
 			return returnArray;
+		}
+
+		/// <summary>
+		/// Decrypt given bytes with given key. Returns new array with decrypted bytes. Same result as EncryptBytes
+		/// </summary>
+		/// <param name="bytesToDecrypt">Byte array to decrypt</param>
+		/// <param name="key">Key</param>
+		/// <returns>Decrypted bytes in new array</returns>
+		public byte[] DecryptBytes(byte[] bytesToDecrypt, byte[] key)
+		{
+			return this.EncryptBytes(bytesToDecrypt, key);
 		}
 
 		/// <summary>

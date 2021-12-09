@@ -259,7 +259,7 @@ namespace CSCommonSecrets
 			}
 
 			// Try to decrypt the binary
-			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
+			byte[] decryptedAUDALF = algorithm.DecryptBytes(this.audalfData, derivedPassword);
 
 			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
 
@@ -288,7 +288,7 @@ namespace CSCommonSecrets
 			}
 
 			// Try to decrypt the binary
-			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
+			byte[] decryptedAUDALF = algorithm.DecryptBytes(this.audalfData, derivedPassword);
 
 			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
 
