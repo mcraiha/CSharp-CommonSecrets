@@ -44,6 +44,37 @@ namespace CSCommonSecrets
 			}
 
 			return (valid: true, exception: null);
-		} 
+		}
+
+		/// <summary>
+		/// Get single value from encrypted audalf dictionary
+		/// </summary>
+		/// <param name="audalfData">Encrypted AUDALF data</param>
+		/// <param name="algorithm">SymmetricKeyAlgorithm to use</param>
+		/// <param name="derivedPassword">Derived password as byte array</param>
+		/// <param name="key">Dictionary key</param>
+		/// <param name="deserializationSettings">Deserialization settings</param>
+		/// <returns>Object containing the data</returns>
+		public static object GetSingleValue(byte[] audalfData, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, string key, DeserializationSettings deserializationSettings)
+		{
+			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
+
+			if (!passwordCheck.valid)
+			{
+				throw passwordCheck.exception;
+			}
+
+			// Try to decrypt the binary
+			byte[] decryptedAUDALF = algorithm.EncryptBytes(audalfData, derivedPassword);
+
+			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
+
+			if (!audalfCheck.valid)
+			{
+				throw audalfCheck.exception;
+			}
+
+			return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
+		}
 	}
 }

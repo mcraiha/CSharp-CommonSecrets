@@ -135,7 +135,7 @@ namespace CSCommonSecrets
 		/// <returns>Note title as string</returns>
 		public string GetNoteTitle(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Note.noteTitleKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.noteTitleKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -145,7 +145,7 @@ namespace CSCommonSecrets
 		/// <returns>Note text as string</returns>
 		public string GetNoteText(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Note.noteTextKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.noteTextKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -155,7 +155,7 @@ namespace CSCommonSecrets
 		/// <returns>Note creation time as DateTimeOffset</returns>
 		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
 		{
-			return (DateTimeOffset)this.GetSingleValue(derivedPassword, Note.creationTimeKey);
+			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.creationTimeKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace CSCommonSecrets
 		/// <returns>Note modification time as DateTimeOffset</returns>
 		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
 		{
-			return (DateTimeOffset)this.GetSingleValue(derivedPassword, Note.modificationTimeKey);
+			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.modificationTimeKey, deserializationSettings);
 		}
 
 		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
@@ -195,28 +195,6 @@ namespace CSCommonSecrets
 			Dictionary<string, object> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 			return noteAsDictionary;
-		}
-
-		private object GetSingleValue(byte[] derivedPassword, string key)
-		{
-			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
-
-			if (!passwordCheck.valid)
-			{
-				throw passwordCheck.exception;
-			}
-
-			// Try to decrypt the binary
-			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
-
-			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
-
-			if (!audalfCheck.valid)
-			{
-				throw audalfCheck.exception;
-			}
-
-			return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
 		}
 
 		/// <summary>

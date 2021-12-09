@@ -142,7 +142,7 @@ namespace CSCommonSecrets
 		/// <returns>Title</returns>
 		public string GetTitle(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, PaymentCard.titleKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.titleKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -152,7 +152,7 @@ namespace CSCommonSecrets
 		/// <returns>Name on card</returns>
 		public string GetNameOnCard(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, PaymentCard.nameOnCardKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.nameOnCardKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -162,7 +162,7 @@ namespace CSCommonSecrets
 		/// <returns>Card type</returns>
 		public string GetCardType(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, PaymentCard.cardTypeKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.cardTypeKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -172,7 +172,7 @@ namespace CSCommonSecrets
 		/// <returns>Number</returns>
 		public string GetNumber(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, PaymentCard.numberKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.numberKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -182,7 +182,7 @@ namespace CSCommonSecrets
 		/// <returns>Security code</returns>
 		public string GetSecurityCode(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, PaymentCard.securityCodeKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.securityCodeKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -192,7 +192,7 @@ namespace CSCommonSecrets
 		/// <returns>Start date</returns>
 		public string GetStartDate(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, PaymentCard.startDateKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.startDateKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -202,7 +202,7 @@ namespace CSCommonSecrets
 		/// <returns>Expiration date</returns>
 		public string GetExpirationDate(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, PaymentCard.expirationDateKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.expirationDateKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -212,7 +212,7 @@ namespace CSCommonSecrets
 		/// <returns>Notes</returns>
 		public string GetNotes(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, PaymentCard.notesKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.notesKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -222,7 +222,7 @@ namespace CSCommonSecrets
 		/// <returns>Creation time</returns>
 		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
 		{
-			return (DateTimeOffset)this.GetSingleValue(derivedPassword, PaymentCard.creationTimeKey);
+			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.creationTimeKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -232,7 +232,7 @@ namespace CSCommonSecrets
 		/// <returns>Modification time</returns>
 		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
 		{
-			return (DateTimeOffset)this.GetSingleValue(derivedPassword, PaymentCard.modificationTimeKey);
+			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.modificationTimeKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -271,28 +271,6 @@ namespace CSCommonSecrets
 			Dictionary<string, object> paymentCardAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 			return paymentCardAsDictionary;
-		}
-
-		private object GetSingleValue(byte[] derivedPassword, string key)
-		{
-			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
-
-			if (!passwordCheck.valid)
-			{
-				throw passwordCheck.exception;
-			}
-
-			// Try to decrypt the binary
-			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
-
-			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
-
-			if (!audalfCheck.valid)
-			{
-				throw audalfCheck.exception;
-			}
-
-			return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
 		}
 
 		/// <summary>

@@ -145,7 +145,7 @@ namespace CSCommonSecrets
 		/// <returns>Title</returns>
 		public string GetTitle(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, LoginInformation.titleKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.titleKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -155,7 +155,7 @@ namespace CSCommonSecrets
 		/// <returns>URL</returns>
 		public string GetURL(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, LoginInformation.urlKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.urlKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -165,7 +165,7 @@ namespace CSCommonSecrets
 		/// <returns>Email</returns>
 		public string GetEmail(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, LoginInformation.emailKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.emailKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -175,7 +175,7 @@ namespace CSCommonSecrets
 		/// <returns>Username</returns>
 		public string GetUsername(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, LoginInformation.usernameKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.usernameKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -185,7 +185,7 @@ namespace CSCommonSecrets
 		/// <returns>Password</returns>
 		public string GetPassword(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, LoginInformation.passwordKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.passwordKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -195,7 +195,7 @@ namespace CSCommonSecrets
 		/// <returns>Notes</returns>
 		public string GetNotes(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, LoginInformation.notesKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.notesKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -205,7 +205,7 @@ namespace CSCommonSecrets
 		/// <returns>MFA</returns>
 		public string GetMFA(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, LoginInformation.mfaKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.mfaKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -215,7 +215,7 @@ namespace CSCommonSecrets
 		/// <returns>Creation time</returns>
 		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
 		{
-			return (DateTimeOffset)this.GetSingleValue(derivedPassword, LoginInformation.creationTimeKey);
+			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.creationTimeKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -225,7 +225,7 @@ namespace CSCommonSecrets
 		/// <returns>Modification time</returns>
 		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
 		{
-			return (DateTimeOffset)this.GetSingleValue(derivedPassword, LoginInformation.modificationTimeKey);
+			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.modificationTimeKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -235,7 +235,7 @@ namespace CSCommonSecrets
 		/// <returns>Icon</returns>
 		public byte[] GetIcon(byte[] derivedPassword)
 		{
-			return (byte[])this.GetSingleValue(derivedPassword, LoginInformation.iconKey);
+			return (byte[])Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.iconKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -245,7 +245,7 @@ namespace CSCommonSecrets
 		/// <returns>Category</returns>
 		public string GetCategory(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, LoginInformation.categoryKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.categoryKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -255,7 +255,7 @@ namespace CSCommonSecrets
 		/// <returns>Tags</returns>
 		public string GetTags(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, LoginInformation.tagsKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.tagsKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -296,27 +296,7 @@ namespace CSCommonSecrets
 			return loginInformationAsDictionary;
 		}
 
-		private object GetSingleValue(byte[] derivedPassword, string key)
-		{
-			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
-
-			if (!passwordCheck.valid)
-			{
-				throw passwordCheck.exception;
-			}
-
-			// Try to decrypt the binary
-			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
-
-			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
-
-			if (!audalfCheck.valid)
-			{
-				throw audalfCheck.exception;
-			}
-
-			return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
-		}
+		
 
 		/// <summary>
 		/// Can the content be decrypted with given derived password

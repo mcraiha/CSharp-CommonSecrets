@@ -157,28 +157,6 @@ namespace CSCommonSecrets
 			return contactAsDictionary;
 		}
 
-		private object GetSingleValue(byte[] derivedPassword, string key)
-		{
-			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
-
-			if (!passwordCheck.valid)
-			{
-				throw passwordCheck.exception;
-			}
-
-			// Try to decrypt the binary
-			byte[] decryptedAUDALF = algorithm.EncryptBytes(this.audalfData, derivedPassword);
-
-			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
-
-			if (!audalfCheck.valid)
-			{
-				throw audalfCheck.exception;
-			}
-
-			return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
-		}
-
 		/// <summary>
 		/// Get Contact. Use this for situation where you want to convert secret -> non secret
 		/// </summary>
@@ -228,7 +206,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact first name as string</returns>
 		public string GetFirstName(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.firstNameKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.firstNameKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -238,7 +216,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact last name as string</returns>
 		public string GetLastName(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.lastNameKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.lastNameKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -248,7 +226,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact middle name as string</returns>
 		public string GetMiddleName(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.middleNameKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.middleNameKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -258,7 +236,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact name prefix as string</returns>
 		public string GetNamePrefix(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.namePrefixKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.namePrefixKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -268,7 +246,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact name suffix as string</returns>
 		public string GetNameSuffix(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.nameSuffixKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.nameSuffixKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -278,7 +256,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact nickname as string</returns>
 		public string GetNickname(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.nicknameKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.nicknameKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -288,7 +266,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact company as string</returns>
 		public string GetCompany(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.companyKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.companyKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -298,7 +276,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact job title as string</returns>
 		public string GetJobTitle(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.jobTitleKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.jobTitleKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -308,7 +286,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact department as string</returns>
 		public string GetDepartment(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.departmentKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.departmentKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -318,7 +296,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact email addresses as string array</returns>
 		public string[] GetEmails(byte[] derivedPassword)
 		{
-			return ((string)this.GetSingleValue(derivedPassword, Contact.emailsKey)).Split(Contact.separatorChar);
+			return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailsKey, deserializationSettings)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -328,7 +306,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact email address descriptions as string array</returns>
 		public string[] GetEmailDescriptions(byte[] derivedPassword)
 		{
-			return ((string)this.GetSingleValue(derivedPassword, Contact.emailDescriptionsKey)).Split(Contact.separatorChar);
+			return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailDescriptionsKey, deserializationSettings)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -338,7 +316,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact phone numbers as string array</returns>
 		public string[] GetPhoneNumbers(byte[] derivedPassword)
 		{
-			return ((string)this.GetSingleValue(derivedPassword, Contact.phoneNumbersKey)).Split(Contact.separatorChar);
+			return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumbersKey, deserializationSettings)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -348,7 +326,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact phone numbers descriptions as string array</returns>
 		public string[] GetPhoneNumberDescriptions(byte[] derivedPassword)
 		{
-			return ((string)this.GetSingleValue(derivedPassword, Contact.phoneNumberDescriptionsKey)).Split(Contact.separatorChar);
+			return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -358,7 +336,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact country as string</returns>
 		public string GetCountry(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.countryKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.countryKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -368,7 +346,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact street address as string</returns>
 		public string GetStreetAddress(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.streetAddressKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -378,7 +356,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact street address additional  as string</returns>
 		public string GetStreetAddressAdditional(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.streetAddressAdditionalKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressAdditionalKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -388,7 +366,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact postal code as string</returns>
 		public string GetPostalCode(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.postalCodeKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.postalCodeKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -398,7 +376,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact city as string</returns>
 		public string GetCity(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.cityKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.cityKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -408,7 +386,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact PO Box as string</returns>
 		public string GetPOBox(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.poBoxKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.poBoxKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -418,7 +396,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact birthday as string</returns>
 		public string GetBirthday(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.birthdayKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.birthdayKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -428,7 +406,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact websites as string array</returns>
 		public string[] GetWebsites(byte[] derivedPassword)
 		{
-			return ((string)this.GetSingleValue(derivedPassword, Contact.websitesKey)).Split(Contact.separatorChar);
+			return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.websitesKey, deserializationSettings)).Split(Contact.separatorChar);
 		}
 
 		/// <summary>
@@ -438,7 +416,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact relationship  as string</returns>
 		public string GetRelationship(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.relationshipKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.relationshipKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -448,7 +426,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact notes  as string</returns>
 		public string GetNotes(byte[] derivedPassword)
 		{
-			return (string)this.GetSingleValue(derivedPassword, Contact.notesKey);
+			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.notesKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -458,7 +436,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact creation time as DateTimeOffset</returns>
 		public DateTimeOffset GetCreationTime(byte[] derivedPassword)
 		{
-			return (DateTimeOffset)this.GetSingleValue(derivedPassword, Contact.creationTimeKey);
+			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.creationTimeKey, deserializationSettings);
 		}
 
 		/// <summary>
@@ -468,7 +446,7 @@ namespace CSCommonSecrets
 		/// <returns>Contact modification time as DateTimeOffset</returns>
 		public DateTimeOffset GetModificationTime(byte[] derivedPassword)
 		{
-			return (DateTimeOffset)this.GetSingleValue(derivedPassword, Contact.modificationTimeKey);
+			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.modificationTimeKey, deserializationSettings);
 		}
 
 		/// <summary>
