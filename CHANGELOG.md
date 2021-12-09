@@ -1,4 +1,4 @@
-## Version 0.9.6 (not released yet)
+## Version 0.9.6 (released 2021-12-09)
 - Update LibAES-CTR (**FEATURE**)
 - Update LibChaCha20 (**FEATURE**)
 - Update LibAUDALF (**FEATURE**)
