@@ -23,6 +23,8 @@ namespace Tests
 			byte[] byteArray2 = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
 			byte[] byteArray3 = new byte[] { };
 
+			string expectedHex = "66840DDA154E8A113C31DD0AD32F7F3A366A80E8136979D8F5A101D3D29D6F72";
+
 			// Act
 			string hex1 = ChecksumHelper.CalculateHexChecksum(byteArray1);
 			string hex2 = ChecksumHelper.CalculateHexChecksum(byteArray2);
@@ -37,6 +39,7 @@ namespace Tests
 
 			Assert.AreEqual(sha256LengthInBytes * 2, hex1.Length, "Every byte should convert to two Hex chars");
 
+			Assert.AreEqual(expectedHex, hex1);
 			Assert.AreEqual(hex1, hex2);
 			Assert.AreNotEqual(hex2, hex3);
 			Assert.AreNotEqual(hex2, hex4);
