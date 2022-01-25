@@ -40,7 +40,7 @@ namespace Tests
 
 			// Assert
 			Assert.AreEqual(title, note.noteTitle);
-			CollectionAssert.AreEqual(text, note.noteText);
+			Assert.AreEqual(text, note.noteText);
 		}
 
 		[Test]
