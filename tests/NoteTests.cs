@@ -39,8 +39,8 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.AreEqual(title, note.noteTitle);
-			Assert.AreEqual(text, note.noteText);
+			Assert.AreEqual(title, note.GetNoteTitle());
+			Assert.AreEqual(text, note.GetNoteText());
 		}
 
 		[Test]
