@@ -100,7 +100,7 @@ namespace CSCommonSecrets
 			{
 				throw new ArgumentNullException(nameof(saltBytes));
 			}
-			else if (saltBytes.Length < 16)
+			else if (saltBytes.Length < saltMinLengthInBytes)
 			{
 				throw new ArgumentException($"{nameof(saltBytes)} should be at least {saltMinLengthInBytes} bytes!");
 			}
