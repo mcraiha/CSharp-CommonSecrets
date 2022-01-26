@@ -13,7 +13,7 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Password-Based Key Derivation Function 2
 		/// </summary>
-		PBKDF2
+		PBKDF2 = 0,
 	}
 
 	/// <summary>
