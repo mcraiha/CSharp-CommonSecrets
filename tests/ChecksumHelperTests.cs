@@ -15,7 +15,7 @@ namespace Tests
 
 		private static readonly int sha256LengthInBytes = 32;
 
-		[Test]
+		[Test, Description("Calculate hex checksum test")]
 		public void CalculateHexChecksumTest()
 		{
 			// Arrange
@@ -45,7 +45,7 @@ namespace Tests
 			Assert.AreNotEqual(hex2, hex4);
 		}
 
-		[Test]
+		[Test, Description("Join byte arrays test")]
 		public void JoinByteArraysTest()
 		{
 			// Arrange
