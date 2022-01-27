@@ -12,7 +12,7 @@ namespace CSCommonSecrets
 	public enum SymmetricEncryptionAlgorithm
 	{
 		/// AES in CTR mode
-		AES_CTR,
+		AES_CTR = 0,
 		/// ChaCha20
 		ChaCha20
 	}
