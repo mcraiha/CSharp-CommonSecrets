@@ -1,3 +1,5 @@
+#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,36 +10,8 @@ namespace CSCommonSecrets
 	/// <summary>
 	/// LoginInformationSecret stores one encrypted login information
 	/// </summary>
-	public sealed class LoginInformationSecret
+	public sealed partial class LoginInformationSecret
 	{
-		/// <summary>
-		/// Key identifier bytes (this is plaintext information), in normal case it is better to use GetKeyIdentifier()
-		/// </summary>
-		public byte[] keyIdentifier { get; set; }
-
-		/// <summary>
-		/// AUDALF data as byte array (this is secret/encrypted information)
-		/// </summary>
-		public byte[] audalfData { get; set; } = new byte[0];
-
-		/// <summary>
-		/// Symmetric Key Algorithm for this LoginInformationSecret (this is plaintext information)
-		/// </summary>
-		public SymmetricKeyAlgorithm algorithm { get; set; }
-
-		/// <summary>
-		/// Checksum of the data (this is plaintext information)
-		/// </summary>
-		public string checksum { get; set; } = string.Empty;
-
-		/// <summary>
-		/// For deserialization
-		/// </summary>
-		public LoginInformationSecret()
-		{
-
-		}
-
 		/// <summary>
 		/// Default constructor for LoginInformationSecret
 		/// </summary>
@@ -76,24 +50,6 @@ namespace CSCommonSecrets
 			// Calculate new checksum
 			this.CalculateAndUpdateChecksum();
 		}
-
-		/// <summary>
-		/// Deep copy existing LoginInformationSecret
-		/// </summary>
-		/// <param name="copyThis">Deep copy this</param>
-		public LoginInformationSecret(LoginInformationSecret copyThis)
-		{
-			this.keyIdentifier = new byte[copyThis.keyIdentifier.Length];
-			Buffer.BlockCopy(copyThis.keyIdentifier, 0, this.keyIdentifier, 0, copyThis.keyIdentifier.Length);
-
-			this.audalfData = new byte[copyThis.audalfData.Length];
-			Buffer.BlockCopy(copyThis.audalfData, 0, this.audalfData, 0, copyThis.audalfData.Length);
-
-			this.algorithm = new SymmetricKeyAlgorithm(copyThis.algorithm);
-			this.checksum = copyThis.checksum;
-		}
-
-		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
 		/// <summary>
 		/// Constructor for custom dictionary, use this only if you know what you are doing
@@ -520,3 +476,5 @@ namespace CSCommonSecrets
 	}
 
 }
+
+#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM

@@ -15,6 +15,8 @@ namespace Tests
 
 		private static readonly int sha256LengthInBytes = 32;
 
+		#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 		[Test, Description("Calculate hex checksum test")]
 		public void CalculateHexChecksumTest()
 		{
@@ -44,6 +46,8 @@ namespace Tests
 			Assert.AreNotEqual(hex2, hex3);
 			Assert.AreNotEqual(hex2, hex4);
 		}
+
+		#endif // ASYNC_WITH_CUSTOM && WITH_CUSTOM
 
 		[Test, Description("Join byte arrays test")]
 		public void JoinByteArraysTest()

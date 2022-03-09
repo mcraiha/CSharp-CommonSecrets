@@ -1,3 +1,5 @@
+#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 using NUnit.Framework;
 using CSCommonSecrets;
 using System;
@@ -252,7 +254,7 @@ namespace Tests
 			string keyIdentifier = "primary";
 
 			// Act
-			ContactSecret contactSecret = new ContactSecret(ContentGenerator.GenerateRandomContact(), keyIdentifier, skaAES_CTR, derivedKey);
+			ContactSecret contactSecret = new ContactSecret(ContentGeneratorSync.GenerateRandomContact(), keyIdentifier, skaAES_CTR, derivedKey);
 
 			// Assert
 			Assert.AreEqual(keyIdentifier, contactSecret.GetKeyIdentifier());
@@ -272,7 +274,7 @@ namespace Tests
 			string keyIdentifier = "primary";
 
 			// Act
-			ContactSecret contactSecret = new ContactSecret(ContentGenerator.GenerateRandomContact(), keyIdentifier, skaAES_CTR, derivedKey1);
+			ContactSecret contactSecret = new ContactSecret(ContentGeneratorSync.GenerateRandomContact(), keyIdentifier, skaAES_CTR, derivedKey1);
 
 			// Assert
 			Assert.IsTrue(contactSecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
@@ -315,7 +317,7 @@ namespace Tests
 			string relationship = "single!";
 			string notes = "Very awesome dragon again";
 			string[] websites = { "https://dacoolastdragons4life.com", "https://nicevalleyvaults.net" };
-			Contact c1 = new Contact(ContentGenerator.GenerateRandomContact());
+			Contact c1 = new Contact(ContentGeneratorSync.GenerateRandomContact());
 
 			ContactSecret cs = new ContactSecret(c1, "does not matter", skaAES_CTR, derivedKey);
 
@@ -422,3 +424,5 @@ namespace Tests
 		}
 	}
 }
+
+#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM

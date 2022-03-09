@@ -1,3 +1,5 @@
+#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,36 +10,8 @@ namespace CSCommonSecrets
 	/// <summary>
 	/// NoteSecret stores one encrypted note. Note is basically a text file
 	/// </summary>
-	public sealed class NoteSecret
+	public sealed partial class NoteSecret
 	{
-		/// <summary>
-		/// Key identifier bytes (this is plaintext information), in normal case it is better to use GetKeyIdentifier()
-		/// </summary>
-		public byte[] keyIdentifier { get; set; }
-
-		/// <summary>
-		/// AUDALF data as byte array (this is secret/encrypted information)
-		/// </summary>
-		public byte[] audalfData { get; set; } = new byte[0];
-
-		/// <summary>
-		/// Symmetric Key Algorithm for this NoteSecret (this is plaintext information)
-		/// </summary>
-		public SymmetricKeyAlgorithm algorithm { get; set; }
-
-		/// <summary>
-		/// Checksum of the data (this is plaintext information)
-		/// </summary>
-		public string checksum { get; set; } = string.Empty;
-
-		/// <summary>
-		/// For deserialization
-		/// </summary>
-		public NoteSecret()
-		{
-
-		}
-
 		/// <summary>
 		/// Default constructor for NoteSecret
 		/// </summary>
@@ -68,24 +42,6 @@ namespace CSCommonSecrets
 			// Calculate new checksum
 			this.CalculateAndUpdateChecksum();
 		}
-
-		/// <summary>
-		/// Deep copy existing NoteSecret
-		/// </summary>
-		/// <param name="copyThis">Deep copy this</param>
-		public NoteSecret(NoteSecret copyThis)
-		{
-			this.keyIdentifier = new byte[copyThis.keyIdentifier.Length];
-			Buffer.BlockCopy(copyThis.keyIdentifier, 0, this.keyIdentifier, 0, copyThis.keyIdentifier.Length);
-
-			this.audalfData = new byte[copyThis.audalfData.Length];
-			Buffer.BlockCopy(copyThis.audalfData, 0, this.audalfData, 0, copyThis.audalfData.Length);
-
-			this.algorithm = new SymmetricKeyAlgorithm(copyThis.algorithm);
-			this.checksum = copyThis.checksum;
-		}
-
-		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
 
 		/// <summary>
 		/// Constructor for custom dictionary, use this only if you know what you are doing
@@ -168,11 +124,6 @@ namespace CSCommonSecrets
 			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.modificationTimeKey, deserializationSettings);
 		}
 
-		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
-		{
-			wantedDateTimeType = typeof(DateTimeOffset)
-		};
-
 		private Dictionary<string, object> GetNoteAsDictionary(byte[] derivedPassword)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
@@ -195,15 +146,6 @@ namespace CSCommonSecrets
 			Dictionary<string, object> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 			return noteAsDictionary;
-		}
-
-		/// <summary>
-		/// Get key identifier
-		/// </summary>
-		/// <returns>Key identifier as string</returns>
-		public string GetKeyIdentifier()
-		{
-			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
 		}
 
 		/// <summary>
@@ -317,3 +259,5 @@ namespace CSCommonSecrets
 		#endregion // Checksum
 	}
 }
+
+#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM

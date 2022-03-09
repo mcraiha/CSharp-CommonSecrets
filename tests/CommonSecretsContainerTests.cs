@@ -1,3 +1,5 @@
+#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 using NUnit.Framework;
 using CSCommonSecrets;
 using System;
@@ -39,12 +41,12 @@ namespace Tests
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 			
 			// Act
-			var addResultSuccess1 = csc.AddLoginInformationSecret(password, ContentGenerator.GenerateRandomLoginInformation(), kdfeIdentifier);
-			var addResultSuccess2 = csc.AddLoginInformationSecret(kdfe.GeneratePasswordBytes(password), ContentGenerator.GenerateRandomLoginInformation(), kdfeIdentifier);
+			var addResultSuccess1 = csc.AddLoginInformationSecret(password, ContentGeneratorSync.GenerateRandomLoginInformation(), kdfeIdentifier);
+			var addResultSuccess2 = csc.AddLoginInformationSecret(kdfe.GeneratePasswordBytes(password), ContentGeneratorSync.GenerateRandomLoginInformation(), kdfeIdentifier);
 
 			var addResultFailure1 = csc.AddLoginInformationSecret(password, null, kdfeIdentifier);
-			var addResultFailure2 = csc.AddLoginInformationSecret(password, ContentGenerator.GenerateRandomLoginInformation(), "not existing");
-			var addResultFailure3 = csc.AddLoginInformationSecret("", ContentGenerator.GenerateRandomLoginInformation(), kdfeIdentifier);
+			var addResultFailure2 = csc.AddLoginInformationSecret(password, ContentGeneratorSync.GenerateRandomLoginInformation(), "not existing");
+			var addResultFailure3 = csc.AddLoginInformationSecret("", ContentGeneratorSync.GenerateRandomLoginInformation(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -75,12 +77,12 @@ namespace Tests
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 			
 			// Act
-			var addResultSuccess1 = csc.AddNoteSecret(password, ContentGenerator.GenerateRandomNote(), kdfeIdentifier);
-			var addResultSuccess2 = csc.AddNoteSecret(kdfe.GeneratePasswordBytes(password), ContentGenerator.GenerateRandomNote(), kdfeIdentifier);
+			var addResultSuccess1 = csc.AddNoteSecret(password, ContentGeneratorSync.GenerateRandomNote(), kdfeIdentifier);
+			var addResultSuccess2 = csc.AddNoteSecret(kdfe.GeneratePasswordBytes(password), ContentGeneratorSync.GenerateRandomNote(), kdfeIdentifier);
 
 			var addResultFailure1 = csc.AddNoteSecret(password, null, kdfeIdentifier);
-			var addResultFailure2 = csc.AddNoteSecret(password, ContentGenerator.GenerateRandomNote(), "not existing");
-			var addResultFailure3 = csc.AddNoteSecret("", ContentGenerator.GenerateRandomNote(), kdfeIdentifier);
+			var addResultFailure2 = csc.AddNoteSecret(password, ContentGeneratorSync.GenerateRandomNote(), "not existing");
+			var addResultFailure3 = csc.AddNoteSecret("", ContentGeneratorSync.GenerateRandomNote(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -111,12 +113,12 @@ namespace Tests
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 			
 			// Act
-			var addResultSuccess1 = csc.AddFileEntrySecret(password, ContentGenerator.GenerateRandomFileEntry(), kdfeIdentifier);
-			var addResultSuccess2 = csc.AddFileEntrySecret(kdfe.GeneratePasswordBytes(password), ContentGenerator.GenerateRandomFileEntry(), kdfeIdentifier);
+			var addResultSuccess1 = csc.AddFileEntrySecret(password, ContentGeneratorSync.GenerateRandomFileEntry(), kdfeIdentifier);
+			var addResultSuccess2 = csc.AddFileEntrySecret(kdfe.GeneratePasswordBytes(password), ContentGeneratorSync.GenerateRandomFileEntry(), kdfeIdentifier);
 
 			var addResultFailure1 = csc.AddFileEntrySecret(password, null, kdfeIdentifier);
-			var addResultFailure2 = csc.AddFileEntrySecret(password, ContentGenerator.GenerateRandomFileEntry(), "not existing");
-			var addResultFailure3 = csc.AddFileEntrySecret("", ContentGenerator.GenerateRandomFileEntry(), kdfeIdentifier);
+			var addResultFailure2 = csc.AddFileEntrySecret(password, ContentGeneratorSync.GenerateRandomFileEntry(), "not existing");
+			var addResultFailure3 = csc.AddFileEntrySecret("", ContentGeneratorSync.GenerateRandomFileEntry(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -147,12 +149,12 @@ namespace Tests
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 			
 			// Act
-			var addResultSuccess1 = csc.AddContactSecret(password, ContentGenerator.GenerateRandomContact(), kdfeIdentifier);
-			var addResultSuccess2 = csc.AddContactSecret(kdfe.GeneratePasswordBytes(password), ContentGenerator.GenerateRandomContact(), kdfeIdentifier);
+			var addResultSuccess1 = csc.AddContactSecret(password, ContentGeneratorSync.GenerateRandomContact(), kdfeIdentifier);
+			var addResultSuccess2 = csc.AddContactSecret(kdfe.GeneratePasswordBytes(password), ContentGeneratorSync.GenerateRandomContact(), kdfeIdentifier);
 
 			var addResultFailure1 = csc.AddContactSecret(password, null, kdfeIdentifier);
-			var addResultFailure2 = csc.AddContactSecret(password, ContentGenerator.GenerateRandomContact(), "not existing");
-			var addResultFailure3 = csc.AddContactSecret("", ContentGenerator.GenerateRandomContact(), kdfeIdentifier);
+			var addResultFailure2 = csc.AddContactSecret(password, ContentGeneratorSync.GenerateRandomContact(), "not existing");
+			var addResultFailure3 = csc.AddContactSecret("", ContentGeneratorSync.GenerateRandomContact(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -183,12 +185,12 @@ namespace Tests
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 			
 			// Act
-			var addResultSuccess1 = csc.AddPaymentCardSecret(password, ContentGenerator.GenerateRandomPaymentCard(), kdfeIdentifier);
-			var addResultSuccess2 = csc.AddPaymentCardSecret(kdfe.GeneratePasswordBytes(password), ContentGenerator.GenerateRandomPaymentCard(), kdfeIdentifier);
+			var addResultSuccess1 = csc.AddPaymentCardSecret(password, ContentGeneratorSync.GenerateRandomPaymentCard(), kdfeIdentifier);
+			var addResultSuccess2 = csc.AddPaymentCardSecret(kdfe.GeneratePasswordBytes(password), ContentGeneratorSync.GenerateRandomPaymentCard(), kdfeIdentifier);
 
 			var addResultFailure1 = csc.AddPaymentCardSecret(password, null, kdfeIdentifier);
-			var addResultFailure2 = csc.AddPaymentCardSecret(password, ContentGenerator.GenerateRandomPaymentCard(), "not existing");
-			var addResultFailure3 = csc.AddPaymentCardSecret("", ContentGenerator.GenerateRandomPaymentCard(), kdfeIdentifier);
+			var addResultFailure2 = csc.AddPaymentCardSecret(password, ContentGeneratorSync.GenerateRandomPaymentCard(), "not existing");
+			var addResultFailure3 = csc.AddPaymentCardSecret("", ContentGeneratorSync.GenerateRandomPaymentCard(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -220,11 +222,11 @@ namespace Tests
 			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 
-			LoginInformation add1 = ContentGenerator.GenerateRandomLoginInformation();
-			LoginInformation add2 = ContentGenerator.GenerateRandomLoginInformation();
+			LoginInformation add1 = ContentGeneratorSync.GenerateRandomLoginInformation();
+			LoginInformation add2 = ContentGeneratorSync.GenerateRandomLoginInformation();
 
-			LoginInformation replace1 = ContentGenerator.GenerateRandomLoginInformation();
-			LoginInformation replace2 = ContentGenerator.GenerateRandomLoginInformation();
+			LoginInformation replace1 = ContentGeneratorSync.GenerateRandomLoginInformation();
+			LoginInformation replace2 = ContentGeneratorSync.GenerateRandomLoginInformation();
 			
 			// Act
 			var addResultSuccess1 = csc.AddLoginInformationSecret(password, add1, kdfeIdentifier);
@@ -234,8 +236,8 @@ namespace Tests
 			var replaceResultSuccess2 = csc.ReplaceLoginInformationSecret(1, kdfe.GeneratePasswordBytes(password), replace2, kdfeIdentifier);
 
 			var replaceResultFailure1 = csc.ReplaceLoginInformationSecret(0, password, null, kdfeIdentifier);
-			var replaceResultFailure2 = csc.ReplaceLoginInformationSecret(0, password, ContentGenerator.GenerateRandomLoginInformation(), "not existing");
-			var replaceResultFailure3 = csc.ReplaceLoginInformationSecret(0, "", ContentGenerator.GenerateRandomLoginInformation(), kdfeIdentifier);
+			var replaceResultFailure2 = csc.ReplaceLoginInformationSecret(0, password, ContentGeneratorSync.GenerateRandomLoginInformation(), "not existing");
+			var replaceResultFailure3 = csc.ReplaceLoginInformationSecret(0, "", ContentGeneratorSync.GenerateRandomLoginInformation(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplaceLoginInformationSecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplaceLoginInformationSecret(2, password, replace1, kdfeIdentifier);
 
@@ -285,11 +287,11 @@ namespace Tests
 			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 
-			Note add1 = ContentGenerator.GenerateRandomNote();
-			Note add2 = ContentGenerator.GenerateRandomNote();
+			Note add1 = ContentGeneratorSync.GenerateRandomNote();
+			Note add2 = ContentGeneratorSync.GenerateRandomNote();
 
-			Note replace1 = ContentGenerator.GenerateRandomNote();
-			Note replace2 = ContentGenerator.GenerateRandomNote();
+			Note replace1 = ContentGeneratorSync.GenerateRandomNote();
+			Note replace2 = ContentGeneratorSync.GenerateRandomNote();
 			
 			// Act
 			var addResultSuccess1 = csc.AddNoteSecret(password, add1, kdfeIdentifier);
@@ -299,8 +301,8 @@ namespace Tests
 			var replaceResultSuccess2 = csc.ReplaceNoteSecret(1, kdfe.GeneratePasswordBytes(password), replace2, kdfeIdentifier);
 
 			var replaceResultFailure1 = csc.ReplaceNoteSecret(0, password, null, kdfeIdentifier);
-			var replaceResultFailure2 = csc.ReplaceNoteSecret(0, password, ContentGenerator.GenerateRandomNote(), "not existing");
-			var replaceResultFailure3 = csc.ReplaceNoteSecret(0, "", ContentGenerator.GenerateRandomNote(), kdfeIdentifier);
+			var replaceResultFailure2 = csc.ReplaceNoteSecret(0, password, ContentGeneratorSync.GenerateRandomNote(), "not existing");
+			var replaceResultFailure3 = csc.ReplaceNoteSecret(0, "", ContentGeneratorSync.GenerateRandomNote(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplaceNoteSecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplaceNoteSecret(2, password, replace1, kdfeIdentifier);
 
@@ -351,11 +353,11 @@ namespace Tests
 			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 
-			FileEntry add1 = ContentGenerator.GenerateRandomFileEntry();
-			FileEntry add2 = ContentGenerator.GenerateRandomFileEntry();
+			FileEntry add1 = ContentGeneratorSync.GenerateRandomFileEntry();
+			FileEntry add2 = ContentGeneratorSync.GenerateRandomFileEntry();
 
-			FileEntry replace1 = ContentGenerator.GenerateRandomFileEntry();
-			FileEntry replace2 = ContentGenerator.GenerateRandomFileEntry();
+			FileEntry replace1 = ContentGeneratorSync.GenerateRandomFileEntry();
+			FileEntry replace2 = ContentGeneratorSync.GenerateRandomFileEntry();
 			
 			// Act
 			var addResultSuccess1 = csc.AddFileEntrySecret(password, add1, kdfeIdentifier);
@@ -365,8 +367,8 @@ namespace Tests
 			var replaceResultSuccess2 = csc.ReplaceFileEntrySecret(1, kdfe.GeneratePasswordBytes(password), replace2, kdfeIdentifier, SymmetricEncryptionAlgorithm.ChaCha20);
 
 			var replaceResultFailure1 = csc.ReplaceFileEntrySecret(0, password, null, kdfeIdentifier);
-			var replaceResultFailure2 = csc.ReplaceFileEntrySecret(0, password, ContentGenerator.GenerateRandomFileEntry(), "not existing");
-			var replaceResultFailure3 = csc.ReplaceFileEntrySecret(0, "", ContentGenerator.GenerateRandomFileEntry(), kdfeIdentifier);
+			var replaceResultFailure2 = csc.ReplaceFileEntrySecret(0, password, ContentGeneratorSync.GenerateRandomFileEntry(), "not existing");
+			var replaceResultFailure3 = csc.ReplaceFileEntrySecret(0, "", ContentGeneratorSync.GenerateRandomFileEntry(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplaceFileEntrySecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplaceFileEntrySecret(2, password, replace1, kdfeIdentifier);
 
@@ -411,11 +413,11 @@ namespace Tests
 			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 
-			Contact add1 = ContentGenerator.GenerateRandomContact();
-			Contact add2 = ContentGenerator.GenerateRandomContact();
+			Contact add1 = ContentGeneratorSync.GenerateRandomContact();
+			Contact add2 = ContentGeneratorSync.GenerateRandomContact();
 
-			Contact replace1 = ContentGenerator.GenerateRandomContact();
-			Contact replace2 = ContentGenerator.GenerateRandomContact();
+			Contact replace1 = ContentGeneratorSync.GenerateRandomContact();
+			Contact replace2 = ContentGeneratorSync.GenerateRandomContact();
 			
 			// Act
 			var addResultSuccess1 = csc.AddContactSecret(password, add1, kdfeIdentifier);
@@ -425,8 +427,8 @@ namespace Tests
 			var replaceResultSuccess2 = csc.ReplaceContactSecret(1, kdfe.GeneratePasswordBytes(password), replace2, kdfeIdentifier, SymmetricEncryptionAlgorithm.ChaCha20);
 
 			var replaceResultFailure1 = csc.ReplaceContactSecret(0, password, null, kdfeIdentifier);
-			var replaceResultFailure2 = csc.ReplaceContactSecret(0, password, ContentGenerator.GenerateRandomContact(), "not existing");
-			var replaceResultFailure3 = csc.ReplaceContactSecret(0, "", ContentGenerator.GenerateRandomContact(), kdfeIdentifier);
+			var replaceResultFailure2 = csc.ReplaceContactSecret(0, password, ContentGeneratorSync.GenerateRandomContact(), "not existing");
+			var replaceResultFailure3 = csc.ReplaceContactSecret(0, "", ContentGeneratorSync.GenerateRandomContact(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplaceContactSecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplaceContactSecret(2, password, replace1, kdfeIdentifier);
 
@@ -471,11 +473,11 @@ namespace Tests
 			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 
-			PaymentCard add1 = ContentGenerator.GenerateRandomPaymentCard();
-			PaymentCard add2 = ContentGenerator.GenerateRandomPaymentCard();
+			PaymentCard add1 = ContentGeneratorSync.GenerateRandomPaymentCard();
+			PaymentCard add2 = ContentGeneratorSync.GenerateRandomPaymentCard();
 
-			PaymentCard replace1 = ContentGenerator.GenerateRandomPaymentCard();
-			PaymentCard replace2 = ContentGenerator.GenerateRandomPaymentCard();
+			PaymentCard replace1 = ContentGeneratorSync.GenerateRandomPaymentCard();
+			PaymentCard replace2 = ContentGeneratorSync.GenerateRandomPaymentCard();
 			
 			// Act
 			var addResultSuccess1 = csc.AddPaymentCardSecret(password, add1, kdfeIdentifier);
@@ -485,8 +487,8 @@ namespace Tests
 			var replaceResultSuccess2 = csc.ReplacePaymentCardSecret(1, kdfe.GeneratePasswordBytes(password), replace2, kdfeIdentifier, SymmetricEncryptionAlgorithm.ChaCha20);
 
 			var replaceResultFailure1 = csc.ReplacePaymentCardSecret(0, password, null, kdfeIdentifier);
-			var replaceResultFailure2 = csc.ReplacePaymentCardSecret(0, password, ContentGenerator.GenerateRandomPaymentCard(), "not existing");
-			var replaceResultFailure3 = csc.ReplacePaymentCardSecret(0, "", ContentGenerator.GenerateRandomPaymentCard(), kdfeIdentifier);
+			var replaceResultFailure2 = csc.ReplacePaymentCardSecret(0, password, ContentGeneratorSync.GenerateRandomPaymentCard(), "not existing");
+			var replaceResultFailure3 = csc.ReplacePaymentCardSecret(0, "", ContentGeneratorSync.GenerateRandomPaymentCard(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplacePaymentCardSecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplacePaymentCardSecret(2, password, replace1, kdfeIdentifier);
 
@@ -522,3 +524,5 @@ namespace Tests
 		}
 	}
 }
+
+#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM

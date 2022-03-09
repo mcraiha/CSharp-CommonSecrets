@@ -1,3 +1,5 @@
+#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 using CSCommonSecrets;
 using System;
 using System.IO;
@@ -6,7 +8,7 @@ using System.Text;
 namespace Tests
 {
 	// Simple class for generating content
-	public static class ContentGenerator
+	public static class ContentGeneratorSync
 	{
 		private static readonly Random rng = new Random(Seed: 1337);
 		private static readonly object rngLock = new object();
@@ -149,3 +151,5 @@ namespace Tests
 		}
 	}
 }
+
+#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM

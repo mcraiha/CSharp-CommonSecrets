@@ -1,3 +1,5 @@
+#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 using NUnit.Framework;
 using CSCommonSecrets;
 using System;
@@ -319,3 +321,5 @@ namespace Tests
 		}
 	}
 }
+
+#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM

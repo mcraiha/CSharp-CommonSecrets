@@ -1,3 +1,5 @@
+#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 using System;
 using System.Threading;
 using NUnit.Framework;
@@ -305,3 +307,5 @@ namespace Tests
 		}
 	}
 }
+
+#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM

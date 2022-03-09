@@ -1,3 +1,5 @@
+#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 using NUnit.Framework;
 using CSCommonSecrets;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
@@ -7,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Tests
 {
-	public class KeyDerivationFunctionEntryTests
+	public class KeyDerivationFunctionEntrySyncTests
 	{
 		[SetUp]
 		public void Setup()
@@ -135,3 +137,5 @@ namespace Tests
 		}
 	}
 }
+
+#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM

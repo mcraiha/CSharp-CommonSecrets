@@ -1,6 +1,10 @@
 using System;
 using CSharp_AUDALF;
 
+#if ASYNC_WITH_CUSTOM
+using System.Threading.Tasks;
+#endif
+
 namespace CSCommonSecrets
 {
 	/// <summary>
@@ -46,6 +50,34 @@ namespace CSCommonSecrets
 			return (valid: true, exception: null);
 		}
 
+		#if ASYNC_WITH_CUSTOM
+
+		public static async Task<object> GetSingleValueAsync(byte[] audalfData, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, string key, DeserializationSettings deserializationSettings, ISecurityAsyncFunctions securityFunctions)
+		{
+			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
+
+			if (!passwordCheck.valid)
+			{
+				throw passwordCheck.exception;
+			}
+
+			// Try to decrypt the binary
+			byte[] decryptedAUDALF = await algorithm.DecryptBytesAsync(audalfData, derivedPassword, securityFunctions);
+
+			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
+
+			if (!audalfCheck.valid)
+			{
+				throw audalfCheck.exception;
+			}
+
+			return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
+		}
+
+		#elif WITH_CUSTOM
+
+		#else // regular mode
+
 		/// <summary>
 		/// Get single value from encrypted audalf dictionary
 		/// </summary>
@@ -76,5 +108,7 @@ namespace CSCommonSecrets
 
 			return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
 		}
+
+		#endif
 	}
 }

@@ -1,5 +1,8 @@
 using System.Text;
 using System.Security.Cryptography;
+#if ASYNC_WITH_CUSTOM
+using System.Threading.Tasks;
+#endif
 
 namespace CSCommonSecrets
 {
@@ -8,6 +11,18 @@ namespace CSCommonSecrets
 	/// </summary>
 	public static class ChecksumHelper
 	{
+		#if ASYNC_WITH_CUSTOM
+
+		public static async Task<string> CalculateHexChecksumAsync(ISecurityAsyncFunctions securityFunctions, params byte[][] arrays)
+		{
+			byte[] joinedArray = JoinByteArrays(arrays);
+			return ByteArrayChecksumToHexString(await securityFunctions.SHA256_Hash(joinedArray));
+		}
+
+		#elif WITH_CUSTOM
+
+		#else // regular mode
+
 		/// <summary>
 		/// Calculate SHA256 checksum from given byte arrays
 		/// </summary>
@@ -23,6 +38,8 @@ namespace CSCommonSecrets
 				return ByteArrayChecksumToHexString(hash);
 			}
 		}
+
+		#endif
 
 		/// <summary>
 		/// Join byte arrays to single byte array

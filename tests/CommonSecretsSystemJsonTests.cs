@@ -1,3 +1,5 @@
+#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
 using NUnit.Framework;
 using CSCommonSecrets;
 using System;
@@ -139,52 +141,52 @@ namespace Tests
 
 			for (int i = 0; i < loginsAmount; i++)
 			{
-				csc.loginInformations.Add(ContentGenerator.GenerateRandomLoginInformation());
+				csc.loginInformations.Add(ContentGeneratorSync.GenerateRandomLoginInformation());
 			}
 
 			for (int i = 0; i < loginsSecretAmount; i++)
 			{
-				csc.loginInformationSecrets.Add(new LoginInformationSecret(ContentGenerator.GenerateRandomLoginInformation(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+				csc.loginInformationSecrets.Add(new LoginInformationSecret(ContentGeneratorSync.GenerateRandomLoginInformation(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			for (int i = 0; i < notesAmount; i++)
 			{
-				csc.notes.Add(ContentGenerator.GenerateRandomNote());
+				csc.notes.Add(ContentGeneratorSync.GenerateRandomNote());
 			}
 
 			for (int i = 0; i < notesSecretAmount; i++)
 			{
-				csc.noteSecrets.Add(new NoteSecret(ContentGenerator.GenerateRandomNote(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+				csc.noteSecrets.Add(new NoteSecret(ContentGeneratorSync.GenerateRandomNote(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			for (int i = 0; i < filesAmount; i++)
 			{
-				csc.files.Add(ContentGenerator.GenerateRandomFileEntry());
+				csc.files.Add(ContentGeneratorSync.GenerateRandomFileEntry());
 			}
 
 			for (int i = 0; i < filesSecretAmount; i++)
 			{
-				csc.fileSecrets.Add(new FileEntrySecret(ContentGenerator.GenerateRandomFileEntry(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+				csc.fileSecrets.Add(new FileEntrySecret(ContentGeneratorSync.GenerateRandomFileEntry(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			for (int i = 0; i < contactAmount; i++)
 			{
-				csc.contacts.Add(ContentGenerator.GenerateRandomContact());
+				csc.contacts.Add(ContentGeneratorSync.GenerateRandomContact());
 			}
 
 			for (int i = 0; i < contactSecretAmount; i++)
 			{
-				csc.contactSecrets.Add(new ContactSecret(ContentGenerator.GenerateRandomContact(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+				csc.contactSecrets.Add(new ContactSecret(ContentGeneratorSync.GenerateRandomContact(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			for (int i = 0; i < paymentAmount; i++)
 			{
-				csc.paymentCards.Add(ContentGenerator.GenerateRandomPaymentCard());
+				csc.paymentCards.Add(ContentGeneratorSync.GenerateRandomPaymentCard());
 			}
 
 			for (int i = 0; i < paymentSecretAmount; i++)
 			{
-				csc.paymentCardSecrets.Add(new PaymentCardSecret(ContentGenerator.GenerateRandomPaymentCard(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+				csc.paymentCardSecrets.Add(new PaymentCardSecret(ContentGeneratorSync.GenerateRandomPaymentCard(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			string json = JsonSerializer.Serialize(csc, serializerOptions);
@@ -272,3 +274,5 @@ namespace Tests
 		}
 	}
 }
+
+#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
