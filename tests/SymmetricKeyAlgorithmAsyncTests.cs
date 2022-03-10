@@ -1,4 +1,5 @@
 #if ASYNC_WITH_CUSTOM
+
 using NUnit.Framework;
 using CSCommonSecrets;
 using CS_AES_CTR;
@@ -21,44 +22,6 @@ namespace Tests
 		/// 32 bytes equals 256 bits
 		/// </summary>
 		private const int validChaCha20KeyLength = 32;
-
-		public class SecurityAsyncFunctions : ISecurityAsyncFunctions
-		{
-			public async Task<byte[]> AES_Encrypt(byte[] bytesToEncrypt, byte[] key, byte[] initialCounter)
-			{
-				await Task.Delay(1);
-
-				byte[] returnArray = new byte[bytesToEncrypt.Length];
-				using (AES_CTR forEncrypting = new AES_CTR(key, initialCounter))
-				{
-					forEncrypting.EncryptBytes(returnArray, bytesToEncrypt, bytesToEncrypt.Length);
-				}
-
-				return returnArray;
-			}
-
-			public async Task<byte[]> SHA256_Hash(byte[] bytesToHash)
-			{
-				await Task.Delay(1);
-
-				using (SHA256 mySHA256 = SHA256.Create())
-				{
-					return mySHA256.ComputeHash(bytesToHash);
-				}
-			}
-
-			private static System.Security.Cryptography.RandomNumberGenerator rng = System.Security.Cryptography.RandomNumberGenerator.Create();
-
-			public void GenerateSecureRandomBytes(byte[] byteArray)
-			{
-				rng.GetBytes(byteArray);
-			}
-
-			public void GenerateSecureRandomBytes(byte[] byteArray, int offset, int count)
-			{
-				rng.GetBytes(byteArray, offset, count);
-			}
-		}
 
 		[Test]
 		public async Task AES_CTR_AsyncTest()
