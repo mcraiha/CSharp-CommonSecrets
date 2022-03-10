@@ -105,16 +105,15 @@ namespace CSCommonSecrets
 		{
 			int iterationsToDo = suggestedMinIterationsCount;
 			byte[] salt = new byte[saltMinLengthInBytes];
-			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
-			{
-				// First add some iterations
-				byte[] fourBytes = new byte[4];
-				rngCsp.GetBytes(fourBytes);
-				iterationsToDo += (int)(BitConverter.ToUInt32(fourBytes, 0) % 4096);
+			
+			RandomNumberGenerator rng = RandomNumberGenerator.Create();
+			// First add some iterations
+			byte[] fourBytes = new byte[4];
+			rng.GetBytes(fourBytes);
+			iterationsToDo += (int)(BitConverter.ToUInt32(fourBytes, 0) % 4096);
 
-				// Then fill salt
-				rngCsp.GetBytes(salt);
-			}
+			// Then fill salt
+			rng.GetBytes(salt);
 
 			int neededBytes = 32;
 			return new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, salt, iterationsToDo, neededBytes, id);
@@ -129,16 +128,15 @@ namespace CSCommonSecrets
 		{
 			int iterationsToDo = suggestedMinIterationsCount;
 			byte[] salt = new byte[saltMinLengthInBytes];
-			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
-			{
-				// First add some iterations
-				byte[] fourBytes = new byte[4];
-				rngCsp.GetBytes(fourBytes);
-				iterationsToDo += (int)(BitConverter.ToUInt32(fourBytes, 0) % 4096);
+			
+			RandomNumberGenerator rng = RandomNumberGenerator.Create();
+			// First add some iterations
+			byte[] fourBytes = new byte[4];
+			rng.GetBytes(fourBytes);
+			iterationsToDo += (int)(BitConverter.ToUInt32(fourBytes, 0) % 4096);
 
-				// Then fill salt
-				rngCsp.GetBytes(salt);
-			}
+			// Then fill salt
+			rng.GetBytes(salt);
 
 			int neededBytes = 64;
 			return new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA512, salt, iterationsToDo, neededBytes, id);

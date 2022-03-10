@@ -79,10 +79,7 @@ namespace CSCommonSecrets
 		{
 			byte[] initialCounter = new byte[AES_CTR.allowedCounterLength];
 
-			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
-			{
-				rngCsp.GetBytes(initialCounter);
-			}
+			RandomNumberGenerator.Create().GetBytes(initialCounter);
 
 			return new SettingsAES_CTR(initialCounter); 
 		}
@@ -102,11 +99,10 @@ namespace CSCommonSecrets
 			byte[] nonce = new byte[ChaCha20.allowedNonceLength];
 			byte[] uintBytes = new byte[4];
 
-			using (RNGCryptoServiceProvider rngCsp = new RNGCryptoServiceProvider())
-			{
-				rngCsp.GetBytes(nonce, 0, 8);
-				rngCsp.GetBytes(uintBytes, 0, 3);
-			}
+			RandomNumberGenerator rng = RandomNumberGenerator.Create();
+
+			rng.GetBytes(nonce, 0, 8);
+			rng.GetBytes(uintBytes, 0, 3);
 
 			return new SettingsChaCha20(nonce, BitConverter.ToUInt32(uintBytes, 0)); 
 		}
