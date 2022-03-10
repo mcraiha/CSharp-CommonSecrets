@@ -14,11 +14,11 @@ namespace Tests
 	public class SecurityAsyncFunctions : ISecurityAsyncFunctions
 	{
 		/// <summary>
-		/// AES Encryption in async land
+		/// AES encryption in async land
 		/// </summary>
-		/// <param name="bytesToEncrypt"></param>
-		/// <param name="key"></param>
-		/// <param name="initialCounter"></param>
+		/// <param name="bytesToEncrypt">Bytes to encrypt</param>
+		/// <param name="key">Key</param>
+		/// <param name="initialCounter">Initial counter</param>
 		/// <returns></returns>
 		public async Task<byte[]> AES_Encrypt(byte[] bytesToEncrypt, byte[] key, byte[] initialCounter)
 		{
@@ -26,6 +26,27 @@ namespace Tests
 
 			byte[] returnArray = new byte[bytesToEncrypt.Length];
 			using (AES_CTR forEncrypting = new AES_CTR(key, initialCounter))
+			{
+				forEncrypting.EncryptBytes(returnArray, bytesToEncrypt, bytesToEncrypt.Length);
+			}
+
+			return returnArray;
+		}
+
+		/// <summary>
+		/// ChaCha20 encryption in async land
+		/// </summary>
+		/// <param name="bytesToEncrypt">Bytes to encrypt</param>
+		/// <param name="key">Key</param>
+		/// <param name="nonce">Nonce</param>
+		/// <param name="counter">Counter</param>
+		/// <returns></returns>
+		public async Task<byte[]> ChaCha20_Encrypt(byte[] bytesToEncrypt, byte[] key, byte[] nonce, uint counter)
+		{
+			await Task.Delay(1);
+
+			byte[] returnArray = new byte[bytesToEncrypt.Length];
+			using (ChaCha20 forEncrypting = new ChaCha20(key, nonce, counter))
 			{
 				forEncrypting.EncryptBytes(returnArray, bytesToEncrypt, bytesToEncrypt.Length);
 			}

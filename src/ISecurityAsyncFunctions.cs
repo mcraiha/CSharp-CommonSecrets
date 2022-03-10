@@ -10,6 +10,8 @@ public interface ISecurityAsyncFunctions
 {
 	Task<byte[]> AES_Encrypt(byte[] bytesToEncrypt, byte[] key, byte[] initialCounter);
 
+	Task<byte[]> ChaCha20_Encrypt(byte[] bytesToEncrypt, byte[] key, byte[] nonce, uint counter);
+
 	Task<byte[]> SHA256_Hash(byte[] bytesToHash);
 
 	void GenerateSecureRandomBytes(byte[] byteArray);

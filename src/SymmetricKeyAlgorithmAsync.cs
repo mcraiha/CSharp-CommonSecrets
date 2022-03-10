@@ -24,10 +24,7 @@ namespace CSCommonSecrets
 			}
 			else if (actualAlgorithm == SymmetricEncryptionAlgorithm.ChaCha20)
 			{
-				/*using (ChaCha20 forEncrypting = new ChaCha20(key, this.settingsChaCha20.nonce, settingsChaCha20.counter))
-				{
-					forEncrypting.EncryptBytes(returnArray, bytesToEncrypt, bytesToEncrypt.Length);
-				}*/
+				return await securityFunctions.ChaCha20_Encrypt(bytesToEncrypt, key, this.settingsChaCha20.nonce, this.settingsChaCha20.counter);
 			}
 			else
 			{
