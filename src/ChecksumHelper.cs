@@ -13,6 +13,12 @@ namespace CSCommonSecrets
 	{
 		#if ASYNC_WITH_CUSTOM
 
+		/// <summary>
+		/// Calculate SHA256 checksum from given byte arrays, async
+		/// </summary>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <param name="arrays">Byte arrays</param>
+		/// <returns>Uppercase hex string</returns>
 		public static async Task<string> CalculateHexChecksumAsync(ISecurityAsyncFunctions securityFunctions, params byte[][] arrays)
 		{
 			byte[] joinedArray = JoinByteArrays(arrays);

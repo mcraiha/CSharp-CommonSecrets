@@ -20,6 +20,7 @@ namespace CSCommonSecrets
 		/// Get FileEntry. Use this for situation where you want to convert secret -> non secret
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>FileEntry</returns>
 		public async Task<FileEntry> GetFileEntryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
