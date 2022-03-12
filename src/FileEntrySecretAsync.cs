@@ -39,6 +39,7 @@ namespace CSCommonSecrets
 		/// Get filename
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Filename as string</returns>
 		public async Task<string> GetFilenameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -49,6 +50,7 @@ namespace CSCommonSecrets
 		/// Get file content as byte array
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Content as byte array</returns>
 		public async Task<byte[]> GetFileContentAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -58,6 +60,8 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Get file content lenght in bytes
 		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Lenght in bytes</returns>
 		public async Task<long> GetFileContentLengthInBytesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -69,6 +73,7 @@ namespace CSCommonSecrets
 		/// Get file entry creation time
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>File entry creation time as DateTimeOffset</returns>
 		public async Task<DateTimeOffset> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -79,6 +84,7 @@ namespace CSCommonSecrets
 		/// Get file entry modification time
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>File entry modification time as DateTimeOffset</returns>
 		public async Task<DateTimeOffset> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
