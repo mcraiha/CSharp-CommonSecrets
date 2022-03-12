@@ -79,7 +79,7 @@ namespace CSCommonSecrets
 		{
 			KeyDerivationFunctionEntry keyDerivationFunctionEntry = new KeyDerivationFunctionEntry(prf, saltBytes, iterationsCount, howManyBytesAreWanted, id);
 			// Calculate new checksum
-			await keyDerivationFunctionEntry.CalculateAndUpdateChecksum(securityFunctions);
+			await keyDerivationFunctionEntry.CalculateAndUpdateChecksumAsync(securityFunctions);
 			return keyDerivationFunctionEntry;
 		}
 
@@ -98,15 +98,15 @@ namespace CSCommonSecrets
 
 		#region Checksum
 
-		private async Task<string> CalculateHexChecksum(ISecurityAsyncFunctions securityFunctions)
+		private async Task<string> CalculateHexChecksumAsync(ISecurityAsyncFunctions securityFunctions)
 		{
 			return await ChecksumHelper.CalculateHexChecksumAsync(securityFunctions, Encoding.UTF8.GetBytes(this.algorithm), Encoding.UTF8.GetBytes(this.pseudorandomFunction), this.salt,
 														BitConverter.GetBytes(this.iterations), BitConverter.GetBytes(this.derivedKeyLengthInBytes), this.keyIdentifier);
 		}
 
-		private async Task CalculateAndUpdateChecksum(ISecurityAsyncFunctions securityFunctions)
+		private async Task CalculateAndUpdateChecksumAsync(ISecurityAsyncFunctions securityFunctions)
 		{
-			this.checksum = await this.CalculateHexChecksum(securityFunctions);
+			this.checksum = await this.CalculateHexChecksumAsync(securityFunctions);
 		}
 
 		#endregion // Checksum
