@@ -37,7 +37,7 @@ namespace Tests
 		}
 
 		[Test]
-		public async Task ConstructorExceptionsASyncTest()
+		public void ConstructorExceptionsAsyncTest()
 		{
 			// Arrange
 			byte[] invalidSalt1 = null;
