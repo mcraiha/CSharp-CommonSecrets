@@ -3,6 +3,7 @@
 using CS_AES_CTR;
 using CSChaCha20;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 using System.Threading.Tasks;
 
@@ -52,6 +53,22 @@ namespace Tests
 			}
 
 			return returnArray;
+		}
+
+		/// <summary>
+		/// Performs key derivation using the PBKDF2 algorithm
+		/// </summary>
+		/// <param name="password">Password</param>
+		/// <param name="salt">Salt</param>
+		/// <param name="prf">Key derivation algorithm</param>
+		/// <param name="iterationCount">Iteration count</param>
+		/// <param name="numBytesRequested">Number of bytes requested</param>
+		/// <returns></returns>
+		public async Task<byte[]> Pbkdf2(string password, byte[] salt, Microsoft.AspNetCore.Cryptography.KeyDerivation.KeyDerivationPrf prf, int iterationCount, int numBytesRequested)
+		{
+			await Task.Delay(1);
+
+			return Microsoft.AspNetCore.Cryptography.KeyDerivation.KeyDerivation.Pbkdf2(password, salt, prf, iterationCount, numBytesRequested);
 		}
 
 		/// <summary>

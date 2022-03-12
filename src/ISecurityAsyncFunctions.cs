@@ -2,6 +2,7 @@
 
 #if ASYNC_WITH_CUSTOM
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 /// <summary>
 /// Interface for security related functions
@@ -26,6 +27,17 @@ public interface ISecurityAsyncFunctions
 	/// <param name="counter">Counter</param>
 	/// <returns></returns>
 	Task<byte[]> ChaCha20_Encrypt(byte[] bytesToEncrypt, byte[] key, byte[] nonce, uint counter);
+
+	/// <summary>
+	/// Password-Based Key Derivation Function 2, async
+	/// </summary>
+	/// <param name="password">Password as string</param>
+	/// <param name="salt">Salt</param>
+	/// <param name="prf">key derivation algorithm</param>
+	/// <param name="iterationCount">Iteration count</param>
+	/// <param name="numBytesRequested">Number of bytes requested</param>
+	/// <returns></returns>
+	Task<byte[]> Pbkdf2(string password, byte[] salt, Microsoft.AspNetCore.Cryptography.KeyDerivation.KeyDerivationPrf prf, int iterationCount, int numBytesRequested);
 
 	/// <summary>
 	/// Hash byte array with SHA256, async
