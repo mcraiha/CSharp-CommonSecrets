@@ -33,7 +33,7 @@ public interface ISecurityAsyncFunctions
 	/// </summary>
 	/// <param name="password">Password as string</param>
 	/// <param name="salt">Salt</param>
-	/// <param name="prf">key derivation algorithm</param>
+	/// <param name="prf">Key derivation algorithm</param>
 	/// <param name="iterationCount">Iteration count</param>
 	/// <param name="numBytesRequested">Number of bytes requested</param>
 	/// <returns></returns>
