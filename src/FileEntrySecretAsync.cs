@@ -14,6 +14,39 @@ namespace CSCommonSecrets
 	/// </summary>
 	public sealed partial class FileEntrySecret
 	{
+		public static async Task<FileEntrySecret> CreateFileEntryAsync(FileEntry fileEntry, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		{
+			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+			{
+				{ FileEntry.filenameKey, fileEntry.GetFilename() },
+				{ FileEntry.fileContentKey, fileEntry.GetFileContent() },
+				{ FileEntry.creationTimeKey, DateTimeOffset.FromUnixTimeSeconds(fileEntry.creationTime) },
+				{ FileEntry.modificationTimeKey, DateTimeOffset.FromUnixTimeSeconds(fileEntry.modificationTime) },
+			};
+
+			return await CreateFileEntryAsync(dictionaryForAUDALF, keyIdentifier, algorithm, derivedPassword, securityFunctions);
+		}
+
+		public static async Task<FileEntrySecret> CreateFileEntryAsync(Dictionary<string, object> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		{
+			FileEntrySecret fileEntrySecret = new FileEntrySecret();
+
+			fileEntrySecret.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
+
+			fileEntrySecret.algorithm = algorithm;
+
+			// Create AUDALF payload from dictionary
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(fileEntryAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+
+			// Encrypt the AUDALF payload with given algorithm
+			fileEntrySecret.audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions);
+
+			// Calculate new checksum
+			fileEntrySecret.CalculateAndUpdateChecksumAsync(securityFunctions);
+
+			return fileEntrySecret;
+		}
+
 		#region Common getters
 
 		/// <summary>
@@ -26,13 +59,12 @@ namespace CSCommonSecrets
 		{
 			Dictionary<string, object> dict = await this.GetFileEntryAsDictionaryAsync(derivedPassword, securityFunctions);
 
-			/*FileEntry returnValue = new FileEntry((string)dict[FileEntry.filenameKey], (byte[])dict[FileEntry.fileContentKey]);
+			FileEntry returnValue = await FileEntry.CreateFileEntryAsync((string)dict[FileEntry.filenameKey], (byte[])dict[FileEntry.fileContentKey], securityFunctions);
 
 			returnValue.creationTime = ((DateTimeOffset)dict[FileEntry.creationTimeKey]).ToUnixTimeSeconds();
 			returnValue.modificationTime = ((DateTimeOffset)dict[FileEntry.modificationTimeKey]).ToUnixTimeSeconds();
 
-			return returnValue;*/
-			return new FileEntry();
+			return returnValue;
 		}
 
 		/// <summary>
