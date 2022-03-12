@@ -14,6 +14,13 @@ namespace CSCommonSecrets
 	/// </summary>
 	public sealed partial class SymmetricKeyAlgorithm
 	{
+		/// <summary>
+		/// Encrypt given bytes with given key. Returns new array with encrypted bytes, async
+		/// </summary>
+		/// <param name="bytesToEncrypt">Byte array to encrypt</param>
+		/// <param name="key">Key</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>Encrypted bytes in new array</returns>
 		public async Task<byte[]> EncryptBytesAsync(byte[] bytesToEncrypt, byte[] key, ISecurityAsyncFunctions securityFunctions)
 		{
 			Enum.TryParse(this.algorithm, out SymmetricEncryptionAlgorithm actualAlgorithm);
@@ -34,6 +41,13 @@ namespace CSCommonSecrets
 			return null;
 		}
 
+		/// <summary>
+		/// Decrypt given bytes with given key. Returns new array with decrypted bytes, async
+		/// </summary>
+		/// <param name="bytesToDecrypt">Byte array to decrypt</param>
+		/// <param name="key">Key</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>Decrypted bytes in new array</returns>
 		public async Task<byte[]> DecryptBytesAsync(byte[] bytesToDecrypt, byte[] key, ISecurityAsyncFunctions securityFunctions)
 		{
 			return await this.EncryptBytesAsync(bytesToDecrypt, key, securityFunctions);
@@ -43,6 +57,7 @@ namespace CSCommonSecrets
 		/// Generate new SymmetricKeyAlgorithm, you should use this instead of constructor
 		/// </summary>
 		/// <param name="symmetricEncryptionAlgorithm">Wanted Symmetric encryption algorithm</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>SymmetricKeyAlgorithm</returns>
 		public static SymmetricKeyAlgorithm GenerateNew(SymmetricEncryptionAlgorithm symmetricEncryptionAlgorithm, ISecurityAsyncFunctions securityFunctions)
 		{
