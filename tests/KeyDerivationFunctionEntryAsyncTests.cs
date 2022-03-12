@@ -69,6 +69,26 @@ namespace Tests
 			Assert.ThrowsAsync<ArgumentException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPrf.HMACSHA256, new byte[16], 100_000, 32, invalidId1, securityAsyncFunctions ));
 			Assert.ThrowsAsync<ArgumentException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPrf.HMACSHA256, new byte[16], 100_000, 32, invalidId2, securityAsyncFunctions ));
 		}
+
+		[Test]
+		public async Task ChecksumSurvivesRoundtrip()
+		{
+			// Arrange
+			byte[] salt = Encoding.UTF8.GetBytes("saltKEYbcTcXHCBxtjD");
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+			KeyDerivationFunctionEntry kdfe1 = await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPrf.HMACSHA512, salt, 100000, 64, "master_key", securityAsyncFunctions );
+
+			// Act
+			string checksum1 = kdfe1.GetChecksumAsHex();
+
+			string json = JsonConvert.SerializeObject(kdfe1, Formatting.Indented);
+
+			KeyDerivationFunctionEntry kdfe2 = JsonConvert.DeserializeObject<KeyDerivationFunctionEntry>(json);
+
+			// Assert
+			Assert.AreEqual(64, checksum1.Length);
+			Assert.AreEqual(checksum1, kdfe2.GetChecksumAsHex());
+		}
 	}
 }
 
