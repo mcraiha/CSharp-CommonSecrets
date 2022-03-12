@@ -54,6 +54,8 @@ namespace CSCommonSecrets
 			this.checksum = copyThis.checksum;
 		}
 
+		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
+
         private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
 		{
 			wantedDateTimeType = typeof(DateTimeOffset)

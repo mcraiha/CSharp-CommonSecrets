@@ -43,10 +43,6 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
-		
-
-		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
-
 		/// <summary>
 		/// Constructor for custom dictionary, use this only if you know what you are doing
 		/// </summary>
