@@ -87,6 +87,7 @@ namespace CSCommonSecrets
 		/// Generate derived password
 		/// </summary>
 		/// <param name="regularPassword">"Normal" plaintext password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns></returns>
 		public byte[] GeneratePasswordBytes(string regularPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -117,6 +118,7 @@ namespace CSCommonSecrets
 		/// Create HMACSHA256 based KeyDerivationFunctionEntry with random salt, async
 		/// </summary>
 		/// <param name="id">Key identifier of this entry</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>KeyDerivationFunctionEntry</returns>
 		public static async Task<KeyDerivationFunctionEntry> CreateHMACSHA256KeyDerivationFunctionEntry(string id, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -139,6 +141,7 @@ namespace CSCommonSecrets
 		/// Create HMACSHA512 based KeyDerivationFunctionEntry with random salt, async
 		/// </summary>
 		/// <param name="id">Key identifier of this entry</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>KeyDerivationFunctionEntry</returns>
 		public static async Task<KeyDerivationFunctionEntry> CreateHMACSHA512KeyDerivationFunctionEntry(string id, ISecurityAsyncFunctions securityFunctions)
 		{
