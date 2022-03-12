@@ -52,6 +52,16 @@ namespace CSCommonSecrets
 
 		#if ASYNC_WITH_CUSTOM
 
+		/// <summary>
+		/// Get single value from encrypted audalf dictionary, async
+		/// </summary>
+		/// <param name="audalfData">Encrypted AUDALF data</param>
+		/// <param name="algorithm">SymmetricKeyAlgorithm to use</param>
+		/// <param name="derivedPassword">Derived password as byte array</param>
+		/// <param name="key">Dictionary key</param>
+		/// <param name="deserializationSettings">Deserialization settings</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>Object containing the data</returns>
 		public static async Task<object> GetSingleValueAsync(byte[] audalfData, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, string key, DeserializationSettings deserializationSettings, ISecurityAsyncFunctions securityFunctions)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
