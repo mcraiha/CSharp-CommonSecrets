@@ -84,16 +84,16 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Generate derived password
+		/// Generate derived password, async
 		/// </summary>
 		/// <param name="regularPassword">"Normal" plaintext password</param>
 		/// <param name="securityFunctions">Security functions</param>
-		/// <returns></returns>
-		public byte[] GeneratePasswordBytes(string regularPassword, ISecurityAsyncFunctions securityFunctions)
+		/// <returns>Derived password</returns>
+		public async Task<byte[]> GeneratePasswordBytesAsync(string regularPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			Enum.TryParse(this.pseudorandomFunction, out KeyDerivationPrf keyDerivationPrf);
 
-			return KeyDerivation.Pbkdf2(regularPassword, this.salt, keyDerivationPrf, this.iterations, this.derivedKeyLengthInBytes);
+			return await securityFunctions.Pbkdf2(regularPassword, this.salt, keyDerivationPrf, this.iterations, this.derivedKeyLengthInBytes);
 		}
 
 		#region Checksum
@@ -120,7 +120,7 @@ namespace CSCommonSecrets
 		/// <param name="id">Key identifier of this entry</param>
 		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>KeyDerivationFunctionEntry</returns>
-		public static async Task<KeyDerivationFunctionEntry> CreateHMACSHA256KeyDerivationFunctionEntry(string id, ISecurityAsyncFunctions securityFunctions)
+		public static async Task<KeyDerivationFunctionEntry> CreateHMACSHA256KeyDerivationFunctionEntryAsync(string id, ISecurityAsyncFunctions securityFunctions)
 		{
 			int iterationsToDo = suggestedMinIterationsCount;
 			byte[] salt = new byte[saltMinLengthInBytes];
@@ -143,7 +143,7 @@ namespace CSCommonSecrets
 		/// <param name="id">Key identifier of this entry</param>
 		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>KeyDerivationFunctionEntry</returns>
-		public static async Task<KeyDerivationFunctionEntry> CreateHMACSHA512KeyDerivationFunctionEntry(string id, ISecurityAsyncFunctions securityFunctions)
+		public static async Task<KeyDerivationFunctionEntry> CreateHMACSHA512KeyDerivationFunctionEntryAsync(string id, ISecurityAsyncFunctions securityFunctions)
 		{
 			int iterationsToDo = suggestedMinIterationsCount;
 			byte[] salt = new byte[saltMinLengthInBytes];
