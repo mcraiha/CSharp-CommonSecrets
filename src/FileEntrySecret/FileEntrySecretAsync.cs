@@ -210,6 +210,18 @@ namespace CSCommonSecrets
 			return await this.GenericSet(FileEntry.filenameKey, newFilename, DateTimeOffset.UtcNow, derivedPassword, securityFunctions);
 		}
 
+		/// <summary>
+		/// Set file content, async
+		/// </summary>
+		/// <param name="newFileContent">New file content</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>True if set was success; False otherwise</returns>
+		public async Task<bool> SetFileContentAsync(byte[] newFileContent, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		{
+			return await this.GenericSet(FileEntry.fileContentKey, newFileContent, DateTimeOffset.UtcNow, derivedPassword, securityFunctions);
+		}
+
 		private async Task<bool> GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			try 

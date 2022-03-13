@@ -304,28 +304,30 @@ namespace Tests
 			Assert.IsFalse(await fes.CanBeDecryptedWithDerivedPasswordAsync(new byte[] {}, securityAsyncFunctions));
 			Assert.IsFalse(await fes.CanBeDecryptedWithDerivedPasswordAsync(derivedKey2, securityAsyncFunctions));
 		}
-		/*
+		
 		[Test]
-		public void SetFilenameTest()
+		public async Task SetFilenameAsyncTest()
 		{
 			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR, securityAsyncFunctions);
 
 			string filename = "backup.zip";
 			byte[] fileContent = Encoding.UTF8.GetBytes("peace, happiness, freedom and something...");
 
-			FileEntry fileEntry = new FileEntry(filename, fileContent);
+			FileEntry fileEntry = await FileEntry.CreateFileEntryAsync(filename, fileContent, securityAsyncFunctions);
 
-			FileEntrySecret fes = new FileEntrySecret(fileEntry, "does not matter", ska, derivedKey);
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fileEntry, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			string filename1 = "another_backup.zip";
 
 			// Act
-			bool shouldBeTrue = fes.SetFilename(filename1, derivedKey);
-			string filename2 = fes.GetFilename(derivedKey);
-			bool shouldBeFalse = fes.SetFilename(filename1,  new byte[] { 1, 2, 3 });
+			bool shouldBeTrue = await fes.SetFilenameAsync(filename1, derivedKey, securityAsyncFunctions);
+			string filename2 = await fes.GetFilenameAsync(derivedKey, securityAsyncFunctions);
+			bool shouldBeFalse = await fes.SetFilenameAsync(filename1,  new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
@@ -335,26 +337,28 @@ namespace Tests
 		}
 
 		[Test]
-		public void SetFileContentTest()
+		public async Task SetFileContentAsyncTest()
 		{
 			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR, securityAsyncFunctions);
 
 			string filename = "backup.zip";
 			byte[] fileContent = Encoding.UTF8.GetBytes("peace, happiness, freedom and something...");
 
-			FileEntry fileEntry = new FileEntry(filename, fileContent);
+			FileEntry fileEntry = await FileEntry.CreateFileEntryAsync(filename, fileContent, securityAsyncFunctions);
 
-			FileEntrySecret fes = new FileEntrySecret(fileEntry, "does not matter", ska, derivedKey);
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fileEntry, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			byte[] fileContent1 = Encoding.UTF8.GetBytes("this is a wrong backup for this situation");
 
 			// Act
-			bool shouldBeTrue = fes.SetFileContent(fileContent1, derivedKey);
-			byte[] fileContent2 = fes.GetFileContent(derivedKey);
-			bool shouldBeFalse = fes.SetFileContent(fileContent1,  new byte[] { 1, 2, 3 });
+			bool shouldBeTrue = await fes.SetFileContentAsync(fileContent1, derivedKey, securityAsyncFunctions);
+			byte[] fileContent2 = await fes.GetFileContentAsync(derivedKey, securityAsyncFunctions);
+			bool shouldBeFalse = await fes.SetFileContentAsync(fileContent1, new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
@@ -363,9 +367,11 @@ namespace Tests
 		}
 
 		[Test]
-		public void ChecksumSurvivesRoundtrip()
+		public async Task ChecksumSurvivesRoundtripAsyncTest()
 		{
 			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
 			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
@@ -376,9 +382,9 @@ namespace Tests
 			string filename = "nice.pdf";
 			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+			FileEntry fe = await FileEntry.CreateFileEntryAsync(filename, fileContent, securityAsyncFunctions);
 
-			FileEntrySecret fes1 = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+			FileEntrySecret fes1 = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string checksum1 = fes1.GetChecksumAsHex();
@@ -391,8 +397,6 @@ namespace Tests
 			Assert.AreEqual(64, checksum1.Length);
 			Assert.AreEqual(checksum1, fes2.GetChecksumAsHex());
 		}
-
-		*/
 	}
 }
 
