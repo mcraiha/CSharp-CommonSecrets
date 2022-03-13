@@ -165,6 +165,34 @@ namespace CSCommonSecrets
 			return fileEntryAsDictionary;
 		}
 
+		/// <summary>
+		/// Can the content be decrypted with given derived password, async
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>True if can be; False otherwise</returns>
+		public async Task<bool> CanBeDecryptedWithDerivedPasswordAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		{
+			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
+
+			if (!passwordCheck.valid)
+			{
+				return false;
+			}
+
+			// Try to decrypt the binary
+			byte[] decryptedAUDALF = await algorithm.DecryptBytesAsync(this.audalfData, derivedPassword, securityFunctions);
+
+			var audalfCheck = Helpers.CheckAUDALFbytes(decryptedAUDALF);
+
+			if (!audalfCheck.valid)
+			{
+				return false;
+			}
+
+			return true;
+		}
+
 		#endregion // Common getters
 
 

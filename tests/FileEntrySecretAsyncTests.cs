@@ -273,10 +273,13 @@ namespace Tests
 			// Assert
 			Assert.AreEqual(keyIdentifier, fes.GetKeyIdentifier());
 		}
-		/*
+		
 		[Test]
-		public void CanBeDecryptedWithDerivedPassword()
+		public async Task CanBeDecryptedWithDerivedPasswordAsyncTest()
 		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] derivedKey1 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 16 };
 			byte[] derivedKey2 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 15 };
 			byte[] initialCounter = new byte[] { 0xa7, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x51, 0x95, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
@@ -290,18 +293,18 @@ namespace Tests
 			string filename = "nice.pdf";
 			byte[] fileContent = new byte[] { 1, 2, 3, 100, 222, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+			FileEntry fe = await FileEntry.CreateFileEntryAsync(filename, fileContent, securityAsyncFunctions);
 
 			// Act
-			FileEntrySecret fes = new FileEntrySecret(fe, keyIdentifier, skaAES_CTR, derivedKey1);
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, keyIdentifier, skaAES_CTR, derivedKey1, securityAsyncFunctions);
 
 			// Assert
-			Assert.IsTrue(fes.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(null));
-			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(new byte[] {}));
-			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(derivedKey2));
+			Assert.IsTrue(await fes.CanBeDecryptedWithDerivedPasswordAsync(derivedKey1, securityAsyncFunctions));
+			Assert.IsFalse(await fes.CanBeDecryptedWithDerivedPasswordAsync(null, securityAsyncFunctions));
+			Assert.IsFalse(await fes.CanBeDecryptedWithDerivedPasswordAsync(new byte[] {}, securityAsyncFunctions));
+			Assert.IsFalse(await fes.CanBeDecryptedWithDerivedPasswordAsync(derivedKey2, securityAsyncFunctions));
 		}
-
+		/*
 		[Test]
 		public void SetFilenameTest()
 		{
