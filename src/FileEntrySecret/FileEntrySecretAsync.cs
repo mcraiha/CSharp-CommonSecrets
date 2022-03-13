@@ -68,7 +68,7 @@ namespace CSCommonSecrets
 		#region Common getters
 
 		/// <summary>
-		/// Get FileEntry. Use this for situation where you want to convert secret -> non secret
+		/// Get FileEntry. Use this for situation where you want to convert secret -> non secret, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -86,7 +86,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get filename
+		/// Get filename, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -97,7 +97,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get file content as byte array
+		/// Get file content as byte array, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -108,7 +108,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get file content lenght in bytes
+		/// Get file content lenght in bytes, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -120,7 +120,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get file entry creation time
+		/// Get file entry creation time, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -131,7 +131,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get file entry modification time
+		/// Get file entry modification time, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
