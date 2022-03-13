@@ -162,11 +162,13 @@ namespace Tests
 			// Assert
 			CollectionAssert.AreEqual(fileContent, rtFileContent);
 		}
-		/*
+		
 		[Test]
-		public void GetFileContentLengthInBytes()
+		public async Task GetFileContentLengthInBytesAsyncTest()
 		{
 			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
 			byte[] initialCounter = new byte[] { 0x40, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0x38, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
@@ -177,17 +179,17 @@ namespace Tests
 			string filename = "nice232fwf.pdf";
 			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0, 4, 5, 6, 7, 8, 9, 33, 44, 55, 66, 77};
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+			FileEntry fe = await FileEntry.CreateFileEntryAsync(filename, fileContent, securityAsyncFunctions);
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			long fileContentLength = fes.GetFileContentLengthInBytes(derivedKey);
+			long fileContentLength = await fes.GetFileContentLengthInBytesAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreEqual(fileContent.LongLength, fileContentLength);
 		}
-
+		/*
 		[Test]
 		public void GetCreationTimeTest()
 		{
