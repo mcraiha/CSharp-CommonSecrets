@@ -79,11 +79,13 @@ namespace Tests
 			Assert.AreNotSame(fes.keyIdentifier, fesCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
 			Assert.AreEqual(fes.checksum, fesCopy.checksum);
 		}
-		/*
+		
 		[Test]
-		public void GetFileEntryTest()
+		public async Task GetFileEntryAsyncTest()
 		{
 			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
 			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
@@ -94,19 +96,19 @@ namespace Tests
 			string filename = "ni12ce.pdf";
 			byte[] fileContent = new byte[] { 1, 2, 32, 11, 2, byte.MaxValue, 0, 0, 2, 34, 45, 0, 0, 0, 0};
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+			FileEntry fe = await FileEntry.CreateFileEntryAsync(filename, fileContent, securityAsyncFunctions);
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			FileEntry feCopy = fes.GetFileEntry(derivedKey);
+			FileEntry feCopy = await fes.GetFileEntryAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(ComparisonHelper.AreFileEntriesEqual(fe, feCopy));
 			Assert.AreEqual(fe.creationTime, feCopy.creationTime);
 			Assert.AreEqual(fe.modificationTime, feCopy.modificationTime);
 		}
-
+		/*
 		[Test]
 		public void GetFilenameTest()
 		{
