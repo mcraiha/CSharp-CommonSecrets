@@ -170,6 +170,47 @@ namespace CSCommonSecrets
 
 		#region Common setters
 
+		/// <summary>
+		/// Set filename, async
+		/// </summary>
+		/// <param name="newFilename">New filename</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>True if set was success; False otherwise</returns>
+		public async Task<bool> SetFilenameAsync(string newFilename, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		{
+			return await this.GenericSet(FileEntry.filenameKey, newFilename, DateTimeOffset.UtcNow, derivedPassword, securityFunctions);
+		}
+
+		private async Task<bool> GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		{
+			try 
+			{
+				Dictionary<string, object> fileEntryAsDictionary = await this.GetFileEntryAsDictionaryAsync(derivedPassword, securityFunctions);
+				// Update wanted value
+				fileEntryAsDictionary[key] = value;
+				// Update modification time
+				fileEntryAsDictionary[FileEntry.modificationTimeKey] = modificationTime;
+
+				// Generate new algorithm since data has changed
+				this.algorithm = SymmetricKeyAlgorithm.GenerateNew(this.algorithm.GetSymmetricEncryptionAlgorithm(), securityFunctions);
+
+				// Create AUDALF payload from dictionary
+				byte[] serializedBytes = AUDALF_Serialize.Serialize(fileEntryAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+
+				// Encrypt the AUDALF payload with given algorithm
+				this.audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions);
+
+				// Calculate new checksum
+				await this.CalculateAndUpdateChecksumAsync(securityFunctions);
+
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
 
 		#endregion // Common setters
 

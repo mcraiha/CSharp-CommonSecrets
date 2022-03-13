@@ -216,11 +216,13 @@ namespace Tests
 			// Assert
 			Assert.AreEqual(fe.GetCreationTime(), fileEntryCreationTime);
 		}
-		/*
+		
 		[Test]
-		public void GetModificationTimeTest()
+		public async Task GetModificationTimeAsyncTest()
 		{
 			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
 			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
@@ -231,20 +233,20 @@ namespace Tests
 			string filename = "nice.pdf";
 			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+			FileEntry fe = await FileEntry.CreateFileEntryAsync(filename, fileContent, securityAsyncFunctions);
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			DateTimeOffset fileEntryModificationTime1 = fes.GetModificationTime(derivedKey);
+			DateTimeOffset fileEntryModificationTime1 = await fes.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 			Thread.Sleep(1100);
-			fes.SetFilename("much_nicer.pdf", derivedKey);
-			DateTimeOffset fileEntryModificationTime2 = fes.GetModificationTime(derivedKey);
+			await fes.SetFilenameAsync("much_nicer.pdf", derivedKey, securityAsyncFunctions);
+			DateTimeOffset fileEntryModificationTime2 = await fes.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.Greater(fileEntryModificationTime2, fileEntryModificationTime1);
 		}
-
+		/*
 		[Test]
 		public void GetKeyIdentifierTest()
 		{
