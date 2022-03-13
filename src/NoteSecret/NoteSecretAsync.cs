@@ -16,6 +16,12 @@ namespace CSCommonSecrets
 
 		#region Common getters
 
+		/// <summary>
+		/// Get note title, async
+		/// </summary>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>Note title</returns>
 		public async Task<string> GetNoteTitleAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Note.noteTitleKey, deserializationSettings, securityFunctions);

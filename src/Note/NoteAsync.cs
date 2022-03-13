@@ -67,6 +67,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="updatedNoteTitle">New title</param>
 		/// <param name="updatedNoteText">New text</param>
+		/// <param name="securityFunctions">Security functions</param>
 		public async Task UpdateNoteAsync(string updatedNoteTitle, string updatedNoteText, ISecurityAsyncFunctions securityFunctions)
 		{
 			await this.UpdateNoteAsync(updatedNoteTitle, updatedNoteText, DateTimeOffset.UtcNow, securityFunctions);
@@ -78,6 +79,7 @@ namespace CSCommonSecrets
 		/// <param name="updatedNoteTitle">New title</param>
 		/// <param name="updatedNoteText">New text</param>
 		/// <param name="modificationTime">Modification time</param>
+		/// <param name="securityFunctions">Security functions</param>
 		public async Task UpdateNoteAsync(string updatedNoteTitle, string updatedNoteText, DateTimeOffset modificationTime, ISecurityAsyncFunctions securityFunctions)
 		{
 			this.noteTitle = Encoding.UTF8.GetBytes(updatedNoteTitle);
@@ -89,6 +91,7 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Check if checksum matches content
 		/// </summary>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if matches; False otherwise</returns>
 		public async Task<bool> CheckIfChecksumMatchesContentAsync(ISecurityAsyncFunctions securityFunctions)
 		{
