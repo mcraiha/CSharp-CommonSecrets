@@ -14,6 +14,15 @@ namespace CSCommonSecrets
 	/// </summary>
 	public sealed partial class FileEntrySecret
 	{
+		/// <summary>
+		/// Create FileEntrySecret, async
+		/// </summary>
+		/// <param name="fileEntry">File entry</param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Key Algorithm</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>FileEntrySecret</returns>
 		public static async Task<FileEntrySecret> CreateFileEntrySecretAsync(FileEntry fileEntry, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
@@ -27,6 +36,15 @@ namespace CSCommonSecrets
 			return await CreateFileEntrySecretAsync(dictionaryForAUDALF, keyIdentifier, algorithm, derivedPassword, securityFunctions);
 		}
 
+		/// <summary>
+		/// Create FileEntrySecret, async
+		/// </summary>
+		/// <param name="fileEntryAsDictionary"></param>
+		/// <param name="keyIdentifier">Key identifier</param>
+		/// <param name="algorithm">Symmetric Key Algorithm</param>
+		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>FileEntrySecret</returns>
 		public static async Task<FileEntrySecret> CreateFileEntrySecretAsync(Dictionary<string, object> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			FileEntrySecret fileEntrySecret = new FileEntrySecret();
