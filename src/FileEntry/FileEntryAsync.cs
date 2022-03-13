@@ -13,32 +13,25 @@ namespace CSCommonSecrets
 	public sealed partial class FileEntry
 	{
 		/// <summary>
-		/// Default constructor for file entry, use <b>CreateFileEntryAsync</b> instead!
+		/// Create file entry, async
 		/// </summary>
 		/// <param name="newFilename">Filename</param>
 		/// <param name="newFileContent">File content</param>
-		private FileEntry(string newFilename, byte[] newFileContent, ISecurityAsyncFunctions securityFunctions) : this (newFilename, newFileContent, DateTimeOffset.UtcNow, securityFunctions)
-		{
-
-		}
-
-		/// <summary>
-		/// Constructor with creation time override, use <b>CreateFileEntryAsync</b> instead!
-		/// </summary>
-		/// <param name="newFilename">Filename</param>
-		/// <param name="newFileContent">File content</param>
-		/// <param name="time">Creation time</param>
-		private FileEntry(string newFilename, byte[] newFileContent, DateTimeOffset time, ISecurityAsyncFunctions securityFunctions)
-		{
-			this.creationTime = time.ToUnixTimeSeconds();
-			this.UpdateFileEntry(newFilename, newFileContent, time, securityFunctions);
-		}
-
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>FileEntry</returns>
 		public static async Task<FileEntry> CreateFileEntryAsync(string newFilename, byte[] newFileContent, ISecurityAsyncFunctions securityFunctions)
 		{
 			return await CreateFileEntryAsync(newFilename, newFileContent, DateTimeOffset.UtcNow, securityFunctions);
 		}
 
+		/// <summary>
+		/// Create file entry, async
+		/// </summary>
+		/// <param name="newFilename">Filename</param>
+		/// <param name="newFileContent">File content</param>
+		/// <param name="time">Creation time</param>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>FileEntry</returns>
 		public static async Task<FileEntry> CreateFileEntryAsync(string newFilename, byte[] newFileContent, DateTimeOffset time, ISecurityAsyncFunctions securityFunctions)
 		{
 			FileEntry fileEntry = new FileEntry();
@@ -52,6 +45,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="updatedFilename">Filename</param>
 		/// <param name="updatedFileContent">File content</param>
+		/// <param name="securityFunctions">Security functions</param>
 		public async Task UpdateFileEntry(string updatedFilename, byte[] updatedFileContent, ISecurityAsyncFunctions securityFunctions)
 		{
 			await this.UpdateFileEntry(updatedFilename, updatedFileContent, DateTimeOffset.UtcNow, securityFunctions);
@@ -63,6 +57,7 @@ namespace CSCommonSecrets
 		/// <param name="updatedFilename">Filename</param>
 		/// <param name="updatedFileContent">File content</param>
 		/// <param name="time">Modification time</param>
+		/// <param name="securityFunctions">Security functions</param>
 		public async Task UpdateFileEntry(string updatedFilename, byte[] updatedFileContent, DateTimeOffset time, ISecurityAsyncFunctions securityFunctions)
 		{
 			this.filename = Encoding.UTF8.GetBytes(updatedFilename);
