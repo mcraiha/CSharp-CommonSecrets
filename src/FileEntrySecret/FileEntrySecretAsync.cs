@@ -14,7 +14,7 @@ namespace CSCommonSecrets
 	/// </summary>
 	public sealed partial class FileEntrySecret
 	{
-		public static async Task<FileEntrySecret> CreateFileEntryAsync(FileEntry fileEntry, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		public static async Task<FileEntrySecret> CreateFileEntrySecretAsync(FileEntry fileEntry, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 			{
@@ -24,10 +24,10 @@ namespace CSCommonSecrets
 				{ FileEntry.modificationTimeKey, DateTimeOffset.FromUnixTimeSeconds(fileEntry.modificationTime) },
 			};
 
-			return await CreateFileEntryAsync(dictionaryForAUDALF, keyIdentifier, algorithm, derivedPassword, securityFunctions);
+			return await CreateFileEntrySecretAsync(dictionaryForAUDALF, keyIdentifier, algorithm, derivedPassword, securityFunctions);
 		}
 
-		public static async Task<FileEntrySecret> CreateFileEntryAsync(Dictionary<string, object> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		public static async Task<FileEntrySecret> CreateFileEntrySecretAsync(Dictionary<string, object> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			FileEntrySecret fileEntrySecret = new FileEntrySecret();
 
@@ -42,7 +42,7 @@ namespace CSCommonSecrets
 			fileEntrySecret.audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions);
 
 			// Calculate new checksum
-			fileEntrySecret.CalculateAndUpdateChecksumAsync(securityFunctions);
+			await fileEntrySecret.CalculateAndUpdateChecksumAsync(securityFunctions);
 
 			return fileEntrySecret;
 		}

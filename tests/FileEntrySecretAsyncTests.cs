@@ -38,7 +38,7 @@ namespace Tests
 				{ FileEntry.filenameKey, "filename.txt" }
 			};
 
-			FileEntrySecret fes = await FileEntrySecret.CreateFileEntryAsync(testDictionary, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(testDictionary, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 
@@ -46,11 +46,13 @@ namespace Tests
 			Assert.IsNotNull(fes);
 			Assert.IsNotNull(fes.audalfData);
 		}
-/*
+
 		[Test]
-		public void DeepCopyTest()
+		public async Task DeepCopyAsyncTest()
 		{
 			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 1, 82, 93, 102, 112, 120, 103, 104, 15, 16 };
 			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0x13, 0xaa, 0xf5, 0x36, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
@@ -61,13 +63,13 @@ namespace Tests
 			string filename = "nic2e.pdf";
 			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0, 23, 34, 33, 22, 222, 111 };
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+			FileEntry fe = await FileEntry.CreateFileEntryAsync(filename, fileContent, securityAsyncFunctions);
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			FileEntrySecret fesCopy = new FileEntrySecret(fes);
-			string filenameInCopy = fesCopy.GetFilename(derivedKey);
+			string filenameInCopy = await fesCopy.GetFilenameAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(filenameInCopy));
@@ -77,7 +79,7 @@ namespace Tests
 			Assert.AreNotSame(fes.keyIdentifier, fesCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
 			Assert.AreEqual(fes.checksum, fesCopy.checksum);
 		}
-
+		/*
 		[Test]
 		public void GetFileEntryTest()
 		{
