@@ -246,11 +246,13 @@ namespace Tests
 			// Assert
 			Assert.Greater(fileEntryModificationTime2, fileEntryModificationTime1);
 		}
-		/*
+		
 		[Test]
-		public void GetKeyIdentifierTest()
+		public async Task GetKeyIdentifierAsyncTest()
 		{
 			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 25, 138, 78, 83, 111, 110, 221, 18, 213, 104, 15, 16 };
 			byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0x13, 0xb5, 0x58, 0x59, 0x13, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
 
@@ -263,15 +265,15 @@ namespace Tests
 			string filename = "nice.pdf";
 			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+			FileEntry fe = await FileEntry.CreateFileEntryAsync(filename, fileContent, securityAsyncFunctions);
 
 			// Act
-			FileEntrySecret fes = new FileEntrySecret(fe, keyIdentifier, skaAES_CTR, derivedKey);
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, keyIdentifier, skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreEqual(keyIdentifier, fes.GetKeyIdentifier());
 		}
-
+		/*
 		[Test]
 		public void CanBeDecryptedWithDerivedPassword()
 		{
