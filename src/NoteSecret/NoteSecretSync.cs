@@ -237,15 +237,6 @@ namespace CSCommonSecrets
 
 		#region Checksum
 
-		/// <summary>
-		/// Get checksum as hex
-		/// </summary>
-		/// <returns>Hex string</returns>
-		public string GetChecksumAsHex()
-		{
-			return this.checksum;
-		}
-
 		private string CalculateHexChecksum()
 		{
 			return ChecksumHelper.CalculateHexChecksum(this.keyIdentifier, this.audalfData, algorithm.GetSettingsAsBytes());

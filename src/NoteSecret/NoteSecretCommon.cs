@@ -70,5 +70,13 @@ namespace CSCommonSecrets
 			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
 		}
 
+		/// <summary>
+		/// Get checksum as hex
+		/// </summary>
+		/// <returns>Hex string</returns>
+		public string GetChecksumAsHex()
+		{
+			return this.checksum;
+		}
 	}
 }
