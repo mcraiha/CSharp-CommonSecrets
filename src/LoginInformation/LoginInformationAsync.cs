@@ -65,6 +65,7 @@ namespace CSCommonSecrets
 		/// <param name="newIcon">Icon</param>
 		/// <param name="newCategory">Category</param>
 		/// <param name="newTags">Tags (as tab separated)</param>
+		/// <param name="securityFunctions">Security functions</param>
 		public static async Task<LoginInformation> CreateLoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, string newMFA,
 									byte[] newIcon, string newCategory, string newTags, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -85,6 +86,7 @@ namespace CSCommonSecrets
 		/// <param name="newCategory">Category</param>
 		/// <param name="newTags">Tags (as tab separated)</param>
 		/// <param name="time">Creation and modification timestamps</param>
+		/// <param name="securityFunctions">Security functions</param>
 		public static async Task<LoginInformation> CreateLoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, string newMFA, 
 									byte[] newIcon, string newCategory, string newTags, DateTimeOffset time, ISecurityAsyncFunctions securityFunctions)
 		{
