@@ -36,7 +36,7 @@ namespace CSCommonSecrets
 		{
 			FileEntry fileEntry = new FileEntry();
 			fileEntry.creationTime = time.ToUnixTimeSeconds();
-			await fileEntry.UpdateFileEntry(newFilename, newFileContent, time, securityFunctions);
+			await fileEntry.UpdateFileEntryAsync(newFilename, newFileContent, time, securityFunctions);
 			return fileEntry;
 		}
 
@@ -46,9 +46,9 @@ namespace CSCommonSecrets
 		/// <param name="updatedFilename">Filename</param>
 		/// <param name="updatedFileContent">File content</param>
 		/// <param name="securityFunctions">Security functions</param>
-		public async Task UpdateFileEntry(string updatedFilename, byte[] updatedFileContent, ISecurityAsyncFunctions securityFunctions)
+		public async Task UpdateFileEntryAsync(string updatedFilename, byte[] updatedFileContent, ISecurityAsyncFunctions securityFunctions)
 		{
-			await this.UpdateFileEntry(updatedFilename, updatedFileContent, DateTimeOffset.UtcNow, securityFunctions);
+			await this.UpdateFileEntryAsync(updatedFilename, updatedFileContent, DateTimeOffset.UtcNow, securityFunctions);
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace CSCommonSecrets
 		/// <param name="updatedFileContent">File content</param>
 		/// <param name="time">Modification time</param>
 		/// <param name="securityFunctions">Security functions</param>
-		public async Task UpdateFileEntry(string updatedFilename, byte[] updatedFileContent, DateTimeOffset time, ISecurityAsyncFunctions securityFunctions)
+		public async Task UpdateFileEntryAsync(string updatedFilename, byte[] updatedFileContent, DateTimeOffset time, ISecurityAsyncFunctions securityFunctions)
 		{
 			this.filename = Encoding.UTF8.GetBytes(updatedFilename);
 			this.fileContent = updatedFileContent;
