@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Tests
 {
-	public class FileEntryTests
+	public class FileEntrySyncTests
 	{
 		[SetUp]
 		public void Setup()
