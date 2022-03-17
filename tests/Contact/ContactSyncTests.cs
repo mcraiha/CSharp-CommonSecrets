@@ -236,13 +236,13 @@ namespace Tests
 
 			// Assert
 			Assert.AreNotSame(c1.firstName, c2.firstName);
-			CollectionAssert.AreEqual(c1.firstName, c2.firstName);
+			Assert.AreEqual(c1.firstName, c2.firstName);
 
 			Assert.AreNotSame(c1.middleName, c2.middleName);
-			CollectionAssert.AreEqual(c1.middleName, c2.middleName);
+			Assert.AreEqual(c1.middleName, c2.middleName);
 
 			Assert.AreNotSame(c1.lastName, c2.lastName);
-			CollectionAssert.AreEqual(c1.lastName, c2.lastName);
+			Assert.AreEqual(c1.lastName, c2.lastName);
 
 			Assert.AreEqual(c1.modificationTime, c2.modificationTime);
 			Assert.AreEqual(c1.creationTime, c2.creationTime);
