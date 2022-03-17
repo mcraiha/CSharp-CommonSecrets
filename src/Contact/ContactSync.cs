@@ -261,7 +261,7 @@ namespace CSCommonSecrets
 		/// Update emails and descriptions (both are tab separated)
 		/// </summary>
 		/// <param name="updatedEmails">Updated emails (tab separated)</param>
-		/// <param name="updatedEmailDescriptions">Updated email descriptions (tab separated</param>
+		/// <param name="updatedEmailDescriptions">Updated email descriptions (tab separated)</param>
 		public void UpdateEmailsAndDescriptions(string updatedEmails, string updatedEmailDescriptions)
 		{
 			this.emails = Encoding.UTF8.GetBytes(updatedEmails);
@@ -276,7 +276,7 @@ namespace CSCommonSecrets
 		/// Update emails and descriptions (both are arrays)
 		/// </summary>
 		/// <param name="updatedEmails">Updated emails (array)</param>
-		/// <param name="updatedEmailDescriptions">Updated email descriptions (array</param>
+		/// <param name="updatedEmailDescriptions">Updated email descriptions (array)</param>
 		public void UpdateEmailsAndDescriptions(string[] updatedEmails, string[] updatedEmailDescriptions)
 		{
 			this.emails = Encoding.UTF8.GetBytes(string.Join(separatorString, updatedEmails));
@@ -291,7 +291,7 @@ namespace CSCommonSecrets
 		/// Update phone numbers and descriptions (both are tab separated)
 		/// </summary>
 		/// <param name="updatedPhoneNumbers">Updated phone numbers (tab separated)</param>
-		/// <param name="updatedPhoneNumberDescriptions">Updated phone number descriptions (tab separated</param>
+		/// <param name="updatedPhoneNumberDescriptions">Updated phone number descriptions (tab separated)</param>
 		public void UpdatePhoneNumbersAndDescriptions(string updatedPhoneNumbers, string updatedPhoneNumberDescriptions)
 		{
 			this.phoneNumbers = Encoding.UTF8.GetBytes(updatedPhoneNumbers);
