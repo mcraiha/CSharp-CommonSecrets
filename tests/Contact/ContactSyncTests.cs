@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace Tests
 {
-	public class ContactTests
+	public class ContactSyncTests
 	{
 		[SetUp]
 		public void Setup()
