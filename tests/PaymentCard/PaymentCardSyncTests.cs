@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace Tests
 {
-	public class PaymentCardTests
+	public class PaymentCardSyncTests
 	{
 		[SetUp]
 		public void Setup()
