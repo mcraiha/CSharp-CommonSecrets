@@ -239,7 +239,7 @@ namespace Tests
 
 			// Act
 			DateTimeOffset fileEntryModificationTime1 = await fes.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
-			Thread.Sleep(1100);
+			await Task.Delay(1100);
 			await fes.SetFilenameAsync("much_nicer.pdf", derivedKey, securityAsyncFunctions);
 			DateTimeOffset fileEntryModificationTime2 = await fes.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 

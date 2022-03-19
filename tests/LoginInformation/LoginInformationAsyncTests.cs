@@ -47,7 +47,7 @@ namespace Tests
 
 			// Act
 			DateTimeOffset modificationTime1 = li.GetModificationTime();
-			Thread.Sleep(1100);
+			await Task.Delay(1100);
 			await li.UpdateUsernameAsync("dragon2", securityAsyncFunctions);
 			DateTimeOffset modificationTime2 = li.GetModificationTime();
 

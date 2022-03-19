@@ -185,7 +185,7 @@ namespace Tests
 			
 			// Act
 			DateTimeOffset modificationTime1 = await noteSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
-			Thread.Sleep(1100);
+			await Task.Delay(1100);
 			await noteSecret.SetNoteTitleAsync("1234567", derivedKey, securityAsyncFunctions);
 			DateTimeOffset modificationTime2 = await noteSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 
