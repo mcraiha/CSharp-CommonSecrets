@@ -75,6 +75,24 @@ namespace Tests
 		}
 
 		[Test]
+		public async Task ModificationTimeAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			Contact contact = await Contact.CreateContactAsync("first", "last", "middle", securityAsyncFunctions);
+
+			// Act
+			DateTimeOffset modificationTime1 = contact.GetModificationTime();
+			await Task.Delay(1100);
+			await contact.UpdateFirstNameAsync("dragon", securityAsyncFunctions);
+			DateTimeOffset modificationTime2 = contact.GetModificationTime();
+
+			// Assert
+			Assert.Greater(modificationTime2, modificationTime1);
+		}
+
+		[Test]
 		public async Task GetValuesAsyncTest()
 		{
 			// Arrange
