@@ -193,7 +193,7 @@ namespace CSCommonSecrets
 		/// <returns>True if set was success; False otherwise</returns>
 		public async Task<bool> SetNoteTitleAsync(string newNoteTitle, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
-			return await this.GenericSet(Note.noteTitleKey, newNoteTitle, DateTimeOffset.UtcNow, derivedPassword, securityFunctions);
+			return await this.GenericSetAsync(Note.noteTitleKey, newNoteTitle, DateTimeOffset.UtcNow, derivedPassword, securityFunctions);
 		}
 
 		/// <summary>
@@ -205,10 +205,10 @@ namespace CSCommonSecrets
 		/// <returns>True if set was success; False otherwise</returns>
 		public async Task<bool> SetNoteTextAsync(string newNoteText, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
-			return await this.GenericSet(Note.noteTextKey, newNoteText, DateTimeOffset.UtcNow, derivedPassword, securityFunctions);
+			return await this.GenericSetAsync(Note.noteTextKey, newNoteText, DateTimeOffset.UtcNow, derivedPassword, securityFunctions);
 		}
 
-		private async Task<bool> GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		private async Task<bool> GenericSetAsync(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			try 
 			{
