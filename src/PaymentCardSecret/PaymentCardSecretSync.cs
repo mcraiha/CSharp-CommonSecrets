@@ -200,11 +200,6 @@ namespace CSCommonSecrets
 			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
 		}
 
-		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
-		{
-			wantedDateTimeType = typeof(DateTimeOffset)
-		};
-
 		private Dictionary<string, object> GetPaymentCardAsDictionary(byte[] derivedPassword)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
@@ -385,15 +380,6 @@ namespace CSCommonSecrets
 
 
 		#region Checksum
-
-		/// <summary>
-		/// Get checksum as hex
-		/// </summary>
-		/// <returns>Hex string</returns>
-		public string GetChecksumAsHex()
-		{
-			return this.checksum;
-		}
 
 		private string CalculateHexChecksum()
 		{

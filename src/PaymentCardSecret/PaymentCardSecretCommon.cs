@@ -55,5 +55,19 @@ namespace CSCommonSecrets
 		}
 
 		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
+
+		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
+		{
+			wantedDateTimeType = typeof(DateTimeOffset)
+		};
+
+		/// <summary>
+		/// Get checksum as hex
+		/// </summary>
+		/// <returns>Hex string</returns>
+		public string GetChecksumAsHex()
+		{
+			return this.checksum;
+		}
 	}
 }
