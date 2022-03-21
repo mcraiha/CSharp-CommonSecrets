@@ -387,7 +387,7 @@ namespace Tests
 		}
 
 		[Test]
-		public void CanBeDecryptedWithDerivedPassword()
+		public void CanBeDecryptedWithDerivedPasswordTest()
 		{
 			byte[] derivedKey1 = new byte[16] { 111, 222, 31, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 16 };
 			byte[] derivedKey2 = new byte[16] { 111, 222, 31, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 15 };
