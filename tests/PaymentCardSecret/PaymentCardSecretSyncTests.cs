@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Tests
 {
-	public class PaymentCardSecretTests
+	public class PaymentCardSecretSyncTests
 	{
 		[SetUp]
 		public void Setup()
