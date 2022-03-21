@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Tests
 {
-	public class NoteSyncTests
+	public class NoteAsyncTests
 	{
 		[SetUp]
 		public void Setup()
@@ -70,7 +70,7 @@ namespace Tests
 		}
 		
 		[Test]
-		public async Task ChecksumChangesTest()
+		public async Task ChecksumChangesAsyncTest()
 		{
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
@@ -96,7 +96,7 @@ namespace Tests
 		}
 
 		[Test]
-		public async Task ShallowCopyTest()
+		public async Task ShallowCopyAsyncTest()
 		{
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
@@ -116,7 +116,7 @@ namespace Tests
 		}
 
 		[Test]
-		public async Task DeepCopyTest()
+		public async Task DeepCopyAsyncTest()
 		{
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
@@ -141,7 +141,7 @@ namespace Tests
 		}
 
 		[Test]
-		public async Task ChecksumSurvivesRoundtrip()
+		public async Task ChecksumSurvivesRoundtripAsyncTest()
 		{
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
