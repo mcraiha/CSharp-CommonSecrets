@@ -289,7 +289,7 @@ namespace Tests
 		}
 
 		[Test]
-		public void ChecksumSurvivesRoundtrip()
+		public void ChecksumSurvivesRoundtripTest()
 		{
 			// Arrange
 			LoginInformation li1 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13");

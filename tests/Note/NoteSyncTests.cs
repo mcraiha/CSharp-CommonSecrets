@@ -127,7 +127,7 @@ namespace Tests
 		}
 
 		[Test]
-		public void ChecksumSurvivesRoundtrip()
+		public void ChecksumSurvivesRoundtripTest()
 		{
 			// Arrange
 			Note note1 = new Note("Some topic here", "Some text here, yes.");

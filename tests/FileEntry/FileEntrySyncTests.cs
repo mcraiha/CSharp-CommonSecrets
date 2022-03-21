@@ -130,7 +130,7 @@ namespace Tests
 		}
 
 		[Test]
-		public void ChecksumSurvivesRoundtrip()
+		public void ChecksumSurvivesRoundtripTest()
 		{
 			// Arrange
 			FileEntry fe1 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));

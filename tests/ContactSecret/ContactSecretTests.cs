@@ -371,7 +371,7 @@ namespace Tests
 		}
 
 		[Test]
-		public void ChecksumSurvivesRoundtrip()
+		public void ChecksumSurvivesRoundtripTest()
 		{
 			// Arrange
 			byte[] derivedKey = new byte[16] { 56, 2, 3, 4, 55, 76, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };

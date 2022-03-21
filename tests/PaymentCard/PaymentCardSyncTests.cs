@@ -250,7 +250,7 @@ namespace Tests
 		}
 
 		[Test]
-		public void ChecksumSurvivesRoundtrip()
+		public void ChecksumSurvivesRoundtripTest()
 		{
 			// Arrange
 			PaymentCard pc1 = new PaymentCard("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here");

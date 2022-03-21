@@ -118,7 +118,7 @@ namespace Tests
 		}
 
 		[Test]
-		public void ChecksumSurvivesRoundtrip()
+		public void ChecksumSurvivesRoundtripTest()
 		{
 			// Arrange
 			byte[] salt = Encoding.UTF8.GetBytes("saltKEYbcTcXHCBxtjD");
