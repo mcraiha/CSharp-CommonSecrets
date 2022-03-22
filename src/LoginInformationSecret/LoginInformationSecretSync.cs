@@ -214,20 +214,6 @@ namespace CSCommonSecrets
 			return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.tagsKey, deserializationSettings);
 		}
 
-		/// <summary>
-		/// Get key identifer.
-		/// </summary>
-		/// <returns>Key identifier</returns>
-		public string GetKeyIdentifier()
-		{
-			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
-		}
-
-		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
-		{
-			wantedDateTimeType = typeof(DateTimeOffset)
-		};
-
 		private Dictionary<string, object> GetLoginInformationAsDictionary(byte[] derivedPassword)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
@@ -452,15 +438,6 @@ namespace CSCommonSecrets
 		#endregion // Common setters
 
 		#region Checksum
-
-		/// <summary>
-		/// Get checksum as hex
-		/// </summary>
-		/// <returns>Hex string</returns>
-		public string GetChecksumAsHex()
-		{
-			return this.checksum;
-		}
 
 		private string CalculateHexChecksum()
 		{
