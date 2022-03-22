@@ -63,25 +63,7 @@ namespace CSCommonSecrets
 			// Calculate new checksum
 			this.CalculateAndUpdateChecksum();
 		}
-
-		/// <summary>
-		/// Deep copy existing ContactSecret
-		/// </summary>
-		/// <param name="copyThis">Deep copy this</param>
-		public ContactSecret(ContactSecret copyThis)
-		{
-			this.keyIdentifier = new byte[copyThis.keyIdentifier.Length];
-			Buffer.BlockCopy(copyThis.keyIdentifier, 0, this.keyIdentifier, 0, copyThis.keyIdentifier.Length);
-
-			this.audalfData = new byte[copyThis.audalfData.Length];
-			Buffer.BlockCopy(copyThis.audalfData, 0, this.audalfData, 0, copyThis.audalfData.Length);
-
-			this.algorithm = new SymmetricKeyAlgorithm(copyThis.algorithm);
-			this.checksum = copyThis.checksum;
-		}
-
-		private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
-
+		
 		/// <summary>
 		/// Constructor for custom dictionary, use this only if you know what you are doing
 		/// </summary>
@@ -702,11 +684,6 @@ namespace CSCommonSecrets
 			}
 		}
 
-		private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
-		{
-			wantedDateTimeType = typeof(DateTimeOffset)
-		};
-
 		/// <summary>
 		/// Can the content be decrypted with given derived password
 		/// </summary>
@@ -737,15 +714,6 @@ namespace CSCommonSecrets
 		#endregion // Common setters
 
 		#region Checksum
-
-		/// <summary>
-		/// Get checksum as hex
-		/// </summary>
-		/// <returns>Hex string</returns>
-		public string GetChecksumAsHex()
-		{
-			return this.checksum;
-		}
 
 		private string CalculateHexChecksum()
 		{
