@@ -405,15 +405,6 @@ namespace CSCommonSecrets
 			return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.modificationTimeKey, deserializationSettings);
 		}
 
-		/// <summary>
-		/// Get key identifier
-		/// </summary>
-		/// <returns>Key identifier as string</returns>
-		public string GetKeyIdentifier()
-		{
-			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
-		}
-
 		#endregion // Common getters
 
 
