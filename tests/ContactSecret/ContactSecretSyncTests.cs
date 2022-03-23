@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Tests
 {
-	public class ContactSecretTests
+	public class ContactSecretSyncTests
 	{
 		[SetUp]
 		public void Setup()
