@@ -21,6 +21,7 @@ namespace CSCommonSecrets
 		/// <param name="keyIdentifier">Key identifier</param>
 		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		public static async Task<ContactSecret> CreateContactSecretAsync(Contact contact, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			ContactSecret contactSecret = new ContactSecret();
@@ -77,6 +78,7 @@ namespace CSCommonSecrets
 		/// <param name="keyIdentifier">Key identifier</param>
 		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		public static async Task<ContactSecret> CreateContactSecretAsync(Dictionary<string, object> contactAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			ContactSecret contactSecret = new ContactSecret();
@@ -127,6 +129,7 @@ namespace CSCommonSecrets
 		/// Get Contact. Use this for situation where you want to convert secret -> non secret
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact</returns>
 		public async Task<Contact> GetContactAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -169,6 +172,7 @@ namespace CSCommonSecrets
 		/// Get contact first name
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact first name as string</returns>
 		public async Task<string> GetFirstNameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -179,6 +183,7 @@ namespace CSCommonSecrets
 		/// Get contact last name
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact last name as string</returns>
 		public async Task<string> GetLastNameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -189,6 +194,7 @@ namespace CSCommonSecrets
 		/// Get contact middle name
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact middle name as string</returns>
 		public async Task<string> GetMiddleNameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -199,6 +205,7 @@ namespace CSCommonSecrets
 		/// Get contact name prefix
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact name prefix as string</returns>
 		public async Task<string> GetNamePrefixAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -209,6 +216,7 @@ namespace CSCommonSecrets
 		/// Get contact name suffix
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact name suffix as string</returns>
 		public async Task<string> GetNameSuffixAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -219,6 +227,7 @@ namespace CSCommonSecrets
 		/// Get contact nickname
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact nickname as string</returns>
 		public async Task<string> GetNicknameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -229,6 +238,7 @@ namespace CSCommonSecrets
 		/// Get contact company
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact company as string</returns>
 		public async Task<string> GetCompanyAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -239,6 +249,7 @@ namespace CSCommonSecrets
 		/// Get contact job title
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact job title as string</returns>
 		public async Task<string> GetJobTitleAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -249,6 +260,7 @@ namespace CSCommonSecrets
 		/// Get contact department
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact department as string</returns>
 		public async Task<string> GetDepartmentAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -259,6 +271,7 @@ namespace CSCommonSecrets
 		/// Get email addresses
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact email addresses as string array</returns>
 		public async Task<string[]> GetEmailsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -269,6 +282,7 @@ namespace CSCommonSecrets
 		/// Get email address descriptions
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact email address descriptions as string array</returns>
 		public async Task<string[]> GetEmailDescriptionsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -279,6 +293,7 @@ namespace CSCommonSecrets
 		/// Get phone numbers
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact phone numbers as string array</returns>
 		public async Task<string[]> GetPhoneNumbersAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -289,6 +304,7 @@ namespace CSCommonSecrets
 		/// Get phone numbers descriptions
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact phone numbers descriptions as string array</returns>
 		public async Task<string[]> GetPhoneNumberDescriptionsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -299,6 +315,7 @@ namespace CSCommonSecrets
 		/// Get country
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact country as string</returns>
 		public async Task<string> GetCountryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -309,6 +326,7 @@ namespace CSCommonSecrets
 		/// Get street address
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact street address as string</returns>
 		public async Task<string> GetStreetAddressAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -319,6 +337,7 @@ namespace CSCommonSecrets
 		/// Get street address additional 
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact street address additional  as string</returns>
 		public async Task<string> GetStreetAddressAdditionalAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -329,6 +348,7 @@ namespace CSCommonSecrets
 		/// Get postal code
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact postal code as string</returns>
 		public async Task<string> GetPostalCodeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -339,6 +359,7 @@ namespace CSCommonSecrets
 		/// Get city
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact city as string</returns>
 		public async Task<string> GetCityAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -349,6 +370,7 @@ namespace CSCommonSecrets
 		/// Get PO Box
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact PO Box as string</returns>
 		public async Task<string> GetPOBoxAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -359,6 +381,7 @@ namespace CSCommonSecrets
 		/// Get birthday
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact birthday as string</returns>
 		public async Task<string> GetBirthdayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -369,6 +392,7 @@ namespace CSCommonSecrets
 		/// Get websites
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact websites as string array</returns>
 		public async Task<string[]> GetWebsitesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -379,7 +403,8 @@ namespace CSCommonSecrets
 		/// Get relationship 
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
-		/// <returns>Contact relationship  as string</returns>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>Contact relationship as string</returns>
 		public async Task<string> GetRelationshipAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.relationshipKey, deserializationSettings, securityFunctions);
@@ -389,7 +414,8 @@ namespace CSCommonSecrets
 		/// Get notes 
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
-		/// <returns>Contact notes  as string</returns>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>Contact notes as string</returns>
 		public async Task<string> GetNotesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.notesKey, deserializationSettings, securityFunctions);
@@ -399,6 +425,7 @@ namespace CSCommonSecrets
 		/// Get contact creation time
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact creation time as DateTimeOffset</returns>
 		public async Task<DateTimeOffset> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -409,6 +436,7 @@ namespace CSCommonSecrets
 		/// Get contact modification time
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact modification time as DateTimeOffset</returns>
 		public async Task<DateTimeOffset> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -427,6 +455,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newFirstName">New first name</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetFirstNameAsync(string newFirstName, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -438,6 +467,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newLastName">New last name</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetLastNameAsync(string newLastName, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -449,6 +479,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newMiddleName">New middle name</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetMiddleNameAsync(string newMiddleName, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -460,6 +491,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newNamePrefix">New name prefix</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetNamePrefixAsync(string newNamePrefix, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -471,6 +503,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newNameSuffix">New name suffix</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetNameSuffixAsync(string newNameSuffix, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -482,6 +515,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newNickname">New nickname</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetNicknameAsync(string newNickname, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -493,6 +527,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newCompany">New company</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetCompanyAsync(string newCompany, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -504,6 +539,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newJobTitle">New job title</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetJobTitleAsync(string newJobTitle, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -515,6 +551,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newDepartment">New department</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetDepartmentAsync(string newDepartment, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -527,6 +564,7 @@ namespace CSCommonSecrets
 		/// <param name="newEmails">New emails</param>
 		/// <param name="newEmailDescriptions">New email descriptions</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetEmailsAndDescriptionsAsync(string[] newEmails, string[] newEmailDescriptions, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -540,6 +578,7 @@ namespace CSCommonSecrets
 		/// <param name="newPhoneNumbers">New emails</param>
 		/// <param name="newPhoneNumberDescriptions">New email descriptions</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetPhoneNumbersAndDescriptionsAsync(string[] newPhoneNumbers, string[] newPhoneNumberDescriptions, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -552,6 +591,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newCountry">New country</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetCountryAsync(string newCountry, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -563,6 +603,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newStreetAddress">New street address</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetStreetAddressAsync(string newStreetAddress, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -574,6 +615,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newStreetAddressAdditional">New street address additional</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetStreetAddressAdditionalAsync(string newStreetAddressAdditional, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -585,6 +627,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newPostalCode">New postal code</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetPostalCodeAsync(string newPostalCode, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -596,6 +639,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newCity">New city</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetCityAsync(string newCity, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -607,6 +651,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newPOBox">New PO box</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetPOBoxAsync(string newPOBox, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -618,6 +663,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newBirthday">New birthday</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetBirthdayAsync(string newBirthday, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -629,6 +675,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newRelationship">New relationship</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetRelationshipAsync(string newRelationship, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -640,6 +687,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newNotes">New notes</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetNotesAsync(string newNotes, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -651,6 +699,7 @@ namespace CSCommonSecrets
 		/// </summary>
 		/// <param name="newWebsites">New websites</param>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if set goes correctly; False otherwise</returns>
 		public async Task<bool> SetWebsitesAsync(string[] newWebsites, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
@@ -691,6 +740,7 @@ namespace CSCommonSecrets
 		/// Can the content be decrypted with given derived password
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
+		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if can be; False otherwise</returns>
 		public async Task<bool> CanBeDecryptedWithDerivedPasswordAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
