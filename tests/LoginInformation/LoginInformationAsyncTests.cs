@@ -25,8 +25,8 @@ namespace Tests
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
 			LoginInformation li1 = new LoginInformation();
-			LoginInformation li2 = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
-			LoginInformation li3 = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+			LoginInformation li2 = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
+			LoginInformation li3 = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
 					newNotes: "funny dialog is funny", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] {0, 1, 3, 4, 5, 7}, newCategory: "forums", newTags: "daily\tmodern", securityAsyncFunctions);
 
 			// Act
@@ -43,7 +43,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
 
 			// Act
 			DateTimeOffset modificationTime1 = li.GetModificationTime();
@@ -61,7 +61,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
 			string newTitle = "Not so random forum";
 
 			// Act
@@ -77,7 +77,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
 			string newURL = "https://otherdomain.com";
 
 			// Act
@@ -93,7 +93,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
 			string newEmail = "somey@me.me";
 
 			// Act
@@ -109,7 +109,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
 			string newUsername = "Kitten137";
 
 			// Act
@@ -125,7 +125,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", securityAsyncFunctions);
 			string newPassword = "joigjo32%&()";
 
 			// Act
@@ -141,7 +141,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
 														newNotes: "some boring notes for someone", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies", securityAsyncFunctions);
 			string newNotes = "Even more text that nobody will read";
 
@@ -158,7 +158,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
 														newNotes: "some boring notes for someone", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies", securityAsyncFunctions);
 			byte[] newIcon = new byte[] { 4, 127, 0, 255, 1, 2, 3, 45 };
 
@@ -175,7 +175,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
 														newNotes: "some boring notes for someone", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies", securityAsyncFunctions);
 			string newCategory = "Discussions";
 
@@ -192,7 +192,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+			LoginInformation li = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
 														newNotes: "some boring notes for someone", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] { 1, 2, 3, 45 }, newCategory: "Forums", newTags: "Hobbies", securityAsyncFunctions);
 			string newTags = "Leisure";
 
@@ -211,8 +211,8 @@ namespace Tests
 
 			DateTimeOffset dto = DateTimeOffset.UtcNow;
 			LoginInformation li1 = new LoginInformation();
-			LoginInformation li2 = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", dto, securityAsyncFunctions);			
-			LoginInformation li3 = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", dto, securityAsyncFunctions);
+			LoginInformation li2 = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", dto, securityAsyncFunctions);			
+			LoginInformation li3 = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", dto, securityAsyncFunctions);
 
 			// Act
 			string checksum1 = li1.GetChecksumAsHex();
@@ -235,9 +235,9 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li1 = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13", securityAsyncFunctions);
+			LoginInformation li1 = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13", securityAsyncFunctions);
 			
-			LoginInformation li3 = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
+			LoginInformation li3 = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon", newPassword: "password1", 
 					newNotes: "funny dialog is funny", newMFA: "otpauth://totp/DRAGON?secret=SECRET", newIcon: new byte[] {0, 1, 3, 4, 5, 7}, newCategory: "forums", newTags: "daily\tmodern", securityAsyncFunctions);
 
 			// Act
@@ -275,7 +275,7 @@ namespace Tests
 			string category = "forums";
 			string tags = "daily\tmodern";
 
-			LoginInformation li1 = await LoginInformation.CreateLoginInformation(newTitle: title, newUrl: url, newEmail: email, newUsername: username, newPassword: password, 
+			LoginInformation li1 = await LoginInformation.CreateLoginInformationAsync(newTitle: title, newUrl: url, newEmail: email, newUsername: username, newPassword: password, 
 					newNotes: notes, newMFA: mfa, newIcon: icon, newCategory: category, newTags: tags, securityAsyncFunctions);
 
 			// Act
@@ -324,7 +324,7 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			LoginInformation li1 = await LoginInformation.CreateLoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13", securityAsyncFunctions);
+			LoginInformation li1 = await LoginInformation.CreateLoginInformationAsync(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13", securityAsyncFunctions);
 
 			// Act
 			string checksum1 = li1.GetChecksumAsHex();

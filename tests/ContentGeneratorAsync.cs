@@ -73,7 +73,7 @@ namespace Tests
 
 		public static async Task<LoginInformation> GenerateRandomLoginInformationAsync(ISecurityAsyncFunctions securityAsyncFunctions)
 		{
-			return await LoginInformation.CreateLoginInformation(Path.GetRandomFileName(), GenerateWebsiteAddress(), GenerateEmailAddress(), Path.GetRandomFileName(), Path.GetRandomFileName(), securityAsyncFunctions);
+			return await LoginInformation.CreateLoginInformationAsync(Path.GetRandomFileName(), GenerateWebsiteAddress(), GenerateEmailAddress(), Path.GetRandomFileName(), Path.GetRandomFileName(), securityAsyncFunctions);
 		}
 
 		public static async Task<Note> GenerateRandomNote(ISecurityAsyncFunctions securityAsyncFunctions)

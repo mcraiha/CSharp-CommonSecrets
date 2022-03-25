@@ -21,9 +21,9 @@ namespace CSCommonSecrets
 		/// <param name="newUsername">Username</param>
 		/// <param name="newPassword">Password</param>
 		/// <param name="securityFunctions">Security functions</param>
-		public static async Task<LoginInformation> CreateLoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, ISecurityAsyncFunctions securityFunctions)
+		public static async Task<LoginInformation> CreateLoginInformationAsync(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, ISecurityAsyncFunctions securityFunctions)
 		{
-			return await CreateLoginInformation(newTitle, newUrl, newEmail, newUsername, newPassword, DateTimeOffset.UtcNow, securityFunctions);
+			return await CreateLoginInformationAsync(newTitle, newUrl, newEmail, newUsername, newPassword, DateTimeOffset.UtcNow, securityFunctions);
 		}
 
 		/// <summary>
@@ -36,7 +36,7 @@ namespace CSCommonSecrets
 		/// <param name="newPassword">Password</param>
 		/// <param name="time">Creation and modification timestamps</param>
 		/// <param name="securityFunctions">Security functions</param>
-		public static async Task<LoginInformation> CreateLoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, DateTimeOffset time, ISecurityAsyncFunctions securityFunctions)
+		public static async Task<LoginInformation> CreateLoginInformationAsync(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, DateTimeOffset time, ISecurityAsyncFunctions securityFunctions)
 		{
 			LoginInformation loginInformation = new LoginInformation();
 			loginInformation.title = Encoding.UTF8.GetBytes(newTitle);
@@ -66,10 +66,10 @@ namespace CSCommonSecrets
 		/// <param name="newCategory">Category</param>
 		/// <param name="newTags">Tags (as tab separated)</param>
 		/// <param name="securityFunctions">Security functions</param>
-		public static async Task<LoginInformation> CreateLoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, string newMFA,
+		public static async Task<LoginInformation> CreateLoginInformationAsync(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, string newMFA,
 									byte[] newIcon, string newCategory, string newTags, ISecurityAsyncFunctions securityFunctions)
 		{
-			return await CreateLoginInformation(newTitle, newUrl, newEmail, newUsername, newPassword, newNotes, newMFA, newIcon, newCategory, newTags, DateTimeOffset.UtcNow, securityFunctions);
+			return await CreateLoginInformationAsync(newTitle, newUrl, newEmail, newUsername, newPassword, newNotes, newMFA, newIcon, newCategory, newTags, DateTimeOffset.UtcNow, securityFunctions);
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@ namespace CSCommonSecrets
 		/// <param name="newTags">Tags (as tab separated)</param>
 		/// <param name="time">Creation and modification timestamps</param>
 		/// <param name="securityFunctions">Security functions</param>
-		public static async Task<LoginInformation> CreateLoginInformation(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, string newMFA, 
+		public static async Task<LoginInformation> CreateLoginInformationAsync(string newTitle, string newUrl, string newEmail, string newUsername, string newPassword, string newNotes, string newMFA, 
 									byte[] newIcon, string newCategory, string newTags, DateTimeOffset time, ISecurityAsyncFunctions securityFunctions)
 		{
 			LoginInformation loginInformation = new LoginInformation();

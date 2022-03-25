@@ -97,7 +97,7 @@ namespace CSCommonSecrets
 		public async Task<LoginInformation> GetLoginInformationAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			Dictionary<string, object> dict = await this.GetLoginInformationAsDictionaryAsync(derivedPassword, securityFunctions);
-			LoginInformation returnValue = await LoginInformation.CreateLoginInformation((string)dict[LoginInformation.titleKey], (string)dict[LoginInformation.urlKey], (string)dict[LoginInformation.emailKey],
+			LoginInformation returnValue = await LoginInformation.CreateLoginInformationAsync((string)dict[LoginInformation.titleKey], (string)dict[LoginInformation.urlKey], (string)dict[LoginInformation.emailKey],
 										(string)dict[LoginInformation.usernameKey], (string)dict[LoginInformation.passwordKey], (string)dict[LoginInformation.notesKey], (string)dict[LoginInformation.mfaKey],
 										(byte[])dict[LoginInformation.iconKey], (string)dict[LoginInformation.categoryKey], (string)dict[LoginInformation.tagsKey], securityFunctions
 										);
