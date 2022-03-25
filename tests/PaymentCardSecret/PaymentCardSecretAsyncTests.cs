@@ -37,7 +37,7 @@ namespace Tests
 				{ PaymentCard.titleKey, "Super cool card"}
 			};
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(testDictionary, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(testDictionary, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 
@@ -62,7 +62,7 @@ namespace Tests
 			string title = "Bank of  Dragon";
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync(title, "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			PaymentCardSecret paymentCardSecretCopy = new PaymentCardSecret(paymentCardSecret);
@@ -92,7 +92,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			PaymentCard paymentCardCopy = await paymentCardSecret.GetPaymentCardAsync(derivedKey, securityAsyncFunctions);
@@ -120,7 +120,7 @@ namespace Tests
 			string title = "Bank of  Dragon";
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync(title, "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string paymentCardTitle = await paymentCardSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
@@ -145,7 +145,7 @@ namespace Tests
 			string nameOnCard = "Cool Dragon";
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", nameOnCard, "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string paymentCardNameOnCard = await paymentCardSecret.GetNameOnCardAsync(derivedKey, securityAsyncFunctions);
@@ -170,7 +170,7 @@ namespace Tests
 			string cardType = "Debit";
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", cardType, "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string paymentCardCardType = await paymentCardSecret.GetCardTypeAsync(derivedKey, securityAsyncFunctions);
@@ -195,7 +195,7 @@ namespace Tests
 			string number = "0000000000001234";
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", number, "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string paymentCardNumber = await paymentCardSecret.GetNumberAsync(derivedKey, securityAsyncFunctions);
@@ -220,7 +220,7 @@ namespace Tests
 			string securityCode = "111";
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", securityCode, "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string paymentCardSecurityCode = await paymentCardSecret.GetSecurityCodeAsync(derivedKey, securityAsyncFunctions);
@@ -245,7 +245,7 @@ namespace Tests
 			string startDate = "11/20";
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", startDate, "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string paymentCardStartDate = await paymentCardSecret.GetStartDateAsync(derivedKey, securityAsyncFunctions);
@@ -270,7 +270,7 @@ namespace Tests
 			string expirationDate = "05/33";
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", expirationDate, "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string paymentCardStartDate = await paymentCardSecret.GetExpirationDateAsync(derivedKey, securityAsyncFunctions);
@@ -295,7 +295,7 @@ namespace Tests
 			string notes = "Super cool card I have here";
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", notes, securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string paymentCardNotes = await paymentCardSecret.GetNotesAsync(derivedKey, securityAsyncFunctions);
@@ -319,7 +319,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 			
 			// Act
 			DateTimeOffset modificationTime1 = await paymentCardSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
@@ -349,7 +349,7 @@ namespace Tests
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
 			// Act
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, keyIdentifier, skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, keyIdentifier, skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreEqual(keyIdentifier, paymentCardSecret.GetKeyIdentifier());
@@ -374,7 +374,7 @@ namespace Tests
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
 			// Act
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, keyIdentifier, skaAES_CTR, derivedKey1, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, keyIdentifier, skaAES_CTR, derivedKey1, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(await paymentCardSecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey1, securityAsyncFunctions));
@@ -395,7 +395,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			string title = "future text that is happy and joyful for all holiday purposes...";
 
@@ -423,7 +423,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			string nameOnCard = "Da coolest dragon";
 
@@ -451,7 +451,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			string cardType = "Credit!";
 
@@ -479,7 +479,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			string number = "1234500000001234";
 
@@ -507,7 +507,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			string securityCode = "987";
 
@@ -535,7 +535,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			string startDate = "12/22";
 
@@ -563,7 +563,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			string expirationDate = "06/36";
 
@@ -591,7 +591,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", ska, derivedKey, securityAsyncFunctions);
 
 			string notes = "Yet another non useful note";
 
@@ -622,7 +622,7 @@ namespace Tests
 
 			PaymentCard paymentCard = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
 
-			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
 			string checksum1 = paymentCardSecret.GetChecksumAsHex();

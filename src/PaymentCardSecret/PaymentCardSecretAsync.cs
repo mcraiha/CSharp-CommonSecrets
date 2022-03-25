@@ -22,7 +22,7 @@ namespace CSCommonSecrets
 		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
-		public static async Task<PaymentCardSecret> CreatePaymentCardSecret(PaymentCard paymentCard, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		public static async Task<PaymentCardSecret> CreatePaymentCardSecretAsync(PaymentCard paymentCard, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 			{
@@ -64,7 +64,7 @@ namespace CSCommonSecrets
 		/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
-		public static async Task<PaymentCardSecret> CreatePaymentCardSecret(Dictionary<string, object> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		public static async Task<PaymentCardSecret> CreatePaymentCardSecretAsync(Dictionary<string, object> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret();
 
