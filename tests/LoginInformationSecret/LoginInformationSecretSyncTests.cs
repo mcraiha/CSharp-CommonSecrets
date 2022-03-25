@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Tests
 {
-	public class LoginInformationSecretTests
+	public class LoginInformationSecretSyncTests
 	{
 		[SetUp]
 		public void Setup()
