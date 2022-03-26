@@ -161,18 +161,31 @@ namespace Tests
 										websites, relationship, notes, securityAsyncFunctions);    
 		}
 
-		/*public static async Task<PaymentCard> GenerateRandomPaymentCardAsync(ISecurityAsyncFunctions securityAsyncFunctions)
+		public static async Task<PaymentCard> GenerateRandomPaymentCardAsync(ISecurityAsyncFunctions securityAsyncFunctions)
 		{
-			PaymentCard returnValue = null;
+			string title;
+			string nameOnCard;
+			string cardType;
+			string number;
+			string securityCode;
+			string startDate;
+			string expirationDate;
+			string notes;
+
 			lock (rngLock)
 			{
-				returnValue = await PaymentCard.CreatePaymentCardAsync(GenerateAsciiCompatibleString(rng.Next(4, 20)), GenerateAsciiCompatibleString(rng.Next(4, 20)), 
-												GenerateAsciiCompatibleString(rng.Next(4, 8)), GenerateAsciiCompatibleNumberString(16), GenerateAsciiCompatibleNumberString(3),
-												GenerateAsciiCompatibleMonthSlashYear(), GenerateAsciiCompatibleMonthSlashYear(), GenerateAsciiCompatibleString(rng.Next(0, 200)), securityAsyncFunctions);
+				title = GenerateAsciiCompatibleString(rng.Next(4, 20));
+				nameOnCard = GenerateAsciiCompatibleString(rng.Next(4, 20));
+				cardType = GenerateAsciiCompatibleString(rng.Next(4, 8));
+				number = GenerateAsciiCompatibleNumberString(16);
+				securityCode = GenerateAsciiCompatibleNumberString(3);
+				startDate = GenerateAsciiCompatibleMonthSlashYear();
+				expirationDate = GenerateAsciiCompatibleMonthSlashYear();
+				notes = GenerateAsciiCompatibleString(rng.Next(0, 200));
 			}
 
-			return returnValue;     
-		}*/
+			return await PaymentCard.CreatePaymentCardAsync(title, nameOnCard, cardType, number, securityCode, startDate, expirationDate, notes, securityAsyncFunctions);;     
+		}
 	}
 }
 
