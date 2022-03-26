@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Tests
 {
-	public class CommonSecretsContainerTests
+	public class CommonSecretsContainerSyncTests
 	{
 		[SetUp]
 		public void Setup()
