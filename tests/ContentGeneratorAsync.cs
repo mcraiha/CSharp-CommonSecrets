@@ -76,7 +76,7 @@ namespace Tests
 			return await LoginInformation.CreateLoginInformationAsync(Path.GetRandomFileName(), GenerateWebsiteAddress(), GenerateEmailAddress(), Path.GetRandomFileName(), Path.GetRandomFileName(), securityAsyncFunctions);
 		}
 
-		public static async Task<Note> GenerateRandomNote(ISecurityAsyncFunctions securityAsyncFunctions)
+		public static async Task<Note> GenerateRandomNoteAsync(ISecurityAsyncFunctions securityAsyncFunctions)
 		{
 			int noteTitleLength = 0;
 			int noteTextLength = 0;
