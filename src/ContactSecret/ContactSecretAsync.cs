@@ -15,7 +15,7 @@ namespace CSCommonSecrets
 	public sealed partial class ContactSecret
 	{
 		/// <summary>
-		/// Default constructor for ContactSecret
+		/// Default constructor for ContactSecret, async
 		/// </summary>
 		/// <param name="contact">Contact to encrypt</param>
 		/// <param name="keyIdentifier">Key identifier</param>
@@ -72,7 +72,7 @@ namespace CSCommonSecrets
 		}
 		
 		/// <summary>
-		/// Constructor for custom dictionary, use this only if you know what you are doing
+		/// Constructor for custom dictionary, use this only if you know what you are doing, async
 		/// </summary>
 		/// <param name="contactAsDictionary">Dictionary containing contact keys and values</param>
 		/// <param name="keyIdentifier">Key identifier</param>
@@ -126,7 +126,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get Contact. Use this for situation where you want to convert secret -> non secret
+		/// Get Contact. Use this for situation where you want to convert secret -> non secret, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -169,7 +169,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact first name
+		/// Get contact first name, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -180,7 +180,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact last name
+		/// Get contact last name, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -191,7 +191,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact middle name
+		/// Get contact middle name, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -202,7 +202,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact name prefix
+		/// Get contact name prefix, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -213,7 +213,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact name suffix
+		/// Get contact name suffix, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -224,7 +224,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact nickname
+		/// Get contact nickname, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -235,7 +235,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact company
+		/// Get contact company, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -246,7 +246,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact job title
+		/// Get contact job title, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -257,7 +257,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact department
+		/// Get contact department, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -268,7 +268,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get email addresses
+		/// Get email addresses, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -279,7 +279,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get email address descriptions
+		/// Get email address descriptions, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -290,7 +290,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get phone numbers
+		/// Get phone numbers, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -301,7 +301,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get phone numbers descriptions
+		/// Get phone numbers descriptions, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -312,7 +312,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get country
+		/// Get country, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -323,7 +323,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get street address
+		/// Get street address, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -334,7 +334,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get street address additional 
+		/// Get street address additional, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -345,7 +345,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get postal code
+		/// Get postal code, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -356,7 +356,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get city
+		/// Get city, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -367,7 +367,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get PO Box
+		/// Get PO Box, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -378,7 +378,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get birthday
+		/// Get birthday, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -389,7 +389,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get websites
+		/// Get websites, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -411,7 +411,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get notes 
+		/// Get notes, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -422,7 +422,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact creation time
+		/// Get contact creation time, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -433,7 +433,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get contact modification time
+		/// Get contact modification time, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -451,7 +451,7 @@ namespace CSCommonSecrets
 		#region Common setters
 
 		/// <summary>
-		/// Try to set new first name for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new first name for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newFirstName">New first name</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -463,7 +463,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new last name for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new last name for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newLastName">New last name</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -475,7 +475,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new middle name for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new middle name for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newMiddleName">New middle name</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -487,7 +487,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new name prefix for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new name prefix for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newNamePrefix">New name prefix</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -499,7 +499,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new name suffix for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new name suffix for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newNameSuffix">New name suffix</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -511,7 +511,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new nickname for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new nickname for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newNickname">New nickname</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -523,7 +523,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new company for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new company for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newCompany">New company</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -535,7 +535,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new job title for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new job title for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newJobTitle">New job title</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -547,7 +547,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new department for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new department for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newDepartment">New department</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -559,7 +559,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new emails and email descriptions for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new emails and email descriptions for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newEmails">New emails</param>
 		/// <param name="newEmailDescriptions">New email descriptions</param>
@@ -573,7 +573,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new phone numbers and phone number descriptions for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new phone numbers and phone number descriptions for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newPhoneNumbers">New emails</param>
 		/// <param name="newPhoneNumberDescriptions">New email descriptions</param>
@@ -587,7 +587,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new country for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new country for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newCountry">New country</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -599,7 +599,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new street address for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new street address for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newStreetAddress">New street address</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -611,7 +611,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new street address for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new street address for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newStreetAddressAdditional">New street address additional</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -623,7 +623,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new postal code for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new postal code for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newPostalCode">New postal code</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -635,7 +635,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new city for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new city for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newCity">New city</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -647,7 +647,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new PO box for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new PO box for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newPOBox">New PO box</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -659,7 +659,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new birthday for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new birthday for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newBirthday">New birthday</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -671,7 +671,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new relationship for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new relationship for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newRelationship">New relationship</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -683,7 +683,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new notes for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new notes for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newNotes">New notes</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -695,7 +695,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new websites for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret
+		/// Try to set new websites for contact secret by decrypting the current contact secret, setting a new value and then encrypting the modified contact secret, async
 		/// </summary>
 		/// <param name="newWebsites">New websites</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -737,7 +737,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Can the content be decrypted with given derived password
+		/// Can the content be decrypted with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
