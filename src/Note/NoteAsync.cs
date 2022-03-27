@@ -39,29 +39,7 @@ namespace CSCommonSecrets
 			await note.UpdateNoteAsync(newNoteTitle, newNoteText, time, securityFunctions);
 			return note;
 		}
-		/*
-		/// <summary>
-		/// Default constructor for note
-		/// </summary>
-		/// <param name="newNoteTitle">Note title</param>
-		/// <param name="newNoteText">Note text</param>
-		public Note(string newNoteTitle, string newNoteText) : this (newNoteTitle, newNoteText, DateTimeOffset.UtcNow)
-		{
-			
-		}
-
-		/// <summary>
-		/// Constructor with creation time override
-		/// </summary>
-		/// <param name="newNoteTitle">Note title</param>
-		/// <param name="newNoteText">Note text</param>
-		/// <param name="time">Creation time</param>
-		public Note(string newNoteTitle, string newNoteText, DateTimeOffset time)
-		{
-			this.creationTime = time.ToUnixTimeSeconds();
-			this.UpdateNote(newNoteTitle, newNoteText, time);
-		}
-		*/
+		
 		/// <summary>
 		/// Update note, uses DateTimeOffset.UtcNow for modification timestamp, async
 		/// </summary>
