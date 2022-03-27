@@ -62,6 +62,15 @@ namespace CSCommonSecrets
 		};
 
 		/// <summary>
+		/// Get key identifer.
+		/// </summary>
+		/// <returns>Key identifier</returns>
+		public string GetKeyIdentifier()
+		{
+			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
+		}
+
+		/// <summary>
 		/// Get checksum as hex
 		/// </summary>
 		/// <returns>Hex string</returns>

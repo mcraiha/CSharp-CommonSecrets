@@ -214,15 +214,6 @@ namespace CSCommonSecrets
 			return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.modificationTimeKey, deserializationSettings, securityFunctions);
 		}
 
-		/// <summary>
-		/// Get key identifer.
-		/// </summary>
-		/// <returns>Key identifier</returns>
-		public string GetKeyIdentifier()
-		{
-			return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
-		}
-
 		private async Task<Dictionary<string, object>> GetPaymentCardAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
