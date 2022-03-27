@@ -15,7 +15,7 @@ namespace CSCommonSecrets
 	public sealed partial class LoginInformationSecret
 	{
 		/// <summary>
-		/// Default constructor for LoginInformationSecret
+		/// Default constructor for LoginInformationSecret, async
 		/// </summary>
 		/// <param name="loginInformation">LoginInformation that will be stored as secret</param>
 		/// <param name="keyIdentifier">Key identifier</param>
@@ -59,7 +59,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Constructor for custom dictionary, use this only if you know what you are doing
+		/// Constructor for custom dictionary, use this only if you know what you are doing, async
 		/// </summary>
 		/// <param name="loginInformationAsDictionary">Dictionary containing login information keys and values</param>
 		/// <param name="keyIdentifier">Key identifier</param>
@@ -89,7 +89,7 @@ namespace CSCommonSecrets
 		#region Common getters
 
 		/// <summary>
-		/// Get LoginInformation. Use this for situation where you want to convert secret -> non secret
+		/// Get LoginInformation. Use this for situation where you want to convert secret -> non secret, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -108,7 +108,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get title. This tries to decrypt data with given derived password
+		/// Get title. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -119,7 +119,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get URL. This tries to decrypt data with given derived password
+		/// Get URL. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -130,7 +130,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get email. This tries to decrypt data with given derived password
+		/// Get email. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -141,7 +141,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get username. This tries to decrypt data with given derived password
+		/// Get username. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -152,7 +152,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get password. This tries to decrypt data with given derived password
+		/// Get password. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -163,7 +163,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get notes. This tries to decrypt data with given derived password
+		/// Get notes. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -174,7 +174,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get MFA (e.g. TOTP Url). This tries to decrypt data with given derived password
+		/// Get MFA (e.g. TOTP Url). This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -185,7 +185,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get creation time of Login Information secret. This tries to decrypt data with given derived password
+		/// Get creation time of Login Information secret. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -196,7 +196,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get modification time of Login Information secret. This tries to decrypt data with given derived password
+		/// Get modification time of Login Information secret. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -207,7 +207,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get icon. This tries to decrypt data with given derived password
+		/// Get icon. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -218,7 +218,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get category. This tries to decrypt data with given derived password
+		/// Get category. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -229,7 +229,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get tags. This tries to decrypt data with given derived password
+		/// Get tags. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -266,7 +266,7 @@ namespace CSCommonSecrets
 		
 
 		/// <summary>
-		/// Can the content be decrypted with given derived password
+		/// Can the content be decrypted with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -298,7 +298,7 @@ namespace CSCommonSecrets
 		#region Common setters
 
 		/// <summary>
-		/// Try to set new title for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new title for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newTitle">New title</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -310,7 +310,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new URL for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new URL for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newURL">New URL</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -322,7 +322,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new email for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new email for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newEmail">New email</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -334,7 +334,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new username for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new username for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newUsername">New username</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -346,7 +346,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new password for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new password for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newPassword">New password</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -358,7 +358,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new notes for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new notes for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newNotes">New notes</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -370,7 +370,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new MFA for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new MFA for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newMFA">New MFA</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -382,7 +382,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new creation time for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new creation time for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newCreationTime">New creation time</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -394,7 +394,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new modification time for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new modification time for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newModificationTime">New modification time</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -406,7 +406,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new icon for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new icon for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newIcon">New icon</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -418,7 +418,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new category for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new category for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newCategory">New category</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -430,7 +430,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new tags for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret
+		/// Try to set new tags for login information secret by decrypting the current login information secret, setting a new value and then encrypting the modified login information secret, async
 		/// </summary>
 		/// <param name="newTags">New tags</param>
 		/// <param name="derivedPassword">Derived password</param>
