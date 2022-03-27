@@ -15,7 +15,7 @@ namespace CSCommonSecrets
 	public sealed partial class PaymentCardSecret
 	{
 		/// <summary>
-		/// Default constructor for PaymentCardSecret
+		/// Default constructor for PaymentCardSecret, async
 		/// </summary>
 		/// <param name="paymentCard">PaymentCard to encrypt</param>
 		/// <param name="keyIdentifier">Key identifier</param>
@@ -57,7 +57,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Constructor for custom dictionary, use this only if you know what you are doing
+		/// Constructor for custom dictionary, use this only if you know what you are doing, async
 		/// </summary>
 		/// <param name="paymentCardAsDictionary">Dictionary containing payment card keys and values</param>
 		/// <param name="keyIdentifier">Key identifier</param>
@@ -87,7 +87,7 @@ namespace CSCommonSecrets
 		#region Common getters
 
 		/// <summary>
-		/// Get PaymentCard. Use this for situation where you want to convert secret -> non secret
+		/// Get PaymentCard. Use this for situation where you want to convert secret -> non secret, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -105,7 +105,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get title. This tries to decrypt data with given derived password
+		/// Get title. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -116,7 +116,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get name on card. This tries to decrypt data with given derived password
+		/// Get name on card. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -127,7 +127,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get card type. This tries to decrypt data with given derived password
+		/// Get card type. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -138,7 +138,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get number. This tries to decrypt data with given derived password
+		/// Get number. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -149,7 +149,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get security code. This tries to decrypt data with given derived password
+		/// Get security code. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -160,7 +160,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get start date. This tries to decrypt data with given derived password
+		/// Get start date. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -171,7 +171,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get expiration date. This tries to decrypt data with given derived password
+		/// Get expiration date. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -182,7 +182,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get notes. This tries to decrypt data with given derived password
+		/// Get notes. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -193,7 +193,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get creation time of Payment card secret. This tries to decrypt data with given derived password
+		/// Get creation time of Payment card secret. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -204,7 +204,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get modification time of Payment card secret. This tries to decrypt data with given derived password
+		/// Get modification time of Payment card secret. This tries to decrypt data with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -248,7 +248,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Can the content be decrypted with given derived password
+		/// Can the content be decrypted with given derived password, async
 		/// </summary>
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
@@ -281,7 +281,7 @@ namespace CSCommonSecrets
 		#region Common setters
 
 		/// <summary>
-		/// Try to set new title for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret
+		/// Try to set new title for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret, async
 		/// </summary>
 		/// <param name="newTitle">New title</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -293,7 +293,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new name on card for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret
+		/// Try to set new name on card for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret, async
 		/// </summary>
 		/// <param name="newNameOnCard">New name on card</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -305,7 +305,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new card type for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret
+		/// Try to set new card type for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret, async
 		/// </summary>
 		/// <param name="newCardType">New card type</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -317,7 +317,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new number for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret
+		/// Try to set new number for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret, async
 		/// </summary>
 		/// <param name="newNumber">New number</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -329,7 +329,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new security code for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret
+		/// Try to set new security code for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret, async
 		/// </summary>
 		/// <param name="newSecurityCode">New security code</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -341,7 +341,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new start date for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret
+		/// Try to set new start date for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret, async
 		/// </summary>
 		/// <param name="newStartDate">New start date</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -353,7 +353,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new expiration date for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret
+		/// Try to set new expiration date for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret, async
 		/// </summary>
 		/// <param name="newExpirationDate">New expiration date</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -365,7 +365,7 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Try to set new notes for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret
+		/// Try to set new notes for payment card secret by decrypting the current payment card secret, setting a new value and then encrypting the modified payment card secret, async
 		/// </summary>
 		/// <param name="newNotes">New notes</param>
 		/// <param name="derivedPassword">Derived password</param>
@@ -414,7 +414,7 @@ namespace CSCommonSecrets
 		#region Checksum
 
 		/// <summary>
-		/// Check if checksum matches content
+		/// Check if checksum matches content, async
 		/// </summary>
 		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>True if matches; False otherwise</returns>
