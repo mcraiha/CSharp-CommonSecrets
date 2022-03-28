@@ -1,7 +1,3 @@
-using System;
-using System.Text;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
 namespace CSCommonSecrets
 {
