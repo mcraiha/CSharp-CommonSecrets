@@ -10,6 +10,12 @@ using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 public interface ISecurityAsyncFunctions
 {
 	/// <summary>
+	/// Get AES CTR Allowed Counter Length
+	/// </summary>
+	/// <returns>Length</returns>
+	int AES_CTRAllowedCounterLength();
+
+	/// <summary>
 	/// Encrypt/decrypt AES bytes with given key and initial counter, async
 	/// </summary>
 	/// <param name="bytesToEncrypt">Bytes to encrypt</param>
@@ -17,6 +23,12 @@ public interface ISecurityAsyncFunctions
 	/// <param name="initialCounter">Initial counter</param>
 	/// <returns>Encrypted/decrypted Byte array</returns>
 	Task<byte[]> AES_Encrypt(byte[] bytesToEncrypt, byte[] key, byte[] initialCounter);
+
+	/// <summary>
+	/// Get ChaCha20 Allowed Nonce Length
+	/// </summary>
+	/// <returns>Length</returns>
+	int ChaCha20AllowedNonceLength();
 
 	/// <summary>
 	/// Encrypt/decrypt ChaCha20 bytes with given key, nonce and counter, async

@@ -15,6 +15,15 @@ namespace Tests
 	public class SecurityAsyncFunctions : ISecurityAsyncFunctions
 	{
 		/// <summary>
+		/// Get AES CTR Allowed Counter Length
+		/// </summary>
+		/// <returns>Length</returns>
+		public int AES_CTRAllowedCounterLength()
+		{
+			return 16;
+		}
+
+		/// <summary>
 		/// AES encryption in async land
 		/// </summary>
 		/// <param name="bytesToEncrypt">Bytes to encrypt</param>
@@ -32,6 +41,15 @@ namespace Tests
 			}
 
 			return returnArray;
+		}
+
+		/// <summary>
+		/// Get ChaCha20 Allowed Nonce Length
+		/// </summary>
+		/// <returns>Length</returns>
+		public int ChaCha20AllowedNonceLength()
+		{
+			return 12;
 		}
 
 		/// <summary>
