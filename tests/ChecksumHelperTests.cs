@@ -3,6 +3,10 @@ using CSCommonSecrets;
 using System.Collections;
 using System.Linq;
 
+#if ASYNC_WITH_CUSTOM
+using System.Threading.Tasks;
+#endif // ASYNC_WITH_CUSTOM
+
 namespace Tests
 {
 	public class ChecksumHelpersTests
@@ -13,9 +17,9 @@ namespace Tests
 			
 		}
 
-		private static readonly int sha256LengthInBytes = 32;
-
 		#if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
+		private static readonly int sha256LengthInBytes = 32;
 
 		[Test, Description("Calculate hex checksum test")]
 		public void CalculateHexChecksumTest()
@@ -47,7 +51,45 @@ namespace Tests
 			Assert.AreNotEqual(hex2, hex4);
 		}
 
-		#endif // ASYNC_WITH_CUSTOM && WITH_CUSTOM
+		#endif // !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
+
+		#if ASYNC_WITH_CUSTOM
+
+		private static readonly int sha256LengthInBytes = 32;
+
+		[Test, Description("Calculate hex checksum async test")]
+		public async Task CalculateHexChecksumAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			byte[] byteArray1 = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+			byte[] byteArray2 = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+			byte[] byteArray3 = new byte[] { };
+
+			string expectedHex = "66840DDA154E8A113C31DD0AD32F7F3A366A80E8136979D8F5A101D3D29D6F72";
+
+			// Act
+			string hex1 = await ChecksumHelper.CalculateHexChecksumAsync(securityAsyncFunctions, byteArray1);
+			string hex2 = await ChecksumHelper.CalculateHexChecksumAsync(securityAsyncFunctions, byteArray2);
+			string hex3 = await ChecksumHelper.CalculateHexChecksumAsync(securityAsyncFunctions, byteArray3);
+			string hex4 = await ChecksumHelper.CalculateHexChecksumAsync(securityAsyncFunctions, byteArray1, byteArray2);
+
+			// Assert
+			Assert.IsNotNull(hex1);
+			Assert.IsNotNull(hex2);
+			Assert.IsNotNull(hex3);
+			Assert.IsNotNull(hex4);
+
+			Assert.AreEqual(sha256LengthInBytes * 2, hex1.Length, "Every byte should convert to two Hex chars");
+
+			Assert.AreEqual(expectedHex, hex1);
+			Assert.AreEqual(hex1, hex2);
+			Assert.AreNotEqual(hex2, hex3);
+			Assert.AreNotEqual(hex2, hex4);
+		}
+
+		#endif // ASYNC_WITH_CUSTOM
 
 		[Test, Description("Join byte arrays test")]
 		public void JoinByteArraysTest()
