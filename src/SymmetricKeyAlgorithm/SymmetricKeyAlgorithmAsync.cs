@@ -1,8 +1,6 @@
 #if ASYNC_WITH_CUSTOM
 using System;
 using System.Text;
-using CS_AES_CTR;
-using CSChaCha20;
 using System.Security.Cryptography;
 
 using System.Threading.Tasks;
@@ -76,7 +74,7 @@ namespace CSCommonSecrets
 		/// <returns>SettingsAES_CTR</returns>
 		public static SettingsAES_CTR CreateWithCryptographicRandomNumbers(ISecurityAsyncFunctions securityFunctions)
 		{
-			byte[] initialCounter = new byte[AES_CTR.allowedCounterLength];
+			byte[] initialCounter = new byte[securityFunctions.AES_CTRAllowedCounterLength()];
 
 			securityFunctions.GenerateSecureRandomBytes(initialCounter);
 
@@ -95,7 +93,7 @@ namespace CSCommonSecrets
 		/// <returns>SettingsChaCha20</returns>
 		public static SettingsChaCha20 CreateWithCryptographicRandomNumbers(ISecurityAsyncFunctions securityFunctions)
 		{
-			byte[] nonce = new byte[ChaCha20.allowedNonceLength];
+			byte[] nonce = new byte[securityFunctions.ChaCha20AllowedNonceLength()];
 			byte[] uintBytes = new byte[4];
 
 			securityFunctions.GenerateSecureRandomBytes(nonce, 0, 8);
