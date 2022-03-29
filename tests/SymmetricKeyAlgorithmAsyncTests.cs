@@ -27,7 +27,9 @@ namespace Tests
 		public async Task ChaCha20AsyncTest()
 		{
 			// Arrange
-			SettingsChaCha20 settingsChaCha20 = new SettingsChaCha20(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0x00 }, 1);
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			SettingsChaCha20 settingsChaCha20 = new SettingsChaCha20(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0x00 }, 1, securityAsyncFunctions);
 			SymmetricKeyAlgorithm skaChaCha20 = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.ChaCha20, 256, settingsChaCha20);
 
 			byte[] key = new byte[validChaCha20KeyLength] { 
@@ -66,8 +68,6 @@ namespace Tests
 															0x87, 0x4d
 															};
 
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
-
 			// Act
 			byte[] output1 = await skaChaCha20.EncryptBytesAsync(content, key, securityAsyncFunctions);
 			byte[] output2 = await skaChaCha20.DecryptBytesAsync(content, key, securityAsyncFunctions);
@@ -81,17 +81,17 @@ namespace Tests
 		public async Task AES_CTR_AsyncTest()
 		{
 			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
 			byte[] key = new byte[16] { 0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6, 0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c };
 			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter, securityAsyncFunctions);
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
 			byte[] content = new byte[] { 0x6b, 0xc1, 0xbe, 0xe2, 0x2e, 0x40, 0x9f, 0x96, 0xe9, 0x3d, 0x7e, 0x11, 0x73, 0x93, 0x17, 0x2a };
 			byte[] expected = new byte[] { 0x87, 0x4d, 0x61, 0x91, 0xb6, 0x20, 0xe3, 0x26, 0x1b, 0xef, 0x68, 0x64, 0x99, 0x0d, 0xb6, 0xce };
-
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
 			// Act
 			byte[] output1 = await skaAES_CTR.EncryptBytesAsync(content, key, securityAsyncFunctions);
@@ -211,6 +211,113 @@ namespace Tests
 			CollectionAssert.AreNotEqual(settingsAES_CTR_2.initialCounter, settingsAES_CTR_3.initialCounter);
 			CollectionAssert.AreNotEqual(settingsAES_CTR_2.initialCounter, settingsAES_CTR_4.initialCounter);
 			CollectionAssert.AreNotEqual(settingsAES_CTR_3.initialCounter, settingsAES_CTR_4.initialCounter);
+		}
+
+		[Test]
+		public void SymmetricKeyAlgorithmGetAsBytesTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			byte[] initialCounter1 = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+			byte[] initialCounter2 = new byte[] { 0xf1, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR1 = new SettingsAES_CTR(initialCounter1, securityAsyncFunctions);
+			SettingsAES_CTR settingsAES_CTR2 = new SettingsAES_CTR(initialCounter2, securityAsyncFunctions);
+
+			SymmetricKeyAlgorithm skaAES_CTR1 = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR1);
+			SymmetricKeyAlgorithm skaAES_CTR2 = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR1);
+			SymmetricKeyAlgorithm skaAES_CTR3 = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR1);
+
+			SymmetricKeyAlgorithm skaAES_CTR4 = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR2);
+
+			// Act
+			byte[] skaAES_CTR1bytes = skaAES_CTR1.GetSettingsAsBytes();
+			byte[] skaAES_CTR2bytes = skaAES_CTR2.GetSettingsAsBytes();
+			byte[] skaAES_CTR3bytes = skaAES_CTR3.GetSettingsAsBytes();
+			byte[] skaAES_CTR4bytes = skaAES_CTR4.GetSettingsAsBytes();
+
+			// Assert
+			Assert.IsNotNull(skaAES_CTR1bytes);
+			Assert.IsNotNull(skaAES_CTR2bytes);
+			Assert.IsNotNull(skaAES_CTR3bytes);
+			Assert.IsNotNull(skaAES_CTR4bytes);
+
+			CollectionAssert.AreEqual(skaAES_CTR1bytes, skaAES_CTR2bytes);
+			CollectionAssert.AreNotEqual(skaAES_CTR1bytes, skaAES_CTR3bytes);
+			CollectionAssert.AreNotEqual(skaAES_CTR1bytes, skaAES_CTR4bytes);
+		}
+
+		[Test]
+		public void SettingsAES_CTRGetAsBytesTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			byte[] initialCounter1 = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+			byte[] initialCounter2 = new byte[] { 0xf0, 0xff, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR_1 = new SettingsAES_CTR(initialCounter1, securityAsyncFunctions);
+			SettingsAES_CTR settingsAES_CTR_2 = new SettingsAES_CTR(initialCounter2, securityAsyncFunctions);
+
+			// Act
+			byte[] bytes1 = settingsAES_CTR_1.GetSettingsAsBytes();
+			byte[] bytes2 = settingsAES_CTR_2.GetSettingsAsBytes();
+
+			// Assert
+			Assert.IsNotNull(bytes1);
+			Assert.IsNotNull(bytes2);
+			CollectionAssert.AreNotEqual(bytes1, bytes2);
+		}
+
+		[Test]
+		public void SettingsChaCha20GetAsBytesTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			SettingsChaCha20 settingsChaCha20_1 = new SettingsChaCha20(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0x00 }, 1, securityAsyncFunctions);
+			SettingsChaCha20 settingsChaCha20_2 = new SettingsChaCha20(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x5a, 0x00, 0x00, 0x00, 0x00 }, 1, securityAsyncFunctions);
+			SettingsChaCha20 settingsChaCha20_3 = new SettingsChaCha20(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0x00 }, 2, securityAsyncFunctions);
+
+			// Act
+			byte[] bytes1 = settingsChaCha20_1.GetSettingsAsBytes();
+			byte[] bytes2 = settingsChaCha20_2.GetSettingsAsBytes();
+			byte[] bytes3 = settingsChaCha20_3.GetSettingsAsBytes();
+
+			// Assert
+			Assert.IsNotNull(bytes1);
+			Assert.IsNotNull(bytes2);
+			Assert.IsNotNull(bytes3);
+
+			CollectionAssert.AreNotEqual(bytes1, bytes2);
+			CollectionAssert.AreNotEqual(bytes1, bytes3);
+		}
+
+		[Test]
+		public void SettingsChaCha20IncreaseNonceTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			SettingsChaCha20 settingsChaCha20_1 = new SettingsChaCha20(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0x00 }, 1, securityAsyncFunctions);
+			byte[] expected1 = new byte[] { 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0x00 };
+
+			SettingsChaCha20 settingsChaCha20_2 = new SettingsChaCha20(new byte[] { 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0xFF }, 1, securityAsyncFunctions);
+			byte[] expected2 = new byte[] { 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0xFF };
+
+			SettingsChaCha20 settingsChaCha20_3 = new SettingsChaCha20(new byte[] { 0xFF, 0xFF, 0x01, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }, 1, securityAsyncFunctions);
+			byte[] expected3 = new byte[] { 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+
+			// Act
+			settingsChaCha20_1.IncreaseNonce();
+			settingsChaCha20_2.IncreaseNonce();
+			settingsChaCha20_3.IncreaseNonce();
+
+			// Assert
+			CollectionAssert.AreEqual(expected1, settingsChaCha20_1.nonce);
+			CollectionAssert.AreEqual(expected2, settingsChaCha20_2.nonce);
+			CollectionAssert.AreEqual(expected3, settingsChaCha20_3.nonce);
 		}
 	}
 }

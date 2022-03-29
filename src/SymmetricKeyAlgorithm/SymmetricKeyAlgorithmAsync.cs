@@ -69,6 +69,25 @@ namespace CSCommonSecrets
 	public sealed partial class SettingsAES_CTR
 	{
 		/// <summary>
+		/// Default constructor for SettingsAES_CTR
+		/// </summary>
+		/// <param name="initialCounter">Byte array of initial counter</param>
+		/// <param name="securityFunctions">Security functions</param>
+		public SettingsAES_CTR(byte[] initialCounter, ISecurityAsyncFunctions securityFunctions)
+		{
+			if (initialCounter == null)
+			{
+				throw new NullReferenceException("Initial counter cannot be null!");
+			}
+			else if (initialCounter.Length != securityFunctions.AES_CTRAllowedCounterLength())
+			{
+				throw new ArgumentException($"Initial counter only allows length of {securityFunctions.AES_CTRAllowedCounterLength()} bytes!");
+			}
+
+			this.initialCounter = initialCounter;
+		}
+
+		/// <summary>
 		/// Create SettingsAES_CTR with Cryptographic random numbers, you should use this instead of constructor
 		/// </summary>
 		/// <returns>SettingsAES_CTR</returns>
@@ -78,7 +97,7 @@ namespace CSCommonSecrets
 
 			securityFunctions.GenerateSecureRandomBytes(initialCounter);
 
-			return new SettingsAES_CTR(initialCounter); 
+			return new SettingsAES_CTR(initialCounter, securityFunctions); 
 		}
 	}
 
@@ -87,6 +106,27 @@ namespace CSCommonSecrets
 	/// </summary>
 	public sealed partial class SettingsChaCha20
 	{
+		/// <summary>
+		/// Default constructor for SettingsChaCha20
+		/// </summary>
+		/// <param name="nonce">Nonce as byte array</param>
+		/// <param name="counter">Counter</param>
+		/// <param name="securityFunctions">Security functions</param>
+		public SettingsChaCha20(byte[] nonce, uint counter, ISecurityAsyncFunctions securityFunctions)
+		{
+			if (nonce == null)
+			{
+				throw new NullReferenceException("Nonce cannot be null!");
+			}
+			else if (nonce.Length != securityFunctions.ChaCha20AllowedNonceLength())
+			{
+				throw new ArgumentException($"Nonce only allows length of {securityFunctions.ChaCha20AllowedNonceLength()} bytes!");
+			}
+
+			this.nonce = nonce;
+			this.counter = counter;
+		}
+
 		/// <summary>
 		/// Create SettingsChaCha20 with Cryptographic random numbers, you should use this instead of constructor
 		/// </summary>
@@ -99,7 +139,7 @@ namespace CSCommonSecrets
 			securityFunctions.GenerateSecureRandomBytes(nonce, 0, 8);
 			securityFunctions.GenerateSecureRandomBytes(uintBytes, 0, 3);
 
-			return new SettingsChaCha20(nonce, BitConverter.ToUInt32(uintBytes, 0)); 
+			return new SettingsChaCha20(nonce, BitConverter.ToUInt32(uintBytes, 0), securityFunctions); 
 		}
 	}
 }

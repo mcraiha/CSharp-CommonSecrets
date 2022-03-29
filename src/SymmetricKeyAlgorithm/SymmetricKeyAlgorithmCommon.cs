@@ -1,7 +1,6 @@
 using System;
 using System.Text;
-using CS_AES_CTR;
-using CSChaCha20;
+
 
 namespace CSCommonSecrets
 {
@@ -41,6 +40,10 @@ namespace CSCommonSecrets
 		/// </summary>
 		public SettingsChaCha20 settingsChaCha20 { get; set; }
 
+		private static readonly int[] AES_CTR_AllowedKeyLengths = new int[3] { 16, 24, 32 };
+
+		private static readonly int ChaCha20_AllowedKeyLength = 32;
+
 		/// <summary>
 		/// For (de)serialization
 		/// </summary>
@@ -61,7 +64,7 @@ namespace CSCommonSecrets
 
 			if (algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
 			{
-				if (!Array.Exists(AES_CTR.allowedKeyLengths, allowed => allowed * 8 == keySizeInBits))
+				if (!Array.Exists(AES_CTR_AllowedKeyLengths, allowed => allowed * 8 == keySizeInBits))
 				{
 					throw new ArgumentException($"{keySizeInBits} is not valid AES-CTR key size!");
 				}
@@ -70,7 +73,7 @@ namespace CSCommonSecrets
 			}
 			else if (algorithm == SymmetricEncryptionAlgorithm.ChaCha20)
 			{
-				if (ChaCha20.allowedKeyLength * 8 != keySizeInBits)
+				if (ChaCha20_AllowedKeyLength * 8 != keySizeInBits)
 				{
 					throw new ArgumentException($"{keySizeInBits} is not valid ChaCha20 key size!");
 				}
@@ -96,12 +99,12 @@ namespace CSCommonSecrets
 
 			if (copyThis.settingsAES_CTR != null)
 			{
-				this.settingsAES_CTR = new SettingsAES_CTR(copyThis.settingsAES_CTR.initialCounter);
+				this.settingsAES_CTR = SettingsAES_CTR.CreateDeepCopy(copyThis.settingsAES_CTR.initialCounter);
 			}
 
 			if (copyThis.settingsChaCha20 != null)
 			{
-				this.settingsChaCha20 = new SettingsChaCha20(copyThis.settingsChaCha20.nonce, copyThis.settingsChaCha20.counter);
+				this.settingsChaCha20 = SettingsChaCha20.CreateDeepCopy(copyThis.settingsChaCha20.nonce, copyThis.settingsChaCha20.counter);
 			}
 		}
 
@@ -173,21 +176,13 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Default constructor for SettingsAES_CTR
+		/// Create deep copy of existing SettingsAES_CTR
 		/// </summary>
-		/// <param name="initialCounter">Byte array of initial counter</param>
-		public SettingsAES_CTR(byte[] initialCounter)
+		/// <param name="initialCounter">Initial counter</param>
+		/// <returns>Copy of SettingsAES_CTR</returns>
+		public static SettingsAES_CTR CreateDeepCopy(byte[] initialCounter)
 		{
-			if (initialCounter == null)
-			{
-				throw new NullReferenceException("Initial counter cannot be null!");
-			}
-			else if (initialCounter.Length != AES_CTR.allowedCounterLength)
-			{
-				throw new ArgumentException($"Initial counter only allows length of {AES_CTR.allowedCounterLength} bytes!");
-			}
-
-			this.initialCounter = initialCounter;
+			return new SettingsAES_CTR() { initialCounter = initialCounter };
 		}
 
 		/// <summary>
@@ -225,26 +220,6 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Default constructor for SettingsChaCha20
-		/// </summary>
-		/// <param name="nonce">Nonce as byte array</param>
-		/// <param name="counter">Counter</param>
-		public SettingsChaCha20(byte[] nonce, uint counter)
-		{
-			if (nonce == null)
-			{
-				throw new NullReferenceException("Nonce cannot be null!");
-			}
-			else if (nonce.Length != ChaCha20.allowedNonceLength)
-			{
-				throw new ArgumentException($"Nonce only allows length of {ChaCha20.allowedNonceLength} bytes!");
-			}
-
-			this.nonce = nonce;
-			this.counter = counter;
-		}
-
-		/// <summary>
 		/// Increase nonce
 		/// </summary>
 		public void IncreaseNonce()
@@ -264,6 +239,17 @@ namespace CSCommonSecrets
 				}
 				index++;
 			}
+		}
+
+		/// <summary>
+		/// Create deep copy of existing SettingsChaCha20
+		/// </summary>
+		/// <param name="nonce">Nonce as byte array</param>
+		/// <param name="counter">Counter</param>
+		/// <returns>Copy of SettingsChaCha20</returns>
+		public static SettingsChaCha20 CreateDeepCopy(byte[] nonce, uint counter)
+		{
+			return new SettingsChaCha20() { nonce = nonce, counter = counter };
 		}
 
 		/// <summary>

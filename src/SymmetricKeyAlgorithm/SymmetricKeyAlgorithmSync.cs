@@ -72,6 +72,24 @@ namespace CSCommonSecrets
 	public sealed partial class SettingsAES_CTR
 	{
 		/// <summary>
+		/// Default constructor for SettingsAES_CTR
+		/// </summary>
+		/// <param name="initialCounter">Byte array of initial counter</param>
+		public SettingsAES_CTR(byte[] initialCounter)
+		{
+			if (initialCounter == null)
+			{
+				throw new NullReferenceException("Initial counter cannot be null!");
+			}
+			else if (initialCounter.Length != AES_CTR.allowedCounterLength)
+			{
+				throw new ArgumentException($"Initial counter only allows length of {AES_CTR.allowedCounterLength} bytes!");
+			}
+
+			this.initialCounter = initialCounter;
+		}
+
+		/// <summary>
 		/// Create SettingsAES_CTR with Cryptographic random numbers, you should use this instead of constructor
 		/// </summary>
 		/// <returns>SettingsAES_CTR</returns>
@@ -90,6 +108,26 @@ namespace CSCommonSecrets
 	/// </summary>
 	public sealed partial class SettingsChaCha20
 	{
+		/// <summary>
+		/// Default constructor for SettingsChaCha20
+		/// </summary>
+		/// <param name="nonce">Nonce as byte array</param>
+		/// <param name="counter">Counter</param>
+		public SettingsChaCha20(byte[] nonce, uint counter)
+		{
+			if (nonce == null)
+			{
+				throw new NullReferenceException("Nonce cannot be null!");
+			}
+			else if (nonce.Length != ChaCha20.allowedNonceLength)
+			{
+				throw new ArgumentException($"Nonce only allows length of {ChaCha20.allowedNonceLength} bytes!");
+			}
+
+			this.nonce = nonce;
+			this.counter = counter;
+		}
+
 		/// <summary>
 		/// Create SettingsChaCha20 with Cryptographic random numbers, you should use this instead of constructor
 		/// </summary>
