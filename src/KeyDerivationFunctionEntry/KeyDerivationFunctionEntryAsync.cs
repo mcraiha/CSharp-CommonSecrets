@@ -3,8 +3,6 @@
 
 using System;
 using System.Text;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Threading.Tasks;
 
 namespace CSCommonSecrets
@@ -22,14 +20,8 @@ namespace CSCommonSecrets
 		/// <param name="iterationsCount">How many iterations</param>
 		/// <param name="howManyBytesAreWanted">How many output bytes are wanted</param>
 		/// <param name="id">Key identifier</param>
-		private KeyDerivationFunctionEntry(KeyDerivationPrf prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id)
+		private KeyDerivationFunctionEntry(KeyDerivationPseudoRandomFunction prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id)
 		{
-			// Block SHA-1
-			if (prf == KeyDerivationPrf.HMACSHA1)
-			{
-				throw new ArgumentException($"{nameof(prf)} cannot be SHA1 for security reasons");
-			}
-
 			// Check salt bytes
 			if (saltBytes == null)
 			{
@@ -75,7 +67,7 @@ namespace CSCommonSecrets
 		/// <param name="id">Key identifier</param>
 		/// <param name="securityFunctions">Security functions</param>
 		/// <returns></returns>
-		public static async Task<KeyDerivationFunctionEntry> CreateKeyDerivationFunctionEntryAsync(KeyDerivationPrf prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id, ISecurityAsyncFunctions securityFunctions)
+		public static async Task<KeyDerivationFunctionEntry> CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id, ISecurityAsyncFunctions securityFunctions)
 		{
 			KeyDerivationFunctionEntry keyDerivationFunctionEntry = new KeyDerivationFunctionEntry(prf, saltBytes, iterationsCount, howManyBytesAreWanted, id);
 			// Calculate new checksum
@@ -91,7 +83,7 @@ namespace CSCommonSecrets
 		/// <returns>Derived password</returns>
 		public async Task<byte[]> GeneratePasswordBytesAsync(string regularPassword, ISecurityAsyncFunctions securityFunctions)
 		{
-			Enum.TryParse(this.pseudorandomFunction, out KeyDerivationPrf keyDerivationPrf);
+			Enum.TryParse(this.pseudorandomFunction, out KeyDerivationPseudoRandomFunction keyDerivationPrf);
 
 			return await securityFunctions.Pbkdf2(regularPassword, this.salt, keyDerivationPrf, this.iterations, this.derivedKeyLengthInBytes);
 		}
@@ -134,7 +126,7 @@ namespace CSCommonSecrets
 			securityFunctions.GenerateSecureRandomBytes(salt);
 
 			int neededBytes = 32;
-			return await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPrf.HMACSHA256, salt, iterationsToDo, neededBytes, id, securityFunctions);
+			return await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, salt, iterationsToDo, neededBytes, id, securityFunctions);
 		}
 
 		/// <summary>
@@ -157,7 +149,7 @@ namespace CSCommonSecrets
 			securityFunctions.GenerateSecureRandomBytes(salt);
 
 			int neededBytes = 64;
-			return await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPrf.HMACSHA512, salt, iterationsToDo, neededBytes, id, securityFunctions);
+			return await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA512, salt, iterationsToDo, neededBytes, id, securityFunctions);
 		}
 
 		#endregion // Static helpers
