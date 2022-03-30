@@ -13,6 +13,22 @@ namespace CSCommonSecrets
 	}
 
 	/// <summary>
+	/// Key derivation pseudorandom function, should match one in Microsoft.AspNetCore.Cryptography.KeyDerivation
+	/// </summary>
+	public enum KeyDerivationPseudoRandomFunction
+	{
+		/// <summary>
+		/// HMAC SHA-256
+		/// </summary>
+		HMACSHA256 = 1,
+
+		/// <summary>
+		/// HMAC SHA-512
+		/// </summary>
+		HMACSHA512 = 2,
+	}
+
+	/// <summary>
 	/// Class that stores all needed info generating derived passwords from plain text passwords
 	/// </summary>
 	public sealed partial class KeyDerivationFunctionEntry
