@@ -1,5 +1,6 @@
 ## Version 1.0.0 (not yet released)
-- Add async versions wit custom cryptographic methods (**FEATURE**)
+- Add async versions with custom cryptographic methods (**FEATURE**)
+- Update Microsoft.AspNetCore.Cryptography.KeyDerivation (**FEATURE**)
 
 ## Version 0.9.6 (released 2021-12-09)
 - Update LibAES-CTR (**FEATURE**)
