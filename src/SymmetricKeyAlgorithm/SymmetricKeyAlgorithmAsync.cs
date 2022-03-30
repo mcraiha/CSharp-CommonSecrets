@@ -31,12 +31,8 @@ namespace CSCommonSecrets
 			{
 				return await securityFunctions.ChaCha20_Encrypt(bytesToEncrypt, key, this.settingsChaCha20.nonce, this.settingsChaCha20.counter);
 			}
-			else
-			{
-				throw new NotImplementedException();
-			}
 
-			return null;
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
