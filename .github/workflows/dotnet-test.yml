@@ -17,5 +17,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    - name: Test
+    - name: Test sync
       run: dotnet test tests/tests.csproj
+    - name: Test async
+      run: dotnet test tests/tests.csproj /p:DefineConstants="ASYNC_WITH_CUSTOM"
