@@ -94,6 +94,22 @@ namespace CSCommonSecrets
 		#region Helpers
 
 		/// <summary>
+		/// Get all identifiers of KeyDerivationFunctionEntries
+		/// </summary>
+		/// <returns>IEnumerable collection of identifiers</returns>
+		public IEnumerable<string> GetKeyDerivationFunctionEntryIdentifiers()
+		{
+			List<string> returnList = new List<string>();
+
+			foreach (KeyDerivationFunctionEntry kdfe in keyDerivationFunctionEntries)
+			{
+				returnList.Add(kdfe.GetKeyIdentifier());
+			}
+
+			return returnList;
+		}
+
+		/// <summary>
 		/// Find KeyDerivationFunctionEntry with key identifier
 		/// </summary>
 		/// <param name="keyIdentifier">Key identifier to seek</param>

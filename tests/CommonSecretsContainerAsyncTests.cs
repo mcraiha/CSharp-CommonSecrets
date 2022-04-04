@@ -4,6 +4,7 @@ using NUnit.Framework;
 using CSCommonSecrets;
 using System;
 using System.Text;
+using System.Collections.Generic;
 
 using System.Threading.Tasks;
 
@@ -33,6 +34,30 @@ namespace Tests
 			// Assert
 			Assert.AreSame(kdfe, result);
 			Assert.Greater(csc.version, 0);
+		}
+
+		[Test]
+		public async Task GetKeyDerivationFunctionEntryIdentifiersAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			string kdfeIdentifier1 = "no matter";
+			KeyDerivationFunctionEntry kdfe1 = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier1, securityAsyncFunctions);
+
+			string kdfeIdentifier2 = "yet another";
+			KeyDerivationFunctionEntry kdfe2 = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier2, securityAsyncFunctions);
+
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe1);
+
+			// Act
+			csc.keyDerivationFunctionEntries.Add(kdfe2);
+			List<string> identifiers = new List<string>(csc.GetKeyDerivationFunctionEntryIdentifiers());
+
+			// Assert
+			Assert.AreEqual(2, identifiers.Count);
+			CollectionAssert.Contains(identifiers, kdfeIdentifier1);
+			CollectionAssert.Contains(identifiers, kdfeIdentifier2);
 		}
 
 		[Test]
