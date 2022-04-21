@@ -455,9 +455,9 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get emails
+		/// Get emails (separated with tab)
 		/// </summary>
-		/// <returns>Emails as string</returns>
+		/// <returns>Emails as single string</returns>
 		public string GetEmails()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.emails);
@@ -473,9 +473,9 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get email descriptions
+		/// Get email descriptions (separated with tab)
 		/// </summary>
-		/// <returns>Email descriptions as string</returns>
+		/// <returns>Email descriptions as single string</returns>
 		public string GetEmailDescriptions()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.emailDescriptions);
@@ -491,9 +491,9 @@ namespace CSCommonSecrets
 		}
 
 		/// <summary>
-		/// Get phone numbers
+		/// Get phone numbers (separated with tab)
 		/// </summary>
-		/// <returns>Phone numbers as string</returns>
+		/// <returns>Phone numbers as single string</returns>
 		public string GetPhoneNumbers()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.phoneNumbers);
@@ -502,16 +502,16 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Get phone numbers as string array
 		/// </summary>
-		/// <returns>Phone numbers as string string</returns>
+		/// <returns>Phone numbers as string array</returns>
 		public string[] GetPhoneNumbersArray()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.phoneNumbers).Split(separatorChar);
 		}
 
 		/// <summary>
-		/// Get phone number descriptions
+		/// Get phone number descriptions (separated with tab)
 		/// </summary>
-		/// <returns>Phone number descriptions as string</returns>
+		/// <returns>Phone number descriptions as single string</returns>
 		public string GetPhoneNumberDescriptions()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.phoneNumberDescriptions);
@@ -520,7 +520,7 @@ namespace CSCommonSecrets
 		/// <summary>
 		/// Get phone number descriptions as string array
 		/// </summary>
-		/// <returns>Phone number descriptions as string</returns>
+		/// <returns>Phone number descriptions as string array</returns>
 		public string[] GetPhoneNumberDescriptionsArray()
 		{
 			return System.Text.Encoding.UTF8.GetString(this.phoneNumberDescriptions).Split(separatorChar);
