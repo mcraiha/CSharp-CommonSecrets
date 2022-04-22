@@ -350,7 +350,7 @@ namespace CSCommonSecrets
 		/// <param name="derivedPassword">Derived password</param>
 		/// <param name="securityFunctions">Security functions</param>
 		/// <returns>Contact phone numbers descriptions as string array</returns>
-		public async Task<string[]> GetPhoneNumberDescriptionsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+		public async Task<string[]> GetPhoneNumberDescriptionsArrayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 		{
 			return ((string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings, securityFunctions)).Split(Contact.separatorChar);
 		}
