@@ -305,6 +305,22 @@ namespace Tests
 			Assert.AreEqual(64, checksum1.Length);
 			Assert.AreEqual(checksum1, li2.GetChecksumAsHex());
 		}
+
+		[Test]
+		public void CheckIfChecksumMatchesContentTest()
+		{
+			// Arrange
+			LoginInformation li1 = new LoginInformation(newTitle: "Random forum", newUrl: "https://somedomain.com", newEmail: "nobbody@me.me", newUsername: "dragon123", newPassword: "password13");
+
+			// Act
+			bool shouldBeTrue = li1.CheckIfChecksumMatchesContent();
+			li1.checksum = li1.checksum.Remove(0, 1);
+			bool shouldBeFalse = li1.CheckIfChecksumMatchesContent();
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+		}
 	}
 }
 

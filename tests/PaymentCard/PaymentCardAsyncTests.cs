@@ -296,6 +296,24 @@ namespace Tests
 			Assert.AreEqual(64, checksum1.Length);
 			Assert.AreEqual(checksum1, pc2.GetChecksumAsHex());
 		}
+
+		[Test]
+		public async Task CheckIfChecksumMatchesContentAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			PaymentCard pc1 = await PaymentCard.CreatePaymentCardAsync("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here", securityAsyncFunctions);
+
+			// Act
+			bool shouldBeTrue = await pc1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+			pc1.checksum = pc1.checksum.Remove(0, 1);
+			bool shouldBeFalse = await pc1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+		}
 	}
 }
 

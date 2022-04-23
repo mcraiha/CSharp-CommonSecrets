@@ -143,6 +143,22 @@ namespace Tests
 			Assert.AreEqual(64, checksum1.Length);
 			Assert.AreEqual(checksum1, note2.GetChecksumAsHex());
 		}
+
+		[Test]
+		public void CheckIfChecksumMatchesContentTest()
+		{
+			// Arrange
+			Note note1 = new Note("Some topic here", "Some text here, yes.");
+
+			// Act
+			bool shouldBeTrue = note1.CheckIfChecksumMatchesContent();
+			note1.checksum = note1.checksum.Remove(0, 1);
+			bool shouldBeFalse = note1.CheckIfChecksumMatchesContent();
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+		}
 	}
 }
 

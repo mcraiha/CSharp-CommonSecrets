@@ -162,6 +162,24 @@ namespace Tests
 			Assert.AreEqual(64, checksum1.Length);
 			Assert.AreEqual(checksum1, fe2.GetChecksumAsHex());
 		}
+
+		[Test]
+		public async Task CheckIfChecksumMatchesContentAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			FileEntry fe1 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
+
+			// Act
+			bool shouldBeTrue = await fe1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+			fe1.checksum = fe1.checksum.Remove(0, 1);
+			bool shouldBeFalse = await fe1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+		}
 	}
 }
 

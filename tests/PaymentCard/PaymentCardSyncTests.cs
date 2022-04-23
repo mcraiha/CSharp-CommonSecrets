@@ -266,6 +266,22 @@ namespace Tests
 			Assert.AreEqual(64, checksum1.Length);
 			Assert.AreEqual(checksum1, pc2.GetChecksumAsHex());
 		}
+
+		[Test]
+		public void CheckIfChecksumMatchesContentTest()
+		{
+			// Arrange
+			PaymentCard pc1 = new PaymentCard("Bank of  Dragon", "Cool Dragon", "Debit", "0000000000001234", "111", "11/20", "05/33", "Super cool card I have here");
+
+			// Act
+			bool shouldBeTrue = pc1.CheckIfChecksumMatchesContent();
+			pc1.checksum = pc1.checksum.Remove(0, 1);
+			bool shouldBeFalse = pc1.CheckIfChecksumMatchesContent();
+
+			// Assert
+			Assert.IsTrue(shouldBeTrue);
+			Assert.IsFalse(shouldBeFalse);
+		}
 	}
 }
 
