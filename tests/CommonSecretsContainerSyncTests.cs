@@ -408,6 +408,12 @@ namespace Tests
 			Assert.IsTrue(addResultSuccess2.success);
 			Assert.AreEqual("", addResultSuccess2.possibleError);
 
+			Assert.IsTrue(replaceResultSuccess1.success);
+			Assert.AreEqual("", replaceResultSuccess1.possibleError);
+
+			Assert.IsTrue(replaceResultSuccess2.success);
+			Assert.AreEqual("", replaceResultSuccess2.possibleError);
+
 			Assert.IsFalse(replaceResultFailure1.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure1.possibleError));
 
@@ -468,6 +474,12 @@ namespace Tests
 			Assert.IsTrue(addResultSuccess2.success);
 			Assert.AreEqual("", addResultSuccess2.possibleError);
 
+			Assert.IsTrue(replaceResultSuccess1.success);
+			Assert.AreEqual("", replaceResultSuccess1.possibleError);
+
+			Assert.IsTrue(replaceResultSuccess2.success);
+			Assert.AreEqual("", replaceResultSuccess2.possibleError);
+
 			Assert.IsFalse(replaceResultFailure1.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure1.possibleError));
 
@@ -527,6 +539,12 @@ namespace Tests
 
 			Assert.IsTrue(addResultSuccess2.success);
 			Assert.AreEqual("", addResultSuccess2.possibleError);
+
+			Assert.IsTrue(replaceResultSuccess1.success);
+			Assert.AreEqual("", replaceResultSuccess1.possibleError);
+
+			Assert.IsTrue(replaceResultSuccess2.success);
+			Assert.AreEqual("", replaceResultSuccess2.possibleError);
 
 			Assert.IsFalse(replaceResultFailure1.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure1.possibleError));
