@@ -6,9 +6,10 @@ CSharp library implementation of [CommonSecrets](https://github.com/mcraiha/Comm
 
 CommonSecrets is specification for storing encrypted and plaintext login information (username, password, URL etc.), notes, files, contacts and payment cards.
 
-## Build status
+## Build status / badges
 
 [![.NET](https://github.com/mcraiha/CSharp-CommonSecrets/actions/workflows/dotnet-test.yml/badge.svg)](https://github.com/mcraiha/CSharp-CommonSecrets/actions/workflows/dotnet-test.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/3f8ce22f4783417c854a1eb62143e444)](https://www.codacy.com/gh/mcraiha/CSharp-CommonSecrets/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mcraiha/CSharp-CommonSecrets&amp;utm_campaign=Badge_Coverage)
 
 ## What could I do with it
 
