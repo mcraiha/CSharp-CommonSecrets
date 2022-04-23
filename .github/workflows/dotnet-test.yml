@@ -24,4 +24,4 @@ jobs:
     - name: Upload coverage files
       env:
         CODACY_PROJECT_TOKEN: ${{secrets.CODACY_PROJECT_TOKEN}}
-      run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l CSharp
+      run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -l CSharp $(find . -name 'coverage.cobertura.xml' -printf '-r %p ')
