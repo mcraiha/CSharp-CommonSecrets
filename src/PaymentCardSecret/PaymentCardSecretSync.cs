@@ -372,6 +372,15 @@ namespace CSCommonSecrets
 
 		#region Checksum
 
+		/// <summary>
+		/// Check if checksum matches content
+		/// </summary>
+		/// <returns>True if matches; False otherwise</returns>
+		public bool CheckIfChecksumMatchesContent()
+		{
+			return checksum == this.CalculateHexChecksum();
+		}
+
 		private string CalculateHexChecksum()
 		{
 			return ChecksumHelper.CalculateHexChecksum(this.keyIdentifier, this.audalfData, algorithm.GetSettingsAsBytes());

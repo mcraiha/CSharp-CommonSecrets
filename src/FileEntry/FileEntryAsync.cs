@@ -66,6 +66,18 @@ namespace CSCommonSecrets
 			await this.CalculateAndUpdateChecksumAsync(securityFunctions);
 		}
 
+		#region Checksum
+
+		/// <summary>
+		/// Check if checksum matches content, async
+		/// </summary>
+		/// <param name="securityFunctions">Security functions</param>
+		/// <returns>True if matches; False otherwise</returns>
+		public async Task<bool> CheckIfChecksumMatchesContentAsync(ISecurityAsyncFunctions securityFunctions)
+		{
+			return checksum == await this.CalculateHexChecksumAsync(securityFunctions);
+		}
+
 		private async Task<string> CalculateHexChecksumAsync(ISecurityAsyncFunctions securityFunctions)
 		{
 			return await ChecksumHelper.CalculateHexChecksumAsync(securityFunctions, this.filename, this.fileContent, BitConverter.GetBytes(this.creationTime), BitConverter.GetBytes(this.modificationTime));
@@ -75,6 +87,8 @@ namespace CSCommonSecrets
 		{
 			this.checksum = await this.CalculateHexChecksumAsync(securityFunctions);
 		}
+
+		#endregion // Checksum
 	}
 }
 

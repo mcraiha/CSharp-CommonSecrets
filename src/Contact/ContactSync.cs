@@ -485,7 +485,7 @@ namespace CSCommonSecrets
 		/// <returns>True if matches; False otherwise</returns>
 		public bool CheckIfChecksumMatchesContent()
 		{
-			return checksum == CalculateHexChecksum();
+			return checksum == this.CalculateHexChecksum();
 		}
 
 		private string CalculateHexChecksum()

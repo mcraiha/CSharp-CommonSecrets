@@ -56,13 +56,15 @@ namespace CSCommonSecrets
 			this.CalculateAndUpdateChecksum();
 		}
 
+		#region Checksum
+
 		/// <summary>
 		/// Check if checksum matches content
 		/// </summary>
 		/// <returns>True if matches; False otherwise</returns>
 		public bool CheckIfChecksumMatchesContent()
 		{
-			return checksum == CalculateHexChecksum();
+			return checksum == this.CalculateHexChecksum();
 		}
 
 		private string CalculateHexChecksum()
@@ -75,6 +77,8 @@ namespace CSCommonSecrets
 		{
 			this.checksum = this.CalculateHexChecksum();
 		}
+
+		#endregion // Checksum
 	}
 
 }
