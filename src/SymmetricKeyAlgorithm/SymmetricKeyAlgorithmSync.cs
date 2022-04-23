@@ -79,7 +79,7 @@ namespace CSCommonSecrets
 		{
 			if (initialCounter == null)
 			{
-				throw new NullReferenceException("Initial counter cannot be null!");
+				throw new ArgumentNullException("Initial counter cannot be null!");
 			}
 			else if (initialCounter.Length != AES_CTR.allowedCounterLength)
 			{
@@ -117,7 +117,7 @@ namespace CSCommonSecrets
 		{
 			if (nonce == null)
 			{
-				throw new NullReferenceException("Nonce cannot be null!");
+				throw new ArgumentNullException("Nonce cannot be null!");
 			}
 			else if (nonce.Length != ChaCha20.allowedNonceLength)
 			{
