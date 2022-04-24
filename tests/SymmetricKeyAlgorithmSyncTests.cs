@@ -2,6 +2,7 @@
 
 using NUnit.Framework;
 using CSCommonSecrets;
+using System;
 
 namespace Tests
 {
@@ -157,6 +158,20 @@ namespace Tests
 		}
 
 		[Test]
+		public void SettingsChaCha20InvalidValuesTest()
+		{
+			// Arrange
+			byte[] nullInput = null;
+			byte[] invalidInput = new byte[3] { 1, 2, 3 };
+
+			// Act
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => new SettingsChaCha20(nullInput, counter: 33));
+			Assert.Throws<ArgumentException>(() => new SettingsChaCha20(invalidInput, counter: 11337));
+		}
+
+		[Test]
 		public void CreateSettingsChaCha20WithCryptographicRandomNumbersTest()
 		{
 			// Arrange
@@ -176,6 +191,20 @@ namespace Tests
 			CollectionAssert.AreNotEqual(settingsChaCha20_3.nonce, settingsChaCha20_4.nonce);
 
 			Assert.AreNotEqual(0, settingsChaCha20_1.counter + settingsChaCha20_2.counter + settingsChaCha20_3.counter + settingsChaCha20_4.counter);
+		}
+
+		[Test]
+		public void SettingsAES_CTRInvalidValuesTest()
+		{
+			// Arrange
+			byte[] nullInput = null;
+			byte[] invalidInput = new byte[3] { 1, 2, 3 };
+
+			// Act
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => new SettingsAES_CTR(nullInput));
+			Assert.Throws<ArgumentException>(() => new SettingsAES_CTR(invalidInput));
 		}
 
 		[Test]
