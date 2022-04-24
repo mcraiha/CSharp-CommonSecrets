@@ -5,6 +5,7 @@ using CSCommonSecrets;
 using CS_AES_CTR;
 using CSChaCha20;
 using System.Security.Cryptography;
+using System;
 
 using System.Threading.Tasks;
 
@@ -166,6 +167,22 @@ namespace Tests
 			CollectionAssert.AreEqual(content, decryptedAES);
 			CollectionAssert.AreEqual(content, decryptedChaCha20);
 		}
+
+		[Test]
+		public void SettingsChaCha20InvalidValuesTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			byte[] nullInput = null;
+			byte[] invalidInput = new byte[3] { 1, 2, 3 };
+
+			// Act
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => new SettingsChaCha20(nullInput, counter: 33, securityAsyncFunctions));
+			Assert.Throws<ArgumentException>(() => new SettingsChaCha20(invalidInput, counter: 11337, securityAsyncFunctions));
+		}
 	
 		[Test]
 		public void CreateSettingsChaCha20WithCustomRandomNumbersTest()
@@ -189,6 +206,22 @@ namespace Tests
 			CollectionAssert.AreNotEqual(settingsChaCha20_3.nonce, settingsChaCha20_4.nonce);
 
 			Assert.AreNotEqual(0, settingsChaCha20_1.counter + settingsChaCha20_2.counter + settingsChaCha20_3.counter + settingsChaCha20_4.counter);
+		}
+
+		[Test]
+		public void SettingsAES_CTRInvalidValuesTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			byte[] nullInput = null;
+			byte[] invalidInput = new byte[3] { 1, 2, 3 };
+
+			// Act
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => new SettingsAES_CTR(nullInput, securityAsyncFunctions));
+			Assert.Throws<ArgumentException>(() => new SettingsAES_CTR(invalidInput, securityAsyncFunctions));
 		}
 
 		[Test]
