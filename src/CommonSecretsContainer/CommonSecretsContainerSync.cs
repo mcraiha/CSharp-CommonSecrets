@@ -128,11 +128,9 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
-
 			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
 
-			this.fileSecrets.Add(new FileEntrySecret(fileEntry, keyIdentifier, ska, derivedPassword));
+			this.AddFileEntrySecretActual(derivedPassword, fileEntry, keyIdentifier, algorithm);
 
 			return (success: true, possibleError: "");
 		}
@@ -153,11 +151,15 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
-
-			this.fileSecrets.Add(new FileEntrySecret(fileEntry, keyIdentifier, ska, derivedPassword));
+			this.AddFileEntrySecretActual(derivedPassword, fileEntry, keyIdentifier, algorithm);
 
 			return (success: true, possibleError: "");
+		}
+
+		private void AddFileEntrySecretActual(byte[] derivedPassword, FileEntry fileEntry, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm)
+		{
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+			this.fileSecrets.Add(new FileEntrySecret(fileEntry, keyIdentifier, ska, derivedPassword));
 		}
 
 		/// <summary>
