@@ -46,6 +46,22 @@ namespace Tests
 		}
 
 		[Test]
+		public void GetCreationTimeTest()
+		{
+			// Arrange
+			Note note1 = new Note("Some topic here", "Some text here, yes.");
+			System.Threading.Thread.Sleep(1100);
+			Note note2 = new Note("Another topic here", "Not so similar text");
+
+			// Act
+			DateTimeOffset noteCreationTime1 = note1.GetCreationTime();
+			DateTimeOffset noteCreationTime2 = note2.GetCreationTime();
+
+			// Assert
+			Assert.IsTrue(noteCreationTime1 < noteCreationTime2, "Second creation time should happen later");
+		}
+
+		[Test]
 		public void ModificationUpdateTimestampTest()
 		{
 			// Arrange
