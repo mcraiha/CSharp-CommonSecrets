@@ -145,6 +145,7 @@ namespace Tests
 			string password = "notthatdragon42";
 			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = csc.AddFileEntrySecret(password, ContentGeneratorSync.GenerateRandomFileEntry(), kdfeIdentifier);
@@ -153,6 +154,7 @@ namespace Tests
 			var addResultFailure1 = csc.AddFileEntrySecret(password, null, kdfeIdentifier);
 			var addResultFailure2 = csc.AddFileEntrySecret(password, ContentGeneratorSync.GenerateRandomFileEntry(), "not existing");
 			var addResultFailure3 = csc.AddFileEntrySecret("", ContentGeneratorSync.GenerateRandomFileEntry(), kdfeIdentifier);
+			var addResultFailure4 = csc.AddFileEntrySecret(nullArray, ContentGeneratorSync.GenerateRandomFileEntry(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -169,6 +171,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure3.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.IsFalse(addResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure4.possibleError));
 
 			Assert.AreEqual(2, csc.fileSecrets.Count);
 		}
