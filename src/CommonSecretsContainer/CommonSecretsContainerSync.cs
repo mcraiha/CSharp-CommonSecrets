@@ -27,12 +27,10 @@ namespace CSCommonSecrets
 			{
 				return (checkResult, possibleError);
 			}
-
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
-
+			
 			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
 
-			this.loginInformationSecrets.Add(new LoginInformationSecret(loginInformation, keyIdentifier, ska, derivedPassword));
+			this.AddLoginInformationSecretActual(derivedPassword, loginInformation, keyIdentifier, algorithm);
 
 			return (success: true, possibleError: "");
 		}
@@ -53,11 +51,15 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
-
-			this.loginInformationSecrets.Add(new LoginInformationSecret(loginInformation, keyIdentifier, ska, derivedPassword));
+			this.AddLoginInformationSecretActual(derivedPassword, loginInformation, keyIdentifier, algorithm);
 
 			return (success: true, possibleError: "");
+		}
+
+		private void AddLoginInformationSecretActual(byte[] derivedPassword, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm)
+		{
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+			this.loginInformationSecrets.Add(new LoginInformationSecret(loginInformation, keyIdentifier, ska, derivedPassword));
 		}
 
 		/// <summary>
