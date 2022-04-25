@@ -227,6 +227,7 @@ namespace Tests
 			string password = "th3atdragon42";
 			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = csc.AddPaymentCardSecret(password, ContentGeneratorSync.GenerateRandomPaymentCard(), kdfeIdentifier);
@@ -235,6 +236,7 @@ namespace Tests
 			var addResultFailure1 = csc.AddPaymentCardSecret(password, null, kdfeIdentifier);
 			var addResultFailure2 = csc.AddPaymentCardSecret(password, ContentGeneratorSync.GenerateRandomPaymentCard(), "not existing");
 			var addResultFailure3 = csc.AddPaymentCardSecret("", ContentGeneratorSync.GenerateRandomPaymentCard(), kdfeIdentifier);
+			var addResultFailure4 = csc.AddPaymentCardSecret(nullArray, ContentGeneratorSync.GenerateRandomPaymentCard(), kdfeIdentifier);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -251,6 +253,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure3.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.IsFalse(addResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure4.possibleError));
 
 			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
 		}
