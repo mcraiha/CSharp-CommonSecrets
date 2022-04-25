@@ -228,11 +228,9 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
-
 			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
 
-			this.paymentCardSecrets.Add(new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword));
+			this.AddPaymentCardSecretActual(derivedPassword, paymentCard, keyIdentifier, algorithm);
 
 			return (success: true, possibleError: "");
 		}
@@ -253,11 +251,15 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
-
-			this.paymentCardSecrets.Add(new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword));
+			this.AddPaymentCardSecretActual(derivedPassword, paymentCard, keyIdentifier, algorithm);
 
 			return (success: true, possibleError: "");
+		}
+
+		private void AddPaymentCardSecretActual(byte[] derivedPassword, PaymentCard paymentCard, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm)
+		{
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+			this.paymentCardSecrets.Add(new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword));
 		}
 
 		#endregion // Add helpers
