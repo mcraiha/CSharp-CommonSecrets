@@ -178,11 +178,9 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
-
 			byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
 
-			this.contactSecrets.Add(new ContactSecret(contact, keyIdentifier, ska, derivedPassword));
+			this.AddContactSecretActual(derivedPassword, contact, keyIdentifier, algorithm);
 
 			return (success: true, possibleError: "");
 		}
@@ -203,11 +201,15 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
-
-			this.contactSecrets.Add(new ContactSecret(contact, keyIdentifier, ska, derivedPassword));
+			this.AddContactSecretActual(derivedPassword, contact, keyIdentifier, algorithm);
 
 			return (success: true, possibleError: "");
+		}
+
+		private void AddContactSecretActual(byte[] derivedPassword, Contact contact, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm)
+		{
+			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+			this.contactSecrets.Add(new ContactSecret(contact, keyIdentifier, ska, derivedPassword));
 		}
 
 		/// <summary>
