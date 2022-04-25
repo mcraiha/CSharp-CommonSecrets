@@ -52,10 +52,10 @@ namespace Tests
 			Note note = new Note("Some topic here", "Some text here, yes.");
 
 			// Act
-			var modificationTime1 = note.modificationTime;
+			var modificationTime1 = note.GetModificationTime();
 			System.Threading.Thread.Sleep(1100);
 			note.UpdateNote(note.GetNoteTitle(), "Some text here, yes. part 2");
-			var modificationTime2 = note.modificationTime;
+			var modificationTime2 = note.GetModificationTime();
 
 			// Assert
 			Assert.AreNotEqual(modificationTime1, modificationTime2);
