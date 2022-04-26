@@ -31,11 +31,9 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
-
 			byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
 
-			this.loginInformationSecrets.Add(await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, keyIdentifier, ska, derivedPassword, securityFunctions));
+			await this.AddLoginInformationSecretActualAsync(derivedPassword, loginInformation, keyIdentifier, algorithm, securityFunctions);
 
 			return (success: true, possibleError: "");
 		}
@@ -57,11 +55,16 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
+			await this.AddLoginInformationSecretActualAsync(derivedPassword, loginInformation, keyIdentifier, algorithm, securityFunctions);
+
+			return (success: true, possibleError: "");
+		}
+
+		private async Task AddLoginInformationSecretActualAsync(byte[] derivedPassword, LoginInformation loginInformation, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm, ISecurityAsyncFunctions securityFunctions)
+		{
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
 			this.loginInformationSecrets.Add(await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, keyIdentifier, ska, derivedPassword, securityFunctions));
-
-			return (success: true, possibleError: "");
 		}
 
 		/// <summary>
@@ -81,11 +84,9 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
-
 			byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
 
-			this.noteSecrets.Add(await NoteSecret.CreateNoteSecretAsync(note, keyIdentifier, ska, derivedPassword, securityFunctions));
+			await this.AddNoteSecretActualAsync(derivedPassword, note, keyIdentifier, algorithm, securityFunctions);
 
 			return (success: true, possibleError: "");
 		}
@@ -107,11 +108,16 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
+			await this.AddNoteSecretActualAsync(derivedPassword, note, keyIdentifier, algorithm, securityFunctions);
+
+			return (success: true, possibleError: "");
+		}
+
+		private async Task AddNoteSecretActualAsync(byte[] derivedPassword, Note note, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm, ISecurityAsyncFunctions securityFunctions)
+		{
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
 			this.noteSecrets.Add(await NoteSecret.CreateNoteSecretAsync(note, keyIdentifier, ska, derivedPassword, securityFunctions));
-
-			return (success: true, possibleError: "");
 		}
 
 		/// <summary>
@@ -131,11 +137,9 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
-
 			byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
 
-			this.fileSecrets.Add(await FileEntrySecret.CreateFileEntrySecretAsync(fileEntry, keyIdentifier, ska, derivedPassword, securityFunctions));
+			await this.AddFileEntrySecretActualAsync(derivedPassword, fileEntry, keyIdentifier, algorithm, securityFunctions);
 
 			return (success: true, possibleError: "");
 		}
@@ -157,11 +161,16 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
+			await this.AddFileEntrySecretActualAsync(derivedPassword, fileEntry, keyIdentifier, algorithm, securityFunctions);
+
+			return (success: true, possibleError: "");
+		}
+
+		private async Task AddFileEntrySecretActualAsync(byte[] derivedPassword, FileEntry fileEntry, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm, ISecurityAsyncFunctions securityFunctions)
+		{
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
 			this.fileSecrets.Add(await FileEntrySecret.CreateFileEntrySecretAsync(fileEntry, keyIdentifier, ska, derivedPassword, securityFunctions));
-
-			return (success: true, possibleError: "");
 		}
 
 		/// <summary>
@@ -181,11 +190,9 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
-
 			byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
 
-			this.contactSecrets.Add(await ContactSecret.CreateContactSecretAsync(contact, keyIdentifier, ska, derivedPassword, securityFunctions));
+			await this.AddContactSecretActualAsync(derivedPassword, contact, keyIdentifier, algorithm, securityFunctions);
 
 			return (success: true, possibleError: "");
 		}
@@ -207,11 +214,16 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
+			await this.AddContactSecretActualAsync(derivedPassword, contact, keyIdentifier, algorithm, securityFunctions);
+
+			return (success: true, possibleError: "");
+		}
+
+		private async Task AddContactSecretActualAsync(byte[] derivedPassword, Contact contact, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm, ISecurityAsyncFunctions securityFunctions)
+		{
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
 			this.contactSecrets.Add(await ContactSecret.CreateContactSecretAsync(contact, keyIdentifier, ska, derivedPassword, securityFunctions));
-
-			return (success: true, possibleError: "");
 		}
 
 		/// <summary>
@@ -231,11 +243,9 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
-
 			byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
 
-			this.paymentCardSecrets.Add(await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, keyIdentifier, ska, derivedPassword, securityFunctions));
+			await this.AddPaymentCardSecretActualAsync(derivedPassword, paymentCard, keyIdentifier, algorithm, securityFunctions);
 
 			return (success: true, possibleError: "");
 		}
@@ -257,11 +267,16 @@ namespace CSCommonSecrets
 				return (checkResult, possibleError);
 			}
 
+			await this.AddPaymentCardSecretActualAsync(derivedPassword, paymentCard, keyIdentifier, algorithm, securityFunctions);
+
+			return (success: true, possibleError: "");
+		}
+
+		private async Task AddPaymentCardSecretActualAsync(byte[] derivedPassword, PaymentCard paymentCard, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm, ISecurityAsyncFunctions securityFunctions)
+		{
 			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
 			this.paymentCardSecrets.Add(await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, keyIdentifier, ska, derivedPassword, securityFunctions));
-
-			return (success: true, possibleError: "");
 		}
 
 		#endregion // Add helpers
