@@ -70,6 +70,7 @@ namespace Tests
 			string password = "notdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddLoginInformationSecretAsync(password, await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
@@ -78,6 +79,7 @@ namespace Tests
 			var addResultFailure1 = await csc.AddLoginInformationSecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddLoginInformationSecretAsync(password, await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddLoginInformationSecretAsync("", await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddLoginInformationSecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -94,6 +96,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure3.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.IsFalse(addResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure4.possibleError));
 
 			Assert.AreEqual(2, csc.loginInformationSecrets.Count);
 		}
@@ -108,6 +113,7 @@ namespace Tests
 			string password = "notdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddNoteSecretAsync(password, await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
@@ -116,6 +122,7 @@ namespace Tests
 			var addResultFailure1 = await csc.AddNoteSecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddNoteSecretAsync(password, await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddNoteSecretAsync("", await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddNoteSecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -132,6 +139,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure3.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.IsFalse(addResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure4.possibleError));
 
 			Assert.AreEqual(2, csc.noteSecrets.Count);
 		}
@@ -146,6 +156,7 @@ namespace Tests
 			string password = "notthatdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddFileEntrySecretAsync(password, await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
@@ -154,6 +165,7 @@ namespace Tests
 			var addResultFailure1 = await csc.AddFileEntrySecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddFileEntrySecretAsync(password, await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddFileEntrySecretAsync("", await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddFileEntrySecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -170,6 +182,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure3.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.IsFalse(addResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure4.possibleError));
 
 			Assert.AreEqual(2, csc.fileSecrets.Count);
 		}
@@ -184,6 +199,7 @@ namespace Tests
 			string password = "notth3atdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddContactSecretAsync(password, await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
@@ -192,6 +208,7 @@ namespace Tests
 			var addResultFailure1 = await csc.AddContactSecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddContactSecretAsync(password, await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddContactSecretAsync("", await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddContactSecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -208,6 +225,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure3.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.IsFalse(addResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure4.possibleError));
 
 			Assert.AreEqual(2, csc.contactSecrets.Count);
 		}
@@ -222,6 +242,7 @@ namespace Tests
 			string password = "th3atdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddPaymentCardSecretAsync(password, await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
@@ -230,6 +251,7 @@ namespace Tests
 			var addResultFailure1 = await csc.AddPaymentCardSecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddPaymentCardSecretAsync(password, await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddPaymentCardSecretAsync("", await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddPaymentCardSecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -246,6 +268,9 @@ namespace Tests
 
 			Assert.IsFalse(addResultFailure3.success);
 			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.IsFalse(addResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure4.possibleError));
 
 			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
 		}
