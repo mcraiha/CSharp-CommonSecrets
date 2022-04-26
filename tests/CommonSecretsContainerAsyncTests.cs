@@ -285,6 +285,8 @@ namespace Tests
 			string kdfeIdentifier = "somethingheremuch";
 			string password = "notdragon42224!";
 
+			byte[] nullArray = null;
+
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 
@@ -306,6 +308,8 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplaceLoginInformationSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceLoginInformationSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceLoginInformationSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceLoginInformationSecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceLoginInformationSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetURL(), replace1.GetURL(), "Make sure that random content do not match!");
@@ -341,6 +345,12 @@ namespace Tests
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
 
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
 			Assert.AreEqual(2, csc.loginInformationSecrets.Count);
 		}
 
@@ -352,6 +362,9 @@ namespace Tests
 
 			string kdfeIdentifier = "somet!%&hinghere";
 			string password = "not()=dragon42";
+
+			byte[] nullArray = null;
+
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 
@@ -373,6 +386,8 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplaceNoteSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceNoteSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceNoteSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceNoteSecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceNoteSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetNoteTitle(), replace1.GetNoteTitle(), "Make sure that random content do not match!");
@@ -408,6 +423,12 @@ namespace Tests
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
 
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
 			Assert.AreEqual(2, csc.noteSecrets.Count);
 		}
 
@@ -419,6 +440,8 @@ namespace Tests
 
 			string kdfeIdentifier = ",.-somefile12344";
 			string password = "--!#notthatdragon42";
+
+			byte[] nullArray = null;
 
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
@@ -441,6 +464,8 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplaceFileEntrySecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceFileEntrySecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceFileEntrySecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceFileEntrySecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceFileEntrySecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetFilename(), replace1.GetFilename(), "Make sure that random content do not match!");
@@ -470,6 +495,12 @@ namespace Tests
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
 
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
 			Assert.AreEqual(2, csc.fileSecrets.Count);
 		}
 
@@ -481,6 +512,8 @@ namespace Tests
 
 			string kdfeIdentifier = ",.-4somefile12344";
 			string password = "--!#nottha2tdragon42";
+
+			byte[] nullArray = null;
 
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
@@ -503,6 +536,8 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplaceContactSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceContactSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceContactSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceContactSecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceContactSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetFirstName(), replace1.GetFirstName(), "Make sure that random content do not match!");
@@ -532,6 +567,12 @@ namespace Tests
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
 
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
 			Assert.AreEqual(2, csc.contactSecrets.Count);
 		}
 
@@ -543,6 +584,8 @@ namespace Tests
 
 			string kdfeIdentifier = ",.-4key12344";
 			string password = "--!#n,.ottha2tdragon42";
+
+			byte[] nullArray = null;
 
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
@@ -565,6 +608,8 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplacePaymentCardSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplacePaymentCardSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplacePaymentCardSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplacePaymentCardSecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplacePaymentCardSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetTitle(), replace1.GetTitle(), "Make sure that random content do not match!");
@@ -593,6 +638,12 @@ namespace Tests
 
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
+
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
 
 			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
 		}
