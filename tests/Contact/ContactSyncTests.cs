@@ -208,6 +208,29 @@ namespace Tests
 			CollectionAssert.AreEqual(websites, c1.GetWebsitesArray());
 		}
 
+		[Test, Description("Make sure both overloads work identically")]
+		public void UpdateEmailsAndDescriptionsOverloadTest()
+		{
+			// Arrange
+			Contact c1 = new Contact("", "", "");
+			Contact c2 = new Contact("", "", "");
+
+			string[] emailsArray = { "som24e@dragon663.com", "cooldra14gon123@dragons.com" };
+			string emails = string.Join(Contact.separatorString, emailsArray);
+
+			string[] emailDescriptionsArray = { "work", "home" };
+			string emailDescriptions = string.Join(Contact.separatorString, emailDescriptionsArray);
+
+			// Act
+			c1.UpdateEmailsAndDescriptions(emailsArray, emailDescriptionsArray);
+			c2.UpdateEmailsAndDescriptions(emails, emailDescriptions);
+
+			// Assert
+			Assert.AreEqual(emailsArray.Length, c1.GetEmailsArray().Length);
+			CollectionAssert.AreEqual(c1.GetEmailsArray(), c2.GetEmailsArray());
+			CollectionAssert.AreEqual(c1.GetEmailDescriptionsArray(), c2.GetEmailDescriptionsArray());
+		}
+
 		[Test]
 		public void ShallowCopyTest()
 		{

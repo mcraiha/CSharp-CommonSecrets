@@ -279,12 +279,7 @@ namespace CSCommonSecrets
 		/// <param name="updatedEmailDescriptions">Updated email descriptions (array)</param>
 		public void UpdateEmailsAndDescriptions(string[] updatedEmails, string[] updatedEmailDescriptions)
 		{
-			this.emails = Encoding.UTF8.GetBytes(string.Join(separatorString, updatedEmails));
-			this.emailDescriptions = Encoding.UTF8.GetBytes(string.Join(separatorString, updatedEmailDescriptions));
-
-			this.UpdateModificationTime();
-
-			this.CalculateAndUpdateChecksum();
+			this.UpdateEmailsAndDescriptions(string.Join(separatorString, updatedEmails), string.Join(separatorString, updatedEmailDescriptions));
 		}
 
 		/// <summary>
