@@ -108,6 +108,32 @@ namespace Tests
 			Assert.AreEqual(fe.creationTime, feCopy.creationTime);
 			Assert.AreEqual(fe.modificationTime, feCopy.modificationTime);
 		}
+
+		[Test]
+		public async Task GetWithInvalidKeyAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 90, 10, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0x10, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			byte[] derivedKeyInvalid = Mutator.CreateMutatedByteArray(derivedKey);
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter, securityAsyncFunctions);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			FileEntry fe = await FileEntry.CreateFileEntryAsync("nice1.pdf", new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 13, 0, 0 }, securityAsyncFunctions);
+
+			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+
+			// Act
+
+			// Assert
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await fes.GetFilenameAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentException>(async () => await fes.GetFilenameAsync(derivedKeyInvalid, securityAsyncFunctions));
+		}
 		
 		[Test]
 		public async Task GetFilenameAsyncTest()

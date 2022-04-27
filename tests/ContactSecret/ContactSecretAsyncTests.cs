@@ -180,6 +180,58 @@ namespace Tests
 		}
 
 		[Test]
+		public async Task GetWithInvalidKeyAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 90, 10, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0x10, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			byte[] derivedKeyInvalid = Mutator.CreateMutatedByteArray(derivedKey);
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter, securityAsyncFunctions);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string firstName = "Super2110";
+			string lastName = "Awesome3220";
+			string middleName = "Mega4330";
+			string namePrefix = "Sirest";
+			string nameSuffix = "IIIXII";
+			string nickname = "MegaDragon13";
+			string company = "EverDragons COTYERT";
+			string jobTitle = "Mid dragon";
+			string department = "13rd Cave";
+			string[] emails = { "som24e@dragon663.com", "cooldra14gon123@dragons.com" };
+			string[] emailDescriptions = { "work", "home" };
+			string[] phoneNumbers = { "1234-123-123", "2344-234-234" };
+			string[] phoneNumberDescriptions = { "work", "hotel" };
+			string country = "dragonland II";
+			string streetAddress = "dragon street 122";
+			string streetAddressAdditional = "no addition";
+			string postalCode = "12345";
+			string city = "dragoncave";
+			string poBox = "no po box";
+			string birthday = "11-09-1697";
+			string relationship = "single";
+			string notes = "Very awesome dragon again";
+			string[] websites = { "https://dacoolastdragons4life.com", "https://nicevalleyvaults.net" };
+			Contact c1 = await Contact.CreateContactAsync(firstName, lastName, middleName, namePrefix, nameSuffix, nickname, company, jobTitle, department, 
+										emails, emailDescriptions, phoneNumbers, phoneNumberDescriptions, 
+										country, streetAddress, streetAddressAdditional, postalCode, city, poBox, birthday,
+										websites, relationship, notes, securityAsyncFunctions);
+
+			ContactSecret cs = await ContactSecret.CreateContactSecretAsync(c1, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+
+			// Act
+
+			// Assert
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await cs.GetFirstNameAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentException>(async () => await cs.GetFirstNameAsync(derivedKeyInvalid, securityAsyncFunctions));
+		}
+
+		[Test]
 		public async Task GetSingleEntriesAsyncTest()
 		{
 			// Arrange
