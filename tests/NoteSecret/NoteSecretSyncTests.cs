@@ -100,6 +100,33 @@ namespace Tests
 			Assert.AreEqual(note.modificationTime, noteCopy.modificationTime);
 		}
 
+		[Test]
+		public void GetWithInvalidKeyTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 90, 10, 11, 12, 13, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0x10, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+			
+			byte[] derivedKeyInvalid = Mutator.CreateMutatedByteArray(derivedKey);
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string title = "Wishlist for holidays";
+			string text = "peace, happiness, freedom";
+
+			Note note = new Note(title, text);
+
+			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+
+			// Assert
+			Assert.Throws<ArgumentNullException>(() => noteSecret.GetNoteTitle(null));
+			Assert.Throws<ArgumentException>(() => noteSecret.GetNoteTitle(derivedKeyInvalid));
+		}
+
 
 		[Test]
 		public void GetNoteTitleTest()
