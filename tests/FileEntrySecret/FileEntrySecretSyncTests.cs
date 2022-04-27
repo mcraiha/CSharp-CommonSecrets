@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Tests
 {
-	public class FileEntrySecretTests
+	public class FileEntrySecretSyncTests
 	{
 		[SetUp]
 		public void Setup()
