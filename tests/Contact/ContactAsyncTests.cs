@@ -236,6 +236,31 @@ namespace Tests
 			CollectionAssert.AreEqual(websites, c1.GetWebsitesArray());
 		}
 
+		[Test, Description("Make sure both overloads work identically")]
+		public async Task UpdateEmailsAndDescriptionsOverloadAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			Contact c1 = await Contact.CreateContactAsync("", "", "", securityAsyncFunctions);
+			Contact c2 = await Contact.CreateContactAsync("", "", "", securityAsyncFunctions);
+
+			string[] emailsArray = { "som24e@dragon663.com", "cooldra14gon123@dragons.com" };
+			string emails = string.Join(Contact.separatorString, emailsArray);
+
+			string[] emailDescriptionsArray = { "work", "home" };
+			string emailDescriptions = string.Join(Contact.separatorString, emailDescriptionsArray);
+
+			// Act
+			await c1.UpdateEmailsAndDescriptionsAsync(emailsArray, emailDescriptionsArray, securityAsyncFunctions);
+			await c2.UpdateEmailsAndDescriptionsAsync(emails, emailDescriptions, securityAsyncFunctions);
+
+			// Assert
+			Assert.AreEqual(emailsArray.Length, c1.GetEmailsArray().Length);
+			CollectionAssert.AreEqual(c1.GetEmailsArray(), c2.GetEmailsArray());
+			CollectionAssert.AreEqual(c1.GetEmailDescriptionsArray(), c2.GetEmailDescriptionsArray());
+		}
+
 		[Test]
 		public async Task ShallowCopyAsyncTest()
 		{
