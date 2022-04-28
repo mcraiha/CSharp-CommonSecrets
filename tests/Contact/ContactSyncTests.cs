@@ -231,6 +231,29 @@ namespace Tests
 			CollectionAssert.AreEqual(c1.GetEmailDescriptionsArray(), c2.GetEmailDescriptionsArray());
 		}
 
+		[Test, Description("Make sure both overloads work identically")]
+		public void UpdatePhoneNumbersAndDescriptionsOverloadTest()
+		{
+			// Arrange
+			Contact c1 = new Contact("", "", "");
+			Contact c2 = new Contact("", "", "");
+
+			string[] phoneNumbersArray = { "1234-123-123", "2344-234-234" };
+			string phoneNumbers = string.Join(Contact.separatorString, phoneNumbersArray);
+
+			string[] phoneNumberDescriptionsArray = { "work", "hotel" };
+			string phoneNumberDescriptions = string.Join(Contact.separatorString, phoneNumberDescriptionsArray);
+
+			// Act
+			c1.UpdatePhoneNumbersAndDescriptions(phoneNumbersArray, phoneNumberDescriptionsArray);
+			c2.UpdatePhoneNumbersAndDescriptions(phoneNumbers, phoneNumberDescriptions);
+
+			// Assert
+			Assert.AreEqual(phoneNumbersArray.Length, c1.GetPhoneNumbersArray().Length);
+			CollectionAssert.AreEqual(c1.GetPhoneNumbersArray(), c2.GetPhoneNumbersArray());
+			CollectionAssert.AreEqual(c1.GetPhoneNumberDescriptionsArray(), c2.GetPhoneNumberDescriptionsArray());
+		}
+
 		[Test]
 		public void ShallowCopyTest()
 		{
