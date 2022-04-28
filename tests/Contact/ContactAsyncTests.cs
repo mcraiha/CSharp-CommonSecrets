@@ -286,6 +286,27 @@ namespace Tests
 			CollectionAssert.AreEqual(c1.GetPhoneNumberDescriptionsArray(), c2.GetPhoneNumberDescriptionsArray());
 		}
 
+		[Test, Description("Make sure both overloads work identically")]
+		public async Task UpdateWebsitesOverloadAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			Contact c1 = await Contact.CreateContactAsync("", "", "", securityAsyncFunctions);
+			Contact c2 = await Contact.CreateContactAsync("", "", "", securityAsyncFunctions);
+
+			string[] websitesArray = { "https://dacoolastdragons4life.com", "https://nicevalleyvaults.net" };
+			string websites = string.Join(Contact.separatorString, websitesArray);
+
+			// Act
+			await c1.UpdateWebsitesAsync(websitesArray, securityAsyncFunctions);
+			await c2.UpdateWebsitesAsync(websites, securityAsyncFunctions);
+
+			// Assert
+			Assert.AreEqual(websitesArray.Length, c1.GetWebsitesArray().Length);
+			CollectionAssert.AreEqual(c1.GetWebsitesArray(), c2.GetWebsitesArray());
+		}
+
 		[Test]
 		public async Task ShallowCopyAsyncTest()
 		{
