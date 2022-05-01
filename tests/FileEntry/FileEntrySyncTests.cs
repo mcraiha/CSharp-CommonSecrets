@@ -53,10 +53,10 @@ namespace Tests
 			FileEntry fe = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
 
 			// Act
-			var modificationTime1 = fe.modificationTime;
+			var modificationTime1 = fe.GetModificationTime();
 			System.Threading.Thread.Sleep(1100);
 			fe.UpdateFileEntry(fe.GetFilename(), new byte[] { });
-			var modificationTime2 = fe.modificationTime;
+			var modificationTime2 = fe.GetModificationTime();
 
 			// Assert
 			Assert.AreNotEqual(modificationTime1, modificationTime2);
