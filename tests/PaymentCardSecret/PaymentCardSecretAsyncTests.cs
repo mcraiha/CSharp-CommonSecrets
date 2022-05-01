@@ -101,6 +101,8 @@ namespace Tests
 			Assert.IsTrue(ComparisonHelper.ArePaymentCardsEqual(paymentCard, paymentCardCopy));
 			Assert.AreEqual(paymentCard.creationTime, paymentCardCopy.creationTime);
 			Assert.AreEqual(paymentCard.modificationTime, paymentCardCopy.modificationTime);
+
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await paymentCardSecret.GetPaymentCardAsync(null, securityAsyncFunctions));
 		}
 
 		[Test]
