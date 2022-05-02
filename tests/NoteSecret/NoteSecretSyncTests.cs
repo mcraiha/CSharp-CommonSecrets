@@ -98,6 +98,8 @@ namespace Tests
 			Assert.IsTrue(ComparisonHelper.AreNotesEqual(note, noteCopy));
 			Assert.AreEqual(note.creationTime, noteCopy.creationTime);
 			Assert.AreEqual(note.modificationTime, noteCopy.modificationTime);
+
+			Assert.Throws<ArgumentNullException>(() => noteSecret.GetNote(null));
 		}
 
 		[Test]
