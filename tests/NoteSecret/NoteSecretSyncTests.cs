@@ -179,6 +179,31 @@ namespace Tests
 		}
 
 		[Test]
+		public void GetCreationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 68, 78, 83, 9, 110, 211, 128, 213, 104, 15, 16 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xc5, 0xd6, 0xbb, 0xf8, 0x19, 0x11, 0xfb, 0x33, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			string title = "Wishlist for coding";
+			string text = "peace, happiness, freedom, good editor";
+
+			Note note = new Note(title, text);
+
+			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			DateTimeOffset noteCreationTime = noteSecret.GetCreationTime(derivedKey);
+
+			// Assert
+			Assert.AreEqual(note.GetCreationTime(), noteCreationTime);
+		}
+
+		[Test]
 		public void GetModificationTimeTest()
 		{
 			// Arrange
