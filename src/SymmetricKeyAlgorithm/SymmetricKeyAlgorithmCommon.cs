@@ -62,6 +62,11 @@ namespace CSCommonSecrets
 		{
 			this.algorithm = algorithm.ToString();
 
+			if (settings == null)
+			{
+				throw new ArgumentNullException("SymmetricKeyAlgorithm's settings cannot be null!");
+			}
+
 			if (algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
 			{
 				if (!Array.Exists(AES_CTR_AllowedKeyLengths, allowed => allowed * 8 == keySizeInBits))
