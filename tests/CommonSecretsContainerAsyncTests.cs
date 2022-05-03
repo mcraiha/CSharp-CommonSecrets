@@ -308,7 +308,7 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplaceLoginInformationSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceLoginInformationSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceLoginInformationSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplaceLoginInformationSecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceLoginInformationSecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure7 = await csc.ReplaceLoginInformationSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
@@ -386,7 +386,7 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplaceNoteSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceNoteSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceNoteSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplaceNoteSecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceNoteSecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure7 = await csc.ReplaceNoteSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
@@ -464,7 +464,7 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplaceFileEntrySecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceFileEntrySecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceFileEntrySecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplaceFileEntrySecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceFileEntrySecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure7 = await csc.ReplaceFileEntrySecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
@@ -536,7 +536,7 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplaceContactSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceContactSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceContactSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplaceContactSecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceContactSecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure7 = await csc.ReplaceContactSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
@@ -608,7 +608,7 @@ namespace Tests
 			var replaceResultFailure3 = await csc.ReplacePaymentCardSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplacePaymentCardSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplacePaymentCardSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplacePaymentCardSecretAsync(-1, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplacePaymentCardSecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure7 = await csc.ReplacePaymentCardSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
