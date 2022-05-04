@@ -89,10 +89,15 @@ namespace Tests
 			// Act
 			PaymentCard paymentCardCopy = paymentCardSecret.GetPaymentCard(derivedKey);
 
+			PaymentCardSecret paymentCardInvalid = new PaymentCardSecret(paymentCardSecret);
+			paymentCardInvalid.audalfData[0] = (byte)(255 - paymentCardInvalid.audalfData[0]);
+
 			// Assert
 			Assert.IsTrue(ComparisonHelper.ArePaymentCardsEqual(paymentCard, paymentCardCopy));
 			Assert.AreEqual(paymentCard.creationTime, paymentCardCopy.creationTime);
 			Assert.AreEqual(paymentCard.modificationTime, paymentCardCopy.modificationTime);
+			Assert.Throws<ArgumentNullException>(() => paymentCardSecret.GetPaymentCard(null));
+			Assert.Throws<ArgumentException>(() => paymentCardInvalid.GetPaymentCard(derivedKey));
 		}
 
 		[Test]
