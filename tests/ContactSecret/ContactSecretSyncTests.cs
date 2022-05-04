@@ -295,6 +295,51 @@ namespace Tests
 		}
 
 		[Test]
+		public void GetCreationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			Contact c1 = new Contact("first", "last", "middle");
+			ContactSecret cs1 = new ContactSecret(c1, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			DateTimeOffset contactCreationTime = cs1.GetCreationTime(derivedKey);
+
+			// Assert
+			Assert.AreEqual(c1.GetCreationTime(), contactCreationTime);
+		}
+
+		[Test]
+		public void GetModificationTimeTest()
+		{
+			// Arrange
+			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+			Contact c1 = new Contact("first", "last", "middle");
+			ContactSecret cs1 = new ContactSecret(c1, "does not matter", skaAES_CTR, derivedKey);
+
+			// Act
+			DateTimeOffset contactSecretModificationTime1 = cs1.GetModificationTime(derivedKey);
+			Thread.Sleep(1100);
+			cs1.SetFirstName("the other first", derivedKey);
+			DateTimeOffset contactSecretModificationTime2 = cs1.GetModificationTime(derivedKey);
+
+			// Assert
+			Assert.Greater(contactSecretModificationTime2, contactSecretModificationTime1);
+		}
+
+		[Test]
 		public void GetKeyIdentifierTest()
 		{
 			// Arrange
