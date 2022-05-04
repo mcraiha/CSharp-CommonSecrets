@@ -165,10 +165,15 @@ namespace Tests
 			// Act
 			Contact contactCopy = cs.GetContact(derivedKey);
 
+			ContactSecret csInvalid = new ContactSecret(cs);
+			csInvalid.audalfData[0] = (byte)(255 - csInvalid.audalfData[0]);
+
 			// Assert
 			Assert.IsTrue(ComparisonHelper.AreContactsEqual(c1, contactCopy));
 			Assert.AreEqual(c1.creationTime, contactCopy.creationTime);
 			Assert.AreEqual(c1.modificationTime, contactCopy.modificationTime);
+			Assert.Throws<ArgumentNullException>(() => cs.GetContact(null));
+			Assert.Throws<ArgumentException>(() => csInvalid.GetContact(derivedKey));
 		}
 
 		[Test]
