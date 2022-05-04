@@ -276,6 +276,8 @@ namespace Tests
 
 			LoginInformation replace1 = ContentGeneratorSync.GenerateRandomLoginInformation();
 			LoginInformation replace2 = ContentGeneratorSync.GenerateRandomLoginInformation();
+
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = csc.AddLoginInformationSecret(password, add1, kdfeIdentifier);
@@ -289,6 +291,8 @@ namespace Tests
 			var replaceResultFailure3 = csc.ReplaceLoginInformationSecret(0, "", ContentGeneratorSync.GenerateRandomLoginInformation(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplaceLoginInformationSecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplaceLoginInformationSecret(2, password, replace1, kdfeIdentifier);
+			var replaceResultFailure6 = csc.ReplaceLoginInformationSecret(0, nullArray, replace1, kdfeIdentifier);
+			var replaceResultFailure7 = csc.ReplaceLoginInformationSecret(-1, nullArray, replace1, kdfeIdentifier);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetURL(), replace1.GetURL(), "Make sure that random content do not match!");
@@ -324,6 +328,12 @@ namespace Tests
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
 
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
 			Assert.AreEqual(2, csc.loginInformationSecrets.Count);
 		}
 
@@ -341,6 +351,8 @@ namespace Tests
 
 			Note replace1 = ContentGeneratorSync.GenerateRandomNote();
 			Note replace2 = ContentGeneratorSync.GenerateRandomNote();
+
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = csc.AddNoteSecret(password, add1, kdfeIdentifier);
@@ -354,6 +366,8 @@ namespace Tests
 			var replaceResultFailure3 = csc.ReplaceNoteSecret(0, "", ContentGeneratorSync.GenerateRandomNote(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplaceNoteSecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplaceNoteSecret(2, password, replace1, kdfeIdentifier);
+			var replaceResultFailure6 = csc.ReplaceNoteSecret(0, nullArray, replace1, kdfeIdentifier);
+			var replaceResultFailure7 = csc.ReplaceNoteSecret(-1, nullArray, replace1, kdfeIdentifier);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetNoteTitle(), replace1.GetNoteTitle(), "Make sure that random content do not match!");
@@ -389,6 +403,12 @@ namespace Tests
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
 
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
 			Assert.AreEqual(2, csc.noteSecrets.Count);
 		}
 
@@ -407,6 +427,8 @@ namespace Tests
 
 			FileEntry replace1 = ContentGeneratorSync.GenerateRandomFileEntry();
 			FileEntry replace2 = ContentGeneratorSync.GenerateRandomFileEntry();
+
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = csc.AddFileEntrySecret(password, add1, kdfeIdentifier);
@@ -420,6 +442,8 @@ namespace Tests
 			var replaceResultFailure3 = csc.ReplaceFileEntrySecret(0, "", ContentGeneratorSync.GenerateRandomFileEntry(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplaceFileEntrySecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplaceFileEntrySecret(2, password, replace1, kdfeIdentifier);
+			var replaceResultFailure6 = csc.ReplaceFileEntrySecret(0, nullArray, replace1, kdfeIdentifier);
+			var replaceResultFailure7 = csc.ReplaceFileEntrySecret(-1, nullArray, replace1, kdfeIdentifier);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetFilename(), replace1.GetFilename(), "Make sure that random content do not match!");
@@ -455,6 +479,12 @@ namespace Tests
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
 
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
 			Assert.AreEqual(2, csc.fileSecrets.Count);
 		}
 
@@ -473,6 +503,8 @@ namespace Tests
 
 			Contact replace1 = ContentGeneratorSync.GenerateRandomContact();
 			Contact replace2 = ContentGeneratorSync.GenerateRandomContact();
+
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = csc.AddContactSecret(password, add1, kdfeIdentifier);
@@ -486,6 +518,8 @@ namespace Tests
 			var replaceResultFailure3 = csc.ReplaceContactSecret(0, "", ContentGeneratorSync.GenerateRandomContact(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplaceContactSecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplaceContactSecret(2, password, replace1, kdfeIdentifier);
+			var replaceResultFailure6 = csc.ReplaceContactSecret(0, nullArray, replace1, kdfeIdentifier);
+			var replaceResultFailure7 = csc.ReplaceContactSecret(-1, nullArray, replace1, kdfeIdentifier);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetFirstName(), replace1.GetFirstName(), "Make sure that random content do not match!");
@@ -521,6 +555,12 @@ namespace Tests
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
 
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
 			Assert.AreEqual(2, csc.contactSecrets.Count);
 		}
 
@@ -539,6 +579,8 @@ namespace Tests
 
 			PaymentCard replace1 = ContentGeneratorSync.GenerateRandomPaymentCard();
 			PaymentCard replace2 = ContentGeneratorSync.GenerateRandomPaymentCard();
+
+			byte[] nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = csc.AddPaymentCardSecret(password, add1, kdfeIdentifier);
@@ -552,6 +594,8 @@ namespace Tests
 			var replaceResultFailure3 = csc.ReplacePaymentCardSecret(0, "", ContentGeneratorSync.GenerateRandomPaymentCard(), kdfeIdentifier);
 			var replaceResultFailure4 = csc.ReplacePaymentCardSecret(-1, password, replace1, kdfeIdentifier);
 			var replaceResultFailure5 = csc.ReplacePaymentCardSecret(2, password, replace1, kdfeIdentifier);
+			var replaceResultFailure6 = csc.ReplacePaymentCardSecret(0, nullArray, replace1, kdfeIdentifier);
+			var replaceResultFailure7 = csc.ReplacePaymentCardSecret(-1, nullArray, replace1, kdfeIdentifier);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetTitle(), replace1.GetTitle(), "Make sure that random content do not match!");
@@ -586,6 +630,12 @@ namespace Tests
 
 			Assert.IsFalse(replaceResultFailure5.success);
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
+
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
 
 			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
 		}
