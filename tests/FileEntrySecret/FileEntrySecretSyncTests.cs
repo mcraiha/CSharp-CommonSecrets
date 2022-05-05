@@ -95,10 +95,15 @@ namespace Tests
 			// Act
 			FileEntry feCopy = fes.GetFileEntry(derivedKey);
 
+			FileEntrySecret fesInvalid = new FileEntrySecret(fes);
+			fesInvalid.audalfData[0] = (byte)(255 - fesInvalid.audalfData[0]);
+
 			// Assert
 			Assert.IsTrue(ComparisonHelper.AreFileEntriesEqual(fe, feCopy));
 			Assert.AreEqual(fe.creationTime, feCopy.creationTime);
 			Assert.AreEqual(fe.modificationTime, feCopy.modificationTime);
+			Assert.Throws<ArgumentNullException>(() => fes.GetFileEntry(null));
+			Assert.Throws<ArgumentException>(() => fesInvalid.GetFileEntry(derivedKey));
 		}
 
 		[Test]
