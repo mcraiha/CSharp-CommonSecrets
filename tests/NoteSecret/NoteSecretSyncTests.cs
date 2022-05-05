@@ -94,12 +94,16 @@ namespace Tests
 			// Act
 			Note noteCopy = noteSecret.GetNote(derivedKey);
 
+			NoteSecret noteSecretInvalid = new NoteSecret(noteSecret);
+			noteSecretInvalid.audalfData[0] = (byte)(255 - noteSecretInvalid.audalfData[0]);
+
 			// Assert
 			Assert.IsTrue(ComparisonHelper.AreNotesEqual(note, noteCopy));
 			Assert.AreEqual(note.creationTime, noteCopy.creationTime);
 			Assert.AreEqual(note.modificationTime, noteCopy.modificationTime);
 
 			Assert.Throws<ArgumentNullException>(() => noteSecret.GetNote(null));
+			Assert.Throws<ArgumentException>(() => noteSecretInvalid.GetNote(derivedKey));
 		}
 
 		[Test]
