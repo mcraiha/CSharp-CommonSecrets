@@ -1,10 +1,6 @@
 using NUnit.Framework;
 using CSCommonSecrets;
 
-#if ASYNC_WITH_CUSTOM
-using System.Threading.Tasks;
-#endif
-
 namespace Tests
 {
 	public class SymmetricKeyAlgorithmCommonTests
@@ -14,16 +10,19 @@ namespace Tests
 		{
 			
 		}
-
-		/// <summary>
-		/// 32 bytes equals 256 bits
-		/// </summary>
-		private const int validChaCha20KeyLength = 32;
-
 		
+		[Test]
+		public void InvalidValuesTest()
+		{
+			// Arrange
+			string invalidValue = "invalid";
+			SymmetricKeyAlgorithm symmetricKeyAlgorithm = new SymmetricKeyAlgorithm();
+			symmetricKeyAlgorithm.algorithm = invalidValue;
 
-		
+			// Act
 
-		
+			// Assert
+			Assert.Throws<System.Exception>(() => symmetricKeyAlgorithm.GetSymmetricEncryptionAlgorithm());
+		}
 	}
 }
