@@ -2,6 +2,8 @@
 - Add async versions with custom cryptographic methods (**FEATURE**)
 - Update Microsoft.AspNetCore.Cryptography.KeyDerivation (**FEATURE**)
 - Add GetKeyDerivationFunctionEntryIdentifiers method for getting identifiers (**FEATURE**)
+- Update LibAES-CTR (**FEATURE**)
+- Update LibChaCha20 (**FEATURE**)
 
 ## Version 0.9.6 (released 2021-12-09)
 - Update LibAES-CTR (**FEATURE**)
