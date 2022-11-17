@@ -75,7 +75,7 @@ namespace Tests
 			csc.paymentCards.Add(new PaymentCard(cardTitle1, cardNameOnCard1, cardCardType1, cardNumber1, cardSecurityCode1, cardStartDate1, cardExpirationDate1, cardNotes));
 
 			string json = JsonSerializer.Serialize(csc, serializerOptions);
-			TestContext.Out.WriteLine(json);
+			//TestContext.Out.WriteLine(json);
 
 			CommonSecretsContainer cscDeserialized = JsonSerializer.Deserialize<CommonSecretsContainer>(json);
 
