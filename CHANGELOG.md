@@ -4,6 +4,8 @@
 - Add GetKeyDerivationFunctionEntryIdentifiers method for getting identifiers (**FEATURE**)
 - Update LibAES-CTR (**FEATURE**)
 - Update LibChaCha20 (**FEATURE**)
+- Add .Net 8 support (**FEATURE**)
+- Drop .Net standard support (**BREAKING**)
 
 ## Version 0.9.6 (released 2021-12-09)
 - Update LibAES-CTR (**FEATURE**)

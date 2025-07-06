@@ -1,6 +1,6 @@
 # CSharp-CommonSecrets
 
-CSharp library implementation of [CommonSecrets](https://github.com/mcraiha/CommonSecrets) format.
+Managed C# library implementation of [CommonSecrets](https://github.com/mcraiha/CommonSecrets) format.
 
 ## What is CommonSecrets
 
