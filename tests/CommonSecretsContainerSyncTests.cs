@@ -1,6 +1,8 @@
 #if !ASYNC_WITH_CUSTOM && !WITH_CUSTOM
 
 using NUnit.Framework;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
+using CollectionAssert = NUnit.Framework.Legacy.ClassicAssert;
 using CSCommonSecrets;
 using System;
 using System.Text;
@@ -50,8 +52,8 @@ namespace Tests
 
 			// Assert
 			Assert.AreEqual(2, identifiers.Count);
-			CollectionAssert.Contains(identifiers, kdfeIdentifier1);
-			CollectionAssert.Contains(identifiers, kdfeIdentifier2);
+			CollectionAssert.Contains(kdfeIdentifier1, identifiers);
+			CollectionAssert.Contains(kdfeIdentifier2, identifiers);
 		}
 
 		[Test]

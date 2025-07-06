@@ -1,6 +1,8 @@
 #if ASYNC_WITH_CUSTOM
 
 using NUnit.Framework;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
+using CollectionAssert = NUnit.Framework.Legacy.ClassicAssert;
 using CSCommonSecrets;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;

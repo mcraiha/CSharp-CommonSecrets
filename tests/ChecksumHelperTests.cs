@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 using CSCommonSecrets;
 using System.Collections;
 using System.Linq;
