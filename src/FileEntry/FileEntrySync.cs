@@ -3,77 +3,76 @@
 using System;
 using System.Text;
 
-namespace CSCommonSecrets
+namespace CSCommonSecrets;
+
+/// <summary>
+/// FileEntry stores one plaintext (anyone can read) file
+/// </summary>
+public sealed partial class FileEntry
 {
 	/// <summary>
-	/// FileEntry stores one plaintext (anyone can read) file
+	/// Default constructor for file entry
 	/// </summary>
-	public sealed partial class FileEntry
+	/// <param name="newFilename">Filename</param>
+	/// <param name="newFileContent">File content</param>
+	public FileEntry(string newFilename, byte[] newFileContent) : this (newFilename, newFileContent, DateTimeOffset.UtcNow)
 	{
-		/// <summary>
-		/// Default constructor for file entry
-		/// </summary>
-		/// <param name="newFilename">Filename</param>
-		/// <param name="newFileContent">File content</param>
-		public FileEntry(string newFilename, byte[] newFileContent) : this (newFilename, newFileContent, DateTimeOffset.UtcNow)
-		{
 
-		}
+	}
 
-		/// <summary>
-		/// Constructor with creation time override
-		/// </summary>
-		/// <param name="newFilename">Filename</param>
-		/// <param name="newFileContent">File content</param>
-		/// <param name="time">Creation time</param>
-		public FileEntry(string newFilename, byte[] newFileContent, DateTimeOffset time)
-		{
-			this.creationTime = time.ToUnixTimeSeconds();
-			this.UpdateFileEntry(newFilename, newFileContent, time);
-		}
+	/// <summary>
+	/// Constructor with creation time override
+	/// </summary>
+	/// <param name="newFilename">Filename</param>
+	/// <param name="newFileContent">File content</param>
+	/// <param name="time">Creation time</param>
+	public FileEntry(string newFilename, byte[] newFileContent, DateTimeOffset time)
+	{
+		this.creationTime = time.ToUnixTimeSeconds();
+		this.UpdateFileEntry(newFilename, newFileContent, time);
+	}
 
-		/// <summary>
-		/// Update file entry, uses DateTimeOffset.UtcNow for modification timestamp
-		/// </summary>
-		/// <param name="updatedFilename">Filename</param>
-		/// <param name="updatedFileContent">File content</param>
-		public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent)
-		{
-			this.UpdateFileEntry(updatedFilename, updatedFileContent, DateTimeOffset.UtcNow);
-		}
+	/// <summary>
+	/// Update file entry, uses DateTimeOffset.UtcNow for modification timestamp
+	/// </summary>
+	/// <param name="updatedFilename">Filename</param>
+	/// <param name="updatedFileContent">File content</param>
+	public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent)
+	{
+		this.UpdateFileEntry(updatedFilename, updatedFileContent, DateTimeOffset.UtcNow);
+	}
 
-		/// <summary>
-		/// Update file entry, use chosen time for modification time
-		/// </summary>
-		/// <param name="updatedFilename">Filename</param>
-		/// <param name="updatedFileContent">File content</param>
-		/// <param name="time">Modification time</param>
-		public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent, DateTimeOffset time)
-		{
-			this.filename = Encoding.UTF8.GetBytes(updatedFilename);
-			this.fileContent = updatedFileContent;
-			this.modificationTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-			this.CalculateAndUpdateChecksum();
-		}
+	/// <summary>
+	/// Update file entry, use chosen time for modification time
+	/// </summary>
+	/// <param name="updatedFilename">Filename</param>
+	/// <param name="updatedFileContent">File content</param>
+	/// <param name="time">Modification time</param>
+	public void UpdateFileEntry(string updatedFilename, byte[] updatedFileContent, DateTimeOffset time)
+	{
+		this.filename = Encoding.UTF8.GetBytes(updatedFilename);
+		this.fileContent = updatedFileContent;
+		this.modificationTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+		this.CalculateAndUpdateChecksum();
+	}
 
-		/// <summary>
-		/// Check if checksum matches content
-		/// </summary>
-		/// <returns>True if matches; False otherwise</returns>
-		public bool CheckIfChecksumMatchesContent()
-		{
-			return checksum == this.CalculateHexChecksum();
-		}
+	/// <summary>
+	/// Check if checksum matches content
+	/// </summary>
+	/// <returns>True if matches; False otherwise</returns>
+	public bool CheckIfChecksumMatchesContent()
+	{
+		return checksum == this.CalculateHexChecksum();
+	}
 
-		private string CalculateHexChecksum()
-		{
-			return ChecksumHelper.CalculateHexChecksum(this.filename, this.fileContent, BitConverter.GetBytes(this.creationTime), BitConverter.GetBytes(this.modificationTime));
-		}
+	private string CalculateHexChecksum()
+	{
+		return ChecksumHelper.CalculateHexChecksum(this.filename, this.fileContent, BitConverter.GetBytes(this.creationTime), BitConverter.GetBytes(this.modificationTime));
+	}
 
-		private void CalculateAndUpdateChecksum()
-		{
-			this.checksum = this.CalculateHexChecksum();
-		}
+	private void CalculateAndUpdateChecksum()
+	{
+		this.checksum = this.CalculateHexChecksum();
 	}
 }
 
