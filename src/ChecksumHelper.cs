@@ -1,4 +1,4 @@
-using System.Text;
+using System;
 using System.Security.Cryptography;
 
 #if ASYNC_WITH_CUSTOM
@@ -23,7 +23,7 @@ public static class ChecksumHelper
 	public static async Task<string> CalculateHexChecksumAsync(ISecurityAsyncFunctions securityFunctions, params byte[][] arrays)
 	{
 		byte[] joinedArray = JoinByteArrays(arrays);
-		return ByteArrayChecksumToHexString(await securityFunctions.SHA256_Hash(joinedArray));
+		return Convert.ToHexString(await securityFunctions.SHA256_Hash(joinedArray));
 	}
 
 	#elif WITH_CUSTOM
@@ -42,7 +42,7 @@ public static class ChecksumHelper
 		using (SHA256 mySHA256 = SHA256.Create())
 		{
 			var hash = mySHA256.ComputeHash(joinedArray);
-			return ByteArrayChecksumToHexString(hash);
+			return Convert.ToHexString(hash);
 		}
 	}
 
@@ -68,18 +68,5 @@ public static class ChecksumHelper
 			offset += array.Length;
 		}
 		return returnArray;
-	}
-
-	private static string ByteArrayChecksumToHexString(byte[] byteArray)
-	{
-		var sb = new StringBuilder(byteArray.Length * 2);
-
-		foreach (byte b in byteArray)
-		{
-			// Use uppercase
-			sb.Append(b.ToString("X2"));
-		}
-
-		return sb.ToString();
 	}
 }
