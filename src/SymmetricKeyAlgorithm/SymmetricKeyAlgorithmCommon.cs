@@ -173,7 +173,7 @@ public sealed partial class SettingsAES_CTR
 	/// <summary>
 	/// Initial counter as byte array
 	/// </summary>
-	public byte[] initialCounter { get; set; }
+	public required byte[] initialCounter { get; set; }
 
 	/// <summary>
 	/// For (de)serialization

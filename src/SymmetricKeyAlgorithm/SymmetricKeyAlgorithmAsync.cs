@@ -69,6 +69,7 @@ public sealed partial class SettingsAES_CTR
 	/// </summary>
 	/// <param name="initialCounter">Byte array of initial counter</param>
 	/// <param name="securityFunctions">Security functions</param>
+	[SetsRequiredMembers]
 	public SettingsAES_CTR(byte[] initialCounter, ISecurityAsyncFunctions securityFunctions)
 	{
 		if (initialCounter == null)
