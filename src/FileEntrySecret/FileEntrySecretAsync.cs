@@ -47,11 +47,11 @@ public sealed partial class FileEntrySecret
 	/// <returns>FileEntrySecret</returns>
 	public static async Task<FileEntrySecret> CreateFileEntrySecretAsync(Dictionary<string, object> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		FileEntrySecret fileEntrySecret = new FileEntrySecret();
-
-		fileEntrySecret.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
-
-		fileEntrySecret.algorithm = algorithm;
+		FileEntrySecret fileEntrySecret = new FileEntrySecret()
+		{
+			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
+			algorithm = algorithm,
+		};
 
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(fileEntryAsDictionary, valueTypes: null, serializationSettings: serializationSettings );

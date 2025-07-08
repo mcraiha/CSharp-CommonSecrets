@@ -5,6 +5,8 @@ using System.Text;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -20,6 +22,7 @@ public sealed partial class KeyDerivationFunctionEntry
 	/// <param name="iterationsCount">How many iterations</param>
 	/// <param name="howManyBytesAreWanted">How many output bytes are wanted</param>
 	/// <param name="id">Key identifier</param>
+	[SetsRequiredMembers]
 	public KeyDerivationFunctionEntry(KeyDerivationPrf prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id)
 	{
 		// Block SHA-1
@@ -53,7 +56,7 @@ public sealed partial class KeyDerivationFunctionEntry
 		this.algorithm = KDFAlgorithm.PBKDF2.ToString();
 
 		this.pseudorandomFunction = prf.ToString();
-		
+
 		this.salt = saltBytes;
 
 		this.iterations = iterationsCount;
@@ -105,7 +108,7 @@ public sealed partial class KeyDerivationFunctionEntry
 	{
 		int iterationsToDo = suggestedMinIterationsCount;
 		byte[] salt = new byte[saltMinLengthInBytes];
-		
+
 		RandomNumberGenerator rng = RandomNumberGenerator.Create();
 		// First add some iterations
 		byte[] fourBytes = new byte[4];
@@ -128,7 +131,7 @@ public sealed partial class KeyDerivationFunctionEntry
 	{
 		int iterationsToDo = suggestedMinIterationsCount;
 		byte[] salt = new byte[saltMinLengthInBytes];
-		
+
 		RandomNumberGenerator rng = RandomNumberGenerator.Create();
 		// First add some iterations
 		byte[] fourBytes = new byte[4];

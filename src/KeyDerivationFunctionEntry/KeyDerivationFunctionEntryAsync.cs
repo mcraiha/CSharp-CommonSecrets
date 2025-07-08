@@ -5,6 +5,8 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -20,6 +22,7 @@ public sealed partial class KeyDerivationFunctionEntry
 	/// <param name="iterationsCount">How many iterations</param>
 	/// <param name="howManyBytesAreWanted">How many output bytes are wanted</param>
 	/// <param name="id">Key identifier</param>
+	[SetsRequiredMembers]
 	private KeyDerivationFunctionEntry(KeyDerivationPseudoRandomFunction prf, byte[] saltBytes, int iterationsCount, int howManyBytesAreWanted, string id)
 	{
 		// Check salt bytes

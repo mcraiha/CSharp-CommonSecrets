@@ -27,7 +27,13 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			KeyDerivationFunctionEntry kdfe1 = new KeyDerivationFunctionEntry();
+			KeyDerivationFunctionEntry kdfe1 = new KeyDerivationFunctionEntry()
+			{
+				algorithm = "PBKDF2",
+				pseudorandomFunction = "HMACSHA512",
+				salt = new byte[16],
+				keyIdentifier = "primary"u8.ToArray()
+			};
 
 			KeyDerivationFunctionEntry kdfe2 = await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, new byte[16], 100_000, 32, "master_key", securityAsyncFunctions);
 

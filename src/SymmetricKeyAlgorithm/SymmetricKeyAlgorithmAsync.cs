@@ -3,6 +3,8 @@ using System;
 
 using System.Threading.Tasks;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -53,7 +55,7 @@ public sealed partial class SymmetricKeyAlgorithm
 	/// <returns>SymmetricKeyAlgorithm</returns>
 	public static SymmetricKeyAlgorithm GenerateNew(SymmetricEncryptionAlgorithm symmetricEncryptionAlgorithm, ISecurityAsyncFunctions securityFunctions)
 	{
-		return new SymmetricKeyAlgorithm(symmetricEncryptionAlgorithm, 256, (symmetricEncryptionAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR ) ? (object)SettingsAES_CTR.CreateWithCryptographicRandomNumbers(securityFunctions) : (object)SettingsChaCha20.CreateWithCryptographicRandomNumbers(securityFunctions) );
+		return new SymmetricKeyAlgorithm(symmetricEncryptionAlgorithm, 256, (symmetricEncryptionAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR) ? (object)SettingsAES_CTR.CreateWithCryptographicRandomNumbers(securityFunctions) : (object)SettingsChaCha20.CreateWithCryptographicRandomNumbers(securityFunctions));
 	}
 }
 
@@ -91,7 +93,7 @@ public sealed partial class SettingsAES_CTR
 
 		securityFunctions.GenerateSecureRandomBytes(initialCounter);
 
-		return new SettingsAES_CTR(initialCounter, securityFunctions); 
+		return new SettingsAES_CTR(initialCounter, securityFunctions);
 	}
 }
 
@@ -106,6 +108,7 @@ public sealed partial class SettingsChaCha20
 	/// <param name="nonce">Nonce as byte array</param>
 	/// <param name="counter">Counter</param>
 	/// <param name="securityFunctions">Security functions</param>
+	[SetsRequiredMembers]
 	public SettingsChaCha20(byte[] nonce, uint counter, ISecurityAsyncFunctions securityFunctions)
 	{
 		if (nonce == null)
@@ -133,7 +136,7 @@ public sealed partial class SettingsChaCha20
 		securityFunctions.GenerateSecureRandomBytes(nonce, 0, 8);
 		securityFunctions.GenerateSecureRandomBytes(uintBytes, 0, 3);
 
-		return new SettingsChaCha20(nonce, BitConverter.ToUInt32(uintBytes, 0), securityFunctions); 
+		return new SettingsChaCha20(nonce, BitConverter.ToUInt32(uintBytes, 0), securityFunctions);
 	}
 }
 

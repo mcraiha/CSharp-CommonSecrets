@@ -5,6 +5,8 @@ using CS_AES_CTR;
 using CSChaCha20;
 using System.Security.Cryptography;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 public sealed partial class SymmetricKeyAlgorithm
@@ -74,6 +76,7 @@ public sealed partial class SettingsAES_CTR
 	/// Default constructor for SettingsAES_CTR
 	/// </summary>
 	/// <param name="initialCounter">Byte array of initial counter</param>
+	[SetsRequiredMembers]
 	public SettingsAES_CTR(byte[] initialCounter)
 	{
 		if (initialCounter == null)
@@ -112,6 +115,7 @@ public sealed partial class SettingsChaCha20
 	/// </summary>
 	/// <param name="nonce">Nonce as byte array</param>
 	/// <param name="counter">Counter</param>
+	[SetsRequiredMembers]
 	public SettingsChaCha20(byte[] nonce, uint counter)
 	{
 		if (nonce == null)

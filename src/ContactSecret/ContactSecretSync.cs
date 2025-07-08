@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using CSharp_AUDALF;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -19,6 +21,7 @@ public sealed partial class ContactSecret
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
+	[SetsRequiredMembers]
 	public ContactSecret(Contact contact, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
@@ -55,7 +58,7 @@ public sealed partial class ContactSecret
 		this.algorithm = algorithm;
 
 		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings);
 
 		// Encrypt the AUDALF payload with given algorithm
 		this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
@@ -63,7 +66,7 @@ public sealed partial class ContactSecret
 		// Calculate new checksum
 		this.CalculateAndUpdateChecksum();
 	}
-	
+
 	/// <summary>
 	/// Constructor for custom dictionary, use this only if you know what you are doing
 	/// </summary>
@@ -71,6 +74,7 @@ public sealed partial class ContactSecret
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
+	[SetsRequiredMembers]
 	public ContactSecret(Dictionary<string, object> contactAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
@@ -78,7 +82,7 @@ public sealed partial class ContactSecret
 		this.algorithm = algorithm;
 
 		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(contactAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(contactAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
 
 		// Encrypt the AUDALF payload with given algorithm
 		this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
@@ -144,8 +148,8 @@ public sealed partial class ContactSecret
 		string relationship = (string)dict[Contact.relationshipKey];
 		string notes = (string)dict[Contact.notesKey];
 		string[] websites = ((string)dict[Contact.websitesKey]).Split(Contact.separatorChar);
-		Contact returnValue = new Contact(firstName, lastName, middleName, namePrefix, nameSuffix, nickname, company, jobTitle, department, 
-									emails, emailDescriptions, phoneNumbers, phoneNumberDescriptions, 
+		Contact returnValue = new Contact(firstName, lastName, middleName, namePrefix, nameSuffix, nickname, company, jobTitle, department,
+									emails, emailDescriptions, phoneNumbers, phoneNumberDescriptions,
 									country, streetAddress, streetAddressAdditional, postalCode, city, poBox, birthday,
 									websites, relationship, notes);
 
@@ -687,7 +691,7 @@ public sealed partial class ContactSecret
 
 	private bool GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword)
 	{
-		try 
+		try
 		{
 			Dictionary<string, object> contactAsDictionary = this.GetContactAsDictionary(derivedPassword);
 			// Update wanted value
@@ -699,7 +703,7 @@ public sealed partial class ContactSecret
 			this.algorithm = SymmetricKeyAlgorithm.GenerateNew(this.algorithm.GetSymmetricEncryptionAlgorithm());
 
 			// Create AUDALF payload from dictionary
-			byte[] serializedBytes = AUDALF_Serialize.Serialize(contactAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(contactAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
 
 			// Encrypt the AUDALF payload with given algorithm
 			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);

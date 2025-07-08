@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using CSharp_AUDALF;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -19,6 +21,7 @@ public sealed partial class NoteSecret
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
+	[SetsRequiredMembers]
 	public NoteSecret(Note note, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
@@ -34,7 +37,7 @@ public sealed partial class NoteSecret
 		this.algorithm = algorithm;
 
 		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings);
 
 		// Encrypt the AUDALF payload with given algorithm
 		this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
@@ -50,6 +53,7 @@ public sealed partial class NoteSecret
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
+	[SetsRequiredMembers]
 	public NoteSecret(Dictionary<string, object> noteAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
@@ -57,7 +61,7 @@ public sealed partial class NoteSecret
 		this.algorithm = algorithm;
 
 		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
 
 		// Encrypt the AUDALF payload with given algorithm
 		this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
@@ -204,7 +208,7 @@ public sealed partial class NoteSecret
 
 	private bool GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword)
 	{
-		try 
+		try
 		{
 			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
 			// Update wanted value
@@ -216,7 +220,7 @@ public sealed partial class NoteSecret
 			this.algorithm = SymmetricKeyAlgorithm.GenerateNew(this.algorithm.GetSymmetricEncryptionAlgorithm());
 
 			// Create AUDALF payload from dictionary
-			byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
 
 			// Encrypt the AUDALF payload with given algorithm
 			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);

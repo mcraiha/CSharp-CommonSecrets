@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using CSharp_AUDALF;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -19,6 +21,7 @@ public sealed partial class LoginInformationSecret
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="algorithm">SymmetricKeyAlgorithm used to encrypt the LoginInformation</param>
 	/// <param name="derivedPassword">Derived password</param>
+	[SetsRequiredMembers]
 	public LoginInformationSecret(LoginInformation loginInformation, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
@@ -42,7 +45,7 @@ public sealed partial class LoginInformationSecret
 		this.algorithm = algorithm;
 
 		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings);
 
 		// Encrypt the AUDALF payload with given algorithm
 		this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
@@ -58,6 +61,7 @@ public sealed partial class LoginInformationSecret
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
+	[SetsRequiredMembers]
 	public LoginInformationSecret(Dictionary<string, object> loginInformationAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
@@ -65,7 +69,7 @@ public sealed partial class LoginInformationSecret
 		this.algorithm = algorithm;
 
 		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(loginInformationAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(loginInformationAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
 
 		// Encrypt the AUDALF payload with given algorithm
 		this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
@@ -90,7 +94,7 @@ public sealed partial class LoginInformationSecret
 									);
 		returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]).ToUnixTimeSeconds();
 		returnValue.modificationTime = ((DateTimeOffset)dict[LoginInformation.modificationTimeKey]).ToUnixTimeSeconds();
-		
+
 		return returnValue;
 	}
 
@@ -238,7 +242,7 @@ public sealed partial class LoginInformationSecret
 		return loginInformationAsDictionary;
 	}
 
-	
+
 
 	/// <summary>
 	/// Can the content be decrypted with given derived password
@@ -356,7 +360,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>True if set goes correctly; False otherwise</returns>
 	public bool SetCreationTime(DateTimeOffset newCreationTime, byte[] derivedPassword)
 	{
-		return this.GenericSet(LoginInformation.creationTimeKey, newCreationTime,  DateTimeOffset.UtcNow, derivedPassword);
+		return this.GenericSet(LoginInformation.creationTimeKey, newCreationTime, DateTimeOffset.UtcNow, derivedPassword);
 	}
 
 	/// <summary>
@@ -367,7 +371,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>True if set goes correctly; False otherwise</returns>
 	public bool SetModificationTime(DateTimeOffset newModificationTime, byte[] derivedPassword)
 	{
-		return this.GenericSet(LoginInformation.modificationTimeKey, newModificationTime,  DateTimeOffset.UtcNow, derivedPassword);
+		return this.GenericSet(LoginInformation.modificationTimeKey, newModificationTime, DateTimeOffset.UtcNow, derivedPassword);
 	}
 
 	/// <summary>
@@ -405,7 +409,7 @@ public sealed partial class LoginInformationSecret
 
 	private bool GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword)
 	{
-		try 
+		try
 		{
 			Dictionary<string, object> loginInformationAsDictionary = this.GetLoginInformationAsDictionary(derivedPassword);
 			loginInformationAsDictionary[key] = value;
@@ -419,7 +423,7 @@ public sealed partial class LoginInformationSecret
 			this.algorithm = SymmetricKeyAlgorithm.GenerateNew(this.algorithm.GetSymmetricEncryptionAlgorithm());
 
 			// Create AUDALF payload from dictionary
-			byte[] serializedBytes = AUDALF_Serialize.Serialize(loginInformationAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(loginInformationAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
 
 			// Encrypt the AUDALF payload with given algorithm
 			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);

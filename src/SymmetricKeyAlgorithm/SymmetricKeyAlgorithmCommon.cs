@@ -1,6 +1,8 @@
 using System;
 using System.Text;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -22,7 +24,7 @@ public sealed partial class SymmetricKeyAlgorithm
 	/// <summary>
 	/// Symmetric Encryption Algorithm as string
 	/// </summary>
-	public string algorithm { get; set; }
+	public required string algorithm { get; set; }
 
 	/// <summary>
 	/// Key size in bits
@@ -57,6 +59,7 @@ public sealed partial class SymmetricKeyAlgorithm
 	/// <param name="algorithm">Algorithm to use</param>
 	/// <param name="keySizeInBits">Key size in bits, e.g. 256</param>
 	/// <param name="settings">Settings for chosen algorithm</param>
+	[SetsRequiredMembers]
 	public SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm algorithm, int keySizeInBits, object settings)
 	{
 		this.algorithm = algorithm.ToString();
@@ -96,6 +99,7 @@ public sealed partial class SymmetricKeyAlgorithm
 	/// Deep copy constructor
 	/// </summary>
 	/// <param name="copyThis">SymmetricKeyAlgorithm to copy</param>
+	[SetsRequiredMembers]
 	public SymmetricKeyAlgorithm(SymmetricKeyAlgorithm copyThis)
 	{
 		this.algorithm = copyThis.algorithm;
@@ -139,16 +143,16 @@ public sealed partial class SymmetricKeyAlgorithm
 		if (actualAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR)
 		{
 			returnValue = ChecksumHelper.JoinByteArrays(
-									Encoding.UTF8.GetBytes(this.algorithm), 
-									BitConverter.GetBytes(this.keySizeInBits), 
+									Encoding.UTF8.GetBytes(this.algorithm),
+									BitConverter.GetBytes(this.keySizeInBits),
 									settingsAES_CTR.GetSettingsAsBytes()
 									);
 		}
 		else if (actualAlgorithm == SymmetricEncryptionAlgorithm.ChaCha20)
 		{
 			returnValue = ChecksumHelper.JoinByteArrays(
-									Encoding.UTF8.GetBytes(this.algorithm), 
-									BitConverter.GetBytes(this.keySizeInBits), 
+									Encoding.UTF8.GetBytes(this.algorithm),
+									BitConverter.GetBytes(this.keySizeInBits),
 									settingsChaCha20.GetSettingsAsBytes()
 									);
 		}
@@ -208,7 +212,7 @@ public sealed partial class SettingsChaCha20
 	/// <summary>
 	/// Nonce byte array
 	/// </summary>
-	public byte[] nonce { get; set; }
+	public required byte[] nonce { get; set; }
 
 	/// <summary>
 	/// Counter

@@ -51,17 +51,17 @@ public sealed partial class KeyDerivationFunctionEntry
 	/// <summary>
 	/// Algorithm can only be "PBKDF2"
 	/// </summary>
-	public string algorithm { get; set; }
+	public required string algorithm { get; set; }
 
 	/// <summary>
 	/// Pseudo-random function can be either "HMAC-SHA256" or "HMAC-SHA512". It is casted to enum.
 	/// </summary>
-	public string pseudorandomFunction { get; set; }
+	public required string pseudorandomFunction { get; set; }
 
 	/// <summary>
 	/// Salt bytes
 	/// </summary>
-	public byte[] salt { get; set; }
+	public required byte[] salt { get; set; }
 
 	/// <summary>
 	/// How many iterations should be done
@@ -76,7 +76,7 @@ public sealed partial class KeyDerivationFunctionEntry
 	/// <summary>
 	/// Key identifier, e.g. "primary" as UTF-8 byte array
 	/// </summary>
-	public byte[] keyIdentifier { get; set; }
+	public required byte[] keyIdentifier { get; set; }
 
 	/// <summary>
 	/// Calculated checksum of Key Derivation Function Entry

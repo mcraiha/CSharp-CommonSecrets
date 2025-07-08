@@ -24,8 +24,6 @@ public sealed partial class LoginInformationSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<LoginInformationSecret> CreateLoginInformationSecretAsync(LoginInformation loginInformation, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		LoginInformationSecret loginInformationSecret = new LoginInformationSecret();
-
 		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 		{
 			{ LoginInformation.titleKey, loginInformation.GetTitle() },
@@ -42,9 +40,11 @@ public sealed partial class LoginInformationSecret
 			{ LoginInformation.tagsKey, loginInformation.GetTags() },
 		};
 
-		loginInformationSecret.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
-
-		loginInformationSecret.algorithm = algorithm;
+		LoginInformationSecret loginInformationSecret = new LoginInformationSecret()
+		{
+			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
+			algorithm = algorithm,
+		};
 
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
@@ -68,11 +68,11 @@ public sealed partial class LoginInformationSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<LoginInformationSecret> CreateLoginInformationSecretAsync(Dictionary<string, object> loginInformationAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		LoginInformationSecret loginInformationSecret = new LoginInformationSecret();
-
-		loginInformationSecret.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
-
-		loginInformationSecret.algorithm = algorithm;
+		LoginInformationSecret loginInformationSecret = new LoginInformationSecret()
+		{
+			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
+			algorithm = algorithm,
+		};
 
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(loginInformationAsDictionary, valueTypes: null, serializationSettings: serializationSettings );

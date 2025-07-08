@@ -24,8 +24,6 @@ public sealed partial class ContactSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<ContactSecret> CreateContactSecretAsync(Contact contact, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		ContactSecret contactSecret = new ContactSecret();
-
 		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 		{
 			{ Contact.firstNameKey, contact.GetFirstName() },
@@ -55,9 +53,11 @@ public sealed partial class ContactSecret
 			{ Contact.modificationTimeKey, DateTimeOffset.FromUnixTimeSeconds(contact.modificationTime) },
 		};
 
-		contactSecret.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
-
-		contactSecret.algorithm = algorithm;
+		ContactSecret contactSecret = new ContactSecret()
+		{
+			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
+			algorithm = algorithm,
+		};
 
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
@@ -81,11 +81,11 @@ public sealed partial class ContactSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<ContactSecret> CreateContactSecretAsync(Dictionary<string, object> contactAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		ContactSecret contactSecret = new ContactSecret();
-
-		contactSecret.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
-
-		contactSecret.algorithm = algorithm;
+		ContactSecret contactSecret = new ContactSecret()
+		{
+			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
+			algorithm = algorithm,
+		};
 
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(contactAsDictionary, valueTypes: null, serializationSettings: serializationSettings );

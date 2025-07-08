@@ -38,11 +38,11 @@ public sealed partial class PaymentCardSecret
 			{ PaymentCard.modificationTimeKey, DateTimeOffset.FromUnixTimeSeconds(paymentCard.modificationTime) },
 		};
 
-		PaymentCardSecret paymentCardSecret = new PaymentCardSecret();
-
-		paymentCardSecret.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
-
-		paymentCardSecret.algorithm = algorithm;
+		PaymentCardSecret paymentCardSecret = new PaymentCardSecret()
+		{
+			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
+			algorithm = algorithm,
+		};
 
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
@@ -66,11 +66,11 @@ public sealed partial class PaymentCardSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<PaymentCardSecret> CreatePaymentCardSecretAsync(Dictionary<string, object> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		PaymentCardSecret paymentCardSecret = new PaymentCardSecret();
-
-		paymentCardSecret.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
-
-		paymentCardSecret.algorithm = algorithm;
+		PaymentCardSecret paymentCardSecret = new PaymentCardSecret()
+		{
+			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
+			algorithm = algorithm,
+		};
 
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(paymentCardAsDictionary, valueTypes: null, serializationSettings: serializationSettings );

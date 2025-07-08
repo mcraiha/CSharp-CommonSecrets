@@ -3,6 +3,8 @@ using System.Text;
 using System.Collections.Generic;
 using CSharp_AUDALF;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -13,7 +15,7 @@ public sealed partial class PaymentCardSecret
 	/// <summary>
 	/// Key identifier bytes (this is plaintext information), in normal case it is better to use GetKeyIdentifier()
 	/// </summary>
-	public byte[] keyIdentifier { get; set; }
+	public required byte[] keyIdentifier { get; set; }
 
 	/// <summary>
 	/// AUDALF data as byte array (this is secret/encrypted information)
@@ -42,6 +44,7 @@ public sealed partial class PaymentCardSecret
 	/// Deep copy existing PaymentCardSecret
 	/// </summary>
 	/// <param name="copyThis">Deep copy this</param>
+	[SetsRequiredMembers]
 	public PaymentCardSecret(PaymentCardSecret copyThis)
 	{
 		this.keyIdentifier = new byte[copyThis.keyIdentifier.Length];

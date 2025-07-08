@@ -5,6 +5,8 @@ using System.Text;
 using System.Collections.Generic;
 using CSharp_AUDALF;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -19,6 +21,7 @@ public sealed partial class PaymentCardSecret
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
+	[SetsRequiredMembers]
 	public PaymentCardSecret(PaymentCard paymentCard, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
@@ -40,7 +43,7 @@ public sealed partial class PaymentCardSecret
 		this.algorithm = algorithm;
 
 		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings);
 
 		// Encrypt the AUDALF payload with given algorithm
 		this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
@@ -56,6 +59,7 @@ public sealed partial class PaymentCardSecret
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
+	[SetsRequiredMembers]
 	public PaymentCardSecret(Dictionary<string, object> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
@@ -63,7 +67,7 @@ public sealed partial class PaymentCardSecret
 		this.algorithm = algorithm;
 
 		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(paymentCardAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(paymentCardAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
 
 		// Encrypt the AUDALF payload with given algorithm
 		this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);
@@ -83,11 +87,11 @@ public sealed partial class PaymentCardSecret
 	{
 		Dictionary<string, object> dict = this.GetPaymentCardAsDictionary(derivedPassword);
 		PaymentCard returnValue = new PaymentCard((string)dict[PaymentCard.titleKey], (string)dict[PaymentCard.nameOnCardKey], (string)dict[PaymentCard.cardTypeKey],
-									(string)dict[PaymentCard.numberKey], (string)dict[PaymentCard.securityCodeKey], (string)dict[PaymentCard.startDateKey], 
+									(string)dict[PaymentCard.numberKey], (string)dict[PaymentCard.securityCodeKey], (string)dict[PaymentCard.startDateKey],
 									(string)dict[PaymentCard.expirationDateKey], (string)dict[PaymentCard.notesKey]);
 		returnValue.creationTime = ((DateTimeOffset)dict[PaymentCard.creationTimeKey]).ToUnixTimeSeconds();
 		returnValue.modificationTime = ((DateTimeOffset)dict[PaymentCard.modificationTimeKey]).ToUnixTimeSeconds();
-		
+
 		return returnValue;
 	}
 
@@ -337,7 +341,7 @@ public sealed partial class PaymentCardSecret
 
 	private bool GenericSet(string key, object value, DateTimeOffset modificationTime, byte[] derivedPassword)
 	{
-		try 
+		try
 		{
 			Dictionary<string, object> paymentCardAsDictionary = this.GetPaymentCardAsDictionary(derivedPassword);
 			paymentCardAsDictionary[key] = value;
@@ -351,7 +355,7 @@ public sealed partial class PaymentCardSecret
 			this.algorithm = SymmetricKeyAlgorithm.GenerateNew(this.algorithm.GetSymmetricEncryptionAlgorithm());
 
 			// Create AUDALF payload from dictionary
-			byte[] serializedBytes = AUDALF_Serialize.Serialize(paymentCardAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+			byte[] serializedBytes = AUDALF_Serialize.Serialize(paymentCardAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
 
 			// Encrypt the AUDALF payload with given algorithm
 			this.audalfData = algorithm.EncryptBytes(serializedBytes, derivedPassword);

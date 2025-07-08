@@ -16,8 +16,10 @@ namespace Tests
 		{
 			// Arrange
 			string invalidValue = "invalid";
-			SymmetricKeyAlgorithm symmetricKeyAlgorithm = new SymmetricKeyAlgorithm();
-			symmetricKeyAlgorithm.algorithm = invalidValue;
+			SymmetricKeyAlgorithm symmetricKeyAlgorithm = new SymmetricKeyAlgorithm()
+			{
+				algorithm = invalidValue
+			};
 
 			// Act
 

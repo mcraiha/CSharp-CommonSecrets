@@ -1,5 +1,7 @@
 using System;
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace CSCommonSecrets;
 
 /// <summary>
@@ -57,13 +59,14 @@ public sealed partial class FileEntry
 	/// </summary>
 	public FileEntry()
 	{
-		
+
 	}
 
 	/// <summary>
 	/// Deep copy existing FileEntry to new FileEntry
 	/// </summary>
 	/// <param name="copyThis">FileEntry to copy</param>
+	[SetsRequiredMembers]
 	public FileEntry(FileEntry copyThis)
 	{
 		this.filename = new byte[copyThis.filename.Length];
@@ -84,7 +87,7 @@ public sealed partial class FileEntry
 	/// <returns>Shallow copy of FileEntry</returns>
 	public FileEntry ShallowCopy()
 	{
-		return (FileEntry) this.MemberwiseClone();
+		return (FileEntry)this.MemberwiseClone();
 	}
 
 	/// <summary>
