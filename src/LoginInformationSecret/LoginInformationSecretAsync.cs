@@ -40,17 +40,16 @@ public sealed partial class LoginInformationSecret
 			{ LoginInformation.tagsKey, loginInformation.GetTags() },
 		};
 
+		// Create AUDALF payload from dictionary
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings);
+
 		LoginInformationSecret loginInformationSecret = new LoginInformationSecret()
 		{
 			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
 			algorithm = algorithm,
+			// Encrypt the AUDALF payload with given algorithm
+			audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions),
 		};
-
-		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
-
-		// Encrypt the AUDALF payload with given algorithm
-		loginInformationSecret.audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions);
 
 		// Calculate new checksum
 		await loginInformationSecret.CalculateAndUpdateChecksumAsync(securityFunctions);
@@ -68,17 +67,16 @@ public sealed partial class LoginInformationSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<LoginInformationSecret> CreateLoginInformationSecretAsync(Dictionary<string, object> loginInformationAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
+		// Create AUDALF payload from dictionary
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(loginInformationAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
+
 		LoginInformationSecret loginInformationSecret = new LoginInformationSecret()
 		{
 			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
 			algorithm = algorithm,
+			// Encrypt the AUDALF payload with given algorithm
+			audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions),
 		};
-
-		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(loginInformationAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
-
-		// Encrypt the AUDALF payload with given algorithm
-		loginInformationSecret.audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions);
 
 		// Calculate new checksum
 		await loginInformationSecret.CalculateAndUpdateChecksumAsync(securityFunctions);

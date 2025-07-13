@@ -20,7 +20,7 @@ public sealed partial class PaymentCardSecret
 	/// <summary>
 	/// AUDALF data as byte array (this is secret/encrypted information)
 	/// </summary>
-	public byte[] audalfData { get; set; } = new byte[0];
+	public required byte[] audalfData { get; set; }
 
 	/// <summary>
 	/// Symmetric Key Algorithm for this PaymentCardSecret (this is plaintext information)

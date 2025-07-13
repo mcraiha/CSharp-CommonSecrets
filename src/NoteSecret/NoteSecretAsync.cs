@@ -46,17 +46,16 @@ public sealed partial class NoteSecret
 	/// <returns>NoteSecret</returns>
 	public static async Task<NoteSecret> CreateNoteSecretAsync(Dictionary<string, object> noteAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
+		// Create AUDALF payload from dictionary
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
+
 		NoteSecret noteSecret = new NoteSecret()
 		{
 			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
 			algorithm = algorithm,
+			// Encrypt the AUDALF payload with given algorithm
+			audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions),
 		};
-
-		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
-
-		// Encrypt the AUDALF payload with given algorithm
-		noteSecret.audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions);
 
 		// Calculate new checksum
 		await noteSecret.CalculateAndUpdateChecksumAsync(securityFunctions);

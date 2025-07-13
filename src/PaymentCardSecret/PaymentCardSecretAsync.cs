@@ -38,17 +38,16 @@ public sealed partial class PaymentCardSecret
 			{ PaymentCard.modificationTimeKey, DateTimeOffset.FromUnixTimeSeconds(paymentCard.modificationTime) },
 		};
 
+		// Create AUDALF payload from dictionary
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings);
+
 		PaymentCardSecret paymentCardSecret = new PaymentCardSecret()
 		{
 			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
 			algorithm = algorithm,
+			// Encrypt the AUDALF payload with given algorithm
+			audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions),
 		};
-
-		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(dictionaryForAUDALF, valueTypes: null, serializationSettings: serializationSettings );
-
-		// Encrypt the AUDALF payload with given algorithm
-		paymentCardSecret.audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions);
 
 		// Calculate new checksum
 		await paymentCardSecret.CalculateAndUpdateChecksumAsync(securityFunctions);
@@ -66,17 +65,16 @@ public sealed partial class PaymentCardSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<PaymentCardSecret> CreatePaymentCardSecretAsync(Dictionary<string, object> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
+		// Create AUDALF payload from dictionary
+		byte[] serializedBytes = AUDALF_Serialize.Serialize(paymentCardAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
+
 		PaymentCardSecret paymentCardSecret = new PaymentCardSecret()
 		{
 			keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier),
 			algorithm = algorithm,
+			// Encrypt the AUDALF payload with given algorithm
+			audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions),
 		};
-
-		// Create AUDALF payload from dictionary
-		byte[] serializedBytes = AUDALF_Serialize.Serialize(paymentCardAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
-
-		// Encrypt the AUDALF payload with given algorithm
-		paymentCardSecret.audalfData = await algorithm.EncryptBytesAsync(serializedBytes, derivedPassword, securityFunctions);
 
 		// Calculate new checksum
 		await paymentCardSecret.CalculateAndUpdateChecksumAsync(securityFunctions);
