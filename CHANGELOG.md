@@ -1,4 +1,4 @@
-## Version 1.0.0 (not yet released)
+## Version 1.1.0 (released 2025-07-28)
 - Add async versions with custom cryptographic methods (**FEATURE**)
 - Update Microsoft.AspNetCore.Cryptography.KeyDerivation (**FEATURE**)
 - Add GetKeyDerivationFunctionEntryIdentifiers method for getting identifiers (**FEATURE**)
@@ -6,6 +6,7 @@
 - Update LibChaCha20 (**FEATURE**)
 - Add .Net 8 support (**FEATURE**)
 - Drop .Net standard support (**BREAKING**)
+- Marked as `IsAotCompatible` (**FEATURE**)
 
 ## Version 0.9.6 (released 2021-12-09)
 - Update LibAES-CTR (**FEATURE**)
