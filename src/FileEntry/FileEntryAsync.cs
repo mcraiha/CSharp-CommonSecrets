@@ -62,7 +62,7 @@ public sealed partial class FileEntry
 	{
 		this.filename = Encoding.UTF8.GetBytes(updatedFilename);
 		this.fileContent = updatedFileContent;
-		this.modificationTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+		this.modificationTime = time.ToUnixTimeSeconds();
 		await this.CalculateAndUpdateChecksumAsync(securityFunctions);
 	}
 
