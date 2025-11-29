@@ -10,20 +10,20 @@ namespace CSCommonSecrets;
 public enum HistoryEventType
 {
 	/// <summary>
-    /// Entry created
-    /// </summary>
-    Create = 0,
+	/// Entry created
+	/// </summary>
+	Create = 0,
 	/// <summary>
-    /// Entry read
-    /// </summary>
+	/// Entry read
+	/// </summary>
 	Read,
 	/// <summary>
-    /// Entry updated
-    /// </summary>
+	/// Entry updated
+	/// </summary>
 	Update,
 	/// <summary>
-    /// Etnry deleted
-    /// </summary>
+	/// Etnry deleted
+	/// </summary>
 	Delete
 }
 
@@ -54,7 +54,7 @@ public sealed partial class History
 	public static readonly string descriptionTextKey = nameof(descriptionText);
 
 	/// <summary>
-	/// Occurence time of modification, in Unix seconds since epoch
+	/// Occurence time of history event, in Unix seconds since epoch
 	/// </summary>
 	public long occurenceTime { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
 
@@ -108,7 +108,18 @@ public sealed partial class History
 	/// <returns>Event type</returns>
 	public HistoryEventType GetEventType()
 	{
-		if (Enum.TryParse(this.eventType, out HistoryEventType parsedEventType))
+		return StringToHistoryEventType(this.eventType);
+	}
+
+	/// <summary>
+	/// Convert string to history event type (if possible)
+	/// </summary>
+	/// <param name="str">String</param>
+	/// <returns>HistoryEventType</returns>
+	/// <exception cref="Exception">If string is not valid event type</exception>
+	public static HistoryEventType StringToHistoryEventType(string str)
+	{
+		if (Enum.TryParse(str, out HistoryEventType parsedEventType))
 		{
 			return parsedEventType;
 		}

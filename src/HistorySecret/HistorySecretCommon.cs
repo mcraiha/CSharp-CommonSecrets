@@ -1,0 +1,83 @@
+using System;
+
+using CSharp_AUDALF;
+
+using System.Diagnostics.CodeAnalysis;
+
+namespace CSCommonSecrets;
+
+/// <summary>
+/// HistorySecret stores one encrypted history event
+/// </summary>
+public sealed partial class HistorySecret
+{
+	/// <summary>
+	/// Key identifier bytes (this is plaintext information), in normal case it is better to use GetKeyIdentifier()
+	/// </summary>
+	public required byte[] keyIdentifier { get; set; }
+
+	/// <summary>
+	/// AUDALF data as byte array (this is secret/encrypted information)
+	/// </summary>
+	public required byte[] audalfData { get; set; }
+
+	/// <summary>
+	/// Symmetric Key Algorithm for this HistorySecret (this is plaintext information)
+	/// </summary>
+	public SymmetricKeyAlgorithm algorithm { get; set; }
+
+	/// <summary>
+	/// Checksum of the data (this is plaintext information)
+	/// </summary>
+	public string checksum { get; set; } = string.Empty;
+
+	/// <summary>
+	/// For deserialization
+	/// </summary>
+	public HistorySecret()
+	{
+
+	}
+
+	/// <summary>
+	/// Deep copy existing HistorySecret
+	/// </summary>
+	/// <param name="copyThis">Deep copy this</param>
+	[SetsRequiredMembers]
+	public HistorySecret(HistorySecret copyThis)
+	{
+		this.keyIdentifier = new byte[copyThis.keyIdentifier.Length];
+		Buffer.BlockCopy(copyThis.keyIdentifier, 0, this.keyIdentifier, 0, copyThis.keyIdentifier.Length);
+
+		this.audalfData = new byte[copyThis.audalfData.Length];
+		Buffer.BlockCopy(copyThis.audalfData, 0, this.audalfData, 0, copyThis.audalfData.Length);
+
+		this.algorithm = new SymmetricKeyAlgorithm(copyThis.algorithm);
+		this.checksum = copyThis.checksum;
+	}
+
+	private static readonly SerializationSettings serializationSettings = new SerializationSettings() { dateTimeFormat = DateTimeFormat.UnixInSeconds };
+
+	private static readonly DeserializationSettings deserializationSettings = new DeserializationSettings()
+	{
+		wantedDateTimeType = typeof(DateTimeOffset)
+	};
+
+	/// <summary>
+	/// Get key identifier
+	/// </summary>
+	/// <returns>Key identifier as string</returns>
+	public string GetKeyIdentifier()
+	{
+		return System.Text.Encoding.UTF8.GetString(this.keyIdentifier);
+	}
+
+	/// <summary>
+	/// Get checksum as hex
+	/// </summary>
+	/// <returns>Hex string</returns>
+	public string GetChecksumAsHex()
+	{
+		return this.checksum;
+	}
+}
