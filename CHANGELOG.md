@@ -1,3 +1,10 @@
+## Version 1.1.1 (released 2025-11-30)
+- Add .Net 10 support (**FEATURE**)
+- Update Microsoft.AspNetCore.Cryptography.KeyDerivation (**FEATURE**)
+- Update LibAES-CTR (**FEATURE**)
+- Update LibChaCha20 (**FEATURE**)
+- Add history feature for keeping log of changes done to elements (**FEATURE**)
+
 ## Version 1.1.0 (released 2025-07-28)
 - Add async versions with custom cryptographic methods (**FEATURE**)
 - Update Microsoft.AspNetCore.Cryptography.KeyDerivation (**FEATURE**)
