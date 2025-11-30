@@ -33,7 +33,7 @@ namespace Tests
 
 			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
 			{
-				{ FileEntry.filenameKey, "filename.txt"}
+				{ History.descriptionTextKey, "Very boring description"}
 			};
 
 			HistorySecret historySecret = new HistorySecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
@@ -200,10 +200,10 @@ namespace Tests
 			HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset fileEntryCreationTime = historySecret.GetOccurenceTime(derivedKey);
+			DateTimeOffset historyOccurenceTime = historySecret.GetOccurenceTime(derivedKey);
 
 			// Assert
-			Assert.AreEqual(history.GetOccurenceTime(), fileEntryCreationTime);
+			Assert.AreEqual(history.GetOccurenceTime(), historyOccurenceTime);
 		}
 
 		[Test]
