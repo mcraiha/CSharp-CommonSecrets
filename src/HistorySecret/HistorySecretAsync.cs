@@ -28,7 +28,7 @@ public sealed partial class HistorySecret
 		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 		{
 			{ History.eventTypeKey, history.eventType },
-			{ History.descriptionTextKey, history.GetDescription() },
+			{ History.descriptionTextKey, history.descriptionText },
 			{ History.occurenceTimeKey, DateTimeOffset.FromUnixTimeSeconds(history.occurenceTime) },
 		};
 
@@ -78,7 +78,7 @@ public sealed partial class HistorySecret
 		return new History()
         {
             eventType = (string)dict[History.eventTypeKey],
-			descriptionText = Encoding.UTF8.GetBytes((string)dict[History.descriptionTextKey]),
+			descriptionText = (byte[])dict[History.descriptionTextKey],
 			occurenceTime = ((DateTimeOffset)dict[History.occurenceTimeKey]).ToUnixTimeSeconds()
         };
 	}
@@ -104,7 +104,7 @@ public sealed partial class HistorySecret
 	/// <returns>Description text as string</returns>
 	public async Task<string> GetDescriptionAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, History.descriptionTextKey, deserializationSettings, securityFunctions);
+		return Encoding.UTF8.GetString((byte[])await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, History.descriptionTextKey, deserializationSettings, securityFunctions));
 	}
 
 	/// <summary>
@@ -196,7 +196,7 @@ public sealed partial class HistorySecret
 	/// <returns>True if set was success; False otherwise</returns>
 	public async Task<bool> SetDescriptionAsync(string newDescription, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return await this.GenericSetAsync(History.descriptionTextKey, newDescription, derivedPassword, securityFunctions);
+		return await this.GenericSetAsync(History.descriptionTextKey, Encoding.UTF8.GetBytes(newDescription), derivedPassword, securityFunctions);
 	}
 
 	private async Task<bool> GenericSetAsync(string key, object value, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)

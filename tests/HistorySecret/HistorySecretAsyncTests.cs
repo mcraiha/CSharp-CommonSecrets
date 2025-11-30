@@ -37,7 +37,7 @@ namespace Tests
 
 			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
 			{
-				{ History.descriptionTextKey, "Very boring description"}
+				{ History.descriptionTextKey, "Very boring description"u8.ToArray() }
 			};
 
 			HistorySecret historySecret = await HistorySecret.CreateHistorySecretAsync(testDictionary, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);

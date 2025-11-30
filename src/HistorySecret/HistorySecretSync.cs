@@ -27,7 +27,7 @@ public sealed partial class HistorySecret
 		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
 		{
 			{ History.eventTypeKey, history.eventType },
-			{ History.descriptionTextKey, history.GetDescription() },
+			{ History.descriptionTextKey, history.descriptionText },
 			{ History.occurenceTimeKey, DateTimeOffset.FromUnixTimeSeconds(history.occurenceTime) },
 		};
 
@@ -82,7 +82,7 @@ public sealed partial class HistorySecret
 		return new History()
         {
             eventType = (string)dict[History.eventTypeKey],
-			descriptionText = Encoding.UTF8.GetBytes((string)dict[History.descriptionTextKey]),
+			descriptionText = (byte[])dict[History.descriptionTextKey],
 			occurenceTime = ((DateTimeOffset)dict[History.occurenceTimeKey]).ToUnixTimeSeconds()
         };
 	}
@@ -106,7 +106,7 @@ public sealed partial class HistorySecret
 	/// <returns>Description text as string</returns>
 	public string GetDescription(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.descriptionTextKey, deserializationSettings);
+		return Encoding.UTF8.GetString((byte[])Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.descriptionTextKey, deserializationSettings));
 	}
 
 	/// <summary>
@@ -194,7 +194,7 @@ public sealed partial class HistorySecret
 	/// <returns>True if set was success; False otherwise</returns>
 	public bool SetDescription(string newDescription, byte[] derivedPassword)
 	{
-		return this.GenericSet(History.descriptionTextKey, newDescription, derivedPassword);
+		return this.GenericSet(History.descriptionTextKey, Encoding.UTF8.GetBytes(newDescription), derivedPassword);
 	}
 
 	private bool GenericSet(string key, object value, byte[] derivedPassword)

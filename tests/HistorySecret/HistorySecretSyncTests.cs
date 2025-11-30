@@ -33,7 +33,7 @@ namespace Tests
 
 			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
 			{
-				{ History.descriptionTextKey, "Very boring description"}
+				{ History.descriptionTextKey, "Very boring description"u8.ToArray() }
 			};
 
 			HistorySecret historySecret = new HistorySecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
