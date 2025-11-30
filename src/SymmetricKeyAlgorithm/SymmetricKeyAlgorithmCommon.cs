@@ -1,7 +1,9 @@
 using System;
 using System.Text;
+using System.Collections.Frozen;
 
 using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 
 namespace CSCommonSecrets;
 
@@ -41,7 +43,7 @@ public sealed partial class SymmetricKeyAlgorithm
 	/// </summary>
 	public SettingsChaCha20 settingsChaCha20 { get; set; }
 
-	private static readonly int[] AES_CTR_AllowedKeyLengths = new int[3] { 16, 24, 32 };
+	private static readonly FrozenSet<int> AES_CTR_AllowedKeyLengths = new HashSet<int>() { 16*8, 24*8, 32*8 }.ToFrozenSet();
 
 	private static readonly int ChaCha20_AllowedKeyLength = 32;
 
@@ -71,7 +73,7 @@ public sealed partial class SymmetricKeyAlgorithm
 
 		if (algorithm == SymmetricEncryptionAlgorithm.AES_CTR)
 		{
-			if (!Array.Exists(AES_CTR_AllowedKeyLengths, allowed => allowed * 8 == keySizeInBits))
+			if (!AES_CTR_AllowedKeyLengths.Contains(keySizeInBits))
 			{
 				throw new ArgumentException($"{keySizeInBits} is not valid AES-CTR key size!");
 			}
