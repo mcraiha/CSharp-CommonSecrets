@@ -106,6 +106,18 @@ namespace Tests
 		{
 			return StructuralComparisons.StructuralEqualityComparer.Equals(symmetricKeyAlgorithm1.GetSettingsAsBytes(), symmetricKeyAlgorithm2.GetSettingsAsBytes());
 		}
+
+		public static bool AreHistoriesEqual(History history1, History history2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(history1.eventType, history2.eventType) && 
+					StructuralComparisons.StructuralEqualityComparer.Equals(history1.descriptionText, history2.descriptionText) &&
+					StructuralComparisons.StructuralEqualityComparer.Equals(history1.occurenceTime, history2.occurenceTime);
+		}
+
+		public static bool AreHistorySecretsEqual(HistorySecret historySecret1, HistorySecret historySecret2)
+		{
+			return StructuralComparisons.StructuralEqualityComparer.Equals(historySecret1.audalfData, historySecret2.audalfData) && AreSymmetricKeyAlgorithmsEqual(historySecret1.algorithm, historySecret2.algorithm);
+		}
 	}
 
 	public static class CalculateEntropy
