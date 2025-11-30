@@ -186,6 +186,26 @@ namespace Tests
 
 			return await PaymentCard.CreatePaymentCardAsync(title, nameOnCard, cardType, number, securityCode, startDate, expirationDate, notes, securityAsyncFunctions);;     
 		}
+
+		private static HistoryEventType GenerateRandomHistoryEventType(Random rng)
+		{
+			var values = Enum.GetValues(typeof(HistoryEventType));
+			return (HistoryEventType)values.GetValue(rng.Next(values.Length));
+		}
+
+		public static async Task<History> GenerateRandomHistoryAsync(ISecurityAsyncFunctions securityAsyncFunctions)
+		{
+			HistoryEventType eventType;
+			string description;
+
+			lock (rngLock)
+			{
+				eventType = GenerateRandomHistoryEventType(rng);
+				description = GenerateAsciiCompatibleString(rng.Next(4, 20));
+			}
+
+			return await History.CreateHistoryAsync(eventType, description, securityAsyncFunctions);;     
+		}
 	}
 }
 

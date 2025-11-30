@@ -262,6 +262,56 @@ public sealed partial class CommonSecretsContainer
 		this.paymentCardSecrets.Add(new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword));
 	}
 
+	/// <summary>
+	/// Add history event to Common secret container
+	/// </summary>
+	/// <param name="password">Plaintext password</param>
+	/// <param name="history">History event to add</param>
+	/// <param name="keyIdentifier">Key identifier</param>
+	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	public (bool success, string possibleError) AddHistorySecret(string password, History history, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+	{
+		(bool checkResult, string possibleError) = MandatoryChecks(history, "History", keyIdentifier, password);
+		if (!checkResult)
+		{
+			return (checkResult, possibleError);
+		}
+
+		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+
+		this.AddHistorySecretActual(derivedPassword, history, keyIdentifier, algorithm);
+
+		return (success: true, possibleError: "");
+	}
+
+	/// <summary>
+	/// Add history event to Common secret container
+	/// </summary>
+	/// <param name="derivedPassword">Derived password</param>
+	/// <param name="history">History event to add</param>
+	/// <param name="keyIdentifier">Key identifier</param>
+	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	public (bool success, string possibleError) AddHistorySecret(byte[] derivedPassword, History history, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+	{
+		(bool checkResult, string possibleError) = MandatoryChecks(history, "History", keyIdentifier, derivedPassword);
+		if (!checkResult)
+		{
+			return (checkResult, possibleError);
+		}
+
+		this.AddHistorySecretActual(derivedPassword, history, keyIdentifier, algorithm);
+
+		return (success: true, possibleError: "");
+	}
+
+	private void AddHistorySecretActual(byte[] derivedPassword, History history, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm)
+	{
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+		this.historySecrets.Add(new HistorySecret(history, keyIdentifier, ska, derivedPassword));
+	}
+
 	#endregion // Add helpers
 
 
@@ -563,6 +613,66 @@ public sealed partial class CommonSecretsContainer
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
 		this.paymentCardSecrets[zeroBasedIndex] = new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword);
+
+		return (success: true, possibleError: "");
+	}
+
+	/// <summary>
+	/// Replace existing history in Common secret container with another one (basically for editing purposes)
+	/// </summary>
+	/// <param name="zeroBasedIndex">Zero based index of history card secret that will be replaced</param>
+	/// <param name="password">Plaintext password</param>
+	/// <param name="history">History that will replace existing one</param>
+	/// <param name="keyIdentifier">Key identifier</param>
+	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
+	public (bool success, string possibleError) ReplaceHistorySecret(int zeroBasedIndex, string password, History history, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+	{
+		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.historySecrets.Count)
+		{
+			return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.historySecrets.Count})");
+		}
+
+		(bool checkResult, string possibleError) = MandatoryChecks(history, "History", keyIdentifier, password);
+		if (!checkResult)
+		{
+			return (checkResult, possibleError);
+		}
+
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+
+		this.historySecrets[zeroBasedIndex] = new HistorySecret(history, keyIdentifier, ska, derivedPassword);
+
+		return (success: true, possibleError: "");
+	}
+
+	/// <summary>
+	/// Replace existing history card in Common secret container with another one (basically for editing purposes)
+	/// </summary>
+	/// <param name="zeroBasedIndex">Zero based index of history card secret that will be replaced</param>
+	/// <param name="derivedPassword">Derived password</param>
+	/// <param name="history">History that will replace existing one</param>
+	/// <param name="keyIdentifier">Key identifier</param>
+	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
+	public (bool success, string possibleError) ReplaceHistorySecret(int zeroBasedIndex, byte[] derivedPassword, History history, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+	{
+		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.historySecrets.Count)
+		{
+			return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.historySecrets.Count})");
+		}
+
+		(bool checkResult, string possibleError) = MandatoryChecks(history, "History", keyIdentifier, derivedPassword);
+		if (!checkResult)
+		{
+			return (checkResult, possibleError);
+		}
+
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
+
+		this.historySecrets[zeroBasedIndex] = new HistorySecret(history, keyIdentifier, ska, derivedPassword);
 
 		return (success: true, possibleError: "");
 	}

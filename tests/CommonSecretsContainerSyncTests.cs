@@ -262,6 +262,47 @@ namespace Tests
 			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
 		}
 
+		[Test]
+		public void AddHistorySecretTest()
+		{
+			// Arrange
+			string kdfeIdentifier = "somekey122324244";
+			string password = "th3atdragon44224241792";
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			byte[] nullArray = null;
+			
+			// Act
+			var addResultSuccess1 = csc.AddHistorySecret(password, ContentGeneratorSync.GenerateRandomHistory(), kdfeIdentifier);
+			var addResultSuccess2 = csc.AddHistorySecret(kdfe.GeneratePasswordBytes(password), ContentGeneratorSync.GenerateRandomHistory(), kdfeIdentifier);
+
+			var addResultFailure1 = csc.AddHistorySecret(password, null, kdfeIdentifier);
+			var addResultFailure2 = csc.AddHistorySecret(password, ContentGeneratorSync.GenerateRandomHistory(), "not existing");
+			var addResultFailure3 = csc.AddHistorySecret("", ContentGeneratorSync.GenerateRandomHistory(), kdfeIdentifier);
+			var addResultFailure4 = csc.AddHistorySecret(nullArray, ContentGeneratorSync.GenerateRandomHistory(), kdfeIdentifier);
+
+			// Assert
+			Assert.IsTrue(addResultSuccess1.success);
+			Assert.AreEqual("", addResultSuccess1.possibleError);
+
+			Assert.IsTrue(addResultSuccess2.success);
+			Assert.AreEqual("", addResultSuccess2.possibleError);
+
+			Assert.IsFalse(addResultFailure1.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure1.possibleError));
+
+			Assert.IsFalse(addResultFailure2.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure2.possibleError));
+
+			Assert.IsFalse(addResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.IsFalse(addResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure4.possibleError));
+
+			Assert.AreEqual(2, csc.historySecrets.Count);
+		}
+
 
 		[Test]
 		public void ReplaceLoginInformationSecretTest()
@@ -640,6 +681,82 @@ namespace Tests
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
 
 			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
+		}
+
+		[Test]
+		public void ReplaceHistorySecretTest()
+		{
+			// Arrange
+			string kdfeIdentifier = ",A846.-4key12344";
+			string password = "--!#ababwawbwawaj56o69363n,.ottha2tdragon42";
+
+			KeyDerivationFunctionEntry kdfe = KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntry(kdfeIdentifier);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+
+			History add1 = ContentGeneratorSync.GenerateRandomHistory();
+			History add2 = ContentGeneratorSync.GenerateRandomHistory();
+
+			History replace1 = ContentGeneratorSync.GenerateRandomHistory();
+			History replace2 = ContentGeneratorSync.GenerateRandomHistory();
+
+			byte[] nullArray = null;
+			
+			// Act
+			var addResultSuccess1 = csc.AddHistorySecret(password, add1, kdfeIdentifier);
+			var addResultSuccess2 = csc.AddHistorySecret(kdfe.GeneratePasswordBytes(password), add2, kdfeIdentifier);
+
+			var replaceResultSuccess1 = csc.ReplaceHistorySecret(0, password, replace1, kdfeIdentifier);
+			var replaceResultSuccess2 = csc.ReplaceHistorySecret(1, kdfe.GeneratePasswordBytes(password), replace2, kdfeIdentifier, SymmetricEncryptionAlgorithm.ChaCha20);
+
+			var replaceResultFailure1 = csc.ReplaceHistorySecret(0, password, null, kdfeIdentifier);
+			var replaceResultFailure2 = csc.ReplaceHistorySecret(0, password, ContentGeneratorSync.GenerateRandomHistory(), "not existing");
+			var replaceResultFailure3 = csc.ReplaceHistorySecret(0, "", ContentGeneratorSync.GenerateRandomHistory(), kdfeIdentifier);
+			var replaceResultFailure4 = csc.ReplaceHistorySecret(-1, password, replace1, kdfeIdentifier);
+			var replaceResultFailure5 = csc.ReplaceHistorySecret(2, password, replace1, kdfeIdentifier);
+			var replaceResultFailure6 = csc.ReplaceHistorySecret(0, nullArray, replace1, kdfeIdentifier);
+			var replaceResultFailure7 = csc.ReplaceHistorySecret(-1, nullArray, replace1, kdfeIdentifier);
+
+			// Assert
+			Assert.AreNotEqual(add1.GetDescription(), replace1.GetDescription(), "Make sure that random content do not match!");
+			Assert.AreNotEqual(add2.GetDescription(), replace2.GetDescription(), "Make sure that random content do not match!");
+
+			Assert.AreEqual(replace1.GetDescription(), csc.historySecrets[0].GetDescription(kdfe.GeneratePasswordBytes(password)));
+			Assert.AreEqual(replace2.GetDescription(), csc.historySecrets[1].GetDescription(kdfe.GeneratePasswordBytes(password)));
+
+			Assert.IsTrue(addResultSuccess1.success);
+			Assert.AreEqual("", addResultSuccess1.possibleError);
+
+			Assert.IsTrue(addResultSuccess2.success);
+			Assert.AreEqual("", addResultSuccess2.possibleError);
+
+			Assert.IsTrue(replaceResultSuccess1.success);
+			Assert.AreEqual("", replaceResultSuccess1.possibleError);
+
+			Assert.IsTrue(replaceResultSuccess2.success);
+			Assert.AreEqual("", replaceResultSuccess2.possibleError);
+
+			Assert.IsFalse(replaceResultFailure1.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure1.possibleError));
+
+			Assert.IsFalse(replaceResultFailure2.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure2.possibleError));
+
+			Assert.IsFalse(replaceResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure3.possibleError));
+
+			Assert.IsFalse(replaceResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure4.possibleError));
+
+			Assert.IsFalse(replaceResultFailure5.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
+
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
+			Assert.AreEqual(2, csc.historySecrets.Count);
 		}
 	}
 }

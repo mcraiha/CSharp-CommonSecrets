@@ -3,7 +3,6 @@
 using CSCommonSecrets;
 using System;
 using System.IO;
-using System.Text;
 
 namespace Tests
 {
@@ -148,6 +147,23 @@ namespace Tests
 			}
 
 			return returnValue;     
+		}
+
+		private static HistoryEventType GenerateRandomHistoryEventType(Random rng)
+		{
+			var values = Enum.GetValues(typeof(HistoryEventType));
+			return (HistoryEventType)values.GetValue(rng.Next(values.Length));
+		}
+
+		public static History GenerateRandomHistory()
+		{
+			History returnValue = null;
+			lock (rngLock)
+			{
+				returnValue = new History(GenerateRandomHistoryEventType(rng), GenerateAsciiCompatibleString(rng.Next(4, 20)));
+			}
+
+			return returnValue;
 		}
 	}
 }

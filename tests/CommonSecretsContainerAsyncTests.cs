@@ -277,6 +277,49 @@ namespace Tests
 			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
 		}
 
+		[Test]
+		public async Task AddHistoryAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			string kdfeIdentifier = "somekey122344";
+			string password = "th3atd9849#%ragon42";
+			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+			byte[] nullArray = null;
+			
+			// Act
+			var addResultSuccess1 = await csc.AddHistorySecretAsync(password, await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultSuccess2 = await csc.AddHistorySecretAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+
+			var addResultFailure1 = await csc.AddHistorySecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure2 = await csc.AddHistorySecretAsync(password, await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
+			var addResultFailure3 = await csc.AddHistorySecretAsync("", await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddHistorySecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+
+			// Assert
+			Assert.IsTrue(addResultSuccess1.success);
+			Assert.AreEqual("", addResultSuccess1.possibleError);
+
+			Assert.IsTrue(addResultSuccess2.success);
+			Assert.AreEqual("", addResultSuccess2.possibleError);
+
+			Assert.IsFalse(addResultFailure1.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure1.possibleError));
+
+			Assert.IsFalse(addResultFailure2.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure2.possibleError));
+
+			Assert.IsFalse(addResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure3.possibleError));
+
+			Assert.IsFalse(addResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(addResultFailure4.possibleError));
+
+			Assert.AreEqual(2, csc.historySecrets.Count);
+		}
+
 
 		[Test]
 		public async Task ReplaceLoginInformationSecretAsyncTest()
@@ -648,6 +691,78 @@ namespace Tests
 			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
 
 			Assert.AreEqual(2, csc.paymentCardSecrets.Count);
+		}
+
+		[Test]
+		public async Task ReplaceHistorySecretAsyncTest()
+		{
+			// Arrange
+			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+			string kdfeIdentifier = ",.-4key12344";
+			string password = "--!#n,.ottha2tdragon42";
+
+			byte[] nullArray = null;
+
+			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
+			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
+
+			History add1 = await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions);
+			History add2 = await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions);
+
+			History replace1 = await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions);
+			History replace2 = await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions);
+			
+			// Act
+			var addResultSuccess1 = await csc.AddHistorySecretAsync(password, add1, kdfeIdentifier, securityAsyncFunctions);
+			var addResultSuccess2 = await csc.AddHistorySecretAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), add2, kdfeIdentifier, securityAsyncFunctions);
+
+			var replaceResultSuccess1 = await csc.ReplaceHistorySecretAsync(0, password, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultSuccess2 = await csc.ReplaceHistorySecretAsync(1, await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), replace2, kdfeIdentifier, securityAsyncFunctions, SymmetricEncryptionAlgorithm.ChaCha20);
+
+			var replaceResultFailure1 = await csc.ReplaceHistorySecretAsync(0, password, null, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure2 = await csc.ReplaceHistorySecretAsync(0, password, await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
+			var replaceResultFailure3 = await csc.ReplaceHistorySecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure4 = await csc.ReplaceHistorySecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure5 = await csc.ReplaceHistorySecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceHistorySecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceHistorySecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+
+			// Assert
+			Assert.AreNotEqual(add1.GetDescription(), replace1.GetDescription(), "Make sure that random content do not match!");
+			Assert.AreNotEqual(add2.GetDescription(), replace2.GetDescription(), "Make sure that random content do not match!");
+
+			Assert.AreEqual(replace1.GetDescription(), await csc.historySecrets[0].GetDescriptionAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), securityAsyncFunctions));
+			Assert.AreEqual(replace2.GetDescription(), await csc.historySecrets[1].GetDescriptionAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), securityAsyncFunctions));
+
+			Assert.IsTrue(addResultSuccess1.success);
+			Assert.AreEqual("", addResultSuccess1.possibleError);
+
+			Assert.IsTrue(addResultSuccess2.success);
+			Assert.AreEqual("", addResultSuccess2.possibleError);
+
+			Assert.IsFalse(replaceResultFailure1.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure1.possibleError));
+
+			Assert.IsFalse(replaceResultFailure2.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure2.possibleError));
+
+			Assert.IsFalse(replaceResultFailure3.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure3.possibleError));
+
+			Assert.IsFalse(replaceResultFailure4.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure4.possibleError));
+
+			Assert.IsFalse(replaceResultFailure5.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure5.possibleError));
+
+			Assert.IsFalse(replaceResultFailure6.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure6.possibleError));
+
+			Assert.IsFalse(replaceResultFailure7.success);
+			Assert.IsFalse(string.IsNullOrEmpty(replaceResultFailure7.possibleError));
+
+			Assert.AreEqual(2, csc.historySecrets.Count);
 		}
 	}
 }

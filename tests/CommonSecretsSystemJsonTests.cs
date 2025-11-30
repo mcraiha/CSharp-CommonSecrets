@@ -67,7 +67,10 @@ namespace Tests
 			string cardSecurityCode1 = "123";
 			string cardStartDate1 = "10/19";
 			string cardExpirationDate1 = "02/25";
-			string cardNotes = "The best payment option";		
+			string cardNotes = "The best payment option";
+
+			HistoryEventType historyEvent = HistoryEventType.Create;
+			string historyDescription = "Container created";
 			
 			// Act
 			csc.loginInformations.Add(new LoginInformation(loginTitle1, loginUrl1, loginEmail1, loginUsername1, loginPassword1));
@@ -75,6 +78,7 @@ namespace Tests
 			csc.files.Add(new FileEntry(filename1, file1Content));
 			csc.contacts.Add(new Contact(firstname1, lastname1, middlename1));
 			csc.paymentCards.Add(new PaymentCard(cardTitle1, cardNameOnCard1, cardCardType1, cardNumber1, cardSecurityCode1, cardStartDate1, cardExpirationDate1, cardNotes));
+			csc.history.Add(new History(historyEvent, historyDescription));
 
 			string json = JsonSerializer.Serialize(csc, serializerOptions);
 			//TestContext.Out.WriteLine(json);
@@ -106,6 +110,9 @@ namespace Tests
 			Assert.AreEqual(cardStartDate1, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].startDate));
 			Assert.AreEqual(cardExpirationDate1, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].expirationDate));
 			Assert.AreEqual(cardNotes, System.Text.Encoding.UTF8.GetString(cscDeserialized.paymentCards[0].notes));
+
+			Assert.AreEqual(historyEvent, csc.history[0].GetEventType());
+			Assert.AreEqual(historyDescription, csc.history[0].GetDescription());
 		}
 
 		[Test]
@@ -135,6 +142,9 @@ namespace Tests
 
 			int paymentAmount = 3;
 			int paymentSecretAmount = 7;
+
+			int historyAmount = 3;
+			int historySecretAmount = 5;
 
 			// Act
 			byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
@@ -189,6 +199,16 @@ namespace Tests
 			for (int i = 0; i < paymentSecretAmount; i++)
 			{
 				csc.paymentCardSecrets.Add(new PaymentCardSecret(ContentGeneratorSync.GenerateRandomPaymentCard(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
+			}
+
+			for (int i = 0; i < historyAmount; i++)
+			{
+				csc.history.Add(ContentGeneratorSync.GenerateRandomHistory());
+			}
+
+			for (int i = 0; i < historySecretAmount; i++)
+			{
+				csc.historySecrets.Add(new HistorySecret(ContentGeneratorSync.GenerateRandomHistory(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
 			string json = JsonSerializer.Serialize(csc, serializerOptions);
@@ -272,6 +292,21 @@ namespace Tests
 			for (int i = 0; i < paymentSecretAmount; i++)
 			{
 				Assert.IsTrue(ComparisonHelper.ArePaymentCardSecretsEqual(csc.paymentCardSecrets[i], cscDeserialized.paymentCardSecrets[i]));
+			}
+
+
+			Assert.AreEqual(historyAmount, csc.history.Count);
+			Assert.AreEqual(historyAmount, cscDeserialized.history.Count);
+			for (int i = 0; i < historyAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreHistoriesEqual(csc.history[i], cscDeserialized.history[i]));
+			}
+
+			Assert.AreEqual(historySecretAmount, csc.historySecrets.Count);
+			Assert.AreEqual(historySecretAmount, cscDeserialized.historySecrets.Count);
+			for (int i = 0; i < historySecretAmount; i++)
+			{
+				Assert.IsTrue(ComparisonHelper.AreHistorySecretsEqual(csc.historySecrets[i], cscDeserialized.historySecrets[i]));
 			}
 		}
 	}

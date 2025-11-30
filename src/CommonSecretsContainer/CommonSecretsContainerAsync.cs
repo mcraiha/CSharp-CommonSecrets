@@ -1,8 +1,5 @@
 #if ASYNC_WITH_CUSTOM
 
-using System;
-using System.Collections.Generic;
-
 using System.Threading.Tasks;
 
 namespace CSCommonSecrets;
@@ -277,6 +274,59 @@ public sealed partial class CommonSecretsContainer
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
 		this.paymentCardSecrets.Add(await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, keyIdentifier, ska, derivedPassword, securityFunctions));
+	}
+
+	/// <summary>
+	/// Add history to Common secret container, async
+	/// </summary>
+	/// <param name="password">Plaintext password</param>
+	/// <param name="history">History to add</param>
+	/// <param name="keyIdentifier">Key identifier</param>
+	/// <param name="securityFunctions">Security functions</param>
+	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	public async Task<(bool success, string possibleError)> AddHistorySecretAsync(string password, History history, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+	{
+		(bool checkResult, string possibleError) = MandatoryChecks(history, "History", keyIdentifier, password);
+		if (!checkResult)
+		{
+			return (checkResult, possibleError);
+		}
+
+		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+
+		await this.AddHistorySecretActualAsync(derivedPassword, history, keyIdentifier, algorithm, securityFunctions);
+
+		return (success: true, possibleError: "");
+	}
+
+	/// <summary>
+	/// Add history to Common secret container, async
+	/// </summary>
+	/// <param name="derivedPassword">Derived password</param>
+	/// <param name="history">History to add</param>
+	/// <param name="keyIdentifier">Key identifier</param>
+	/// <param name="securityFunctions">Security functions</param>
+	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	public async Task<(bool success, string possibleError)> AddHistorySecretAsync(byte[] derivedPassword, History history, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+	{
+		(bool checkResult, string possibleError) = MandatoryChecks(history, "History", keyIdentifier, derivedPassword);
+		if (!checkResult)
+		{
+			return (checkResult, possibleError);
+		}
+
+		await this.AddHistorySecretActualAsync(derivedPassword, history, keyIdentifier, algorithm, securityFunctions);
+
+		return (success: true, possibleError: "");
+	}
+
+	private async Task AddHistorySecretActualAsync(byte[] derivedPassword, History history, string keyIdentifier, SymmetricEncryptionAlgorithm algorithm, ISecurityAsyncFunctions securityFunctions)
+	{
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
+
+		this.historySecrets.Add(await HistorySecret.CreateHistorySecretAsync(history, keyIdentifier, ska, derivedPassword, securityFunctions));
 	}
 
 	#endregion // Add helpers
@@ -590,6 +640,68 @@ public sealed partial class CommonSecretsContainer
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
 		this.paymentCardSecrets[zeroBasedIndex] = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, keyIdentifier, ska, derivedPassword, securityFunctions);
+
+		return (success: true, possibleError: "");
+	}
+
+	/// <summary>
+	/// Replace existing history in Common secret container with another one (basically for editing purposes), async
+	/// </summary>
+	/// <param name="zeroBasedIndex">Zero based index of history card secret that will be replaced</param>
+	/// <param name="password">Plaintext password</param>
+	/// <param name="history">History that will replace existing one</param>
+	/// <param name="keyIdentifier">Key identifier</param>
+	/// <param name="securityFunctions">Security functions</param>
+	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
+	public async Task<(bool success, string possibleError)> ReplaceHistorySecretAsync(int zeroBasedIndex, string password, History history, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+	{
+		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.historySecrets.Count)
+		{
+			return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.historySecrets.Count})");
+		}
+
+		(bool checkResult, string possibleError) = MandatoryChecks(history, "History", keyIdentifier, password);
+		if (!checkResult)
+		{
+			return (checkResult, possibleError);
+		}
+
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
+
+		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+
+		this.historySecrets[zeroBasedIndex] = await HistorySecret.CreateHistorySecretAsync(history, keyIdentifier, ska, derivedPassword, securityFunctions);
+
+		return (success: true, possibleError: "");
+	}
+
+	/// <summary>
+	/// Replace existing history in Common secret container with another one (basically for editing purposes), async
+	/// </summary>
+	/// <param name="zeroBasedIndex">Zero based index of history secret that will be replaced</param>
+	/// <param name="derivedPassword">Derived password</param>
+	/// <param name="history">History that will replace existing one</param>
+	/// <param name="keyIdentifier">Key identifier</param>
+	/// <param name="securityFunctions">Security functions</param>
+	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
+	public async Task<(bool success, string possibleError)> ReplaceHistorySecretAsync(int zeroBasedIndex, byte[] derivedPassword, History history, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
+	{
+		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.historySecrets.Count)
+		{
+			return (false, $"Index {zeroBasedIndex} is out of bounds [0, {this.historySecrets.Count})");
+		}
+
+		(bool checkResult, string possibleError) = MandatoryChecks(history, "History", keyIdentifier, derivedPassword);
+		if (!checkResult)
+		{
+			return (checkResult, possibleError);
+		}
+
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
+
+		this.historySecrets[zeroBasedIndex] = await HistorySecret.CreateHistorySecretAsync(history, keyIdentifier, ska, derivedPassword, securityFunctions);
 
 		return (success: true, possibleError: "");
 	}

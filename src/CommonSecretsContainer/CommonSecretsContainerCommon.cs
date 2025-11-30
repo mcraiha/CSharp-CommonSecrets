@@ -74,6 +74,18 @@ public sealed partial class CommonSecretsContainer
 	public List<PaymentCardSecret> paymentCardSecrets { get; set; } = new List<PaymentCardSecret>();
 
 	/// <summary>
+	/// List of history entries
+	/// </summary>
+	/// <remarks>These are optional</remarks>
+	public List<History> history { get; set; } = new List<History>();
+
+	/// <summary>
+	/// List of history secret entries
+	/// </summary>
+	/// <remarks>These are optional</remarks>
+	public List<HistorySecret> historySecrets { get; set; } = new List<HistorySecret>();
+
+	/// <summary>
 	/// Constructor without parameters for creating empty CommonSecretsContainer
 	/// </summary>
 	public CommonSecretsContainer()
