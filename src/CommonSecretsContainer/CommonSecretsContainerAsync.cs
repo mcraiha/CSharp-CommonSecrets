@@ -339,11 +339,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of login information secret that will be replaced</param>
 	/// <param name="password">Plaintext password</param>
-	/// <param name="loginInformation">Loginiformation to add</param>
+	/// <param name="loginInformation">Loginiformation that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplaceLoginInformationSecretAsync(int zeroBasedIndex, string password, LoginInformation loginInformation, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.loginInformationSecrets.Count)
@@ -371,11 +371,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of login information secret that will be replaced</param>
 	/// <param name="derivedPassword">Derived password</param>
-	/// <param name="loginInformation">Loginiformation to add</param>
+	/// <param name="loginInformation">Loginiformation that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplaceLoginInformationSecretAsync(int zeroBasedIndex, byte[] derivedPassword, LoginInformation loginInformation, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.loginInformationSecrets.Count)
@@ -401,11 +401,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of note secret that will be replaced</param>
 	/// <param name="password">Plaintext password</param>
-	/// <param name="note">Note to add</param>
+	/// <param name="note">Note that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplaceNoteSecretAsync(int zeroBasedIndex, string password, Note note, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.noteSecrets.Count)
@@ -433,11 +433,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of note secret that will be replaced</param>
 	/// <param name="derivedPassword">Derived password</param>
-	/// <param name="note">Note to add</param>
+	/// <param name="note">Note that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplaceNoteSecretAsync(int zeroBasedIndex, byte[] derivedPassword, Note note, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.noteSecrets.Count)
@@ -463,11 +463,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of file entry secret that will be replaced</param>
 	/// <param name="password">Plaintext password</param>
-	/// <param name="fileEntry">File entry to add</param>
+	/// <param name="fileEntry">File entry that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplaceFileEntrySecretAsync(int zeroBasedIndex, string password, FileEntry fileEntry, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.fileSecrets.Count)
@@ -495,11 +495,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of file entry secret that will be replaced</param>
 	/// <param name="derivedPassword">Derived password</param>
-	/// <param name="fileEntry">File entry to add</param>
+	/// <param name="fileEntry">File entry that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplaceFileEntrySecretAsync(int zeroBasedIndex, byte[] derivedPassword, FileEntry fileEntry, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.fileSecrets.Count)
@@ -525,11 +525,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of contact secret that will be replaced</param>
 	/// <param name="password">Plaintext password</param>
-	/// <param name="contact">Contact to add</param>
+	/// <param name="contact">Contact that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplaceContactSecretAsync(int zeroBasedIndex, string password, Contact contact, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.contactSecrets.Count)
@@ -557,11 +557,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of contact secret that will be replaced</param>
 	/// <param name="derivedPassword">Derived password</param>
-	/// <param name="contact">Contact to add</param>
+	/// <param name="contact">Contact that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplaceContactSecretAsync(int zeroBasedIndex, byte[] derivedPassword, Contact contact, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.contactSecrets.Count)
@@ -587,11 +587,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of payment card secret that will be replaced</param>
 	/// <param name="password">Plaintext password</param>
-	/// <param name="paymentCard">Payment card to add</param>
+	/// <param name="paymentCard">Payment card that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplacePaymentCardSecretAsync(int zeroBasedIndex, string password, PaymentCard paymentCard, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.paymentCardSecrets.Count)
@@ -619,11 +619,11 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="zeroBasedIndex">Zero based index of payment card secret that will be replaced</param>
 	/// <param name="derivedPassword">Derived password</param>
-	/// <param name="paymentCard">Payment card to add</param>
+	/// <param name="paymentCard">Payment card that will replace existing one</param>
 	/// <param name="keyIdentifier">Key identifier</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <param name="algorithm">Symmetric Encryption Algorithm to use</param>
-	/// <returns>Tuple that tells if add was success, and possible error</returns>
+	/// <returns>Tuple that tells if replace was success, and possible error</returns>
 	public async Task<(bool success, string possibleError)> ReplacePaymentCardSecretAsync(int zeroBasedIndex, byte[] derivedPassword, PaymentCard paymentCard, string keyIdentifier, ISecurityAsyncFunctions securityFunctions, SymmetricEncryptionAlgorithm algorithm = SymmetricEncryptionAlgorithm.AES_CTR)
 	{
 		if (zeroBasedIndex < 0 || zeroBasedIndex >= this.paymentCardSecrets.Count)
