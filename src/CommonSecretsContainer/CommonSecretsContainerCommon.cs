@@ -126,9 +126,9 @@ public sealed partial class CommonSecretsContainer
 	/// </summary>
 	/// <param name="keyIdentifier">Key identifier to seek</param>
 	/// <returns>KeyDerivationFunctionEntry if match is found; null otherwise</returns>
-	public KeyDerivationFunctionEntry FindKeyDerivationFunctionEntryWithKeyIdentifier(string keyIdentifier)
+	public KeyDerivationFunctionEntry? FindKeyDerivationFunctionEntryWithKeyIdentifier(string keyIdentifier)
 	{
-		KeyDerivationFunctionEntry returnValue = null;
+		KeyDerivationFunctionEntry? returnValue = null;
 
 		foreach (KeyDerivationFunctionEntry kdfe in keyDerivationFunctionEntries)
 		{
@@ -169,11 +169,11 @@ public sealed partial class CommonSecretsContainer
 			return (commonCheckResult, possibleCommonCheckError);
 		}
 
-		(bool derivedPasswordValid, Exception exception) = Helpers.CheckDerivedPassword(derivedPassword);
+		(bool derivedPasswordValid, Exception? exception) = Helpers.CheckDerivedPassword(derivedPassword);
 
 		if (!derivedPasswordValid)
 		{
-			return (derivedPasswordValid, exception.ToString());
+			return (derivedPasswordValid, exception!.ToString());
 		}
 
 		return (success: true, possibleError: "");
@@ -186,9 +186,9 @@ public sealed partial class CommonSecretsContainer
 			return (success: false, possibleError: $"{objectToCheckForError} cannot be null");
 		}
 
-		KeyDerivationFunctionEntry kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
 
-		if (kdfe == null)
+		if (kdfe is null)
 		{
 			return (success: false, possibleError: $"Cannot find key identifier matching to: {keyIdentifier}");
 		}

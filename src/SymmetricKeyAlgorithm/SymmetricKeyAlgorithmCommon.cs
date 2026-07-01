@@ -36,12 +36,12 @@ public sealed partial class SymmetricKeyAlgorithm
 	/// <summary>
 	/// AES_CTR settings, might be null
 	/// </summary>
-	public SettingsAES_CTR settingsAES_CTR { get; set; }
+	public SettingsAES_CTR? settingsAES_CTR { get; set; }
 
 	/// <summary>
 	/// ChaCha20 settings, might be null
 	/// </summary>
-	public SettingsChaCha20 settingsChaCha20 { get; set; }
+	public SettingsChaCha20? settingsChaCha20 { get; set; }
 
 	private static readonly FrozenSet<int> AES_CTR_AllowedKeyLengths = new HashSet<int>() { 16*8, 24*8, 32*8 }.ToFrozenSet();
 
@@ -138,21 +138,19 @@ public sealed partial class SymmetricKeyAlgorithm
 	/// <returns>Byte array</returns>
 	public byte[] GetSettingsAsBytes()
 	{
-		byte[] returnValue = null;
-
 		Enum.TryParse(this.algorithm, out SymmetricEncryptionAlgorithm actualAlgorithm);
 
-		if (actualAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR)
+		if (actualAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR && settingsAES_CTR is not null)
 		{
-			returnValue = ChecksumHelper.JoinByteArrays(
+			return ChecksumHelper.JoinByteArrays(
 									Encoding.UTF8.GetBytes(this.algorithm),
 									BitConverter.GetBytes(this.keySizeInBits),
 									settingsAES_CTR.GetSettingsAsBytes()
 									);
 		}
-		else if (actualAlgorithm == SymmetricEncryptionAlgorithm.ChaCha20)
+		else if (actualAlgorithm == SymmetricEncryptionAlgorithm.ChaCha20 && settingsChaCha20 is not null)
 		{
-			returnValue = ChecksumHelper.JoinByteArrays(
+			return ChecksumHelper.JoinByteArrays(
 									Encoding.UTF8.GetBytes(this.algorithm),
 									BitConverter.GetBytes(this.keySizeInBits),
 									settingsChaCha20.GetSettingsAsBytes()
@@ -162,8 +160,6 @@ public sealed partial class SymmetricKeyAlgorithm
 		{
 			throw new NotImplementedException();
 		}
-
-		return returnValue;
 	}
 }
 

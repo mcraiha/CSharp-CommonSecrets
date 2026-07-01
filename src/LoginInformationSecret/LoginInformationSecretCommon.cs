@@ -25,7 +25,7 @@ public sealed partial class LoginInformationSecret
 	/// <summary>
 	/// Symmetric Key Algorithm for this LoginInformationSecret (this is plaintext information)
 	/// </summary>
-	public SymmetricKeyAlgorithm algorithm { get; set; }
+	public required SymmetricKeyAlgorithm algorithm { get; set; }
 
 	/// <summary>
 	/// Checksum of the data (this is plaintext information)

@@ -28,7 +28,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.AddLoginInformationSecretActual(derivedPassword, loginInformation, keyIdentifier, algorithm);
 
@@ -78,7 +84,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.AddNoteSecretActual(derivedPassword, note, keyIdentifier, algorithm);
 
@@ -128,7 +140,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.AddFileEntrySecretActual(derivedPassword, fileEntry, keyIdentifier, algorithm);
 
@@ -178,7 +196,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.AddContactSecretActual(derivedPassword, contact, keyIdentifier, algorithm);
 
@@ -228,7 +252,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.AddPaymentCardSecretActual(derivedPassword, paymentCard, keyIdentifier, algorithm);
 
@@ -278,7 +308,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.AddHistorySecretActual(derivedPassword, history, keyIdentifier, algorithm);
 
@@ -461,7 +497,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.fileSecrets[zeroBasedIndex] = new FileEntrySecret(fileEntry, keyIdentifier, ska, derivedPassword);
 
@@ -521,7 +563,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.contactSecrets[zeroBasedIndex] = new ContactSecret(contact, keyIdentifier, ska, derivedPassword);
 
@@ -581,7 +629,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.paymentCardSecrets[zeroBasedIndex] = new PaymentCardSecret(paymentCard, keyIdentifier, ska, derivedPassword);
 
@@ -641,7 +695,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.historySecrets[zeroBasedIndex] = new HistorySecret(history, keyIdentifier, ska, derivedPassword);
 

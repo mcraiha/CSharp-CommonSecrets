@@ -25,7 +25,7 @@ public sealed partial class ContactSecret
 	/// <summary>
 	/// Symmetric Key Algorithm for this ContactSecret (this is plaintext information)
 	/// </summary>
-	public SymmetricKeyAlgorithm algorithm { get; set; }
+	public required SymmetricKeyAlgorithm algorithm { get; set; }
 
 	/// <summary>
 	/// Checksum of the data (this is plaintext information)

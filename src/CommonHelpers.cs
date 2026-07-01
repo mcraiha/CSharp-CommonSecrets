@@ -15,7 +15,7 @@ public static class Helpers
 	/// <summary>
 	/// Generic null and empty check for derived password
 	/// </summary>
-	public static (bool valid, Exception exception) CheckDerivedPassword(byte[] derivedPassword)
+	public static (bool valid, Exception? exception) CheckDerivedPassword(byte[] derivedPassword)
 	{
 		if (derivedPassword == null)
 		{
@@ -32,7 +32,7 @@ public static class Helpers
 	/// <summary>
 	/// Check validity of audalf data
 	/// </summary>
-	public static (bool valid, Exception exception) CheckAUDALFbytes(byte[] audalfBytes)
+	public static (bool valid, Exception? exception) CheckAUDALFbytes(byte[] audalfBytes)
 	{
 		if (audalfBytes == null)
 		{
@@ -68,7 +68,7 @@ public static class Helpers
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck.exception;
+			throw passwordCheck.exception!;
 		}
 
 		// Try to decrypt the binary
@@ -78,7 +78,7 @@ public static class Helpers
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck.exception;
+			throw audalfCheck.exception!;
 		}
 
 		return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);
@@ -103,7 +103,7 @@ public static class Helpers
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck.exception;
+			throw passwordCheck.exception!;
 		}
 
 		// Try to decrypt the binary
@@ -113,7 +113,7 @@ public static class Helpers
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck.exception;
+			throw audalfCheck.exception!;
 		}
 
 		return AUDALF_Deserialize.DeserializeSingleValue<string, object>(decryptedAUDALF, key, settings: deserializationSettings);

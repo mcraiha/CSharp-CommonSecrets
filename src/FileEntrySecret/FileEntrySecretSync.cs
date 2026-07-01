@@ -143,7 +143,7 @@ public sealed partial class FileEntrySecret
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck.exception;
+			throw passwordCheck!.exception;
 		}
 
 		// Try to decrypt the binary
@@ -153,7 +153,7 @@ public sealed partial class FileEntrySecret
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck.exception;
+			throw audalfCheck!.exception;
 		}
 
 		Dictionary<string, object> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);

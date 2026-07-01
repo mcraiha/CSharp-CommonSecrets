@@ -25,7 +25,7 @@ public sealed partial class FileEntrySecret
 	/// <summary>
 	/// Symmetric Key Algorithm for this FileEntrySecret (this is plaintext information)
 	/// </summary>
-	public SymmetricKeyAlgorithm algorithm { get; set; }
+	public required SymmetricKeyAlgorithm algorithm { get; set; }
 
 	/// <summary>
 	/// Checksum of the data (this is plaintext information)
