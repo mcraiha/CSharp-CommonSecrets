@@ -100,7 +100,7 @@ namespace Tests
 
 		public static Contact GenerateRandomContact()
 		{
-			Contact returnValue = null;
+			Contact? returnValue = null;
 			lock (rngLock)
 			{
 				string firstName = GenerateAsciiCompatibleString(rng.Next(4, 20));
@@ -133,12 +133,12 @@ namespace Tests
 										websites, relationship, notes);
 			}
 
-			return returnValue;        
+			return returnValue;
 		}
 
 		public static PaymentCard GenerateRandomPaymentCard()
 		{
-			PaymentCard returnValue = null;
+			PaymentCard? returnValue = null;
 			lock (rngLock)
 			{
 				returnValue = new PaymentCard(GenerateAsciiCompatibleString(rng.Next(4, 20)), GenerateAsciiCompatibleString(rng.Next(4, 20)), 
@@ -152,12 +152,12 @@ namespace Tests
 		private static HistoryEventType GenerateRandomHistoryEventType(Random rng)
 		{
 			var values = Enum.GetValues(typeof(HistoryEventType));
-			return (HistoryEventType)values.GetValue(rng.Next(values.Length));
+			return (HistoryEventType)values.GetValue(rng.Next(values.Length))!;
 		}
 
 		public static History GenerateRandomHistory()
 		{
-			History returnValue = null;
+			History? returnValue = null;
 			lock (rngLock)
 			{
 				returnValue = new History(GenerateRandomHistoryEventType(rng), GenerateAsciiCompatibleString(rng.Next(4, 20)));

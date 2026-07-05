@@ -30,7 +30,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ PaymentCard.titleKey, "Super cool card"}
 			};
@@ -62,7 +62,7 @@ namespace Tests
 
 			// Act
 			PaymentCardSecret paymentCardSecretCopy = new PaymentCardSecret(paymentCardSecret);
-			string paymentCardTitle = paymentCardSecretCopy.GetTitle(derivedKey);
+			string? paymentCardTitle = paymentCardSecretCopy.GetTitle(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(paymentCardTitle));
@@ -98,7 +98,7 @@ namespace Tests
 			Assert.IsTrue(ComparisonHelper.ArePaymentCardsEqual(paymentCard, paymentCardCopy));
 			Assert.AreEqual(paymentCard.creationTime, paymentCardCopy.creationTime);
 			Assert.AreEqual(paymentCard.modificationTime, paymentCardCopy.modificationTime);
-			Assert.Throws<ArgumentNullException>(() => paymentCardSecret.GetPaymentCard(null));
+			Assert.Throws<ArgumentNullException>(() => paymentCardSecret.GetPaymentCard(null!));
 			Assert.Throws<ArgumentException>(() => paymentCardInvalid.GetPaymentCard(derivedKey));
 		}
 
@@ -122,7 +122,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => paymentCardSecret.GetTitle(null));
+			Assert.Throws<ArgumentNullException>(() => paymentCardSecret.GetTitle(null!));
 			Assert.Throws<ArgumentException>(() => paymentCardSecret.GetTitle(derivedKeyInvalid));
 		}
 
@@ -143,9 +143,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string paymentCardTitle = paymentCardSecret.GetTitle(derivedKey);
+			string? paymentCardTitle = paymentCardSecret.GetTitle(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(paymentCardTitle);
 			Assert.AreEqual(title, paymentCardTitle);
 		}
 
@@ -166,9 +167,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string paymentCardNameOnCard = paymentCardSecret.GetNameOnCard(derivedKey);
+			string? paymentCardNameOnCard = paymentCardSecret.GetNameOnCard(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(paymentCardNameOnCard);
 			Assert.AreEqual(nameOnCard, paymentCardNameOnCard);
 		}
 
@@ -189,9 +191,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string paymentCardCardType = paymentCardSecret.GetCardType(derivedKey);
+			string? paymentCardCardType = paymentCardSecret.GetCardType(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(paymentCardCardType);
 			Assert.AreEqual(cardType, paymentCardCardType);
 		}
 
@@ -212,9 +215,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string paymentCardNumber = paymentCardSecret.GetNumber(derivedKey);
+			string? paymentCardNumber = paymentCardSecret.GetNumber(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(paymentCardNumber);
 			Assert.AreEqual(number, paymentCardNumber);
 		}
 
@@ -235,9 +239,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string paymentCardSecurityCode = paymentCardSecret.GetSecurityCode(derivedKey);
+			string? paymentCardSecurityCode = paymentCardSecret.GetSecurityCode(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(paymentCardSecurityCode);
 			Assert.AreEqual(securityCode, paymentCardSecurityCode);
 		}
 
@@ -258,9 +263,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string paymentCardStartDate = paymentCardSecret.GetStartDate(derivedKey);
+			string? paymentCardStartDate = paymentCardSecret.GetStartDate(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(paymentCardStartDate);
 			Assert.AreEqual(startDate, paymentCardStartDate);
 		}
 
@@ -281,9 +287,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string paymentCardStartDate = paymentCardSecret.GetExpirationDate(derivedKey);
+			string? paymentCardStartDate = paymentCardSecret.GetExpirationDate(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(paymentCardStartDate);
 			Assert.AreEqual(expirationDate, paymentCardStartDate);
 		}
 
@@ -304,9 +311,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string paymentCardNotes = paymentCardSecret.GetNotes(derivedKey);
+			string? paymentCardNotes = paymentCardSecret.GetNotes(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(paymentCardNotes);
 			Assert.AreEqual(notes, paymentCardNotes);
 		}
 
@@ -326,9 +334,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset paymentCardSecretCreationTime = paymentCardSecret.GetCreationTime(derivedKey);
+			DateTimeOffset? paymentCardSecretCreationTime = paymentCardSecret.GetCreationTime(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(paymentCardSecretCreationTime);
 			Assert.AreEqual(paymentCard.GetCreationTime(), paymentCardSecretCreationTime);
 		}
 
@@ -348,13 +357,15 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = new PaymentCardSecret(paymentCard, "does not matter", skaAES_CTR, derivedKey);
 			
 			// Act
-			DateTimeOffset modificationTime1 = paymentCardSecret.GetModificationTime(derivedKey);
+			DateTimeOffset? modificationTime1 = paymentCardSecret.GetModificationTime(derivedKey);
 			Thread.Sleep(1100);
 			paymentCardSecret.SetTitle("1234567", derivedKey);
-			DateTimeOffset modificationTime2 = paymentCardSecret.GetModificationTime(derivedKey);
+			DateTimeOffset? modificationTime2 = paymentCardSecret.GetModificationTime(derivedKey);
 
 			// Assert
-			Assert.Greater(modificationTime2, modificationTime1);
+			Assert.IsNotNull(modificationTime1);
+			Assert.IsNotNull(modificationTime2);
+			Assert.Greater(modificationTime2!, modificationTime1!);
 		}
 
 		[Test]
@@ -399,7 +410,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(paymentCardSecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(paymentCardSecret.CanBeDecryptedWithDerivedPassword(null));
+			Assert.IsFalse(paymentCardSecret.CanBeDecryptedWithDerivedPassword(null!));
 			Assert.IsFalse(paymentCardSecret.CanBeDecryptedWithDerivedPassword(new byte[] {}));
 			Assert.IsFalse(paymentCardSecret.CanBeDecryptedWithDerivedPassword(derivedKey2));
 		}
@@ -420,7 +431,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = paymentCardSecret.SetTitle(title, derivedKey);
-			string titleAfterModification = paymentCardSecret.GetTitle(derivedKey);
+			string? titleAfterModification = paymentCardSecret.GetTitle(derivedKey);
 			bool shouldBeFalse = paymentCardSecret.SetTitle(title, new byte[] { 1, 2, 3 });
 
 			// Assert
@@ -446,8 +457,8 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = paymentCardSecret.SetNameOnCard(nameOnCard, derivedKey);
-			string nameOnCardAfterModification = paymentCardSecret.GetNameOnCard(derivedKey);
-			bool shouldBeFalse = paymentCardSecret.SetNameOnCard(nameOnCard,  new byte[] { 1, 2, 3 });
+			string? nameOnCardAfterModification = paymentCardSecret.GetNameOnCard(derivedKey);
+			bool shouldBeFalse = paymentCardSecret.SetNameOnCard(nameOnCard, new byte[] { 1, 2, 3 });
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
@@ -472,8 +483,8 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = paymentCardSecret.SetCardType(cardType, derivedKey);
-			string cardTypeAfterModification = paymentCardSecret.GetCardType(derivedKey);
-			bool shouldBeFalse = paymentCardSecret.SetCardType(cardType,  new byte[] { 1, 2, 3 });
+			string? cardTypeAfterModification = paymentCardSecret.GetCardType(derivedKey);
+			bool shouldBeFalse = paymentCardSecret.SetCardType(cardType, new byte[] { 1, 2, 3 });
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
@@ -498,7 +509,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = paymentCardSecret.SetNumber(number, derivedKey);
-			string numberAfterModification = paymentCardSecret.GetNumber(derivedKey);
+			string? numberAfterModification = paymentCardSecret.GetNumber(derivedKey);
 			bool shouldBeFalse = paymentCardSecret.SetNumber(number, new byte[] { 1, 2, 3 });
 
 			// Assert
@@ -524,8 +535,8 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = paymentCardSecret.SetSecurityCode(securityCode, derivedKey);
-			string securityCodeAfterModification = paymentCardSecret.GetSecurityCode(derivedKey);
-			bool shouldBeFalse = paymentCardSecret.SetSecurityCode(securityCode,  new byte[] { 1, 2, 3 });
+			string? securityCodeAfterModification = paymentCardSecret.GetSecurityCode(derivedKey);
+			bool shouldBeFalse = paymentCardSecret.SetSecurityCode(securityCode, new byte[] { 1, 2, 3 });
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
@@ -550,8 +561,8 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = paymentCardSecret.SetStartDate(startDate, derivedKey);
-			string startDateAfterModification = paymentCardSecret.GetStartDate(derivedKey);
-			bool shouldBeFalse = paymentCardSecret.SetStartDate(startDate,  new byte[] { 1, 2, 3 });
+			string? startDateAfterModification = paymentCardSecret.GetStartDate(derivedKey);
+			bool shouldBeFalse = paymentCardSecret.SetStartDate(startDate, new byte[] { 1, 2, 3 });
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
@@ -576,8 +587,8 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = paymentCardSecret.SetExpirationDate(expirationDate, derivedKey);
-			string expirationDateAfterModification = paymentCardSecret.GetExpirationDate(derivedKey);
-			bool shouldBeFalse = paymentCardSecret.SetExpirationDate(expirationDate,  new byte[] { 1, 2, 3 });
+			string? expirationDateAfterModification = paymentCardSecret.GetExpirationDate(derivedKey);
+			bool shouldBeFalse = paymentCardSecret.SetExpirationDate(expirationDate, new byte[] { 1, 2, 3 });
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
@@ -602,7 +613,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = paymentCardSecret.SetNotes(notes, derivedKey);
-			string notesAfterModification = paymentCardSecret.GetNotes(derivedKey);
+			string? notesAfterModification = paymentCardSecret.GetNotes(derivedKey);
 			bool shouldBeFalse = paymentCardSecret.SetNotes(notes, new byte[] { 1, 2, 3 });
 
 			// Assert
@@ -631,11 +642,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(paymentCardSecret, Formatting.Indented);
 
-			PaymentCardSecret paymentCardSecret2 = JsonConvert.DeserializeObject<PaymentCardSecret>(json);
+			PaymentCardSecret? paymentCardSecret2 = JsonConvert.DeserializeObject<PaymentCardSecret>(json);
 
 			// Assert
+			Assert.IsNotNull(paymentCardSecret2);
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, paymentCardSecret2.GetChecksumAsHex());
+			Assert.AreEqual(checksum1, paymentCardSecret2!.GetChecksumAsHex());
 		}
 
 		[Test]

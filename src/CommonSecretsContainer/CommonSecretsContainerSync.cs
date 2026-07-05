@@ -377,7 +377,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.loginInformationSecrets[zeroBasedIndex] = new LoginInformationSecret(loginInformation, keyIdentifier, ska, derivedPassword);
 
@@ -437,7 +443,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm);
 
-		byte[] derivedPassword = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytes(password);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = kdfe.GeneratePasswordBytes(password);
 
 		this.noteSecrets[zeroBasedIndex] = new NoteSecret(note, keyIdentifier, ska, derivedPassword);
 

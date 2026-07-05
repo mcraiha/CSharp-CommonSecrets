@@ -24,7 +24,7 @@ public sealed partial class LoginInformationSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<LoginInformationSecret> CreateLoginInformationSecretAsync(LoginInformation loginInformation, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ LoginInformation.titleKey, loginInformation.GetTitle() },
 			{ LoginInformation.urlKey, loginInformation.GetURL() },
@@ -65,7 +65,7 @@ public sealed partial class LoginInformationSecret
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
-	public static async Task<LoginInformationSecret> CreateLoginInformationSecretAsync(Dictionary<string, object> loginInformationAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public static async Task<LoginInformationSecret> CreateLoginInformationSecretAsync(Dictionary<string, object?> loginInformationAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(loginInformationAsDictionary, valueTypes: null, serializationSettings: serializationSettings );
@@ -94,7 +94,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>LoginInformation</returns>
 	public async Task<LoginInformation> GetLoginInformationAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dict = await this.GetLoginInformationAsDictionaryAsync(derivedPassword, securityFunctions);
+		Dictionary<string, object?> dict = await this.GetLoginInformationAsDictionaryAsync(derivedPassword, securityFunctions);
 		LoginInformation returnValue = await LoginInformation.CreateLoginInformationAsync((string)dict[LoginInformation.titleKey], (string)dict[LoginInformation.urlKey], (string)dict[LoginInformation.emailKey],
 									(string)dict[LoginInformation.usernameKey], (string)dict[LoginInformation.passwordKey], (string)dict[LoginInformation.notesKey], (string)dict[LoginInformation.mfaKey],
 									(byte[])dict[LoginInformation.iconKey], (string)dict[LoginInformation.categoryKey], (string)dict[LoginInformation.tagsKey], securityFunctions
@@ -237,13 +237,13 @@ public sealed partial class LoginInformationSecret
 		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.tagsKey, deserializationSettings, securityFunctions);
 	}
 
-	private async Task<Dictionary<string, object>> GetLoginInformationAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	private async Task<Dictionary<string, object?>> GetLoginInformationAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck.exception;
+			throw passwordCheck.exception!;
 		}
 
 		// Try to decrypt the binary
@@ -253,10 +253,10 @@ public sealed partial class LoginInformationSecret
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck.exception;
+			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> loginInformationAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> loginInformationAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return loginInformationAsDictionary;
 	}
@@ -443,7 +443,7 @@ public sealed partial class LoginInformationSecret
 	{
 		try 
 		{
-			Dictionary<string, object> loginInformationAsDictionary = await this.GetLoginInformationAsDictionaryAsync(derivedPassword, securityFunctions);
+			Dictionary<string, object?> loginInformationAsDictionary = await this.GetLoginInformationAsDictionaryAsync(derivedPassword, securityFunctions);
 			loginInformationAsDictionary[key] = value;
 
 			if (key != LoginInformation.creationTimeKey && key != LoginInformation.modificationTimeKey)

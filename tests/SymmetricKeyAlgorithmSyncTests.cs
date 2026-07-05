@@ -25,7 +25,7 @@ namespace Tests
 		public void InvalidValuesTest()
 		{
 			// Arrange
-			object nullSettings = null;
+			object? nullSettings = null;
 			int invalidKeySizeInBits = 53;
 
 			SettingsChaCha20 settingsChaCha20 = new SettingsChaCha20(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x4a, 0x00, 0x00, 0x00, 0x00 }, 1);
@@ -34,8 +34,8 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.ChaCha20, 256, nullSettings));
-			Assert.Throws<ArgumentNullException>(() => new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, nullSettings));
+			Assert.Throws<ArgumentNullException>(() => new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.ChaCha20, 256, nullSettings!));
+			Assert.Throws<ArgumentNullException>(() => new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, nullSettings!));
 
 			Assert.Throws<ArgumentException>(() => new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.ChaCha20, invalidKeySizeInBits, settingsChaCha20));
 			Assert.Throws<ArgumentException>(() => new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, invalidKeySizeInBits, settingsAES_CTR));
@@ -130,12 +130,12 @@ namespace Tests
 			// Assert
 			Assert.AreEqual(skaAES.algorithm, skaAESCopy.algorithm);
 			Assert.AreEqual(skaAES.keySizeInBits, skaAESCopy.keySizeInBits);
-			CollectionAssert.AreEqual(skaAES.settingsAES_CTR.initialCounter, skaAESCopy.settingsAES_CTR.initialCounter);
+			CollectionAssert.AreEqual(skaAES.settingsAES_CTR!.initialCounter, skaAESCopy.settingsAES_CTR!.initialCounter);
 			Assert.IsNull(skaAESCopy.settingsChaCha20);
 
 			Assert.AreEqual(skaChaCha20.algorithm, skaChaCha20Copy.algorithm);
 			Assert.AreEqual(skaChaCha20.keySizeInBits, skaChaCha20Copy.keySizeInBits);
-			CollectionAssert.AreEqual(skaChaCha20.settingsChaCha20.nonce, skaChaCha20Copy.settingsChaCha20.nonce);
+			CollectionAssert.AreEqual(skaChaCha20.settingsChaCha20!.nonce, skaChaCha20Copy.settingsChaCha20!.nonce);
 			Assert.AreEqual(skaChaCha20.settingsChaCha20.counter, skaChaCha20Copy.settingsChaCha20.counter);
 			Assert.IsNull(skaChaCha20.settingsAES_CTR);
 		}
@@ -183,13 +183,13 @@ namespace Tests
 		public void SettingsChaCha20InvalidValuesTest()
 		{
 			// Arrange
-			byte[] nullInput = null;
+			byte[]? nullInput = null;
 			byte[] invalidInput = new byte[3] { 1, 2, 3 };
 
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => new SettingsChaCha20(nullInput, counter: 33));
+			Assert.Throws<ArgumentNullException>(() => new SettingsChaCha20(nullInput!, counter: 33));
 			Assert.Throws<ArgumentException>(() => new SettingsChaCha20(invalidInput, counter: 11337));
 		}
 
@@ -219,13 +219,13 @@ namespace Tests
 		public void SettingsAES_CTRInvalidValuesTest()
 		{
 			// Arrange
-			byte[] nullInput = null;
+			byte[]? nullInput = null;
 			byte[] invalidInput = new byte[3] { 1, 2, 3 };
 
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => new SettingsAES_CTR(nullInput));
+			Assert.Throws<ArgumentNullException>(() => new SettingsAES_CTR(nullInput!));
 			Assert.Throws<ArgumentException>(() => new SettingsAES_CTR(invalidInput));
 		}
 

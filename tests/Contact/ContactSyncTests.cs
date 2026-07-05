@@ -328,11 +328,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(c1, Formatting.Indented);
 
-			Contact c2 = JsonConvert.DeserializeObject<Contact>(json);
+			Contact? c2 = JsonConvert.DeserializeObject<Contact>(json);
 
 			// Assert
+			Assert.IsNotNull(c2);
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, c2.GetChecksumAsHex());
+			Assert.AreEqual(checksum1, c2!.GetChecksumAsHex());
 		}
 
 		[Test]

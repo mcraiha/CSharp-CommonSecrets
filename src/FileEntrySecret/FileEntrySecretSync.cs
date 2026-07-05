@@ -24,7 +24,7 @@ public sealed partial class FileEntrySecret
 	[SetsRequiredMembers]
 	public FileEntrySecret(FileEntry fileEntry, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ FileEntry.filenameKey, fileEntry.GetFilename() },
 			{ FileEntry.fileContentKey, fileEntry.GetFileContent() },
@@ -54,7 +54,7 @@ public sealed partial class FileEntrySecret
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
 	[SetsRequiredMembers]
-	public FileEntrySecret(Dictionary<string, object> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+	public FileEntrySecret(Dictionary<string, object?> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
 
@@ -79,11 +79,11 @@ public sealed partial class FileEntrySecret
 	/// <returns>FileEntry</returns>
 	public FileEntry GetFileEntry(byte[] derivedPassword)
 	{
-		Dictionary<string, object> dict = this.GetFileEntryAsDictionary(derivedPassword);
-		FileEntry returnValue = new FileEntry((string)dict[FileEntry.filenameKey], (byte[])dict[FileEntry.fileContentKey]);
+		Dictionary<string, object?> dict = this.GetFileEntryAsDictionary(derivedPassword);
+		FileEntry returnValue = new FileEntry((string)dict[FileEntry.filenameKey]!, (byte[])dict[FileEntry.fileContentKey]!);
 
-		returnValue.creationTime = ((DateTimeOffset)dict[FileEntry.creationTimeKey]).ToUnixTimeSeconds();
-		returnValue.modificationTime = ((DateTimeOffset)dict[FileEntry.modificationTimeKey]).ToUnixTimeSeconds();
+		returnValue.creationTime = ((DateTimeOffset)dict[FileEntry.creationTimeKey]!).ToUnixTimeSeconds();
+		returnValue.modificationTime = ((DateTimeOffset)dict[FileEntry.modificationTimeKey]!).ToUnixTimeSeconds();
 
 		return returnValue;
 	}
@@ -93,7 +93,7 @@ public sealed partial class FileEntrySecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Filename as string</returns>
-	public string GetFilename(byte[] derivedPassword)
+	public string? GetFilename(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.filenameKey, deserializationSettings);
 	}
@@ -103,7 +103,7 @@ public sealed partial class FileEntrySecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Content as byte array</returns>
-	public byte[] GetFileContent(byte[] derivedPassword)
+	public byte[]? GetFileContent(byte[] derivedPassword)
 	{
 		return (byte[])Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.fileContentKey, deserializationSettings);
 	}
@@ -122,7 +122,7 @@ public sealed partial class FileEntrySecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>File entry creation time as DateTimeOffset</returns>
-	public DateTimeOffset GetCreationTime(byte[] derivedPassword)
+	public DateTimeOffset? GetCreationTime(byte[] derivedPassword)
 	{
 		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.creationTimeKey, deserializationSettings);
 	}
@@ -132,18 +132,18 @@ public sealed partial class FileEntrySecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>File entry modification time as DateTimeOffset</returns>
-	public DateTimeOffset GetModificationTime(byte[] derivedPassword)
+	public DateTimeOffset? GetModificationTime(byte[] derivedPassword)
 	{
 		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.modificationTimeKey, deserializationSettings);
 	}
 
-	private Dictionary<string, object> GetFileEntryAsDictionary(byte[] derivedPassword)
+	private Dictionary<string, object?> GetFileEntryAsDictionary(byte[] derivedPassword)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck!.exception;
+			throw passwordCheck.exception!;
 		}
 
 		// Try to decrypt the binary
@@ -153,10 +153,10 @@ public sealed partial class FileEntrySecret
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck!.exception;
+			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return fileEntryAsDictionary;
 	}
@@ -219,7 +219,7 @@ public sealed partial class FileEntrySecret
 	{
 		try
 		{
-			Dictionary<string, object> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
+			Dictionary<string, object?> fileEntryAsDictionary = this.GetFileEntryAsDictionary(derivedPassword);
 			// Update wanted value
 			fileEntryAsDictionary[key] = value;
 			// Update modification time

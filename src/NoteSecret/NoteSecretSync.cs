@@ -24,7 +24,7 @@ public sealed partial class NoteSecret
 	[SetsRequiredMembers]
 	public NoteSecret(Note note, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ Note.noteTitleKey, note.GetNoteTitle() },
 			{ Note.noteTextKey, note.GetNoteText() },
@@ -54,7 +54,7 @@ public sealed partial class NoteSecret
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
 	[SetsRequiredMembers]
-	public NoteSecret(Dictionary<string, object> noteAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+	public NoteSecret(Dictionary<string, object?> noteAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
 
@@ -79,11 +79,11 @@ public sealed partial class NoteSecret
 	/// <returns>Note</returns>
 	public Note GetNote(byte[] derivedPassword)
 	{
-		Dictionary<string, object> dict = this.GetNoteAsDictionary(derivedPassword);
-		Note returnValue = new Note((string)dict[Note.noteTitleKey], (string)dict[Note.noteTextKey]);
+		Dictionary<string, object?> dict = this.GetNoteAsDictionary(derivedPassword);
+		Note returnValue = new Note((string)dict[Note.noteTitleKey]!, (string)dict[Note.noteTextKey]!);
 
-		returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]).ToUnixTimeSeconds();
-		returnValue.modificationTime = ((DateTimeOffset)dict[LoginInformation.modificationTimeKey]).ToUnixTimeSeconds();
+		returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]!).ToUnixTimeSeconds();
+		returnValue.modificationTime = ((DateTimeOffset)dict[LoginInformation.modificationTimeKey]!).ToUnixTimeSeconds();
 
 		return returnValue;
 	}
@@ -93,7 +93,7 @@ public sealed partial class NoteSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Note title as string</returns>
-	public string GetNoteTitle(byte[] derivedPassword)
+	public string? GetNoteTitle(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.noteTitleKey, deserializationSettings);
 	}
@@ -103,7 +103,7 @@ public sealed partial class NoteSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Note text as string</returns>
-	public string GetNoteText(byte[] derivedPassword)
+	public string? GetNoteText(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.noteTextKey, deserializationSettings);
 	}
@@ -113,7 +113,7 @@ public sealed partial class NoteSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Note creation time as DateTimeOffset</returns>
-	public DateTimeOffset GetCreationTime(byte[] derivedPassword)
+	public DateTimeOffset? GetCreationTime(byte[] derivedPassword)
 	{
 		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.creationTimeKey, deserializationSettings);
 	}
@@ -123,12 +123,12 @@ public sealed partial class NoteSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Note modification time as DateTimeOffset</returns>
-	public DateTimeOffset GetModificationTime(byte[] derivedPassword)
+	public DateTimeOffset? GetModificationTime(byte[] derivedPassword)
 	{
 		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.modificationTimeKey, deserializationSettings);
 	}
 
-	private Dictionary<string, object> GetNoteAsDictionary(byte[] derivedPassword)
+	private Dictionary<string, object?> GetNoteAsDictionary(byte[] derivedPassword)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
@@ -147,7 +147,7 @@ public sealed partial class NoteSecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return noteAsDictionary;
 	}
@@ -210,7 +210,7 @@ public sealed partial class NoteSecret
 	{
 		try
 		{
-			Dictionary<string, object> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
+			Dictionary<string, object?> noteAsDictionary = this.GetNoteAsDictionary(derivedPassword);
 			// Update wanted value
 			noteAsDictionary[key] = value;
 			// Update modification time

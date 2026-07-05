@@ -31,7 +31,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ FileEntry.filenameKey, "filename.txt"}
 			};
@@ -65,7 +65,7 @@ namespace Tests
 
 			// Act
 			FileEntrySecret fesCopy = new FileEntrySecret(fes);
-			string filenameInCopy = fesCopy.GetFilename(derivedKey);
+			string? filenameInCopy = fesCopy.GetFilename(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(filenameInCopy));
@@ -104,7 +104,7 @@ namespace Tests
 			Assert.IsTrue(ComparisonHelper.AreFileEntriesEqual(fe, feCopy));
 			Assert.AreEqual(fe.creationTime, feCopy.creationTime);
 			Assert.AreEqual(fe.modificationTime, feCopy.modificationTime);
-			Assert.Throws<ArgumentNullException>(() => fes.GetFileEntry(null));
+			Assert.Throws<ArgumentNullException>(() => fes.GetFileEntry(null!));
 			Assert.Throws<ArgumentException>(() => fesInvalid.GetFileEntry(derivedKey));
 		}
 
@@ -131,7 +131,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => fes.GetFilename(null));
+			Assert.Throws<ArgumentNullException>(() => fes.GetFilename(null!));
 			Assert.Throws<ArgumentException>(() => fes.GetFilename(derivedKeyInvalid));
 		}
 
@@ -154,9 +154,10 @@ namespace Tests
 			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string rtFilename = fes.GetFilename(derivedKey);
+			string? rtFilename = fes.GetFilename(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(rtFilename);
 			Assert.AreEqual(filename, rtFilename);
 		}
 
@@ -179,9 +180,10 @@ namespace Tests
 			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			byte[] rtFileContent = fes.GetFileContent(derivedKey);
+			byte[]? rtFileContent = fes.GetFileContent(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(rtFileContent);
 			CollectionAssert.AreEqual(fileContent, rtFileContent);
 		}
 
@@ -229,9 +231,10 @@ namespace Tests
 			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset fileEntryCreationTime = fes.GetCreationTime(derivedKey);
+			DateTimeOffset? fileEntryCreationTime = fes.GetCreationTime(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(fileEntryCreationTime);
 			Assert.AreEqual(fe.GetCreationTime(), fileEntryCreationTime);
 		}
 
@@ -254,13 +257,15 @@ namespace Tests
 			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset fileEntryModificationTime1 = fes.GetModificationTime(derivedKey);
+			DateTimeOffset? fileEntryModificationTime1 = fes.GetModificationTime(derivedKey);
 			Thread.Sleep(1100);
 			fes.SetFilename("much_nicer.pdf", derivedKey);
-			DateTimeOffset fileEntryModificationTime2 = fes.GetModificationTime(derivedKey);
+			DateTimeOffset? fileEntryModificationTime2 = fes.GetModificationTime(derivedKey);
 
 			// Assert
-			Assert.Greater(fileEntryModificationTime2, fileEntryModificationTime1);
+			Assert.IsNotNull(fileEntryModificationTime1);
+			Assert.IsNotNull(fileEntryModificationTime2);
+			Assert.Greater(fileEntryModificationTime2!, fileEntryModificationTime1!);
 		}
 
 		[Test]
@@ -311,7 +316,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(fes.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(null));
+			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(null!));
 			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(new byte[] {}));
 			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(derivedKey2));
 		}
@@ -335,7 +340,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = fes.SetFilename(filename1, derivedKey);
-			string filename2 = fes.GetFilename(derivedKey);
+			string? filename2 = fes.GetFilename(derivedKey);
 			bool shouldBeFalse = fes.SetFilename(filename1,  new byte[] { 1, 2, 3 });
 
 			// Assert
@@ -364,12 +369,13 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = fes.SetFileContent(fileContent1, derivedKey);
-			byte[] fileContent2 = fes.GetFileContent(derivedKey);
+			byte[]? fileContent2 = fes.GetFileContent(derivedKey);
 			bool shouldBeFalse = fes.SetFileContent(fileContent1,  new byte[] { 1, 2, 3 });
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
 			Assert.IsFalse(shouldBeFalse);
+			Assert.IsNotNull(fileContent2);
 			CollectionAssert.AreEqual(fileContent1, fileContent2);
 		}
 
@@ -395,11 +401,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(fes1, Formatting.Indented);
 
-			FileEntrySecret fes2 = JsonConvert.DeserializeObject<FileEntrySecret>(json);
+			FileEntrySecret? fes2 = JsonConvert.DeserializeObject<FileEntrySecret>(json);
 
 			// Assert
+			Assert.IsNotNull(fes2);
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, fes2.GetChecksumAsHex());
+			Assert.AreEqual(checksum1, fes2!.GetChecksumAsHex());
 		}
 
 		[Test]

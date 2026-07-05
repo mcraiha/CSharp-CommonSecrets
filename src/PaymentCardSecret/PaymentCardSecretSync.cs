@@ -24,7 +24,7 @@ public sealed partial class PaymentCardSecret
 	[SetsRequiredMembers]
 	public PaymentCardSecret(PaymentCard paymentCard, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ PaymentCard.titleKey, paymentCard.GetTitle() },
 			{ PaymentCard.nameOnCardKey, paymentCard.GetNameOnCard() },
@@ -60,7 +60,7 @@ public sealed partial class PaymentCardSecret
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
 	[SetsRequiredMembers]
-	public PaymentCardSecret(Dictionary<string, object> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+	public PaymentCardSecret(Dictionary<string, object?> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
 
@@ -85,12 +85,12 @@ public sealed partial class PaymentCardSecret
 	/// <returns>PaymentCard</returns>
 	public PaymentCard GetPaymentCard(byte[] derivedPassword)
 	{
-		Dictionary<string, object> dict = this.GetPaymentCardAsDictionary(derivedPassword);
-		PaymentCard returnValue = new PaymentCard((string)dict[PaymentCard.titleKey], (string)dict[PaymentCard.nameOnCardKey], (string)dict[PaymentCard.cardTypeKey],
-									(string)dict[PaymentCard.numberKey], (string)dict[PaymentCard.securityCodeKey], (string)dict[PaymentCard.startDateKey],
-									(string)dict[PaymentCard.expirationDateKey], (string)dict[PaymentCard.notesKey]);
-		returnValue.creationTime = ((DateTimeOffset)dict[PaymentCard.creationTimeKey]).ToUnixTimeSeconds();
-		returnValue.modificationTime = ((DateTimeOffset)dict[PaymentCard.modificationTimeKey]).ToUnixTimeSeconds();
+		Dictionary<string, object?> dict = this.GetPaymentCardAsDictionary(derivedPassword);
+		PaymentCard returnValue = new PaymentCard((string)dict[PaymentCard.titleKey]!, (string)dict[PaymentCard.nameOnCardKey]!, (string)dict[PaymentCard.cardTypeKey]!,
+									(string)dict[PaymentCard.numberKey]!, (string)dict[PaymentCard.securityCodeKey]!, (string)dict[PaymentCard.startDateKey]!,
+									(string)dict[PaymentCard.expirationDateKey]!, (string)dict[PaymentCard.notesKey]!);
+		returnValue.creationTime = ((DateTimeOffset)dict[PaymentCard.creationTimeKey]!).ToUnixTimeSeconds();
+		returnValue.modificationTime = ((DateTimeOffset)dict[PaymentCard.modificationTimeKey]!).ToUnixTimeSeconds();
 
 		return returnValue;
 	}
@@ -100,7 +100,7 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Title</returns>
-	public string GetTitle(byte[] derivedPassword)
+	public string? GetTitle(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.titleKey, deserializationSettings);
 	}
@@ -110,7 +110,7 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Name on card</returns>
-	public string GetNameOnCard(byte[] derivedPassword)
+	public string? GetNameOnCard(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.nameOnCardKey, deserializationSettings);
 	}
@@ -120,7 +120,7 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Card type</returns>
-	public string GetCardType(byte[] derivedPassword)
+	public string? GetCardType(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.cardTypeKey, deserializationSettings);
 	}
@@ -130,7 +130,7 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Number</returns>
-	public string GetNumber(byte[] derivedPassword)
+	public string? GetNumber(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.numberKey, deserializationSettings);
 	}
@@ -140,7 +140,7 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Security code</returns>
-	public string GetSecurityCode(byte[] derivedPassword)
+	public string? GetSecurityCode(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.securityCodeKey, deserializationSettings);
 	}
@@ -150,7 +150,7 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Start date</returns>
-	public string GetStartDate(byte[] derivedPassword)
+	public string? GetStartDate(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.startDateKey, deserializationSettings);
 	}
@@ -160,7 +160,7 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Expiration date</returns>
-	public string GetExpirationDate(byte[] derivedPassword)
+	public string? GetExpirationDate(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.expirationDateKey, deserializationSettings);
 	}
@@ -170,7 +170,7 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Notes</returns>
-	public string GetNotes(byte[] derivedPassword)
+	public string? GetNotes(byte[] derivedPassword)
 	{
 		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.notesKey, deserializationSettings);
 	}
@@ -180,7 +180,7 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Creation time</returns>
-	public DateTimeOffset GetCreationTime(byte[] derivedPassword)
+	public DateTimeOffset? GetCreationTime(byte[] derivedPassword)
 	{
 		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.creationTimeKey, deserializationSettings);
 	}
@@ -190,12 +190,12 @@ public sealed partial class PaymentCardSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Modification time</returns>
-	public DateTimeOffset GetModificationTime(byte[] derivedPassword)
+	public DateTimeOffset? GetModificationTime(byte[] derivedPassword)
 	{
 		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.modificationTimeKey, deserializationSettings);
 	}
 
-	private Dictionary<string, object> GetPaymentCardAsDictionary(byte[] derivedPassword)
+	private Dictionary<string, object?> GetPaymentCardAsDictionary(byte[] derivedPassword)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
@@ -214,7 +214,7 @@ public sealed partial class PaymentCardSecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> paymentCardAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> paymentCardAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return paymentCardAsDictionary;
 	}
@@ -343,7 +343,7 @@ public sealed partial class PaymentCardSecret
 	{
 		try
 		{
-			Dictionary<string, object> paymentCardAsDictionary = this.GetPaymentCardAsDictionary(derivedPassword);
+			Dictionary<string, object?> paymentCardAsDictionary = this.GetPaymentCardAsDictionary(derivedPassword);
 			paymentCardAsDictionary[key] = value;
 
 			if (key != PaymentCard.creationTimeKey && key != PaymentCard.modificationTimeKey)

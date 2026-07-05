@@ -33,7 +33,7 @@ namespace Tests
 
 			DateTimeOffset time = DateTimeOffset.UtcNow;
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ Contact.firstNameKey, "first" },
 				{ Contact.lastNameKey, "last" },
@@ -174,7 +174,7 @@ namespace Tests
 			Assert.IsTrue(ComparisonHelper.AreContactsEqual(c1, contactCopy));
 			Assert.AreEqual(c1.creationTime, contactCopy.creationTime);
 			Assert.AreEqual(c1.modificationTime, contactCopy.modificationTime);
-			Assert.Throws<ArgumentNullException>(() => cs.GetContact(null));
+			Assert.Throws<ArgumentNullException>(() => cs.GetContact(null!));
 			Assert.Throws<ArgumentException>(() => csInvalid.GetContact(derivedKey));
 		}
 
@@ -224,7 +224,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => cs.GetFirstName(null));
+			Assert.Throws<ArgumentNullException>(() => cs.GetFirstName(null!));
 			Assert.Throws<ArgumentException>(() => cs.GetFirstName(derivedKeyInvalid));
 		}
 
@@ -316,9 +316,10 @@ namespace Tests
 			ContactSecret cs1 = new ContactSecret(c1, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset contactCreationTime = cs1.GetCreationTime(derivedKey);
+			DateTimeOffset? contactCreationTime = cs1.GetCreationTime(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(contactCreationTime);
 			Assert.AreEqual(c1.GetCreationTime(), contactCreationTime);
 		}
 
@@ -337,13 +338,15 @@ namespace Tests
 			ContactSecret cs1 = new ContactSecret(c1, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset contactSecretModificationTime1 = cs1.GetModificationTime(derivedKey);
+			DateTimeOffset? contactSecretModificationTime1 = cs1.GetModificationTime(derivedKey);
 			Thread.Sleep(1100);
 			cs1.SetFirstName("the other first", derivedKey);
-			DateTimeOffset contactSecretModificationTime2 = cs1.GetModificationTime(derivedKey);
+			DateTimeOffset? contactSecretModificationTime2 = cs1.GetModificationTime(derivedKey);
 
 			// Assert
-			Assert.Greater(contactSecretModificationTime2, contactSecretModificationTime1);
+			Assert.IsNotNull(contactSecretModificationTime1);
+			Assert.IsNotNull(contactSecretModificationTime2);
+			Assert.Greater(contactSecretModificationTime2!, contactSecretModificationTime1!);
 		}
 
 		[Test]
@@ -384,7 +387,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(contactSecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(contactSecret.CanBeDecryptedWithDerivedPassword(null));
+			Assert.IsFalse(contactSecret.CanBeDecryptedWithDerivedPassword(null!));
 			Assert.IsFalse(contactSecret.CanBeDecryptedWithDerivedPassword(new byte[] {}));
 			Assert.IsFalse(contactSecret.CanBeDecryptedWithDerivedPassword(derivedKey2));
 		}
@@ -526,11 +529,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(cs1, Formatting.Indented);
 
-			ContactSecret cs2 = JsonConvert.DeserializeObject<ContactSecret>(json);
+			ContactSecret? cs2 = JsonConvert.DeserializeObject<ContactSecret>(json);
 
 			// Assert
+			Assert.IsNotNull(cs2);
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, cs2.GetChecksumAsHex());
+			Assert.AreEqual(checksum1, cs2!.GetChecksumAsHex());
 		}
 
 		[Test]

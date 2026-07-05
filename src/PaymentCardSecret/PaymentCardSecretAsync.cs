@@ -24,7 +24,7 @@ public sealed partial class PaymentCardSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<PaymentCardSecret> CreatePaymentCardSecretAsync(PaymentCard paymentCard, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ PaymentCard.titleKey, paymentCard.GetTitle() },
 			{ PaymentCard.nameOnCardKey, paymentCard.GetNameOnCard() },
@@ -63,7 +63,7 @@ public sealed partial class PaymentCardSecret
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
-	public static async Task<PaymentCardSecret> CreatePaymentCardSecretAsync(Dictionary<string, object> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public static async Task<PaymentCardSecret> CreatePaymentCardSecretAsync(Dictionary<string, object?> paymentCardAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(paymentCardAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
@@ -92,12 +92,12 @@ public sealed partial class PaymentCardSecret
 	/// <returns>PaymentCard</returns>
 	public async Task<PaymentCard> GetPaymentCardAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dict = await this.GetPaymentCardAsDictionaryAsync(derivedPassword, securityFunctions);
-		PaymentCard returnValue = await PaymentCard.CreatePaymentCardAsync((string)dict[PaymentCard.titleKey], (string)dict[PaymentCard.nameOnCardKey], (string)dict[PaymentCard.cardTypeKey],
-									(string)dict[PaymentCard.numberKey], (string)dict[PaymentCard.securityCodeKey], (string)dict[PaymentCard.startDateKey], 
-									(string)dict[PaymentCard.expirationDateKey], (string)dict[PaymentCard.notesKey], securityFunctions);
-		returnValue.creationTime = ((DateTimeOffset)dict[PaymentCard.creationTimeKey]).ToUnixTimeSeconds();
-		returnValue.modificationTime = ((DateTimeOffset)dict[PaymentCard.modificationTimeKey]).ToUnixTimeSeconds();
+		Dictionary<string, object?> dict = await this.GetPaymentCardAsDictionaryAsync(derivedPassword, securityFunctions);
+		PaymentCard returnValue = await PaymentCard.CreatePaymentCardAsync((string)dict[PaymentCard.titleKey]!, (string)dict[PaymentCard.nameOnCardKey]!, (string)dict[PaymentCard.cardTypeKey]!,
+									(string)dict[PaymentCard.numberKey]!, (string)dict[PaymentCard.securityCodeKey]!, (string)dict[PaymentCard.startDateKey]!, 
+									(string)dict[PaymentCard.expirationDateKey]!, (string)dict[PaymentCard.notesKey]!, securityFunctions);
+		returnValue.creationTime = ((DateTimeOffset)dict[PaymentCard.creationTimeKey]!).ToUnixTimeSeconds();
+		returnValue.modificationTime = ((DateTimeOffset)dict[PaymentCard.modificationTimeKey]!).ToUnixTimeSeconds();
 		
 		return returnValue;
 	}
@@ -212,13 +212,13 @@ public sealed partial class PaymentCardSecret
 		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.modificationTimeKey, deserializationSettings, securityFunctions);
 	}
 
-	private async Task<Dictionary<string, object>> GetPaymentCardAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	private async Task<Dictionary<string, object?>> GetPaymentCardAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck.exception;
+			throw passwordCheck.exception!;
 		}
 
 		// Try to decrypt the binary
@@ -228,10 +228,10 @@ public sealed partial class PaymentCardSecret
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck.exception;
+			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> paymentCardAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> paymentCardAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return paymentCardAsDictionary;
 	}
@@ -369,7 +369,7 @@ public sealed partial class PaymentCardSecret
 	{
 		try 
 		{
-			Dictionary<string, object> paymentCardAsDictionary = await this.GetPaymentCardAsDictionaryAsync(derivedPassword, securityFunctions);
+			Dictionary<string, object?> paymentCardAsDictionary = await this.GetPaymentCardAsDictionaryAsync(derivedPassword, securityFunctions);
 			paymentCardAsDictionary[key] = value;
 
 			if (key != PaymentCard.creationTimeKey && key != PaymentCard.modificationTimeKey)

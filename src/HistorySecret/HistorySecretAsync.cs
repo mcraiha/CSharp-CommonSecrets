@@ -25,7 +25,7 @@ public sealed partial class HistorySecret
 	/// <returns>HistorySecret</returns>
 	public static async Task<HistorySecret> CreateHistorySecretAsync(History history, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ History.eventTypeKey, history.eventType },
 			{ History.descriptionTextKey, history.descriptionText },
@@ -44,7 +44,7 @@ public sealed partial class HistorySecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>HistorySecret</returns>
-	public static async Task<HistorySecret> CreateHistorySecretAsync(Dictionary<string, object> historyAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public static async Task<HistorySecret> CreateHistorySecretAsync(Dictionary<string, object?> historyAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(historyAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
@@ -73,7 +73,7 @@ public sealed partial class HistorySecret
 	/// <returns>History</returns>
 	public async Task<History> GetHistoryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dict = await this.GetHistoryAsDictionaryAsync(derivedPassword, securityFunctions);
+		Dictionary<string, object?> dict = await this.GetHistoryAsDictionaryAsync(derivedPassword, securityFunctions);
 
 		return new History()
         {
@@ -118,13 +118,13 @@ public sealed partial class HistorySecret
 		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, History.occurenceTimeKey, deserializationSettings, securityFunctions);
 	}
 
-	private async Task<Dictionary<string, object>> GetHistoryAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	private async Task<Dictionary<string, object?>> GetHistoryAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck.exception;
+			throw passwordCheck.exception!;
 		}
 
 		// Try to decrypt the binary
@@ -134,10 +134,10 @@ public sealed partial class HistorySecret
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck.exception;
+			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> historyAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> historyAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return historyAsDictionary;
 	}
@@ -203,7 +203,7 @@ public sealed partial class HistorySecret
 	{
 		try 
 		{
-			Dictionary<string, object> historyAsDictionary = await this.GetHistoryAsDictionaryAsync(derivedPassword, securityFunctions);
+			Dictionary<string, object?> historyAsDictionary = await this.GetHistoryAsDictionaryAsync(derivedPassword, securityFunctions);
 			// Update wanted value
 			historyAsDictionary[key] = value;
 

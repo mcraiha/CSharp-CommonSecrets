@@ -30,7 +30,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ Note.noteTitleKey, "My shopping list for tomorrow"}
 			};
@@ -64,7 +64,7 @@ namespace Tests
 
 			// Act
 			NoteSecret noteSecretCopy = new NoteSecret(noteSecret);
-			string noteTitle = noteSecretCopy.GetNoteTitle(derivedKey);
+			string? noteTitle = noteSecretCopy.GetNoteTitle(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(noteTitle));
@@ -104,7 +104,7 @@ namespace Tests
 			Assert.AreEqual(note.creationTime, noteCopy.creationTime);
 			Assert.AreEqual(note.modificationTime, noteCopy.modificationTime);
 
-			Assert.Throws<ArgumentNullException>(() => noteSecret.GetNote(null));
+			Assert.Throws<ArgumentNullException>(() => noteSecret.GetNote(null!));
 			Assert.Throws<ArgumentException>(() => noteSecretInvalid.GetNote(derivedKey));
 		}
 
@@ -131,7 +131,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => noteSecret.GetNoteTitle(null));
+			Assert.Throws<ArgumentNullException>(() => noteSecret.GetNoteTitle(null!));
 			Assert.Throws<ArgumentException>(() => noteSecret.GetNoteTitle(derivedKeyInvalid));
 		}
 
@@ -155,9 +155,10 @@ namespace Tests
 			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string noteTitle = noteSecret.GetNoteTitle(derivedKey);
+			string? noteTitle = noteSecret.GetNoteTitle(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(noteTitle);
 			Assert.AreEqual(title, noteTitle);
 		}
 
@@ -180,9 +181,10 @@ namespace Tests
 			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string noteText = noteSecret.GetNoteText(derivedKey);
+			string? noteText = noteSecret.GetNoteText(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(noteText);
 			Assert.AreEqual(text, noteText);
 		}
 
@@ -205,7 +207,7 @@ namespace Tests
 			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset noteCreationTime = noteSecret.GetCreationTime(derivedKey);
+			DateTimeOffset? noteCreationTime = noteSecret.GetCreationTime(derivedKey);
 
 			// Assert
 			Assert.AreEqual(note.GetCreationTime(), noteCreationTime);
@@ -230,13 +232,15 @@ namespace Tests
 			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 			
 			// Act
-			DateTimeOffset modificationTime1 = noteSecret.GetModificationTime(derivedKey);
+			DateTimeOffset? modificationTime1 = noteSecret.GetModificationTime(derivedKey);
 			Thread.Sleep(1100);
 			noteSecret.SetNoteTitle("1234567", derivedKey);
-			DateTimeOffset modificationTime2 = noteSecret.GetModificationTime(derivedKey);
+			DateTimeOffset? modificationTime2 = noteSecret.GetModificationTime(derivedKey);
 
 			// Assert
-			Assert.Greater(modificationTime2, modificationTime1);
+			Assert.IsNotNull(modificationTime1);
+			Assert.IsNotNull(modificationTime2);
+			Assert.Greater(modificationTime2!.Value, modificationTime1!.Value);
 		}
 
 		[Test]
@@ -287,7 +291,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(noteSecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(null));
+			Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(null!));
 			Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(new byte[] {}));
 			Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(derivedKey2));
 		}
@@ -311,7 +315,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = noteSecret.SetNoteTitle(noteTitle1, derivedKey);
-			string noteTitle2 = noteSecret.GetNoteTitle(derivedKey);
+			string? noteTitle2 = noteSecret.GetNoteTitle(derivedKey);
 			bool shouldBeFalse = noteSecret.SetNoteTitle(noteTitle1,  new byte[] { 1, 2, 3 });
 
 			// Assert
@@ -340,7 +344,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = noteSecret.SetNoteText(noteText1, derivedKey);
-			string noteText2 = noteSecret.GetNoteText(derivedKey);
+			string? noteText2 = noteSecret.GetNoteText(derivedKey);
 			bool shouldBeFalse = noteSecret.SetNoteText(noteText1,  new byte[] { 1, 2, 3 });
 
 			// Assert
@@ -372,11 +376,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(noteSecret1, Formatting.Indented);
 
-			NoteSecret noteSecret2 = JsonConvert.DeserializeObject<NoteSecret>(json);
+			NoteSecret? noteSecret2 = JsonConvert.DeserializeObject<NoteSecret>(json);
 
 			// Assert
+			Assert.IsNotNull(noteSecret2);
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, noteSecret2.GetChecksumAsHex());
+			Assert.AreEqual(checksum1, noteSecret2!.GetChecksumAsHex());
 		}
 
 		[Test]

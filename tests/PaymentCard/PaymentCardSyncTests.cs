@@ -262,11 +262,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(pc1, Formatting.Indented);
 
-			PaymentCard pc2 = JsonConvert.DeserializeObject<PaymentCard>(json);
+			PaymentCard? pc2 = JsonConvert.DeserializeObject<PaymentCard>(json);
 
 			// Assert
+			Assert.IsNotNull(pc2);
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, pc2.GetChecksumAsHex());
+			Assert.AreEqual(checksum1, pc2!.GetChecksumAsHex());
 		}
 
 		[Test]

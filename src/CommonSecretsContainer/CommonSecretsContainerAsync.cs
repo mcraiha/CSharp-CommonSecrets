@@ -28,7 +28,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		await this.AddLoginInformationSecretActualAsync(derivedPassword, loginInformation, keyIdentifier, algorithm, securityFunctions);
 
@@ -81,7 +87,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		await this.AddNoteSecretActualAsync(derivedPassword, note, keyIdentifier, algorithm, securityFunctions);
 
@@ -134,7 +146,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		await this.AddFileEntrySecretActualAsync(derivedPassword, fileEntry, keyIdentifier, algorithm, securityFunctions);
 
@@ -187,7 +205,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		await this.AddContactSecretActualAsync(derivedPassword, contact, keyIdentifier, algorithm, securityFunctions);
 
@@ -240,7 +264,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		await this.AddPaymentCardSecretActualAsync(derivedPassword, paymentCard, keyIdentifier, algorithm, securityFunctions);
 
@@ -293,7 +323,13 @@ public sealed partial class CommonSecretsContainer
 			return (checkResult, possibleError);
 		}
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		await this.AddHistorySecretActualAsync(derivedPassword, history, keyIdentifier, algorithm, securityFunctions);
 
@@ -359,7 +395,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		this.loginInformationSecrets[zeroBasedIndex] = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, keyIdentifier, ska, derivedPassword, securityFunctions);
 
@@ -421,7 +463,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		this.noteSecrets[zeroBasedIndex] = await NoteSecret.CreateNoteSecretAsync(note, keyIdentifier, ska, derivedPassword, securityFunctions);
 
@@ -483,7 +531,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		this.fileSecrets[zeroBasedIndex] = await FileEntrySecret.CreateFileEntrySecretAsync(fileEntry, keyIdentifier, ska, derivedPassword, securityFunctions);
 
@@ -545,7 +599,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		this.contactSecrets[zeroBasedIndex] = await ContactSecret.CreateContactSecretAsync(contact, keyIdentifier, ska, derivedPassword, securityFunctions);
 
@@ -607,7 +667,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		this.paymentCardSecrets[zeroBasedIndex] = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, keyIdentifier, ska, derivedPassword, securityFunctions);
 
@@ -669,7 +735,13 @@ public sealed partial class CommonSecretsContainer
 
 		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(algorithm, securityFunctions);
 
-		byte[] derivedPassword = await this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier).GeneratePasswordBytesAsync(password, securityFunctions);
+		KeyDerivationFunctionEntry? kdfe = this.FindKeyDerivationFunctionEntryWithKeyIdentifier(keyIdentifier);
+		if (kdfe is null)
+		{
+			return (false, $"Cannot find key with identifier {keyIdentifier}");
+		}
+
+		byte[] derivedPassword = await kdfe.GeneratePasswordBytesAsync(password, securityFunctions);
 
 		this.historySecrets[zeroBasedIndex] = await HistorySecret.CreateHistorySecretAsync(history, keyIdentifier, ska, derivedPassword, securityFunctions);
 

@@ -32,7 +32,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ LoginInformation.titleKey, "Shopping site"}
 			};
@@ -61,7 +61,7 @@ namespace Tests
 
 			// Act
 			LoginInformationSecret loginInformationSecretCopy = new LoginInformationSecret(loginInformationSecret);
-			string loginInformationTitle = loginInformationSecretCopy.GetTitle(derivedKey);
+			string? loginInformationTitle = loginInformationSecretCopy.GetTitle(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle));
@@ -112,7 +112,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => loginInformationSecret.GetTitle(null));
+			Assert.Throws<ArgumentNullException>(() => loginInformationSecret.GetTitle(null!));
 			Assert.Throws<ArgumentException>(() => loginInformationSecret.GetTitle(derivedKeyInvalid));
 		}
 
@@ -130,7 +130,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationTitle = loginInformationSecret.GetTitle(derivedKey);
+			string? loginInformationTitle = loginInformationSecret.GetTitle(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle));
@@ -151,7 +151,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationUrl = loginInformationSecret.GetURL(derivedKey);
+			string? loginInformationUrl = loginInformationSecret.GetURL(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUrl));
@@ -172,7 +172,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationEmail = loginInformationSecret.GetEmail(derivedKey);
+			string? loginInformationEmail = loginInformationSecret.GetEmail(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationEmail));
@@ -193,7 +193,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationUsername = loginInformationSecret.GetUsername(derivedKey);
+			string? loginInformationUsername = loginInformationSecret.GetUsername(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUsername));
@@ -214,7 +214,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationPassword = loginInformationSecret.GetPassword(derivedKey);
+			string? loginInformationPassword = loginInformationSecret.GetPassword(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationPassword));
@@ -238,7 +238,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationNotes = loginInformationSecret.GetNotes(derivedKey);
+			string? loginInformationNotes = loginInformationSecret.GetNotes(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationNotes));
@@ -262,7 +262,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationMFA = loginInformationSecret.GetMFA(derivedKey);
+			string? loginInformationMFA = loginInformationSecret.GetMFA(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationMFA));
@@ -283,9 +283,10 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformation, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset loginInformationCreationTime = loginInformationSecret.GetCreationTime(derivedKey);
+			DateTimeOffset? loginInformationCreationTime = loginInformationSecret.GetCreationTime(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(loginInformationCreationTime);
 			Assert.AreEqual(loginInformation.GetCreationTime(), loginInformationCreationTime);
 		}
 
@@ -307,9 +308,10 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset loginInformationModificationTime = loginInformationSecret.GetModificationTime(derivedKey);
+			DateTimeOffset? loginInformationModificationTime = loginInformationSecret.GetModificationTime(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(loginInformationModificationTime);
 			Assert.IsTrue(loginInformationModified.modificationTime > loginInformationModified.creationTime);
 			Assert.AreEqual(loginInformationModified.GetModificationTime(), loginInformationModificationTime);
 		}
@@ -335,7 +337,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			byte[] loginInformationIcon = loginInformationSecret.GetIcon(derivedKey);
+			byte[]? loginInformationIcon = loginInformationSecret.GetIcon(derivedKey);
 
 			// Assert
 			Assert.IsNotNull(loginInformationIcon);
@@ -359,7 +361,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationCategory = loginInformationSecret.GetCategory(derivedKey);
+			string? loginInformationCategory = loginInformationSecret.GetCategory(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationCategory));
@@ -383,7 +385,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = new LoginInformationSecret(loginInformationModified, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string loginInformationTags = loginInformationSecret.GetTags(derivedKey);
+			string? loginInformationTags = loginInformationSecret.GetTags(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTags));
@@ -428,7 +430,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(loginInformationSecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(loginInformationSecret.CanBeDecryptedWithDerivedPassword(null));
+			Assert.IsFalse(loginInformationSecret.CanBeDecryptedWithDerivedPassword(null!));
 			Assert.IsFalse(loginInformationSecret.CanBeDecryptedWithDerivedPassword(new byte[] {}));
 			Assert.IsFalse(loginInformationSecret.CanBeDecryptedWithDerivedPassword(derivedKey2));
 		}
@@ -446,9 +448,9 @@ namespace Tests
 			string newTitle = "new and fresh!";
 
 			// Act
-			string loginInformationTitle1 = loginInformationSecret.GetTitle(derivedKey);
+			string? loginInformationTitle1 = loginInformationSecret.GetTitle(derivedKey);
 			bool shouldBeTrue = loginInformationSecret.SetTitle(newTitle, derivedKey);
-			string loginInformationTitle2 = loginInformationSecret.GetTitle(derivedKey);
+			string? loginInformationTitle2 = loginInformationSecret.GetTitle(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetTitle(newTitle, new byte[] { 1, 2, 3});
 
 			// Assert
@@ -473,9 +475,9 @@ namespace Tests
 			string newURL = "https://newandbetter.future";
 
 			// Act
-			string loginInformationURL1 = loginInformationSecret.GetURL(derivedKey);
+			string? loginInformationURL1 = loginInformationSecret.GetURL(derivedKey);
 			bool shouldBeTrue = loginInformationSecret.SetURL(newURL, derivedKey);
-			string loginInformationURL2 = loginInformationSecret.GetURL(derivedKey);
+			string? loginInformationURL2 = loginInformationSecret.GetURL(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetURL(newURL, new byte[] { 1, 2, 3});
 
 			// Assert
@@ -500,9 +502,9 @@ namespace Tests
 			string newEmail = "tomorrow@newandbetter.future";
 
 			// Act
-			string loginInformationEmail1 = loginInformationSecret.GetEmail(derivedKey);
+			string? loginInformationEmail1 = loginInformationSecret.GetEmail(derivedKey);
 			bool shouldBeTrue = loginInformationSecret.SetEmail(newEmail, derivedKey);
-			string loginInformationEmail2 = loginInformationSecret.GetEmail(derivedKey);
+			string? loginInformationEmail2 = loginInformationSecret.GetEmail(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetEmail(newEmail, new byte[] { 1, 2, 3});
 
 			// Assert
@@ -527,9 +529,9 @@ namespace Tests
 			string newUsername = "futuredragon";
 
 			// Act
-			string loginInformationUsername1 = loginInformationSecret.GetUsername(derivedKey);
+			string? loginInformationUsername1 = loginInformationSecret.GetUsername(derivedKey);
 			bool shouldBeTrue = loginInformationSecret.SetUsername(newUsername, derivedKey);
-			string loginInformationUsername2 = loginInformationSecret.GetUsername(derivedKey);
+			string? loginInformationUsername2 = loginInformationSecret.GetUsername(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetUsername(newUsername, new byte[] { 1, 2, 3});
 
 			// Assert
@@ -554,9 +556,9 @@ namespace Tests
 			string newPassword = "ag#%23,.67Hngrewn";
 
 			// Act
-			string loginInformationPassword1 = loginInformationSecret.GetPassword(derivedKey);
+			string? loginInformationPassword1 = loginInformationSecret.GetPassword(derivedKey);
 			bool shouldBeTrue = loginInformationSecret.SetPassword(newPassword, derivedKey);
-			string loginInformationPassword2 = loginInformationSecret.GetPassword(derivedKey);
+			string? loginInformationPassword2 = loginInformationSecret.GetPassword(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetPassword(newPassword, new byte[] { 1, 2, 3});
 
 			// Assert
@@ -582,7 +584,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = loginInformationSecret.SetNotes(newNotes, derivedKey);
-			string loginInformationNotes2 = loginInformationSecret.GetNotes(derivedKey);
+			string? loginInformationNotes2 = loginInformationSecret.GetNotes(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetNotes(newNotes, new byte[] { 1, 2, 3});
 
 			// Assert
@@ -606,7 +608,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = loginInformationSecret.SetMFA(newMFA, derivedKey);
-			string loginInformationMFA2 = loginInformationSecret.GetMFA(derivedKey);
+			string? loginInformationMFA2 = loginInformationSecret.GetMFA(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetMFA(newMFA, new byte[] { 1, 2, 3});
 
 			// Assert
@@ -629,16 +631,18 @@ namespace Tests
 			DateTimeOffset newCreationTime = DateTimeOffset.UtcNow.AddDays(1); 
 
 			// Act
-			DateTimeOffset loginInformationCreationTime1 = loginInformationSecret.GetCreationTime(derivedKey);
+			DateTimeOffset? loginInformationCreationTime1 = loginInformationSecret.GetCreationTime(derivedKey);
 			bool shouldBeTrue = loginInformationSecret.SetCreationTime(newCreationTime, derivedKey);
-			DateTimeOffset loginInformationCreationTime2 = loginInformationSecret.GetCreationTime(derivedKey);
+			DateTimeOffset? loginInformationCreationTime2 = loginInformationSecret.GetCreationTime(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetCreationTime(newCreationTime, new byte[] { 1, 29, 3});
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
 			Assert.IsFalse(shouldBeFalse);
-			Assert.AreEqual(loginInformation.creationTime, loginInformationCreationTime1.ToUnixTimeSeconds());
-			Assert.AreEqual(newCreationTime.ToUnixTimeSeconds(), loginInformationCreationTime2.ToUnixTimeSeconds());
+			Assert.IsNotNull(loginInformationCreationTime1);
+			Assert.IsNotNull(loginInformationCreationTime2);
+			Assert.AreEqual(loginInformation.creationTime, loginInformationCreationTime1!.Value.ToUnixTimeSeconds());
+			Assert.AreEqual(newCreationTime.ToUnixTimeSeconds(), loginInformationCreationTime2!.Value.ToUnixTimeSeconds());
 		}
 
 		[Test]
@@ -654,16 +658,18 @@ namespace Tests
 			DateTimeOffset newModificationTime = DateTimeOffset.UtcNow.AddDays(1); 
 
 			// Act
-			DateTimeOffset loginInformationModificationTime1 = loginInformationSecret.GetModificationTime(derivedKey);
+			DateTimeOffset? loginInformationModificationTime1 = loginInformationSecret.GetModificationTime(derivedKey);
 			bool shouldBeTrue = loginInformationSecret.SetModificationTime(newModificationTime, derivedKey);
-			DateTimeOffset loginInformationModificationTime2 = loginInformationSecret.GetModificationTime(derivedKey);
+			DateTimeOffset? loginInformationModificationTime2 = loginInformationSecret.GetModificationTime(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetModificationTime(newModificationTime, new byte[] { 1, 29, 3, 99, 134, 255, 0});
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
 			Assert.IsFalse(shouldBeFalse);
-			Assert.AreEqual(loginInformation.modificationTime, loginInformationModificationTime1.ToUnixTimeSeconds());
-			Assert.AreEqual(newModificationTime.ToUnixTimeSeconds(), loginInformationModificationTime2.ToUnixTimeSeconds());
+			Assert.IsNotNull(loginInformationModificationTime1);
+			Assert.IsNotNull(loginInformationModificationTime2);
+			Assert.AreEqual(loginInformation.modificationTime, loginInformationModificationTime1!.Value.ToUnixTimeSeconds());
+			Assert.AreEqual(newModificationTime.ToUnixTimeSeconds(), loginInformationModificationTime2!.Value.ToUnixTimeSeconds());
 		}
 
 		[Test]
@@ -680,7 +686,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = loginInformationSecret.SetIcon(newIcon, derivedKey);
-			byte[] loginInformationIcon2 = loginInformationSecret.GetIcon(derivedKey);
+			byte[]? loginInformationIcon2 = loginInformationSecret.GetIcon(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetIcon(newIcon, new byte[] { 13, 129, 3, 99, 134, 255, 0});
 
 			// Assert
@@ -703,7 +709,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = loginInformationSecret.SetCategory(newCategory, derivedKey);
-			string loginInformationCategory2 = loginInformationSecret.GetCategory(derivedKey);
+			string? loginInformationCategory2 = loginInformationSecret.GetCategory(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetCategory(newCategory, new byte[] { 13, 129, 0, 99, 134, 255, 0});
 
 			// Assert
@@ -727,7 +733,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = loginInformationSecret.SetTags(newTags, derivedKey);
-			string loginInformationTags2 = loginInformationSecret.GetTags(derivedKey);
+			string? loginInformationTags2 = loginInformationSecret.GetTags(derivedKey);
 			bool shouldBeFalse = loginInformationSecret.SetTags(newTags, new byte[] { 13, 129, 0, 91, 194, 255, 0});
 
 			// Assert
@@ -755,11 +761,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(loginInformationSecret1, Formatting.Indented);
 
-			LoginInformationSecret loginInformationSecret2 = JsonConvert.DeserializeObject<LoginInformationSecret>(json);
+			LoginInformationSecret? loginInformationSecret2 = JsonConvert.DeserializeObject<LoginInformationSecret>(json);
 
 			// Assert
+			Assert.IsNotNull(loginInformationSecret2);
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, loginInformationSecret2.GetChecksumAsHex());
+			Assert.AreEqual(checksum1, loginInformationSecret2!.GetChecksumAsHex());
 		}
 
 		[Test]

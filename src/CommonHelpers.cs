@@ -62,7 +62,7 @@ public static class Helpers
 	/// <param name="deserializationSettings">Deserialization settings</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Object containing the data</returns>
-	public static async Task<object> GetSingleValueAsync(byte[] audalfData, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, string key, DeserializationSettings deserializationSettings, ISecurityAsyncFunctions securityFunctions)
+	public static async Task<object?> GetSingleValueAsync(byte[] audalfData, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, string key, DeserializationSettings deserializationSettings, ISecurityAsyncFunctions securityFunctions)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
@@ -97,7 +97,7 @@ public static class Helpers
 	/// <param name="key">Dictionary key</param>
 	/// <param name="deserializationSettings">Deserialization settings</param>
 	/// <returns>Object containing the data</returns>
-	public static object GetSingleValue(byte[] audalfData, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, string key, DeserializationSettings deserializationSettings)
+	public static object? GetSingleValue(byte[] audalfData, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, string key, DeserializationSettings deserializationSettings)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 

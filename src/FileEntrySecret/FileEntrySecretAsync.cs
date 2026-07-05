@@ -25,7 +25,7 @@ public sealed partial class FileEntrySecret
 	/// <returns>FileEntrySecret</returns>
 	public static async Task<FileEntrySecret> CreateFileEntrySecretAsync(FileEntry fileEntry, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ FileEntry.filenameKey, fileEntry.GetFilename() },
 			{ FileEntry.fileContentKey, fileEntry.GetFileContent() },
@@ -45,7 +45,7 @@ public sealed partial class FileEntrySecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>FileEntrySecret</returns>
-	public static async Task<FileEntrySecret> CreateFileEntrySecretAsync(Dictionary<string, object> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public static async Task<FileEntrySecret> CreateFileEntrySecretAsync(Dictionary<string, object?> fileEntryAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(fileEntryAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
@@ -74,7 +74,7 @@ public sealed partial class FileEntrySecret
 	/// <returns>FileEntry</returns>
 	public async Task<FileEntry> GetFileEntryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dict = await this.GetFileEntryAsDictionaryAsync(derivedPassword, securityFunctions);
+		Dictionary<string, object?> dict = await this.GetFileEntryAsDictionaryAsync(derivedPassword, securityFunctions);
 
 		FileEntry returnValue = await FileEntry.CreateFileEntryAsync((string)dict[FileEntry.filenameKey], (byte[])dict[FileEntry.fileContentKey], securityFunctions);
 
@@ -140,13 +140,13 @@ public sealed partial class FileEntrySecret
 		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, FileEntry.modificationTimeKey, deserializationSettings, securityFunctions);
 	}
 
-	private async Task<Dictionary<string, object>> GetFileEntryAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	private async Task<Dictionary<string, object?>> GetFileEntryAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck.exception;
+			throw passwordCheck.exception!;
 		}
 
 		// Try to decrypt the binary
@@ -156,10 +156,10 @@ public sealed partial class FileEntrySecret
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck.exception;
+			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return fileEntryAsDictionary;
 	}
@@ -225,7 +225,7 @@ public sealed partial class FileEntrySecret
 	{
 		try 
 		{
-			Dictionary<string, object> fileEntryAsDictionary = await this.GetFileEntryAsDictionaryAsync(derivedPassword, securityFunctions);
+			Dictionary<string, object?> fileEntryAsDictionary = await this.GetFileEntryAsDictionaryAsync(derivedPassword, securityFunctions);
 			// Update wanted value
 			fileEntryAsDictionary[key] = value;
 			// Update modification time

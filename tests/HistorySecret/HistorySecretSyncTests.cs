@@ -31,7 +31,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ History.descriptionTextKey, "Very boring description"u8.ToArray() }
 			};
@@ -63,7 +63,7 @@ namespace Tests
 
 			// Act
 			HistorySecret historySecretCopy = new HistorySecret(historySecret);
-			string descriptionInCopy = historySecretCopy.GetDescription(derivedKey);
+			string? descriptionInCopy = historySecretCopy.GetDescription(derivedKey);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(descriptionInCopy));
@@ -100,7 +100,7 @@ namespace Tests
 
 			// Assert
 			Assert.AreEqual(history.occurenceTime, historyCopy.occurenceTime);
-			Assert.Throws<ArgumentNullException>(() => historySecret.GetHistory(null));
+			Assert.Throws<ArgumentNullException>(() => historySecret.GetHistory(null!));
 			Assert.Throws<ArgumentException>(() => historySecretInvalid.GetHistory(derivedKey));
 		}
 
@@ -127,7 +127,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => historySecret.GetDescription(null));
+			Assert.Throws<ArgumentNullException>(() => historySecret.GetDescription(null!));
 			Assert.Throws<ArgumentException>(() => historySecret.GetDescription(derivedKeyInvalid));
 		}
 
@@ -150,9 +150,10 @@ namespace Tests
 			HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			HistoryEventType rtHistoryEventType = historySecret.GetEventType(derivedKey);
+			HistoryEventType? rtHistoryEventType = historySecret.GetEventType(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(rtHistoryEventType);
 			Assert.AreEqual(historyEventType, rtHistoryEventType);
 		}
 
@@ -175,9 +176,10 @@ namespace Tests
 			HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			string rtDescription = historySecret.GetDescription(derivedKey);
+			string? rtDescription = historySecret.GetDescription(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(rtDescription);
 			Assert.AreEqual(description, rtDescription);
 		}
 
@@ -200,9 +202,10 @@ namespace Tests
 			HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
 			// Act
-			DateTimeOffset historyOccurenceTime = historySecret.GetOccurenceTime(derivedKey);
+			DateTimeOffset? historyOccurenceTime = historySecret.GetOccurenceTime(derivedKey);
 
 			// Assert
+			Assert.IsNotNull(historyOccurenceTime);
 			Assert.AreEqual(history.GetOccurenceTime(), historyOccurenceTime);
 		}
 
@@ -254,7 +257,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(historySecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(null));
+			Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(null!));
 			Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(new byte[] {}));
 			Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(derivedKey2));
 		}
@@ -276,12 +279,13 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = historySecret.SetEventType(historyEventType, derivedKey);
-			HistoryEventType historyEventType2 = historySecret.GetEventType(derivedKey);
+			HistoryEventType? historyEventType2 = historySecret.GetEventType(derivedKey);
 			bool shouldBeFalse = historySecret.SetEventType(historyEventType,  new byte[] { 1, 2, 3 });
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
 			Assert.IsFalse(shouldBeFalse);
+			Assert.IsNotNull(historyEventType2);
 			Assert.AreEqual(historyEventType, historyEventType2);
 		}
 
@@ -302,12 +306,13 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = historySecret.SetDescription(description, derivedKey);
-			string description2 = historySecret.GetDescription(derivedKey);
+			string? description2 = historySecret.GetDescription(derivedKey);
 			bool shouldBeFalse = historySecret.SetDescription(description,  new byte[] { 1, 2, 3 });
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
 			Assert.IsFalse(shouldBeFalse);
+			Assert.IsNotNull(description2);
 			CollectionAssert.AreEqual(description, description2);
 		}
 
@@ -333,11 +338,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(fes1, Formatting.Indented);
 
-			HistorySecret fes2 = JsonConvert.DeserializeObject<HistorySecret>(json);
+			HistorySecret? fes2 = JsonConvert.DeserializeObject<HistorySecret>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, fes2.GetChecksumAsHex());
+			Assert.IsNotNull(fes2);
+			Assert.AreEqual(checksum1, fes2!.GetChecksumAsHex());
 		}
 
 		[Test]

@@ -27,7 +27,7 @@ namespace Tests
 			CommonSecretsContainer csc = new CommonSecretsContainer();
 
 			// Act
-			string xml = null;
+			string xml = "";
 
 			var xmlserializer = new XmlSerializer(typeof(CommonSecretsContainer));
 			var stringWriter = new StringWriter();
@@ -86,7 +86,7 @@ namespace Tests
 			csc.paymentCards.Add(new PaymentCard(cardTitle1, cardNameOnCard1, cardCardType1, cardNumber1, cardSecurityCode1, cardStartDate1, cardExpirationDate1, cardNotes));
 			csc.history.Add(new History(historyEvent, historyDescription));
 
-			string xml = null;
+			string xml = "";
 			var xmlserializer = new XmlSerializer(typeof(CommonSecretsContainer));
 			var stringWriter = new StringWriter();
 			using (var writer = XmlWriter.Create(stringWriter))
@@ -95,10 +95,10 @@ namespace Tests
 				xml = stringWriter.ToString();
 			}
 
-			CommonSecretsContainer cscDeserialized = null;
+			CommonSecretsContainer? cscDeserialized = null;
 			using (XmlReader reader = XmlReader.Create(new StringReader(xml)))
 			{
-				cscDeserialized = (CommonSecretsContainer)xmlserializer.Deserialize(reader);
+				cscDeserialized = (CommonSecretsContainer)xmlserializer.Deserialize(reader)!;
 			}
 
 			// Assert
@@ -227,7 +227,7 @@ namespace Tests
 				csc.historySecrets.Add(new HistorySecret(ContentGeneratorSync.GenerateRandomHistory(), kdfe.GetKeyIdentifier(), skaAES, derivedPassword));
 			}
 
-			string xml = null;
+			string xml = "";
 			var xmlserializer = new XmlSerializer(typeof(CommonSecretsContainer));
 			var stringWriter = new StringWriter();
 			using (var writer = XmlWriter.Create(stringWriter))
@@ -236,10 +236,10 @@ namespace Tests
 				xml = stringWriter.ToString();
 			}
 
-			CommonSecretsContainer cscDeserialized = null;
+			CommonSecretsContainer? cscDeserialized = null;
 			using (XmlReader reader = XmlReader.Create(new StringReader(xml)))
 			{
-				cscDeserialized = (CommonSecretsContainer)xmlserializer.Deserialize(reader);
+				cscDeserialized = (CommonSecretsContainer)xmlserializer.Deserialize(reader)!;
 			}
 
 			// Assert

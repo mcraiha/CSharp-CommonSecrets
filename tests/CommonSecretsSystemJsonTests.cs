@@ -83,10 +83,10 @@ namespace Tests
 			string json = JsonSerializer.Serialize(csc, serializerOptions);
 			//TestContext.Out.WriteLine(json);
 
-			CommonSecretsContainer cscDeserialized = JsonSerializer.Deserialize<CommonSecretsContainer>(json);
+			CommonSecretsContainer? cscDeserialized = JsonSerializer.Deserialize<CommonSecretsContainer>(json);
 
 			// Assert
-			Assert.AreEqual(loginTitle1, cscDeserialized.loginInformations[0].title);
+			Assert.AreEqual(loginTitle1, cscDeserialized!.loginInformations[0].title);
 			Assert.AreEqual(loginUrl1, cscDeserialized.loginInformations[0].url);
 			Assert.AreEqual(loginEmail1, cscDeserialized.loginInformations[0].email);
 			Assert.AreEqual(loginUsername1, cscDeserialized.loginInformations[0].username);
@@ -213,11 +213,11 @@ namespace Tests
 
 			string json = JsonSerializer.Serialize(csc, serializerOptions);
 
-			CommonSecretsContainer cscDeserialized = JsonSerializer.Deserialize<CommonSecretsContainer>(json);
+			CommonSecretsContainer? cscDeserialized = JsonSerializer.Deserialize<CommonSecretsContainer>(json);
 
 			// Assert
 			Assert.AreEqual(1, csc.keyDerivationFunctionEntries.Count);
-			Assert.AreEqual(1, cscDeserialized.keyDerivationFunctionEntries.Count);
+			Assert.AreEqual(1, cscDeserialized!.keyDerivationFunctionEntries.Count);
 			Assert.IsTrue(ComparisonHelper.AreKeyDerivationFunctionEntriesEqual(csc.keyDerivationFunctionEntries[0], cscDeserialized.keyDerivationFunctionEntries[0]));
 
 			Assert.AreEqual(loginsAmount, csc.loginInformations.Count);

@@ -24,7 +24,7 @@ public sealed partial class HistorySecret
 	[SetsRequiredMembers]
 	public HistorySecret(History history, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ History.eventTypeKey, history.eventType },
 			{ History.descriptionTextKey, history.descriptionText },
@@ -53,7 +53,7 @@ public sealed partial class HistorySecret
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
 	[SetsRequiredMembers]
-	public HistorySecret(Dictionary<string, object> historyAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
+	public HistorySecret(Dictionary<string, object?> historyAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword)
 	{
 		this.keyIdentifier = Encoding.UTF8.GetBytes(keyIdentifier);
 
@@ -78,12 +78,12 @@ public sealed partial class HistorySecret
 	/// <returns>History</returns>
 	public History GetHistory(byte[] derivedPassword)
 	{
-		Dictionary<string, object> dict = this.GetHistoryAsDictionary(derivedPassword);
+		Dictionary<string, object?> dict = this.GetHistoryAsDictionary(derivedPassword);
 		return new History()
         {
-            eventType = (string)dict[History.eventTypeKey],
-			descriptionText = (byte[])dict[History.descriptionTextKey],
-			occurenceTime = ((DateTimeOffset)dict[History.occurenceTimeKey]).ToUnixTimeSeconds()
+            eventType = (string)dict[History.eventTypeKey]!,
+			descriptionText = (byte[])dict[History.descriptionTextKey]!,
+			occurenceTime = ((DateTimeOffset)dict[History.occurenceTimeKey]!).ToUnixTimeSeconds()
         };
 	}
 
@@ -92,7 +92,7 @@ public sealed partial class HistorySecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Event type</returns>
-	public HistoryEventType GetEventType(byte[] derivedPassword)
+	public HistoryEventType? GetEventType(byte[] derivedPassword)
 	{
 		string temp = (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.eventTypeKey, deserializationSettings);
 
@@ -104,7 +104,7 @@ public sealed partial class HistorySecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Description text as string</returns>
-	public string GetDescription(byte[] derivedPassword)
+	public string? GetDescription(byte[] derivedPassword)
 	{
 		return Encoding.UTF8.GetString((byte[])Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.descriptionTextKey, deserializationSettings));
 	}
@@ -114,12 +114,12 @@ public sealed partial class HistorySecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>History entry occurence time as DateTimeOffset</returns>
-	public DateTimeOffset GetOccurenceTime(byte[] derivedPassword)
+	public DateTimeOffset? GetOccurenceTime(byte[] derivedPassword)
 	{
 		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.occurenceTimeKey, deserializationSettings);
 	}
 
-	private Dictionary<string, object> GetHistoryAsDictionary(byte[] derivedPassword)
+	private Dictionary<string, object?> GetHistoryAsDictionary(byte[] derivedPassword)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
@@ -138,7 +138,7 @@ public sealed partial class HistorySecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> historyAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> historyAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return historyAsDictionary;
 	}
@@ -201,7 +201,7 @@ public sealed partial class HistorySecret
 	{
 		try
 		{
-			Dictionary<string, object> historyAsDictionary = this.GetHistoryAsDictionary(derivedPassword);
+			Dictionary<string, object?> historyAsDictionary = this.GetHistoryAsDictionary(derivedPassword);
 			// Update wanted value
 			historyAsDictionary[key] = value;
 

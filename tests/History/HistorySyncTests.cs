@@ -119,11 +119,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(history1, Formatting.Indented);
 
-			History history2 = JsonConvert.DeserializeObject<History>(json);
+			History? history2 = JsonConvert.DeserializeObject<History>(json);
 
 			// Assert
+			Assert.IsNotNull(history2);
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, history2.GetChecksumAsHex());
+			Assert.AreEqual(checksum1, history2!.GetChecksumAsHex());
 		}
 
 		[Test]

@@ -24,7 +24,7 @@ public sealed partial class NoteSecret
 	/// <returns>NoteSecret</returns>
 	public static async Task<NoteSecret> CreateNoteSecretAsync(Note note, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ Note.noteTitleKey, note.GetNoteTitle() },
 			{ Note.noteTextKey, note.GetNoteText() },
@@ -44,7 +44,7 @@ public sealed partial class NoteSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>NoteSecret</returns>
-	public static async Task<NoteSecret> CreateNoteSecretAsync(Dictionary<string, object> noteAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public static async Task<NoteSecret> CreateNoteSecretAsync(Dictionary<string, object?> noteAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(noteAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
@@ -73,7 +73,7 @@ public sealed partial class NoteSecret
 	/// <returns>Note</returns>
 	public async Task<Note> GetNoteAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dict = await this.GetNoteAsDictionaryAsync(derivedPassword, securityFunctions);
+		Dictionary<string, object?> dict = await this.GetNoteAsDictionaryAsync(derivedPassword, securityFunctions);
 		Note returnValue = await Note.CreateNoteAsync((string)dict[Note.noteTitleKey], (string)dict[Note.noteTextKey], securityFunctions);
 
 		returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]).ToUnixTimeSeconds();
@@ -126,13 +126,13 @@ public sealed partial class NoteSecret
 		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Note.modificationTimeKey, deserializationSettings, securityFunctions);
 	}
 
-	private async Task<Dictionary<string, object>> GetNoteAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	private async Task<Dictionary<string, object?>> GetNoteAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck.exception;
+			throw passwordCheck.exception!;
 		}
 
 		// Try to decrypt the binary
@@ -142,10 +142,10 @@ public sealed partial class NoteSecret
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck.exception;
+			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return noteAsDictionary;
 	}
@@ -211,7 +211,7 @@ public sealed partial class NoteSecret
 	{
 		try 
 		{
-			Dictionary<string, object> noteAsDictionary = await this.GetNoteAsDictionaryAsync(derivedPassword, securityFunctions);
+			Dictionary<string, object?> noteAsDictionary = await this.GetNoteAsDictionaryAsync(derivedPassword, securityFunctions);
 			// Update wanted value
 			noteAsDictionary[key] = value;
 			// Update modification time

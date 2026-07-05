@@ -44,7 +44,7 @@ namespace Tests
 		public void ConstructorExceptionsTest()
 		{
 			// Arrange
-			byte[] invalidSalt1 = null;
+			byte[]? invalidSalt1 = null;
 			byte[] invalidSalt2 = new byte[0];
 			byte[] invalidSalt3 = new byte[15];
 
@@ -52,7 +52,7 @@ namespace Tests
 			int invalidIterationsCount2 =  0;
 			int invalidIterationsCount3 = 100;
 
-			string invalidId1 = null;
+			string? invalidId1 = null;
 			string invalidId2 = "";
 
 			// Act
@@ -60,7 +60,7 @@ namespace Tests
 			// Assert
 			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA1, new byte[16], 100_000, 32, "master_key" ));
 
-			Assert.Throws<ArgumentNullException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, invalidSalt1, 100_000, 32, "master_key" ));
+			Assert.Throws<ArgumentNullException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, invalidSalt1!, 100_000, 32, "master_key" ));
 			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, invalidSalt2, 100_000, 32, "master_key" ));
 			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, invalidSalt3, 100_000, 32, "master_key" ));
 
@@ -68,7 +68,7 @@ namespace Tests
 			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, new byte[16], invalidIterationsCount2, 32, "master_key" ));
 			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, new byte[16], invalidIterationsCount3, 32, "master_key" ));
 
-			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, new byte[16], 100_000, 32, invalidId1 ));
+			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, new byte[16], 100_000, 32, invalidId1! ));
 			Assert.Throws<ArgumentException>(() => new KeyDerivationFunctionEntry(KeyDerivationPrf.HMACSHA256, new byte[16], 100_000, 32, invalidId2 ));
 		}
 
@@ -137,11 +137,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(kdfe1, Formatting.Indented);
 
-			KeyDerivationFunctionEntry kdfe2 = JsonConvert.DeserializeObject<KeyDerivationFunctionEntry>(json);
+			KeyDerivationFunctionEntry? kdfe2 = JsonConvert.DeserializeObject<KeyDerivationFunctionEntry>(json);
 
 			// Assert
+			Assert.IsNotNull(kdfe2);
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, kdfe2.GetChecksumAsHex());
+			Assert.AreEqual(checksum1, kdfe2!.GetChecksumAsHex());
 		}
 	}
 }

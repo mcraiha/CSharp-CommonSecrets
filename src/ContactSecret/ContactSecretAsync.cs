@@ -24,7 +24,7 @@ public sealed partial class ContactSecret
 	/// <param name="securityFunctions">Security functions</param>
 	public static async Task<ContactSecret> CreateContactSecretAsync(Contact contact, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dictionaryForAUDALF = new Dictionary<string, object>()
+		Dictionary<string, object?> dictionaryForAUDALF = new Dictionary<string, object?>()
 		{
 			{ Contact.firstNameKey, contact.GetFirstName() },
 			{ Contact.lastNameKey, contact.GetLastName() },
@@ -78,7 +78,7 @@ public sealed partial class ContactSecret
 	/// <param name="algorithm">Symmetric Key Algorithm used for encryption</param>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
-	public static async Task<ContactSecret> CreateContactSecretAsync(Dictionary<string, object> contactAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public static async Task<ContactSecret> CreateContactSecretAsync(Dictionary<string, object?> contactAsDictionary, string keyIdentifier, SymmetricKeyAlgorithm algorithm, byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		// Create AUDALF payload from dictionary
 		byte[] serializedBytes = AUDALF_Serialize.Serialize(contactAsDictionary, valueTypes: null, serializationSettings: serializationSettings);
@@ -99,13 +99,13 @@ public sealed partial class ContactSecret
 
 	#region Common getters
 
-	private async Task<Dictionary<string, object>> GetContactAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	private async Task<Dictionary<string, object?>> GetContactAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		var passwordCheck = Helpers.CheckDerivedPassword(derivedPassword);
 
 		if (!passwordCheck.valid)
 		{
-			throw passwordCheck.exception;
+			throw passwordCheck.exception!;
 		}
 
 		// Try to decrypt the binary
@@ -115,10 +115,10 @@ public sealed partial class ContactSecret
 
 		if (!audalfCheck.valid)
 		{
-			throw audalfCheck.exception;
+			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object> contactAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> contactAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
 
 		return contactAsDictionary;
 	}
@@ -131,7 +131,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact</returns>
 	public async Task<Contact> GetContactAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		Dictionary<string, object> dict = await this.GetContactAsDictionaryAsync(derivedPassword, securityFunctions);
+		Dictionary<string, object?> dict = await this.GetContactAsDictionaryAsync(derivedPassword, securityFunctions);
 		string firstName = (string)dict[Contact.firstNameKey];
 		string lastName = (string)dict[Contact.lastNameKey];
 		string middleName = (string)dict[Contact.middleNameKey];
@@ -752,7 +752,7 @@ public sealed partial class ContactSecret
 	{
 		try 
 		{
-			Dictionary<string, object> contactAsDictionary = await this.GetContactAsDictionaryAsync(derivedPassword, securityFunctions);;
+			Dictionary<string, object?> contactAsDictionary = await this.GetContactAsDictionaryAsync(derivedPassword, securityFunctions);;
 			// Update wanted value
 			contactAsDictionary[key] = value;
 			// Update modification time

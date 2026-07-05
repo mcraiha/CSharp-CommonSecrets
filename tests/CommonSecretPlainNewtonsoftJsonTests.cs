@@ -77,10 +77,11 @@ namespace Tests
 			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
 			//TestContext.Out.WriteLine(json);
 
-			CommonSecretsContainer cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
+			CommonSecretsContainer? cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
 
 			// Assert
-			Assert.AreEqual(loginTitle1, cscDeserialized.loginInformations[0].title);
+			Assert.IsNotNull(cscDeserialized);
+			Assert.AreEqual(loginTitle1, cscDeserialized!.loginInformations[0].title);
 			Assert.AreEqual(loginUrl1, cscDeserialized.loginInformations[0].url);
 			Assert.AreEqual(loginEmail1, cscDeserialized.loginInformations[0].email);
 			Assert.AreEqual(loginUsername1, cscDeserialized.loginInformations[0].username);
@@ -207,11 +208,11 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(csc, Formatting.Indented);
 
-			CommonSecretsContainer cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
+			CommonSecretsContainer? cscDeserialized = JsonConvert.DeserializeObject<CommonSecretsContainer>(json);
 
 			// Assert
 			Assert.AreEqual(1, csc.keyDerivationFunctionEntries.Count);
-			Assert.AreEqual(1, cscDeserialized.keyDerivationFunctionEntries.Count);
+			Assert.AreEqual(1, cscDeserialized!.keyDerivationFunctionEntries.Count);
 			Assert.IsTrue(ComparisonHelper.AreKeyDerivationFunctionEntriesEqual(csc.keyDerivationFunctionEntries[0], cscDeserialized.keyDerivationFunctionEntries[0]));
 
 			Assert.AreEqual(loginsAmount, csc.loginInformations.Count);
