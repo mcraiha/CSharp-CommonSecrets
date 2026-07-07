@@ -158,11 +158,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(fe1, Formatting.Indented);
 
-			FileEntry fe2 = JsonConvert.DeserializeObject<FileEntry>(json);
+			FileEntry? fe2 = JsonConvert.DeserializeObject<FileEntry>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, fe2.GetChecksumAsHex());
+			Assert.IsNotNull(fe2);
+			Assert.AreEqual(checksum1, fe2!.GetChecksumAsHex());
 		}
 
 		[Test]

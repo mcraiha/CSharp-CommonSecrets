@@ -34,7 +34,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ PaymentCard.titleKey, "Super cool card"}
 			};
@@ -68,7 +68,7 @@ namespace Tests
 
 			// Act
 			PaymentCardSecret paymentCardSecretCopy = new PaymentCardSecret(paymentCardSecret);
-			string paymentCardTitle = await paymentCardSecretCopy.GetTitleAsync(derivedKey, securityAsyncFunctions);
+			string? paymentCardTitle = await paymentCardSecretCopy.GetTitleAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(paymentCardTitle));
@@ -104,7 +104,7 @@ namespace Tests
 			Assert.AreEqual(paymentCard.creationTime, paymentCardCopy.creationTime);
 			Assert.AreEqual(paymentCard.modificationTime, paymentCardCopy.modificationTime);
 
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await paymentCardSecret.GetPaymentCardAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await paymentCardSecret.GetPaymentCardAsync(null!, securityAsyncFunctions));
 		}
 
 		[Test]
@@ -129,7 +129,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await paymentCardSecret.GetTitleAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await paymentCardSecret.GetTitleAsync(null!, securityAsyncFunctions));
 			Assert.ThrowsAsync<ArgumentException>(async () => await paymentCardSecret.GetTitleAsync(derivedKeyInvalid, securityAsyncFunctions));
 		}
 
@@ -153,10 +153,11 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string paymentCardTitle = await paymentCardSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
+			string? paymentCardTitle = await paymentCardSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(title, paymentCardTitle);
+			Assert.IsNotNull(paymentCardTitle);
+			Assert.AreEqual(title, paymentCardTitle!);
 		}
 
 		[Test]
@@ -178,10 +179,11 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string paymentCardNameOnCard = await paymentCardSecret.GetNameOnCardAsync(derivedKey, securityAsyncFunctions);
+			string? paymentCardNameOnCard = await paymentCardSecret.GetNameOnCardAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(nameOnCard, paymentCardNameOnCard);
+			Assert.IsNotNull(paymentCardNameOnCard);
+			Assert.AreEqual(nameOnCard, paymentCardNameOnCard!);
 		}
 
 		[Test]
@@ -203,10 +205,11 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string paymentCardCardType = await paymentCardSecret.GetCardTypeAsync(derivedKey, securityAsyncFunctions);
+			string? paymentCardCardType = await paymentCardSecret.GetCardTypeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(cardType, paymentCardCardType);
+			Assert.IsNotNull(paymentCardCardType);
+			Assert.AreEqual(cardType, paymentCardCardType!);
 		}
 
 		[Test]
@@ -228,10 +231,11 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string paymentCardNumber = await paymentCardSecret.GetNumberAsync(derivedKey, securityAsyncFunctions);
+			string? paymentCardNumber = await paymentCardSecret.GetNumberAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(number, paymentCardNumber);
+			Assert.IsNotNull(paymentCardNumber);
+			Assert.AreEqual(number, paymentCardNumber!);
 		}
 
 		[Test]
@@ -253,10 +257,11 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string paymentCardSecurityCode = await paymentCardSecret.GetSecurityCodeAsync(derivedKey, securityAsyncFunctions);
+			string? paymentCardSecurityCode = await paymentCardSecret.GetSecurityCodeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(securityCode, paymentCardSecurityCode);
+			Assert.IsNotNull(paymentCardSecurityCode);
+			Assert.AreEqual(securityCode, paymentCardSecurityCode!);
 		}
 
 		[Test]
@@ -278,9 +283,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string paymentCardStartDate = await paymentCardSecret.GetStartDateAsync(derivedKey, securityAsyncFunctions);
+			string? paymentCardStartDate = await paymentCardSecret.GetStartDateAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
+			Assert.IsNotNull(paymentCardStartDate);
 			Assert.AreEqual(startDate, paymentCardStartDate);
 		}
 
@@ -303,10 +309,11 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string paymentCardStartDate = await paymentCardSecret.GetExpirationDateAsync(derivedKey, securityAsyncFunctions);
+			string? paymentCardStartDate = await paymentCardSecret.GetExpirationDateAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(expirationDate, paymentCardStartDate);
+			Assert.IsNotNull(paymentCardStartDate);
+			Assert.AreEqual(expirationDate, paymentCardStartDate!);
 		}
 
 		[Test]
@@ -328,9 +335,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string paymentCardNotes = await paymentCardSecret.GetNotesAsync(derivedKey, securityAsyncFunctions);
+			string? paymentCardNotes = await paymentCardSecret.GetNotesAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
+			Assert.IsNotNull(paymentCardNotes);
 			Assert.AreEqual(notes, paymentCardNotes);
 		}
 
@@ -352,10 +360,10 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			DateTimeOffset paymentCardCreationTime = await paymentCardSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? paymentCardCreationTime = await paymentCardSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(paymentCard.GetCreationTime(), paymentCardCreationTime);
+			Assert.AreEqual(paymentCard.GetCreationTime(), paymentCardCreationTime!);
 		}
 
 		[Test]
@@ -376,13 +384,15 @@ namespace Tests
 			PaymentCardSecret paymentCardSecret = await PaymentCardSecret.CreatePaymentCardSecretAsync(paymentCard, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 			
 			// Act
-			DateTimeOffset modificationTime1 = await paymentCardSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? modificationTime1 = await paymentCardSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 			await Task.Delay(1100);
 			await paymentCardSecret.SetTitleAsync("1234567", derivedKey, securityAsyncFunctions);
-			DateTimeOffset modificationTime2 = await paymentCardSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? modificationTime2 = await paymentCardSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.Greater(modificationTime2, modificationTime1);
+			Assert.IsNotNull(modificationTime1);
+			Assert.IsNotNull(modificationTime2);
+			Assert.Greater(modificationTime2!, modificationTime1!);
 		}
 
 		[Test]
@@ -432,7 +442,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(await paymentCardSecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey1, securityAsyncFunctions));
-			Assert.IsFalse(await paymentCardSecret.CanBeDecryptedWithDerivedPasswordAsync(null, securityAsyncFunctions));
+			Assert.IsFalse(await paymentCardSecret.CanBeDecryptedWithDerivedPasswordAsync(null!, securityAsyncFunctions));
 			Assert.IsFalse(await paymentCardSecret.CanBeDecryptedWithDerivedPasswordAsync(new byte[] {}, securityAsyncFunctions));
 			Assert.IsFalse(await paymentCardSecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey2, securityAsyncFunctions));
 		}
@@ -455,7 +465,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await paymentCardSecret.SetTitleAsync(title, derivedKey, securityAsyncFunctions);
-			string titleAfterModification = await paymentCardSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
+			string? titleAfterModification = await paymentCardSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await paymentCardSecret.SetTitleAsync(title, new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -483,7 +493,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await paymentCardSecret.SetNameOnCardAsync(nameOnCard, derivedKey, securityAsyncFunctions);
-			string nameOnCardAfterModification = await paymentCardSecret.GetNameOnCardAsync(derivedKey, securityAsyncFunctions);
+			string? nameOnCardAfterModification = await paymentCardSecret.GetNameOnCardAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await paymentCardSecret.SetNameOnCardAsync(nameOnCard,  new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -511,7 +521,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await paymentCardSecret.SetCardTypeAsync(cardType, derivedKey, securityAsyncFunctions);
-			string cardTypeAfterModification = await paymentCardSecret.GetCardTypeAsync(derivedKey, securityAsyncFunctions);
+			string? cardTypeAfterModification = await paymentCardSecret.GetCardTypeAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await paymentCardSecret.SetCardTypeAsync(cardType,  new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -539,7 +549,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await paymentCardSecret.SetNumberAsync(number, derivedKey, securityAsyncFunctions);
-			string numberAfterModification = await paymentCardSecret.GetNumberAsync(derivedKey, securityAsyncFunctions);
+			string? numberAfterModification = await paymentCardSecret.GetNumberAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await paymentCardSecret.SetNumberAsync(number, new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -567,7 +577,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await paymentCardSecret.SetSecurityCodeAsync(securityCode, derivedKey, securityAsyncFunctions);
-			string securityCodeAfterModification = await paymentCardSecret.GetSecurityCodeAsync(derivedKey, securityAsyncFunctions);
+			string? securityCodeAfterModification = await paymentCardSecret.GetSecurityCodeAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await paymentCardSecret.SetSecurityCodeAsync(securityCode,  new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -595,7 +605,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await paymentCardSecret.SetStartDateAsync(startDate, derivedKey, securityAsyncFunctions);
-			string startDateAfterModification = await paymentCardSecret.GetStartDateAsync(derivedKey, securityAsyncFunctions);
+			string? startDateAfterModification = await paymentCardSecret.GetStartDateAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await paymentCardSecret.SetStartDateAsync(startDate,  new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -623,7 +633,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await paymentCardSecret.SetExpirationDateAsync(expirationDate, derivedKey, securityAsyncFunctions);
-			string expirationDateAfterModification = await paymentCardSecret.GetExpirationDateAsync(derivedKey, securityAsyncFunctions);
+			string? expirationDateAfterModification = await paymentCardSecret.GetExpirationDateAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await paymentCardSecret.SetExpirationDateAsync(expirationDate,  new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -651,7 +661,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await paymentCardSecret.SetNotesAsync(notes, derivedKey, securityAsyncFunctions);
-			string notesAfterModification = await paymentCardSecret.GetNotesAsync(derivedKey, securityAsyncFunctions);
+			string? notesAfterModification = await paymentCardSecret.GetNotesAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await paymentCardSecret.SetNotesAsync(notes, new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -683,11 +693,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(paymentCardSecret, Formatting.Indented);
 
-			PaymentCardSecret paymentCardSecret2 = JsonConvert.DeserializeObject<PaymentCardSecret>(json);
+			PaymentCardSecret? paymentCardSecret2 = JsonConvert.DeserializeObject<PaymentCardSecret>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, paymentCardSecret2.GetChecksumAsHex());
+			Assert.IsNotNull(paymentCardSecret2);
+			Assert.AreEqual(checksum1, paymentCardSecret2!.GetChecksumAsHex());
 		}
 
 		[Test]

@@ -95,12 +95,12 @@ public sealed partial class LoginInformationSecret
 	public async Task<LoginInformation> GetLoginInformationAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		Dictionary<string, object?> dict = await this.GetLoginInformationAsDictionaryAsync(derivedPassword, securityFunctions);
-		LoginInformation returnValue = await LoginInformation.CreateLoginInformationAsync((string)dict[LoginInformation.titleKey], (string)dict[LoginInformation.urlKey], (string)dict[LoginInformation.emailKey],
-									(string)dict[LoginInformation.usernameKey], (string)dict[LoginInformation.passwordKey], (string)dict[LoginInformation.notesKey], (string)dict[LoginInformation.mfaKey],
-									(byte[])dict[LoginInformation.iconKey], (string)dict[LoginInformation.categoryKey], (string)dict[LoginInformation.tagsKey], securityFunctions
+		LoginInformation returnValue = await LoginInformation.CreateLoginInformationAsync((string)dict[LoginInformation.titleKey]!, (string)dict[LoginInformation.urlKey]!, (string)dict[LoginInformation.emailKey]!,
+									(string)dict[LoginInformation.usernameKey]!, (string)dict[LoginInformation.passwordKey]!, (string)dict[LoginInformation.notesKey]!, (string)dict[LoginInformation.mfaKey]!,
+									(byte[])dict[LoginInformation.iconKey]!, (string)dict[LoginInformation.categoryKey]!, (string)dict[LoginInformation.tagsKey]!, securityFunctions
 									);
-		returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]).ToUnixTimeSeconds();
-		returnValue.modificationTime = ((DateTimeOffset)dict[LoginInformation.modificationTimeKey]).ToUnixTimeSeconds();
+		returnValue.creationTime = ((DateTimeOffset)dict[LoginInformation.creationTimeKey]!).ToUnixTimeSeconds();
+		returnValue.modificationTime = ((DateTimeOffset)dict[LoginInformation.modificationTimeKey]!).ToUnixTimeSeconds();
 		
 		return returnValue;
 	}
@@ -111,9 +111,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Title</returns>
-	public async Task<string> GetTitleAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetTitleAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.titleKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.titleKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -122,9 +122,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>URL</returns>
-	public async Task<string> GetURLAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetURLAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.urlKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.urlKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -133,9 +133,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Email</returns>
-	public async Task<string> GetEmailAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetEmailAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.emailKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.emailKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -144,9 +144,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Username</returns>
-	public async Task<string> GetUsernameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetUsernameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.usernameKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.usernameKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -155,9 +155,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Password</returns>
-	public async Task<string> GetPasswordAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetPasswordAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.passwordKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.passwordKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -166,9 +166,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Notes</returns>
-	public async Task<string> GetNotesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetNotesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.notesKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.notesKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -177,9 +177,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>MFA</returns>
-	public async Task<string> GetMFAAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetMFAAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.mfaKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.mfaKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -188,9 +188,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Creation time</returns>
-	public async Task<DateTimeOffset> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<DateTimeOffset?> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.creationTimeKey, deserializationSettings, securityFunctions);
+		return (DateTimeOffset?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.creationTimeKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -199,9 +199,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Modification time</returns>
-	public async Task<DateTimeOffset> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<DateTimeOffset?> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.modificationTimeKey, deserializationSettings, securityFunctions);
+		return (DateTimeOffset?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.modificationTimeKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -209,10 +209,10 @@ public sealed partial class LoginInformationSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
-	/// <returns>Icon</returns>
-	public async Task<byte[]> GetIconAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	/// <returns>Icon as byte array</returns>
+	public async Task<byte[]?> GetIconAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (byte[])await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.iconKey, deserializationSettings, securityFunctions);
+		return (byte[]?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.iconKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -221,9 +221,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Category</returns>
-	public  async Task<string> GetCategoryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public  async Task<string?> GetCategoryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.categoryKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.categoryKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -232,9 +232,9 @@ public sealed partial class LoginInformationSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Tags</returns>
-	public  async Task<string> GetTagsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public  async Task<string?> GetTagsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.tagsKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, LoginInformation.tagsKey, deserializationSettings, securityFunctions);
 	}
 
 	private async Task<Dictionary<string, object?>> GetLoginInformationAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
@@ -256,7 +256,7 @@ public sealed partial class LoginInformationSecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> loginInformationAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> loginInformationAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return loginInformationAsDictionary;
 	}

@@ -34,7 +34,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ Note.noteTitleKey, "My shopping list for tomorrow"}
 			};
@@ -70,7 +70,7 @@ namespace Tests
 
 			// Act
 			NoteSecret noteSecretCopy = new NoteSecret(noteSecret);
-			string noteTitle = await noteSecretCopy.GetNoteTitleAsync(derivedKey, securityAsyncFunctions);
+			string? noteTitle = await noteSecretCopy.GetNoteTitleAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(noteTitle));
@@ -108,7 +108,7 @@ namespace Tests
 			Assert.IsTrue(ComparisonHelper.AreNotesEqual(note, noteCopy));
 			Assert.AreEqual(note.creationTime, noteCopy.creationTime);
 			Assert.AreEqual(note.modificationTime, noteCopy.modificationTime);
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await noteSecret.GetNoteAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await noteSecret.GetNoteAsync(null!, securityAsyncFunctions));
 		}
 
 		[Test]
@@ -133,10 +133,9 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await noteSecret.GetNoteTitleAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await noteSecret.GetNoteTitleAsync(null!, securityAsyncFunctions));
 			Assert.ThrowsAsync<ArgumentException>(async () => await noteSecret.GetNoteTitleAsync(derivedKeyInvalid, securityAsyncFunctions));
 		}
-
 
 		[Test]
 		public async Task GetNoteTitleAsyncTest()
@@ -159,9 +158,10 @@ namespace Tests
 			NoteSecret noteSecret = await NoteSecret.CreateNoteSecretAsync(note, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string noteTitle = await noteSecret.GetNoteTitleAsync(derivedKey, securityAsyncFunctions);
+			string? noteTitle = await noteSecret.GetNoteTitleAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
+			Assert.IsNotNull(noteTitle);
 			Assert.AreEqual(title, noteTitle);
 		}
 
@@ -186,9 +186,10 @@ namespace Tests
 			NoteSecret noteSecret = await NoteSecret.CreateNoteSecretAsync(note, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string noteText = await noteSecret.GetNoteTextAsync(derivedKey, securityAsyncFunctions);
+			string? noteText = await noteSecret.GetNoteTextAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
+			Assert.IsNotNull(noteText);
 			Assert.AreEqual(text, noteText);
 		}
 
@@ -213,10 +214,11 @@ namespace Tests
 			NoteSecret noteSecret = await NoteSecret.CreateNoteSecretAsync(note, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			DateTimeOffset noteCreationTime = await noteSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? noteCreationTime = await noteSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(note.GetCreationTime(), noteCreationTime);
+			Assert.IsNotNull(noteCreationTime);
+			Assert.AreEqual(note.GetCreationTime(), noteCreationTime!);
 		}
 
 		[Test]
@@ -240,13 +242,15 @@ namespace Tests
 			NoteSecret noteSecret = await NoteSecret.CreateNoteSecretAsync(note, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 			
 			// Act
-			DateTimeOffset modificationTime1 = await noteSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? modificationTime1 = await noteSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 			await Task.Delay(1100);
 			await noteSecret.SetNoteTitleAsync("1234567", derivedKey, securityAsyncFunctions);
-			DateTimeOffset modificationTime2 = await noteSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? modificationTime2 = await noteSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.Greater(modificationTime2, modificationTime1);
+			Assert.IsNotNull(modificationTime1);
+			Assert.IsNotNull(modificationTime2);
+			Assert.Greater(modificationTime2!, modificationTime1!);
 		}
 
 		[Test]
@@ -302,7 +306,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(await noteSecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey1, securityAsyncFunctions));
-			Assert.IsFalse(await noteSecret.CanBeDecryptedWithDerivedPasswordAsync(null, securityAsyncFunctions));
+			Assert.IsFalse(await noteSecret.CanBeDecryptedWithDerivedPasswordAsync(null!, securityAsyncFunctions));
 			Assert.IsFalse(await noteSecret.CanBeDecryptedWithDerivedPasswordAsync(new byte[] {}, securityAsyncFunctions));
 			Assert.IsFalse(await noteSecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey2, securityAsyncFunctions));
 		}
@@ -328,7 +332,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await noteSecret.SetNoteTitleAsync(noteTitle1, derivedKey, securityAsyncFunctions);
-			string noteTitle2 = await noteSecret.GetNoteTitleAsync(derivedKey, securityAsyncFunctions);
+			string? noteTitle2 = await noteSecret.GetNoteTitleAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await noteSecret.SetNoteTitleAsync(noteTitle1,  new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -359,7 +363,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await noteSecret.SetNoteTextAsync(noteText1, derivedKey, securityAsyncFunctions);
-			string noteText2 = await noteSecret.GetNoteTextAsync(derivedKey, securityAsyncFunctions);
+			string? noteText2 = await noteSecret.GetNoteTextAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await noteSecret.SetNoteTextAsync(noteText1,  new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -394,11 +398,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(noteSecret1, Formatting.Indented);
 
-			NoteSecret noteSecret2 = JsonConvert.DeserializeObject<NoteSecret>(json);
+			NoteSecret? noteSecret2 = JsonConvert.DeserializeObject<NoteSecret>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, noteSecret2.GetChecksumAsHex());
+			Assert.IsNotNull(noteSecret2);
+			Assert.AreEqual(checksum1, noteSecret2!.GetChecksumAsHex());
 		}
 
 		[Test]

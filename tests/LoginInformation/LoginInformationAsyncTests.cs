@@ -333,11 +333,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(li1, Formatting.Indented);
 
-			LoginInformation li2 = JsonConvert.DeserializeObject<LoginInformation>(json);
+			LoginInformation? li2 = JsonConvert.DeserializeObject<LoginInformation>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, li2.GetChecksumAsHex());
+			Assert.IsNotNull(li2);
+			Assert.AreEqual(checksum1, li2!.GetChecksumAsHex());
 		}
 
 		[Test]

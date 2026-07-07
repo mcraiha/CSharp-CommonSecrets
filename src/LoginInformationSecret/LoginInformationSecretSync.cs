@@ -105,7 +105,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Title</returns>
 	public string? GetTitle(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.titleKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.titleKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -115,7 +115,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>URL</returns>
 	public string? GetURL(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.urlKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.urlKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -125,7 +125,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Email</returns>
 	public string? GetEmail(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.emailKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.emailKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -135,7 +135,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Username</returns>
 	public string? GetUsername(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.usernameKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.usernameKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -145,7 +145,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Password</returns>
 	public string? GetPassword(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.passwordKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.passwordKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -155,7 +155,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Notes</returns>
 	public string? GetNotes(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.notesKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.notesKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -165,7 +165,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>MFA</returns>
 	public string? GetMFA(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.mfaKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.mfaKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -175,7 +175,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Creation time</returns>
 	public DateTimeOffset? GetCreationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.creationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.creationTimeKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -185,7 +185,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Modification time</returns>
 	public DateTimeOffset? GetModificationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.modificationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.modificationTimeKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -195,7 +195,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Icon as byte array</returns>
 	public byte[]? GetIcon(byte[] derivedPassword)
 	{
-		return (byte[])Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.iconKey, deserializationSettings);
+		return (byte[]?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.iconKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -205,7 +205,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Category</returns>
 	public string? GetCategory(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.categoryKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.categoryKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -215,7 +215,7 @@ public sealed partial class LoginInformationSecret
 	/// <returns>Tags</returns>
 	public string? GetTags(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.tagsKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, LoginInformation.tagsKey, deserializationSettings);
 	}
 
 	private Dictionary<string, object?> GetLoginInformationAsDictionary(byte[] derivedPassword)
@@ -237,12 +237,10 @@ public sealed partial class LoginInformationSecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> loginInformationAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> loginInformationAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return loginInformationAsDictionary;
 	}
-
-
 
 	/// <summary>
 	/// Can the content be decrypted with given derived password

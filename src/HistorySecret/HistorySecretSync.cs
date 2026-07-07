@@ -94,7 +94,12 @@ public sealed partial class HistorySecret
 	/// <returns>Event type</returns>
 	public HistoryEventType? GetEventType(byte[] derivedPassword)
 	{
-		string temp = (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.eventTypeKey, deserializationSettings);
+		string? temp = (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.eventTypeKey, deserializationSettings);
+
+		if (temp is null)
+		{
+			return null;
+		}
 
 		return History.StringToHistoryEventType(temp);
 	}
@@ -106,7 +111,12 @@ public sealed partial class HistorySecret
 	/// <returns>Description text as string</returns>
 	public string? GetDescription(byte[] derivedPassword)
 	{
-		return Encoding.UTF8.GetString((byte[])Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.descriptionTextKey, deserializationSettings));
+		byte[]? temp = (byte[]?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.descriptionTextKey, deserializationSettings);
+		if (temp is null)
+		{
+			return null;
+		}
+		return Encoding.UTF8.GetString(temp);
 	}
 
 	/// <summary>
@@ -116,7 +126,7 @@ public sealed partial class HistorySecret
 	/// <returns>History entry occurence time as DateTimeOffset</returns>
 	public DateTimeOffset? GetOccurenceTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.occurenceTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, History.occurenceTimeKey, deserializationSettings);
 	}
 
 	private Dictionary<string, object?> GetHistoryAsDictionary(byte[] derivedPassword)
@@ -138,7 +148,7 @@ public sealed partial class HistorySecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> historyAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> historyAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return historyAsDictionary;
 	}

@@ -77,9 +77,9 @@ public sealed partial class HistorySecret
 
 		return new History()
         {
-            eventType = (string)dict[History.eventTypeKey],
-			descriptionText = (byte[])dict[History.descriptionTextKey],
-			occurenceTime = ((DateTimeOffset)dict[History.occurenceTimeKey]).ToUnixTimeSeconds()
+            eventType = (string)dict[History.eventTypeKey]!,
+			descriptionText = (byte[])dict[History.descriptionTextKey]!,
+			occurenceTime = ((DateTimeOffset)dict[History.occurenceTimeKey]!).ToUnixTimeSeconds()
         };
 	}
 
@@ -89,10 +89,9 @@ public sealed partial class HistorySecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Event type</returns>
-	public async Task<HistoryEventType> GetEventTypeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<HistoryEventType?> GetEventTypeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		string temp = (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, History.eventTypeKey, deserializationSettings, securityFunctions);
-
+		string? temp = (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, History.eventTypeKey, deserializationSettings, securityFunctions);
 		return History.StringToHistoryEventType(temp);
 	}
 
@@ -104,7 +103,8 @@ public sealed partial class HistorySecret
 	/// <returns>Description text as string</returns>
 	public async Task<string> GetDescriptionAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return Encoding.UTF8.GetString((byte[])await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, History.descriptionTextKey, deserializationSettings, securityFunctions));
+		byte[]? bytes = (byte[]?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, History.descriptionTextKey, deserializationSettings, securityFunctions);
+		return Encoding.UTF8.GetString(bytes!);
 	}
 
 	/// <summary>
@@ -113,9 +113,9 @@ public sealed partial class HistorySecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>History entry occurence time as DateTimeOffset</returns>
-	public async Task<DateTimeOffset> GetOccurenceTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<DateTimeOffset?> GetOccurenceTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, History.occurenceTimeKey, deserializationSettings, securityFunctions);
+		return (DateTimeOffset?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, History.occurenceTimeKey, deserializationSettings, securityFunctions);
 	}
 
 	private async Task<Dictionary<string, object?>> GetHistoryAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
@@ -137,7 +137,7 @@ public sealed partial class HistorySecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> historyAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> historyAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return historyAsDictionary;
 	}

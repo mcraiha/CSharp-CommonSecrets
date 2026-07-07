@@ -117,7 +117,7 @@ public sealed partial class History
 	/// <param name="str">String</param>
 	/// <returns>HistoryEventType</returns>
 	/// <exception cref="Exception">If string is not valid event type</exception>
-	public static HistoryEventType StringToHistoryEventType(string str)
+	public static HistoryEventType StringToHistoryEventType(string? str)
 	{
 		if (Enum.TryParse(str, out HistoryEventType parsedEventType))
 		{

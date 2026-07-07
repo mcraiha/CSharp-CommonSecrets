@@ -120,13 +120,13 @@ namespace Tests
 			// Assert
 			Assert.AreEqual(skaAES.algorithm, skaAESCopy.algorithm);
 			Assert.AreEqual(skaAES.keySizeInBits, skaAESCopy.keySizeInBits);
-			CollectionAssert.AreEqual(skaAES.settingsAES_CTR.initialCounter, skaAESCopy.settingsAES_CTR.initialCounter);
+			CollectionAssert.AreEqual(skaAES.settingsAES_CTR!.initialCounter, skaAESCopy.settingsAES_CTR!.initialCounter);
 			Assert.IsNull(skaAESCopy.settingsChaCha20);
 
 			Assert.AreEqual(skaChaCha20.algorithm, skaChaCha20Copy.algorithm);
 			Assert.AreEqual(skaChaCha20.keySizeInBits, skaChaCha20Copy.keySizeInBits);
-			CollectionAssert.AreEqual(skaChaCha20.settingsChaCha20.nonce, skaChaCha20Copy.settingsChaCha20.nonce);
-			Assert.AreEqual(skaChaCha20.settingsChaCha20.counter, skaChaCha20Copy.settingsChaCha20.counter);
+			CollectionAssert.AreEqual(skaChaCha20.settingsChaCha20!.nonce, skaChaCha20Copy.settingsChaCha20!.nonce);
+			Assert.AreEqual(skaChaCha20.settingsChaCha20!.counter, skaChaCha20Copy.settingsChaCha20!.counter);
 			Assert.IsNull(skaChaCha20.settingsAES_CTR);
 		}
 
@@ -176,13 +176,13 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			byte[] nullInput = null;
+			byte[]? nullInput = null;
 			byte[] invalidInput = new byte[3] { 1, 2, 3 };
 
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => new SettingsChaCha20(nullInput, counter: 33, securityAsyncFunctions));
+			Assert.Throws<ArgumentNullException>(() => new SettingsChaCha20(nullInput!, counter: 33, securityAsyncFunctions));
 			Assert.Throws<ArgumentException>(() => new SettingsChaCha20(invalidInput, counter: 11337, securityAsyncFunctions));
 		}
 	
@@ -216,13 +216,13 @@ namespace Tests
 			// Arrange
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			byte[] nullInput = null;
+			byte[]? nullInput = null;
 			byte[] invalidInput = new byte[3] { 1, 2, 3 };
 
 			// Act
 
 			// Assert
-			Assert.Throws<ArgumentNullException>(() => new SettingsAES_CTR(nullInput, securityAsyncFunctions));
+			Assert.Throws<ArgumentNullException>(() => new SettingsAES_CTR(nullInput!, securityAsyncFunctions));
 			Assert.Throws<ArgumentException>(() => new SettingsAES_CTR(invalidInput, securityAsyncFunctions));
 		}
 

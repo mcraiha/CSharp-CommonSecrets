@@ -95,7 +95,7 @@ public sealed partial class FileEntrySecret
 	/// <returns>Filename as string</returns>
 	public string? GetFilename(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.filenameKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.filenameKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -105,7 +105,7 @@ public sealed partial class FileEntrySecret
 	/// <returns>Content as byte array</returns>
 	public byte[]? GetFileContent(byte[] derivedPassword)
 	{
-		return (byte[])Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.fileContentKey, deserializationSettings);
+		return (byte[]?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.fileContentKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -114,7 +114,12 @@ public sealed partial class FileEntrySecret
 	/// <returns>Lenght in bytes</returns>
 	public long GetFileContentLengthInBytes(byte[] derivedPassword)
 	{
-		return GetFileContent(derivedPassword).LongLength;
+		byte[]? temp = GetFileContent(derivedPassword);
+		if (temp is null)
+		{
+			return -1;
+		}
+		return temp.LongLength;
 	}
 
 	/// <summary>
@@ -124,7 +129,7 @@ public sealed partial class FileEntrySecret
 	/// <returns>File entry creation time as DateTimeOffset</returns>
 	public DateTimeOffset? GetCreationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.creationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.creationTimeKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -134,7 +139,7 @@ public sealed partial class FileEntrySecret
 	/// <returns>File entry modification time as DateTimeOffset</returns>
 	public DateTimeOffset? GetModificationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.modificationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, FileEntry.modificationTimeKey, deserializationSettings);
 	}
 
 	private Dictionary<string, object?> GetFileEntryAsDictionary(byte[] derivedPassword)
@@ -156,7 +161,7 @@ public sealed partial class FileEntrySecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return fileEntryAsDictionary;
 	}

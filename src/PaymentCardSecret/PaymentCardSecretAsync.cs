@@ -108,9 +108,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Title</returns>
-	public async Task<string> GetTitleAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetTitleAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.titleKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.titleKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -119,9 +119,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Name on card</returns>
-	public async Task<string> GetNameOnCardAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetNameOnCardAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.nameOnCardKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.nameOnCardKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -130,9 +130,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Card type</returns>
-	public async Task<string> GetCardTypeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetCardTypeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.cardTypeKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.cardTypeKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -141,9 +141,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Number</returns>
-	public async Task<string> GetNumberAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetNumberAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.numberKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.numberKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -152,9 +152,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Security code</returns>
-	public async Task<string> GetSecurityCodeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetSecurityCodeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.securityCodeKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.securityCodeKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -163,9 +163,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Start date</returns>
-	public async Task<string> GetStartDateAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetStartDateAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.startDateKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.startDateKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -174,9 +174,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Expiration date</returns>
-	public async Task<string> GetExpirationDateAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetExpirationDateAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.expirationDateKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.expirationDateKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -185,9 +185,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Notes</returns>
-	public async Task<string> GetNotesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetNotesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.notesKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.notesKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -196,9 +196,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Creation time</returns>
-	public async Task<DateTimeOffset> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<DateTimeOffset?> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.creationTimeKey, deserializationSettings, securityFunctions);
+		return (DateTimeOffset?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.creationTimeKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -207,9 +207,9 @@ public sealed partial class PaymentCardSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Modification time</returns>
-	public async Task<DateTimeOffset> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<DateTimeOffset?> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.modificationTimeKey, deserializationSettings, securityFunctions);
+		return (DateTimeOffset?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, PaymentCard.modificationTimeKey, deserializationSettings, securityFunctions);
 	}
 
 	private async Task<Dictionary<string, object?>> GetPaymentCardAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
@@ -231,7 +231,7 @@ public sealed partial class PaymentCardSecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> paymentCardAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> paymentCardAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return paymentCardAsDictionary;
 	}

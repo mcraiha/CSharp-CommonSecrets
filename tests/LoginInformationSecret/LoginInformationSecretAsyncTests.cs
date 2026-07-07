@@ -34,7 +34,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ LoginInformation.titleKey, "Shopping site"}
 			};
@@ -67,7 +67,7 @@ namespace Tests
 
 			// Act
 			LoginInformationSecret loginInformationSecretCopy = new LoginInformationSecret(loginInformationSecret);
-			string loginInformationTitle = await loginInformationSecretCopy.GetTitleAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationTitle = await loginInformationSecretCopy.GetTitleAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle));
@@ -122,10 +122,11 @@ namespace Tests
 			LoginInformation loginInformation = await LoginInformation.CreateLoginInformationAsync("Wishlist for holidays", "https://example.com", "someone@noexistent.com", "dragon6", "password1", securityAsyncFunctions);
 
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
+
 			// Act
 
 			// Assert
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await loginInformationSecret.GetTitleAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await loginInformationSecret.GetTitleAsync(null!, securityAsyncFunctions));
 			Assert.ThrowsAsync<ArgumentException>(async () => await loginInformationSecret.GetTitleAsync(derivedKeyInvalid, securityAsyncFunctions));
 		}
 
@@ -147,7 +148,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string loginInformationTitle = await loginInformationSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationTitle = await loginInformationSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTitle));
@@ -172,7 +173,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string loginInformationUrl = await loginInformationSecret.GetURLAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationUrl = await loginInformationSecret.GetURLAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUrl));
@@ -197,7 +198,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string loginInformationEmail = await loginInformationSecret.GetEmailAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationEmail = await loginInformationSecret.GetEmailAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationEmail));
@@ -222,7 +223,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string loginInformationUsername = await loginInformationSecret.GetUsernameAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationUsername = await loginInformationSecret.GetUsernameAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationUsername));
@@ -247,7 +248,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string loginInformationPassword = await loginInformationSecret.GetPasswordAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationPassword = await loginInformationSecret.GetPasswordAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationPassword));
@@ -274,7 +275,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformationModified, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string loginInformationNotes = await loginInformationSecret.GetNotesAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationNotes = await loginInformationSecret.GetNotesAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationNotes));
@@ -301,7 +302,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformationModified, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string loginInformationMFA = await loginInformationSecret.GetMFAAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationMFA = await loginInformationSecret.GetMFAAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationMFA));
@@ -325,10 +326,10 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformation, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			DateTimeOffset loginInformationCreationTime = await loginInformationSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? loginInformationCreationTime = await loginInformationSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(loginInformation.GetCreationTime(), loginInformationCreationTime);
+			Assert.AreEqual(loginInformation.GetCreationTime(), loginInformationCreationTime!);
 		}
 
 		[Test]
@@ -352,11 +353,11 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformationModified, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			DateTimeOffset loginInformationModificationTime = await loginInformationSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? loginInformationModificationTime = await loginInformationSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(loginInformationModified.modificationTime > loginInformationModified.creationTime);
-			Assert.AreEqual(loginInformationModified.GetModificationTime(), loginInformationModificationTime);
+			Assert.AreEqual(loginInformationModified.GetModificationTime(), loginInformationModificationTime!);
 		}
 
 		[Test]
@@ -383,11 +384,11 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformationModified, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			byte[] loginInformationIcon = await loginInformationSecret.GetIconAsync(derivedKey, securityAsyncFunctions);
+			byte[]? loginInformationIcon = await loginInformationSecret.GetIconAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsNotNull(loginInformationIcon);
-			CollectionAssert.AreEqual(iconBytes, loginInformationIcon);
+			CollectionAssert.AreEqual(iconBytes, loginInformationIcon!);
 		}
 
 		[Test]
@@ -410,7 +411,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformationModified, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string loginInformationCategory = await loginInformationSecret.GetCategoryAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationCategory = await loginInformationSecret.GetCategoryAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationCategory));
@@ -437,7 +438,7 @@ namespace Tests
 			LoginInformationSecret loginInformationSecret = await LoginInformationSecret.CreateLoginInformationSecretAsync(loginInformationModified, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string loginInformationTags = await loginInformationSecret.GetTagsAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationTags = await loginInformationSecret.GetTagsAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(loginInformationTags));
@@ -491,7 +492,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(await loginInformationSecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey1, securityAsyncFunctions));
-			Assert.IsFalse(await loginInformationSecret.CanBeDecryptedWithDerivedPasswordAsync(null, securityAsyncFunctions));
+			Assert.IsFalse(await loginInformationSecret.CanBeDecryptedWithDerivedPasswordAsync(null!, securityAsyncFunctions));
 			Assert.IsFalse(await loginInformationSecret.CanBeDecryptedWithDerivedPasswordAsync(new byte[] {}, securityAsyncFunctions));
 			Assert.IsFalse(await loginInformationSecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey2, securityAsyncFunctions));
 		}
@@ -513,9 +514,9 @@ namespace Tests
 			string newTitle = "new and fresh!";
 
 			// Act
-			string loginInformationTitle1 = await loginInformationSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationTitle1 = await loginInformationSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeTrue = await loginInformationSecret.SetTitleAsync(newTitle, derivedKey, securityAsyncFunctions);
-			string loginInformationTitle2 = await loginInformationSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationTitle2 = await loginInformationSecret.GetTitleAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetTitleAsync(newTitle, new byte[] { 1, 2, 3}, securityAsyncFunctions);
 
 			// Assert
@@ -544,9 +545,9 @@ namespace Tests
 			string newURL = "https://newandbetter.future";
 
 			// Act
-			string loginInformationURL1 = await loginInformationSecret.GetURLAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationURL1 = await loginInformationSecret.GetURLAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeTrue = await loginInformationSecret.SetURLAsync(newURL, derivedKey, securityAsyncFunctions);
-			string loginInformationURL2 = await loginInformationSecret.GetURLAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationURL2 = await loginInformationSecret.GetURLAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetURLAsync(newURL, new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -575,9 +576,9 @@ namespace Tests
 			string newEmail = "tomorrow@newandbetter.future";
 
 			// Act
-			string loginInformationEmail1 = await loginInformationSecret.GetEmailAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationEmail1 = await loginInformationSecret.GetEmailAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeTrue = await loginInformationSecret.SetEmailAsync(newEmail, derivedKey, securityAsyncFunctions);
-			string loginInformationEmail2 = await loginInformationSecret.GetEmailAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationEmail2 = await loginInformationSecret.GetEmailAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetEmailAsync(newEmail, new byte[] { 1, 2, 3}, securityAsyncFunctions);
 
 			// Assert
@@ -606,9 +607,9 @@ namespace Tests
 			string newUsername = "futuredragon";
 
 			// Act
-			string loginInformationUsername1 = await loginInformationSecret.GetUsernameAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationUsername1 = await loginInformationSecret.GetUsernameAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeTrue = await loginInformationSecret.SetUsernameAsync(newUsername, derivedKey, securityAsyncFunctions);
-			string loginInformationUsername2 = await loginInformationSecret.GetUsernameAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationUsername2 = await loginInformationSecret.GetUsernameAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetUsernameAsync(newUsername, new byte[] { 1, 2, 3}, securityAsyncFunctions);
 
 			// Assert
@@ -637,9 +638,9 @@ namespace Tests
 			string newPassword = "ag#%23,.67Hngrewn";
 
 			// Act
-			string loginInformationPassword1 = await loginInformationSecret.GetPasswordAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationPassword1 = await loginInformationSecret.GetPasswordAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeTrue = await loginInformationSecret.SetPasswordAsync(newPassword, derivedKey, securityAsyncFunctions);
-			string loginInformationPassword2 = await loginInformationSecret.GetPasswordAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationPassword2 = await loginInformationSecret.GetPasswordAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetPasswordAsync(newPassword, new byte[] { 1, 2, 3}, securityAsyncFunctions);
 
 			// Assert
@@ -669,7 +670,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await loginInformationSecret.SetNotesAsync(newNotes, derivedKey, securityAsyncFunctions);
-			string loginInformationNotes2 = await loginInformationSecret.GetNotesAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationNotes2 = await loginInformationSecret.GetNotesAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetNotesAsync(newNotes, new byte[] { 1, 2, 3}, securityAsyncFunctions);
 
 			// Assert
@@ -697,7 +698,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await loginInformationSecret.SetMFAAsync(newMFA, derivedKey, securityAsyncFunctions);
-			string loginInformationMFA2 = await loginInformationSecret.GetMFAAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationMFA2 = await loginInformationSecret.GetMFAAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetMFAAsync(newMFA, new byte[] { 1, 2, 3}, securityAsyncFunctions);
 
 			// Assert
@@ -724,16 +725,18 @@ namespace Tests
 			DateTimeOffset newCreationTime = DateTimeOffset.UtcNow.AddDays(1); 
 
 			// Act
-			DateTimeOffset loginInformationCreationTime1 = await loginInformationSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? loginInformationCreationTime1 = await loginInformationSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeTrue = await loginInformationSecret.SetCreationTimeAsync(newCreationTime, derivedKey, securityAsyncFunctions);
-			DateTimeOffset loginInformationCreationTime2 = await loginInformationSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? loginInformationCreationTime2 = await loginInformationSecret.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetCreationTimeAsync(newCreationTime, new byte[] { 1, 29, 3}, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
 			Assert.IsFalse(shouldBeFalse);
-			Assert.AreEqual(loginInformation.creationTime, loginInformationCreationTime1.ToUnixTimeSeconds());
-			Assert.AreEqual(newCreationTime.ToUnixTimeSeconds(), loginInformationCreationTime2.ToUnixTimeSeconds());
+			Assert.IsNotNull(loginInformationCreationTime1);
+			Assert.IsNotNull(loginInformationCreationTime2);
+			Assert.AreEqual(loginInformation.creationTime, loginInformationCreationTime1.Value.ToUnixTimeSeconds());
+			Assert.AreEqual(newCreationTime.ToUnixTimeSeconds(), loginInformationCreationTime2.Value.ToUnixTimeSeconds());
 		}
 
 		[Test]
@@ -753,16 +756,18 @@ namespace Tests
 			DateTimeOffset newModificationTime = DateTimeOffset.UtcNow.AddDays(1); 
 
 			// Act
-			DateTimeOffset loginInformationModificationTime1 = await loginInformationSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? loginInformationModificationTime1 = await loginInformationSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeTrue = await loginInformationSecret.SetModificationTimeAsync(newModificationTime, derivedKey, securityAsyncFunctions);
-			DateTimeOffset loginInformationModificationTime2 = await loginInformationSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? loginInformationModificationTime2 = await loginInformationSecret.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetModificationTimeAsync(newModificationTime, new byte[] { 1, 29, 3, 99, 134, 255, 0 }, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
 			Assert.IsFalse(shouldBeFalse);
-			Assert.AreEqual(loginInformation.modificationTime, loginInformationModificationTime1.ToUnixTimeSeconds());
-			Assert.AreEqual(newModificationTime.ToUnixTimeSeconds(), loginInformationModificationTime2.ToUnixTimeSeconds());
+			Assert.IsNotNull(loginInformationModificationTime1);
+			Assert.IsNotNull(loginInformationModificationTime2);
+			Assert.AreEqual(loginInformation.modificationTime, loginInformationModificationTime1.Value.ToUnixTimeSeconds());
+			Assert.AreEqual(newModificationTime.ToUnixTimeSeconds(), loginInformationModificationTime2.Value.ToUnixTimeSeconds());
 		}
 
 		[Test]
@@ -783,13 +788,14 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await loginInformationSecret.SetIconAsync(newIcon, derivedKey, securityAsyncFunctions);
-			byte[] loginInformationIcon2 = await loginInformationSecret.GetIconAsync(derivedKey, securityAsyncFunctions);
+			byte[]? loginInformationIcon2 = await loginInformationSecret.GetIconAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetIconAsync(newIcon, new byte[] { 13, 129, 3, 99, 134, 255, 0}, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
 			Assert.IsFalse(shouldBeFalse);
-			CollectionAssert.AreEqual(newIcon, loginInformationIcon2);
+			Assert.IsNotNull(loginInformationIcon2);
+			CollectionAssert.AreEqual(newIcon, loginInformationIcon2!);
 		}
 
 		[Test]
@@ -810,7 +816,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await loginInformationSecret.SetCategoryAsync(newCategory, derivedKey, securityAsyncFunctions);
-			string loginInformationCategory2 = await loginInformationSecret.GetCategoryAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationCategory2 = await loginInformationSecret.GetCategoryAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetCategoryAsync(newCategory, new byte[] { 13, 129, 0, 99, 134, 255, 0 }, securityAsyncFunctions);
 
 			// Assert
@@ -838,7 +844,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await loginInformationSecret.SetTagsAsync(newTags, derivedKey, securityAsyncFunctions);
-			string loginInformationTags2 = await loginInformationSecret.GetTagsAsync(derivedKey, securityAsyncFunctions);
+			string? loginInformationTags2 = await loginInformationSecret.GetTagsAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await loginInformationSecret.SetTagsAsync(newTags, new byte[] { 13, 129, 0, 91, 194, 255, 0 }, securityAsyncFunctions);
 
 			// Assert
@@ -870,11 +876,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(loginInformationSecret1, Formatting.Indented);
 
-			LoginInformationSecret loginInformationSecret2 = JsonConvert.DeserializeObject<LoginInformationSecret>(json);
+			LoginInformationSecret? loginInformationSecret2 = JsonConvert.DeserializeObject<LoginInformationSecret>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, loginInformationSecret2.GetChecksumAsHex());
+			Assert.IsNotNull(loginInformationSecret2);
+			Assert.AreEqual(checksum1, loginInformationSecret2!.GetChecksumAsHex());
 		}
 
 		[Test]

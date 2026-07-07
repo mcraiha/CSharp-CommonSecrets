@@ -31,9 +31,10 @@ namespace Tests
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
 
 			// Act
-			KeyDerivationFunctionEntry result = csc.FindKeyDerivationFunctionEntryWithKeyIdentifier(kdfeIdentifier);
+			KeyDerivationFunctionEntry? result = csc.FindKeyDerivationFunctionEntryWithKeyIdentifier(kdfeIdentifier);
 
 			// Assert
+			Assert.IsNotNull(result);
 			Assert.AreSame(kdfe, result);
 			Assert.Greater(csc.version, 0);
 		}
@@ -72,16 +73,16 @@ namespace Tests
 			string password = "notdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddLoginInformationSecretAsync(password, await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var addResultSuccess2 = await csc.AddLoginInformationSecretAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
-			var addResultFailure1 = await csc.AddLoginInformationSecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure1 = await csc.AddLoginInformationSecretAsync(password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddLoginInformationSecretAsync(password, await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddLoginInformationSecretAsync("", await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
-			var addResultFailure4 = await csc.AddLoginInformationSecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddLoginInformationSecretAsync(nullArray!, await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -115,16 +116,16 @@ namespace Tests
 			string password = "notdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddNoteSecretAsync(password, await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var addResultSuccess2 = await csc.AddNoteSecretAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
-			var addResultFailure1 = await csc.AddNoteSecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure1 = await csc.AddNoteSecretAsync(password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddNoteSecretAsync(password, await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddNoteSecretAsync("", await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
-			var addResultFailure4 = await csc.AddNoteSecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddNoteSecretAsync(nullArray!, await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -158,16 +159,16 @@ namespace Tests
 			string password = "notthatdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddFileEntrySecretAsync(password, await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var addResultSuccess2 = await csc.AddFileEntrySecretAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
-			var addResultFailure1 = await csc.AddFileEntrySecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure1 = await csc.AddFileEntrySecretAsync(password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddFileEntrySecretAsync(password, await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddFileEntrySecretAsync("", await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
-			var addResultFailure4 = await csc.AddFileEntrySecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddFileEntrySecretAsync(nullArray!, await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -201,16 +202,16 @@ namespace Tests
 			string password = "notth3atdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddContactSecretAsync(password, await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var addResultSuccess2 = await csc.AddContactSecretAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
-			var addResultFailure1 = await csc.AddContactSecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure1 = await csc.AddContactSecretAsync(password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddContactSecretAsync(password, await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddContactSecretAsync("", await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
-			var addResultFailure4 = await csc.AddContactSecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddContactSecretAsync(nullArray!, await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -244,16 +245,16 @@ namespace Tests
 			string password = "th3atdragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddPaymentCardSecretAsync(password, await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var addResultSuccess2 = await csc.AddPaymentCardSecretAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
-			var addResultFailure1 = await csc.AddPaymentCardSecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure1 = await csc.AddPaymentCardSecretAsync(password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddPaymentCardSecretAsync(password, await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddPaymentCardSecretAsync("", await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
-			var addResultFailure4 = await csc.AddPaymentCardSecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddPaymentCardSecretAsync(nullArray!, await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -287,16 +288,16 @@ namespace Tests
 			string password = "th3atd9849#%ragon42";
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 			
 			// Act
 			var addResultSuccess1 = await csc.AddHistorySecretAsync(password, await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var addResultSuccess2 = await csc.AddHistorySecretAsync(await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
-			var addResultFailure1 = await csc.AddHistorySecretAsync(password, null, kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure1 = await csc.AddHistorySecretAsync(password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var addResultFailure2 = await csc.AddHistorySecretAsync(password, await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var addResultFailure3 = await csc.AddHistorySecretAsync("", await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
-			var addResultFailure4 = await csc.AddHistorySecretAsync(nullArray, await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
+			var addResultFailure4 = await csc.AddHistorySecretAsync(nullArray!, await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(addResultSuccess1.success);
@@ -330,7 +331,7 @@ namespace Tests
 			string kdfeIdentifier = "somethingheremuch";
 			string password = "notdragon42224!";
 
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
@@ -348,13 +349,13 @@ namespace Tests
 			var replaceResultSuccess1 = await csc.ReplaceLoginInformationSecretAsync(0, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultSuccess2 = await csc.ReplaceLoginInformationSecretAsync(1, await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), replace2, kdfeIdentifier, securityAsyncFunctions);
 
-			var replaceResultFailure1 = await csc.ReplaceLoginInformationSecretAsync(0, password, null, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure1 = await csc.ReplaceLoginInformationSecretAsync(0, password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure2 = await csc.ReplaceLoginInformationSecretAsync(0, password, await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var replaceResultFailure3 = await csc.ReplaceLoginInformationSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomLoginInformationAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceLoginInformationSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceLoginInformationSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplaceLoginInformationSecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure7 = await csc.ReplaceLoginInformationSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceLoginInformationSecretAsync(0, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceLoginInformationSecretAsync(2, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetURL(), replace1.GetURL(), "Make sure that random content do not match!");
@@ -408,7 +409,7 @@ namespace Tests
 			string kdfeIdentifier = "somet!%&hinghere";
 			string password = "not()=dragon42";
 
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
@@ -426,13 +427,13 @@ namespace Tests
 			var replaceResultSuccess1 = await csc.ReplaceNoteSecretAsync(0, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultSuccess2 = await csc.ReplaceNoteSecretAsync(1, await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), replace2, kdfeIdentifier, securityAsyncFunctions);
 
-			var replaceResultFailure1 = await csc.ReplaceNoteSecretAsync(0, password, null, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure1 = await csc.ReplaceNoteSecretAsync(0, password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure2 = await csc.ReplaceNoteSecretAsync(0, password, await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var replaceResultFailure3 = await csc.ReplaceNoteSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomNoteAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceNoteSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceNoteSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplaceNoteSecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure7 = await csc.ReplaceNoteSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceNoteSecretAsync(0, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceNoteSecretAsync(2, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetNoteTitle(), replace1.GetNoteTitle(), "Make sure that random content do not match!");
@@ -486,7 +487,7 @@ namespace Tests
 			string kdfeIdentifier = ",.-somefile12344";
 			string password = "--!#notthatdragon42";
 
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
@@ -504,13 +505,13 @@ namespace Tests
 			var replaceResultSuccess1 = await csc.ReplaceFileEntrySecretAsync(0, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultSuccess2 = await csc.ReplaceFileEntrySecretAsync(1, await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), replace2, kdfeIdentifier, securityAsyncFunctions, SymmetricEncryptionAlgorithm.ChaCha20);
 
-			var replaceResultFailure1 = await csc.ReplaceFileEntrySecretAsync(0, password, null, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure1 = await csc.ReplaceFileEntrySecretAsync(0, password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure2 = await csc.ReplaceFileEntrySecretAsync(0, password, await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var replaceResultFailure3 = await csc.ReplaceFileEntrySecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomFileEntryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceFileEntrySecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceFileEntrySecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplaceFileEntrySecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure7 = await csc.ReplaceFileEntrySecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceFileEntrySecretAsync(0, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceFileEntrySecretAsync(2, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetFilename(), replace1.GetFilename(), "Make sure that random content do not match!");
@@ -558,7 +559,7 @@ namespace Tests
 			string kdfeIdentifier = ",.-4somefile12344";
 			string password = "--!#nottha2tdragon42";
 
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
@@ -576,13 +577,13 @@ namespace Tests
 			var replaceResultSuccess1 = await csc.ReplaceContactSecretAsync(0, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultSuccess2 = await csc.ReplaceContactSecretAsync(1, await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), replace2, kdfeIdentifier, securityAsyncFunctions, SymmetricEncryptionAlgorithm.ChaCha20);
 
-			var replaceResultFailure1 = await csc.ReplaceContactSecretAsync(0, password, null, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure1 = await csc.ReplaceContactSecretAsync(0, password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure2 = await csc.ReplaceContactSecretAsync(0, password, await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var replaceResultFailure3 = await csc.ReplaceContactSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomContactAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceContactSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceContactSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplaceContactSecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure7 = await csc.ReplaceContactSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceContactSecretAsync(0, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceContactSecretAsync(2, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetFirstName(), replace1.GetFirstName(), "Make sure that random content do not match!");
@@ -630,7 +631,7 @@ namespace Tests
 			string kdfeIdentifier = ",.-4key12344";
 			string password = "--!#n,.ottha2tdragon42";
 
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
@@ -648,13 +649,13 @@ namespace Tests
 			var replaceResultSuccess1 = await csc.ReplacePaymentCardSecretAsync(0, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultSuccess2 = await csc.ReplacePaymentCardSecretAsync(1, await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), replace2, kdfeIdentifier, securityAsyncFunctions, SymmetricEncryptionAlgorithm.ChaCha20);
 
-			var replaceResultFailure1 = await csc.ReplacePaymentCardSecretAsync(0, password, null, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure1 = await csc.ReplacePaymentCardSecretAsync(0, password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure2 = await csc.ReplacePaymentCardSecretAsync(0, password, await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var replaceResultFailure3 = await csc.ReplacePaymentCardSecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomPaymentCardAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplacePaymentCardSecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplacePaymentCardSecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplacePaymentCardSecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure7 = await csc.ReplacePaymentCardSecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplacePaymentCardSecretAsync(0, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplacePaymentCardSecretAsync(2, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetTitle(), replace1.GetTitle(), "Make sure that random content do not match!");
@@ -702,7 +703,7 @@ namespace Tests
 			string kdfeIdentifier = ",.-4key12344";
 			string password = "--!#n,.ottha2tdragon42";
 
-			byte[] nullArray = null;
+			byte[]? nullArray = null;
 
 			KeyDerivationFunctionEntry kdfe = await KeyDerivationFunctionEntry.CreateHMACSHA256KeyDerivationFunctionEntryAsync(kdfeIdentifier, securityAsyncFunctions);
 			CommonSecretsContainer csc = new CommonSecretsContainer(kdfe);
@@ -720,13 +721,13 @@ namespace Tests
 			var replaceResultSuccess1 = await csc.ReplaceHistorySecretAsync(0, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultSuccess2 = await csc.ReplaceHistorySecretAsync(1, await kdfe.GeneratePasswordBytesAsync(password, securityAsyncFunctions), replace2, kdfeIdentifier, securityAsyncFunctions, SymmetricEncryptionAlgorithm.ChaCha20);
 
-			var replaceResultFailure1 = await csc.ReplaceHistorySecretAsync(0, password, null, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure1 = await csc.ReplaceHistorySecretAsync(0, password, null!, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure2 = await csc.ReplaceHistorySecretAsync(0, password, await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), "not existing", securityAsyncFunctions);
 			var replaceResultFailure3 = await csc.ReplaceHistorySecretAsync(0, "", await ContentGeneratorAsync.GenerateRandomHistoryAsync(securityAsyncFunctions), kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure4 = await csc.ReplaceHistorySecretAsync(-1, password, replace1, kdfeIdentifier, securityAsyncFunctions);
 			var replaceResultFailure5 = await csc.ReplaceHistorySecretAsync(2, password, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure6 = await csc.ReplaceHistorySecretAsync(0, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
-			var replaceResultFailure7 = await csc.ReplaceHistorySecretAsync(2, nullArray, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure6 = await csc.ReplaceHistorySecretAsync(0, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
+			var replaceResultFailure7 = await csc.ReplaceHistorySecretAsync(2, nullArray!, replace1, kdfeIdentifier, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreNotEqual(add1.GetDescription(), replace1.GetDescription(), "Make sure that random content do not match!");

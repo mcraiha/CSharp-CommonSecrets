@@ -23,11 +23,11 @@ public sealed partial class SymmetricKeyAlgorithm
 	{
 		Enum.TryParse(this.algorithm, out SymmetricEncryptionAlgorithm actualAlgorithm);
 
-		if (actualAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR)
+		if (actualAlgorithm == SymmetricEncryptionAlgorithm.AES_CTR && this.settingsAES_CTR is not null)
 		{
 			return await securityFunctions.AES_Encrypt(bytesToEncrypt, key, this.settingsAES_CTR.initialCounter);
 		}
-		else if (actualAlgorithm == SymmetricEncryptionAlgorithm.ChaCha20)
+		else if (actualAlgorithm == SymmetricEncryptionAlgorithm.ChaCha20 && this.settingsChaCha20 is not null)
 		{
 			return await securityFunctions.ChaCha20_Encrypt(bytesToEncrypt, key, this.settingsChaCha20.nonce, this.settingsChaCha20.counter);
 		}

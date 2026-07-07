@@ -48,7 +48,7 @@ namespace Tests
 		public void ConstructorExceptionsAsyncTest()
 		{
 			// Arrange
-			byte[] invalidSalt1 = null;
+			byte[]? invalidSalt1 = null;
 			byte[] invalidSalt2 = new byte[0];
 			byte[] invalidSalt3 = new byte[15];
 
@@ -56,7 +56,7 @@ namespace Tests
 			int invalidIterationsCount2 =  0;
 			int invalidIterationsCount3 = 100;
 
-			string invalidId1 = null;
+			string? invalidId1 = null;
 			string invalidId2 = "";
 
 			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
@@ -64,7 +64,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, invalidSalt1, 100_000, 32, "master_key", securityAsyncFunctions ));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, invalidSalt1!, 100_000, 32, "master_key", securityAsyncFunctions ));
 			Assert.ThrowsAsync<ArgumentException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, invalidSalt2, 100_000, 32, "master_key", securityAsyncFunctions ));
 			Assert.ThrowsAsync<ArgumentException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, invalidSalt3, 100_000, 32, "master_key", securityAsyncFunctions ));
 
@@ -72,7 +72,7 @@ namespace Tests
 			Assert.ThrowsAsync<ArgumentException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, new byte[16], invalidIterationsCount2, 32, "master_key", securityAsyncFunctions ));
 			Assert.ThrowsAsync<ArgumentException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, new byte[16], invalidIterationsCount3, 32, "master_key", securityAsyncFunctions ));
 
-			Assert.ThrowsAsync<ArgumentException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, new byte[16], 100_000, 32, invalidId1, securityAsyncFunctions ));
+			Assert.ThrowsAsync<ArgumentException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, new byte[16], 100_000, 32, invalidId1!, securityAsyncFunctions ));
 			Assert.ThrowsAsync<ArgumentException>(async () => await KeyDerivationFunctionEntry.CreateKeyDerivationFunctionEntryAsync(KeyDerivationPseudoRandomFunction.HMACSHA256, new byte[16], 100_000, 32, invalidId2, securityAsyncFunctions ));
 		}
 
@@ -148,11 +148,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(kdfe1, Formatting.Indented);
 
-			KeyDerivationFunctionEntry kdfe2 = JsonConvert.DeserializeObject<KeyDerivationFunctionEntry>(json);
+			KeyDerivationFunctionEntry? kdfe2 = JsonConvert.DeserializeObject<KeyDerivationFunctionEntry>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, kdfe2.GetChecksumAsHex());
+			Assert.IsNotNull(kdfe2);
+			Assert.AreEqual(checksum1, kdfe2!.GetChecksumAsHex());
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ FileEntry.filenameKey, "filename.txt" }
 			};
@@ -71,7 +71,7 @@ namespace Tests
 
 			// Act
 			FileEntrySecret fesCopy = new FileEntrySecret(fes);
-			string filenameInCopy = await fesCopy.GetFilenameAsync(derivedKey, securityAsyncFunctions);
+			string? filenameInCopy = await fesCopy.GetFilenameAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsFalse(string.IsNullOrEmpty(filenameInCopy));
@@ -133,7 +133,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await fes.GetFilenameAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await fes.GetFilenameAsync(null!, securityAsyncFunctions));
 			Assert.ThrowsAsync<ArgumentException>(async () => await fes.GetFilenameAsync(derivedKeyInvalid, securityAsyncFunctions));
 		}
 		
@@ -158,10 +158,11 @@ namespace Tests
 			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			string rtFilename = await fes.GetFilenameAsync(derivedKey, securityAsyncFunctions);
+			string? rtFilename = await fes.GetFilenameAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(filename, rtFilename);
+			Assert.IsNotNull(rtFilename);
+			Assert.AreEqual(filename, rtFilename!);
 		}
 		
 		[Test]
@@ -185,10 +186,11 @@ namespace Tests
 			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			byte[] rtFileContent = await fes.GetFileContentAsync(derivedKey, securityAsyncFunctions);
+			byte[]? rtFileContent = await fes.GetFileContentAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			CollectionAssert.AreEqual(fileContent, rtFileContent);
+			Assert.IsNotNull(rtFileContent);
+			CollectionAssert.AreEqual(fileContent, rtFileContent!);
 		}
 		
 		[Test]
@@ -239,10 +241,11 @@ namespace Tests
 			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			DateTimeOffset fileEntryCreationTime = await fes.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? fileEntryCreationTime = await fes.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(fe.GetCreationTime(), fileEntryCreationTime);
+			Assert.IsNotNull(fileEntryCreationTime);
+			Assert.AreEqual(fe.GetCreationTime(), fileEntryCreationTime!);
 		}
 		
 		[Test]
@@ -266,13 +269,15 @@ namespace Tests
 			FileEntrySecret fes = await FileEntrySecret.CreateFileEntrySecretAsync(fe, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			DateTimeOffset fileEntryModificationTime1 = await fes.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? fileEntryModificationTime1 = await fes.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 			await Task.Delay(1100);
 			await fes.SetFilenameAsync("much_nicer.pdf", derivedKey, securityAsyncFunctions);
-			DateTimeOffset fileEntryModificationTime2 = await fes.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? fileEntryModificationTime2 = await fes.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.Greater(fileEntryModificationTime2, fileEntryModificationTime1);
+			Assert.IsNotNull(fileEntryModificationTime1);
+			Assert.IsNotNull(fileEntryModificationTime2);
+			Assert.Greater(fileEntryModificationTime2!, fileEntryModificationTime1!);
 		}
 		
 		[Test]
@@ -328,7 +333,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(await fes.CanBeDecryptedWithDerivedPasswordAsync(derivedKey1, securityAsyncFunctions));
-			Assert.IsFalse(await fes.CanBeDecryptedWithDerivedPasswordAsync(null, securityAsyncFunctions));
+			Assert.IsFalse(await fes.CanBeDecryptedWithDerivedPasswordAsync(null!, securityAsyncFunctions));
 			Assert.IsFalse(await fes.CanBeDecryptedWithDerivedPasswordAsync(new byte[] {}, securityAsyncFunctions));
 			Assert.IsFalse(await fes.CanBeDecryptedWithDerivedPasswordAsync(derivedKey2, securityAsyncFunctions));
 		}
@@ -354,7 +359,7 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await fes.SetFilenameAsync(filename1, derivedKey, securityAsyncFunctions);
-			string filename2 = await fes.GetFilenameAsync(derivedKey, securityAsyncFunctions);
+			string? filename2 = await fes.GetFilenameAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await fes.SetFilenameAsync(filename1,  new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
@@ -385,13 +390,14 @@ namespace Tests
 
 			// Act
 			bool shouldBeTrue = await fes.SetFileContentAsync(fileContent1, derivedKey, securityAsyncFunctions);
-			byte[] fileContent2 = await fes.GetFileContentAsync(derivedKey, securityAsyncFunctions);
+			byte[]? fileContent2 = await fes.GetFileContentAsync(derivedKey, securityAsyncFunctions);
 			bool shouldBeFalse = await fes.SetFileContentAsync(fileContent1, new byte[] { 1, 2, 3 }, securityAsyncFunctions);
 
 			// Assert
 			Assert.IsTrue(shouldBeTrue);
 			Assert.IsFalse(shouldBeFalse);
-			CollectionAssert.AreEqual(fileContent1, fileContent2);
+			Assert.IsNotNull(fileContent2);
+			CollectionAssert.AreEqual(fileContent1, fileContent2!);
 		}
 
 		[Test]
@@ -419,11 +425,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(fes1, Formatting.Indented);
 
-			FileEntrySecret fes2 = JsonConvert.DeserializeObject<FileEntrySecret>(json);
+			FileEntrySecret? fes2 = JsonConvert.DeserializeObject<FileEntrySecret>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, fes2.GetChecksumAsHex());
+			Assert.IsNotNull(fes2);
+			Assert.AreEqual(checksum1, fes2!.GetChecksumAsHex());
 		}
 
 		[Test]

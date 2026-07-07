@@ -118,7 +118,7 @@ public sealed partial class ContactSecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> contactAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> contactAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return contactAsDictionary;
 	}
@@ -132,36 +132,36 @@ public sealed partial class ContactSecret
 	public async Task<Contact> GetContactAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
 		Dictionary<string, object?> dict = await this.GetContactAsDictionaryAsync(derivedPassword, securityFunctions);
-		string firstName = (string)dict[Contact.firstNameKey];
-		string lastName = (string)dict[Contact.lastNameKey];
-		string middleName = (string)dict[Contact.middleNameKey];
-		string namePrefix = (string)dict[Contact.namePrefixKey];
-		string nameSuffix = (string)dict[Contact.nameSuffixKey];
-		string nickname = (string)dict[Contact.nicknameKey];
-		string company = (string)dict[Contact.companyKey];
-		string jobTitle = (string)dict[Contact.jobTitleKey];
-		string department = (string)dict[Contact.departmentKey];
-		string[] emails = ((string)dict[Contact.emailsKey]).Split(Contact.separatorChar);
-		string[] emailDescriptions = ((string)dict[Contact.emailDescriptionsKey]).Split(Contact.separatorChar);
-		string[] phoneNumbers = ((string)dict[Contact.phoneNumbersKey]).Split(Contact.separatorChar);
-		string[] phoneNumberDescriptions = ((string)dict[Contact.phoneNumberDescriptionsKey]).Split(Contact.separatorChar);
-		string country = (string)dict[Contact.countryKey];
-		string streetAddress = (string)dict[Contact.streetAddressKey];
-		string streetAddressAdditional = (string)dict[Contact.streetAddressAdditionalKey];
-		string postalCode = (string)dict[Contact.postalCodeKey];
-		string city = (string)dict[Contact.cityKey];
-		string poBox = (string)dict[Contact.poBoxKey];
-		string birthday = (string)dict[Contact.birthdayKey];
-		string relationship = (string)dict[Contact.relationshipKey];
-		string notes = (string)dict[Contact.notesKey];
-		string[] websites = ((string)dict[Contact.websitesKey]).Split(Contact.separatorChar);
+		string firstName = (string)dict[Contact.firstNameKey]!;
+		string lastName = (string)dict[Contact.lastNameKey]!;
+		string middleName = (string)dict[Contact.middleNameKey]!;
+		string namePrefix = (string)dict[Contact.namePrefixKey]!;
+		string nameSuffix = (string)dict[Contact.nameSuffixKey]!;
+		string nickname = (string)dict[Contact.nicknameKey]!;
+		string company = (string)dict[Contact.companyKey]!;
+		string jobTitle = (string)dict[Contact.jobTitleKey]!;
+		string department = (string)dict[Contact.departmentKey]!;
+		string[] emails = ((string)dict[Contact.emailsKey]!).Split(Contact.separatorChar);
+		string[] emailDescriptions = ((string)dict[Contact.emailDescriptionsKey]!).Split(Contact.separatorChar);
+		string[] phoneNumbers = ((string)dict[Contact.phoneNumbersKey]!).Split(Contact.separatorChar);
+		string[] phoneNumberDescriptions = ((string)dict[Contact.phoneNumberDescriptionsKey]!).Split(Contact.separatorChar);
+		string country = (string)dict[Contact.countryKey]!;
+		string streetAddress = (string)dict[Contact.streetAddressKey]!;
+		string streetAddressAdditional = (string)dict[Contact.streetAddressAdditionalKey]!;
+		string postalCode = (string)dict[Contact.postalCodeKey]!;
+		string city = (string)dict[Contact.cityKey]!;
+		string poBox = (string)dict[Contact.poBoxKey]!;
+		string birthday = (string)dict[Contact.birthdayKey]!;
+		string relationship = (string)dict[Contact.relationshipKey]!;
+		string notes = (string)dict[Contact.notesKey]!;
+		string[] websites = ((string)dict[Contact.websitesKey]!).Split(Contact.separatorChar);
 		Contact returnValue = await Contact.CreateContactAsync(firstName, lastName, middleName, namePrefix, nameSuffix, nickname, company, jobTitle, department, 
 									emails, emailDescriptions, phoneNumbers, phoneNumberDescriptions, 
 									country, streetAddress, streetAddressAdditional, postalCode, city, poBox, birthday,
 									websites, relationship, notes, securityFunctions);
 
-		returnValue.creationTime = ((DateTimeOffset)dict[Contact.creationTimeKey]).ToUnixTimeSeconds();
-		returnValue.modificationTime = ((DateTimeOffset)dict[Contact.modificationTimeKey]).ToUnixTimeSeconds();
+		returnValue.creationTime = ((DateTimeOffset)dict[Contact.creationTimeKey]!).ToUnixTimeSeconds();
+		returnValue.modificationTime = ((DateTimeOffset)dict[Contact.modificationTimeKey]!).ToUnixTimeSeconds();
 
 		return returnValue;
 	}
@@ -172,9 +172,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact first name as string</returns>
-	public async Task<string> GetFirstNameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetFirstNameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.firstNameKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.firstNameKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -183,9 +183,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact last name as string</returns>
-	public async Task<string> GetLastNameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetLastNameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.lastNameKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.lastNameKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -194,9 +194,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact middle name as string</returns>
-	public async Task<string> GetMiddleNameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetMiddleNameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.middleNameKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.middleNameKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -205,9 +205,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact name prefix as string</returns>
-	public async Task<string> GetNamePrefixAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetNamePrefixAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.namePrefixKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.namePrefixKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -216,9 +216,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact name suffix as string</returns>
-	public async Task<string> GetNameSuffixAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetNameSuffixAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.nameSuffixKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.nameSuffixKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -227,9 +227,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact nickname as string</returns>
-	public async Task<string> GetNicknameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetNicknameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.nicknameKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.nicknameKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -238,9 +238,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact company as string</returns>
-	public async Task<string> GetCompanyAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetCompanyAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.companyKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.companyKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -249,9 +249,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact job title as string</returns>
-	public async Task<string> GetJobTitleAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetJobTitleAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.jobTitleKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.jobTitleKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -260,9 +260,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact department as string</returns>
-	public async Task<string> GetDepartmentAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetDepartmentAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.departmentKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.departmentKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -271,9 +271,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact email addresses as tab separated string</returns>
-	public async Task<string> GetEmailsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetEmailsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.emailsKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.emailsKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -282,9 +282,15 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact email addresses as string array</returns>
-	public async Task<string[]> GetEmailsArrayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string[]?> GetEmailsArrayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return ((string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.emailsKey, deserializationSettings, securityFunctions)).Split(Contact.separatorChar);
+		string? temp = (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.emailsKey, deserializationSettings, securityFunctions);
+		if (temp is null)
+		{
+			return null;
+		}
+
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -293,9 +299,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact email address descriptions as tab separated string</returns>
-	public async Task<string> GetEmailDescriptionsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetEmailDescriptionsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.emailDescriptionsKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.emailDescriptionsKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -304,9 +310,15 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact email address descriptions as string array</returns>
-	public async Task<string[]> GetEmailDescriptionsArrayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string[]?> GetEmailDescriptionsArrayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return ((string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.emailDescriptionsKey, deserializationSettings, securityFunctions)).Split(Contact.separatorChar);
+		string? temp = (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.emailDescriptionsKey, deserializationSettings, securityFunctions);
+		if (temp is null)
+		{
+			return null;
+		}
+
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -315,9 +327,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact phone numbers as tab separated string</returns>
-	public async Task<string> GetPhoneNumbersAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetPhoneNumbersAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumbersKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumbersKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -326,9 +338,15 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact phone numbers as string array</returns>
-	public async Task<string[]> GetPhoneNumbersArrayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string[]?> GetPhoneNumbersArrayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return ((string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumbersKey, deserializationSettings, securityFunctions)).Split(Contact.separatorChar);
+		string? temp = (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumbersKey, deserializationSettings, securityFunctions);
+		if (temp is null)
+		{
+			return null;
+		}
+
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -337,9 +355,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact phone numbers descriptions as tab separated string</returns>
-	public async Task<string> GetPhoneNumberDescriptionsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetPhoneNumberDescriptionsAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -348,9 +366,15 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact phone numbers descriptions as string array</returns>
-	public async Task<string[]> GetPhoneNumberDescriptionsArrayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string[]?> GetPhoneNumberDescriptionsArrayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return ((string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings, securityFunctions)).Split(Contact.separatorChar);
+		string? temp = (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings, securityFunctions);
+		if (temp is null)
+		{
+			return null;
+		}
+
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -359,9 +383,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact country as string</returns>
-	public async Task<string> GetCountryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetCountryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.countryKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.countryKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -370,9 +394,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact street address as string</returns>
-	public async Task<string> GetStreetAddressAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetStreetAddressAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -381,9 +405,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact street address additional  as string</returns>
-	public async Task<string> GetStreetAddressAdditionalAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetStreetAddressAdditionalAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressAdditionalKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressAdditionalKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -392,9 +416,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact postal code as string</returns>
-	public async Task<string> GetPostalCodeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetPostalCodeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.postalCodeKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.postalCodeKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -403,9 +427,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact city as string</returns>
-	public async Task<string> GetCityAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetCityAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.cityKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.cityKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -414,9 +438,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact PO Box as string</returns>
-	public async Task<string> GetPOBoxAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetPOBoxAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.poBoxKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.poBoxKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -425,9 +449,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact birthday as string</returns>
-	public async Task<string> GetBirthdayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetBirthdayAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.birthdayKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.birthdayKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -436,9 +460,15 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact websites as string array</returns>
-	public async Task<string[]> GetWebsitesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string[]?> GetWebsitesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return ((string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.websitesKey, deserializationSettings, securityFunctions)).Split(Contact.separatorChar);
+		string? temp = (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.websitesKey, deserializationSettings, securityFunctions);
+		if (temp is null)
+		{
+			return null;
+		}
+
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -447,9 +477,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact relationship as string</returns>
-	public async Task<string> GetRelationshipAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetRelationshipAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.relationshipKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.relationshipKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -458,9 +488,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact notes as string</returns>
-	public async Task<string> GetNotesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetNotesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.notesKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.notesKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -469,9 +499,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact creation time as DateTimeOffset</returns>
-	public async Task<DateTimeOffset> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<DateTimeOffset?> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.creationTimeKey, deserializationSettings, securityFunctions);
+		return (DateTimeOffset?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.creationTimeKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -480,9 +510,9 @@ public sealed partial class ContactSecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Contact modification time as DateTimeOffset</returns>
-	public async Task<DateTimeOffset> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<DateTimeOffset?> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.modificationTimeKey, deserializationSettings, securityFunctions);
+		return (DateTimeOffset?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, Contact.modificationTimeKey, deserializationSettings, securityFunctions);
 	}
 
 	

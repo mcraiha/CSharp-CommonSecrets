@@ -95,7 +95,7 @@ public sealed partial class NoteSecret
 	/// <returns>Note title as string</returns>
 	public string? GetNoteTitle(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.noteTitleKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.noteTitleKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -105,7 +105,7 @@ public sealed partial class NoteSecret
 	/// <returns>Note text as string</returns>
 	public string? GetNoteText(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.noteTextKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.noteTextKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -115,7 +115,7 @@ public sealed partial class NoteSecret
 	/// <returns>Note creation time as DateTimeOffset</returns>
 	public DateTimeOffset? GetCreationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.creationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.creationTimeKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -125,7 +125,7 @@ public sealed partial class NoteSecret
 	/// <returns>Note modification time as DateTimeOffset</returns>
 	public DateTimeOffset? GetModificationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.modificationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Note.modificationTimeKey, deserializationSettings);
 	}
 
 	private Dictionary<string, object?> GetNoteAsDictionary(byte[] derivedPassword)
@@ -147,7 +147,7 @@ public sealed partial class NoteSecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> noteAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return noteAsDictionary;
 	}

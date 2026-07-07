@@ -112,7 +112,7 @@ public sealed partial class ContactSecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> contactAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> contactAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return contactAsDictionary;
 	}
@@ -166,7 +166,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact first name as string</returns>
 	public string? GetFirstName(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.firstNameKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.firstNameKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -176,7 +176,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact last name as string</returns>
 	public string? GetLastName(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.lastNameKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.lastNameKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -186,7 +186,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact middle name as string</returns>
 	public string? GetMiddleName(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.middleNameKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.middleNameKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -196,7 +196,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact name prefix as string</returns>
 	public string? GetNamePrefix(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.namePrefixKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.namePrefixKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -206,7 +206,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact name suffix as string</returns>
 	public string? GetNameSuffix(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.nameSuffixKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.nameSuffixKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -216,7 +216,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact nickname as string</returns>
 	public string? GetNickname(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.nicknameKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.nicknameKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -226,7 +226,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact company as string</returns>
 	public string? GetCompany(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.companyKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.companyKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -236,7 +236,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact job title as string</returns>
 	public string? GetJobTitle(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.jobTitleKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.jobTitleKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -246,7 +246,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact department as string</returns>
 	public string? GetDepartment(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.departmentKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.departmentKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -256,7 +256,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact email addresses as single string</returns>
 	public string? GetEmails(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailsKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailsKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -264,9 +264,14 @@ public sealed partial class ContactSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Contact email addresses as string array</returns>
-	public string?[] GetEmailsArray(byte[] derivedPassword)
+	public string[]? GetEmailsArray(byte[] derivedPassword)
 	{
-		return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailsKey, deserializationSettings)).Split(Contact.separatorChar);
+		string? temp = (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailsKey, deserializationSettings);
+		if (temp is null)
+		{
+			return null;
+		}
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -276,7 +281,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact email address descriptions as single string</returns>
 	public string? GetEmailDescriptions(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailDescriptionsKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailDescriptionsKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -284,9 +289,14 @@ public sealed partial class ContactSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Contact email address descriptions as string array</returns>
-	public string?[] GetEmailDescriptionsArray(byte[] derivedPassword)
+	public string[]? GetEmailDescriptionsArray(byte[] derivedPassword)
 	{
-		return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailDescriptionsKey, deserializationSettings)).Split(Contact.separatorChar);
+		string? temp = (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.emailDescriptionsKey, deserializationSettings);
+		if (temp is null)
+		{
+			return null;
+		}
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -296,7 +306,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact phone numbers as single string</returns>
 	public string? GetPhoneNumbers(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumbersKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumbersKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -304,9 +314,14 @@ public sealed partial class ContactSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Contact phone numbers as string array</returns>
-	public string?[] GetPhoneNumbersArray(byte[] derivedPassword)
+	public string[]? GetPhoneNumbersArray(byte[] derivedPassword)
 	{
-		return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumbersKey, deserializationSettings)).Split(Contact.separatorChar);
+		string? temp = (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumbersKey, deserializationSettings);
+		if (temp is null)
+		{
+			return null;
+		}
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -316,7 +331,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact phone numbers descriptions as single string</returns>
 	public string? GetPhoneNumberDescriptions(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -324,9 +339,14 @@ public sealed partial class ContactSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Contact phone numbers descriptions as string array</returns>
-	public string?[] GetPhoneNumberDescriptionsArray(byte[] derivedPassword)
+	public string[]? GetPhoneNumberDescriptionsArray(byte[] derivedPassword)
 	{
-		return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings)).Split(Contact.separatorChar);
+		string? temp = (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.phoneNumberDescriptionsKey, deserializationSettings);
+		if (temp is null)
+		{
+			return null;
+		}
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -336,7 +356,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact country as string</returns>
 	public string? GetCountry(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.countryKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.countryKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -346,7 +366,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact street address as string</returns>
 	public string? GetStreetAddress(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -356,7 +376,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact street address additional  as string</returns>
 	public string? GetStreetAddressAdditional(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressAdditionalKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.streetAddressAdditionalKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -366,7 +386,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact postal code as string</returns>
 	public string? GetPostalCode(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.postalCodeKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.postalCodeKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -376,7 +396,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact city as string</returns>
 	public string? GetCity(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.cityKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.cityKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -386,7 +406,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact PO Box as string</returns>
 	public string? GetPOBox(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.poBoxKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.poBoxKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -396,7 +416,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact birthday as string</returns>
 	public string? GetBirthday(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.birthdayKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.birthdayKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -404,9 +424,14 @@ public sealed partial class ContactSecret
 	/// </summary>
 	/// <param name="derivedPassword">Derived password</param>
 	/// <returns>Contact websites as string array</returns>
-	public string?[] GetWebsites(byte[] derivedPassword)
+	public string[]? GetWebsites(byte[] derivedPassword)
 	{
-		return ((string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.websitesKey, deserializationSettings)).Split(Contact.separatorChar);
+		string? temp = (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.websitesKey, deserializationSettings);
+		if (temp is null)
+		{
+			return null;
+		}
+		return temp.Split(Contact.separatorChar);
 	}
 
 	/// <summary>
@@ -416,7 +441,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact relationship  as string</returns>
 	public string? GetRelationship(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.relationshipKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.relationshipKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -426,7 +451,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact notes  as string</returns>
 	public string? GetNotes(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.notesKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.notesKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -436,7 +461,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact creation time as DateTimeOffset</returns>
 	public DateTimeOffset? GetCreationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.creationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.creationTimeKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -446,7 +471,7 @@ public sealed partial class ContactSecret
 	/// <returns>Contact modification time as DateTimeOffset</returns>
 	public DateTimeOffset? GetModificationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.modificationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, Contact.modificationTimeKey, deserializationSettings);
 	}
 
 	#endregion // Common getters

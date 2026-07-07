@@ -102,7 +102,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Title</returns>
 	public string? GetTitle(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.titleKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.titleKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -112,7 +112,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Name on card</returns>
 	public string? GetNameOnCard(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.nameOnCardKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.nameOnCardKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -122,7 +122,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Card type</returns>
 	public string? GetCardType(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.cardTypeKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.cardTypeKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -132,7 +132,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Number</returns>
 	public string? GetNumber(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.numberKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.numberKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -142,7 +142,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Security code</returns>
 	public string? GetSecurityCode(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.securityCodeKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.securityCodeKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -152,7 +152,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Start date</returns>
 	public string? GetStartDate(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.startDateKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.startDateKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -162,7 +162,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Expiration date</returns>
 	public string? GetExpirationDate(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.expirationDateKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.expirationDateKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -172,7 +172,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Notes</returns>
 	public string? GetNotes(byte[] derivedPassword)
 	{
-		return (string)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.notesKey, deserializationSettings);
+		return (string?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.notesKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -182,7 +182,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Creation time</returns>
 	public DateTimeOffset? GetCreationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.creationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.creationTimeKey, deserializationSettings);
 	}
 
 	/// <summary>
@@ -192,7 +192,7 @@ public sealed partial class PaymentCardSecret
 	/// <returns>Modification time</returns>
 	public DateTimeOffset? GetModificationTime(byte[] derivedPassword)
 	{
-		return (DateTimeOffset)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.modificationTimeKey, deserializationSettings);
+		return (DateTimeOffset?)Helpers.GetSingleValue(this.audalfData, this.algorithm, derivedPassword, PaymentCard.modificationTimeKey, deserializationSettings);
 	}
 
 	private Dictionary<string, object?> GetPaymentCardAsDictionary(byte[] derivedPassword)
@@ -214,7 +214,7 @@ public sealed partial class PaymentCardSecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> paymentCardAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> paymentCardAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return paymentCardAsDictionary;
 	}

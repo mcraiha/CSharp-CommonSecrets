@@ -37,7 +37,7 @@ namespace Tests
 
 			DateTimeOffset time = DateTimeOffset.UtcNow;
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ Contact.firstNameKey, "first" },
 				{ Contact.lastNameKey, "last" },
@@ -229,7 +229,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await cs.GetFirstNameAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await cs.GetFirstNameAsync(null!, securityAsyncFunctions));
 			Assert.ThrowsAsync<ArgumentException>(async () => await cs.GetFirstNameAsync(derivedKeyInvalid, securityAsyncFunctions));
 		}
 
@@ -325,10 +325,11 @@ namespace Tests
 			ContactSecret cs = await ContactSecret.CreateContactSecretAsync(contact, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			DateTimeOffset contactCreationTime = await cs.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? contactCreationTime = await cs.GetCreationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(contact.GetCreationTime(), contactCreationTime);
+			Assert.IsNotNull(contactCreationTime);
+			Assert.AreEqual(contact.GetCreationTime(), contactCreationTime!);
 		}
 
 		[Test]
@@ -348,13 +349,15 @@ namespace Tests
 			ContactSecret cs = await ContactSecret.CreateContactSecretAsync(contact, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 			
 			// Act
-			DateTimeOffset modificationTime1 = await cs.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? modificationTime1 = await cs.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 			await Task.Delay(1100);
 			await cs.SetFirstNameAsync("Better", derivedKey, securityAsyncFunctions);
-			DateTimeOffset modificationTime2 = await cs.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? modificationTime2 = await cs.GetModificationTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.Greater(modificationTime2, modificationTime1);
+			Assert.IsNotNull(modificationTime1);
+			Assert.IsNotNull(modificationTime2);
+			Assert.Greater(modificationTime2!, modificationTime1!);
 		}
 
 		[Test]
@@ -400,7 +403,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(await contactSecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey1, securityAsyncFunctions));
-			Assert.IsFalse(await contactSecret.CanBeDecryptedWithDerivedPasswordAsync(null, securityAsyncFunctions));
+			Assert.IsFalse(await contactSecret.CanBeDecryptedWithDerivedPasswordAsync(null!, securityAsyncFunctions));
 			Assert.IsFalse(await contactSecret.CanBeDecryptedWithDerivedPasswordAsync(new byte[] {}, securityAsyncFunctions));
 			Assert.IsFalse(await contactSecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey2, securityAsyncFunctions));
 		}
@@ -547,11 +550,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(cs1, Formatting.Indented);
 
-			ContactSecret cs2 = JsonConvert.DeserializeObject<ContactSecret>(json);
+			ContactSecret? cs2 = JsonConvert.DeserializeObject<ContactSecret>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, cs2.GetChecksumAsHex());
+			Assert.IsNotNull(cs2);
+			Assert.AreEqual(checksum1, cs2!.GetChecksumAsHex());
 		}
 
 		[Test]

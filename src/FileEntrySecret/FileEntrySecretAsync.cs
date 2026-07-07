@@ -76,10 +76,10 @@ public sealed partial class FileEntrySecret
 	{
 		Dictionary<string, object?> dict = await this.GetFileEntryAsDictionaryAsync(derivedPassword, securityFunctions);
 
-		FileEntry returnValue = await FileEntry.CreateFileEntryAsync((string)dict[FileEntry.filenameKey], (byte[])dict[FileEntry.fileContentKey], securityFunctions);
+		FileEntry returnValue = await FileEntry.CreateFileEntryAsync((string)dict[FileEntry.filenameKey]!, (byte[])dict[FileEntry.fileContentKey]!, securityFunctions);
 
-		returnValue.creationTime = ((DateTimeOffset)dict[FileEntry.creationTimeKey]).ToUnixTimeSeconds();
-		returnValue.modificationTime = ((DateTimeOffset)dict[FileEntry.modificationTimeKey]).ToUnixTimeSeconds();
+		returnValue.creationTime = ((DateTimeOffset)dict[FileEntry.creationTimeKey]!).ToUnixTimeSeconds();
+		returnValue.modificationTime = ((DateTimeOffset)dict[FileEntry.modificationTimeKey]!).ToUnixTimeSeconds();
 
 		return returnValue;
 	}
@@ -90,9 +90,9 @@ public sealed partial class FileEntrySecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Filename as string</returns>
-	public async Task<string> GetFilenameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<string?> GetFilenameAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (string)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, FileEntry.filenameKey, deserializationSettings, securityFunctions);
+		return (string?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, FileEntry.filenameKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -101,9 +101,9 @@ public sealed partial class FileEntrySecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>Content as byte array</returns>
-	public async Task<byte[]> GetFileContentAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<byte[]?> GetFileContentAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (byte[])await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, FileEntry.fileContentKey, deserializationSettings, securityFunctions);
+		return (byte[]?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, FileEntry.fileContentKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -114,7 +114,11 @@ public sealed partial class FileEntrySecret
 	/// <returns>Lenght in bytes</returns>
 	public async Task<long> GetFileContentLengthInBytesAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		byte[] fileContent = await GetFileContentAsync(derivedPassword, securityFunctions);
+		byte[]? fileContent = await GetFileContentAsync(derivedPassword, securityFunctions);
+		if (fileContent is null)
+		{
+			return -1;
+		}
 		return fileContent.LongLength;
 	}
 
@@ -124,9 +128,9 @@ public sealed partial class FileEntrySecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>File entry creation time as DateTimeOffset</returns>
-	public async Task<DateTimeOffset> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<DateTimeOffset?> GetCreationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, FileEntry.creationTimeKey, deserializationSettings, securityFunctions);
+		return (DateTimeOffset?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, FileEntry.creationTimeKey, deserializationSettings, securityFunctions);
 	}
 
 	/// <summary>
@@ -135,9 +139,9 @@ public sealed partial class FileEntrySecret
 	/// <param name="derivedPassword">Derived password</param>
 	/// <param name="securityFunctions">Security functions</param>
 	/// <returns>File entry modification time as DateTimeOffset</returns>
-	public async Task<DateTimeOffset> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
+	public async Task<DateTimeOffset?> GetModificationTimeAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
 	{
-		return (DateTimeOffset)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, FileEntry.modificationTimeKey, deserializationSettings, securityFunctions);
+		return (DateTimeOffset?)await Helpers.GetSingleValueAsync(this.audalfData, this.algorithm, derivedPassword, FileEntry.modificationTimeKey, deserializationSettings, securityFunctions);
 	}
 
 	private async Task<Dictionary<string, object?>> GetFileEntryAsDictionaryAsync(byte[] derivedPassword, ISecurityAsyncFunctions securityFunctions)
@@ -159,7 +163,7 @@ public sealed partial class FileEntrySecret
 			throw audalfCheck.exception!;
 		}
 
-		Dictionary<string, object?> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object>(decryptedAUDALF, settings: deserializationSettings);
+		Dictionary<string, object?> fileEntryAsDictionary = AUDALF_Deserialize.Deserialize<string, object?>(decryptedAUDALF, settings: deserializationSettings);
 
 		return fileEntryAsDictionary;
 	}

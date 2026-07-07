@@ -35,7 +35,7 @@ namespace Tests
 
 			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Dictionary<string, object> testDictionary = new Dictionary<string, object>()
+			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 			{
 				{ History.descriptionTextKey, "Very boring description"u8.ToArray() }
 			};
@@ -132,7 +132,7 @@ namespace Tests
 			// Act
 
 			// Assert
-			Assert.ThrowsAsync<ArgumentNullException>(async () => await historySecret.GetDescriptionAsync(null, securityAsyncFunctions));
+			Assert.ThrowsAsync<ArgumentNullException>(async () => await historySecret.GetDescriptionAsync(null!, securityAsyncFunctions));
 			Assert.ThrowsAsync<ArgumentException>(async () => await historySecret.GetDescriptionAsync(derivedKeyInvalid, securityAsyncFunctions));
 		}
 		
@@ -157,7 +157,7 @@ namespace Tests
 			HistorySecret historySecret = await HistorySecret.CreateHistorySecretAsync(history, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			HistoryEventType rtEventType = await historySecret.GetEventTypeAsync(derivedKey, securityAsyncFunctions);
+			HistoryEventType? rtEventType = await historySecret.GetEventTypeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
 			Assert.AreEqual(eventType, rtEventType);
@@ -210,10 +210,11 @@ namespace Tests
 			HistorySecret historySecret = await HistorySecret.CreateHistorySecretAsync(history, "does not matter", skaAES_CTR, derivedKey, securityAsyncFunctions);
 
 			// Act
-			DateTimeOffset historyOccurenceTime = await historySecret.GetOccurenceTimeAsync(derivedKey, securityAsyncFunctions);
+			DateTimeOffset? historyOccurenceTime = await historySecret.GetOccurenceTimeAsync(derivedKey, securityAsyncFunctions);
 
 			// Assert
-			Assert.AreEqual(history.GetOccurenceTime(), historyOccurenceTime);
+			Assert.IsNotNull(historyOccurenceTime);
+			Assert.AreEqual(history.GetOccurenceTime(), historyOccurenceTime!);
 		}
 		
 		[Test]
@@ -267,7 +268,7 @@ namespace Tests
 
 			// Assert
 			Assert.IsTrue(await historySecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey1, securityAsyncFunctions));
-			Assert.IsFalse(await historySecret.CanBeDecryptedWithDerivedPasswordAsync(null, securityAsyncFunctions));
+			Assert.IsFalse(await historySecret.CanBeDecryptedWithDerivedPasswordAsync(null!, securityAsyncFunctions));
 			Assert.IsFalse(await historySecret.CanBeDecryptedWithDerivedPasswordAsync(new byte[] {}, securityAsyncFunctions));
 			Assert.IsFalse(await historySecret.CanBeDecryptedWithDerivedPasswordAsync(derivedKey2, securityAsyncFunctions));
 		}
@@ -326,11 +327,12 @@ namespace Tests
 
 			string json = JsonConvert.SerializeObject(historySecret1, Formatting.Indented);
 
-			HistorySecret historySecret2 = JsonConvert.DeserializeObject<HistorySecret>(json);
+			HistorySecret? historySecret2 = JsonConvert.DeserializeObject<HistorySecret>(json);
 
 			// Assert
 			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, historySecret2.GetChecksumAsHex());
+			Assert.IsNotNull(historySecret2);
+			Assert.AreEqual(checksum1, historySecret2!.GetChecksumAsHex());
 		}
 
 		[Test]
