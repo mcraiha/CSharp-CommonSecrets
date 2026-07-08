@@ -9,407 +9,406 @@ using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Tests
+namespace Tests;
+
+public class NoteSecretTests
 {
-	public class NoteSecretTests
+	[SetUp]
+	public void Setup()
 	{
-		[SetUp]
-		public void Setup()
+		
+	}
+
+	[Test]
+	public void ConstructorTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 1, 1, 4, 5, 6, 7, 7, 7, 10, 11, 12, 13, 14, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf1, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+		Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 		{
-			
-		}
+			{ Note.noteTitleKey, "My shopping list for tomorrow"}
+		};
 
-		[Test]
-		public void ConstructorTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 1, 1, 4, 5, 6, 7, 7, 7, 10, 11, 12, 13, 14, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf1, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		NoteSecret noteSecret = new NoteSecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Assert
+		Assert.IsNotNull(noteSecret);
+		Assert.IsNotNull(noteSecret.audalfData);
+	}
 
-			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
-			{
-				{ Note.noteTitleKey, "My shopping list for tomorrow"}
-			};
+	[Test]
+	public void DeepCopyTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 1, 82, 93, 102, 11, 12, 13, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xf5, 0xf6, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			NoteSecret noteSecret = new NoteSecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(noteSecret);
-			Assert.IsNotNull(noteSecret.audalfData);
-		}
+		string title = "Wishlist for holidays";
+		string text = "peace, happiness, freedom and something";
 
-		[Test]
-		public void DeepCopyTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 1, 82, 93, 102, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xf5, 0xf6, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		Note note = new Note(title, text);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		NoteSecret noteSecretCopy = new NoteSecret(noteSecret);
+		string? noteTitle = noteSecretCopy.GetNoteTitle(derivedKey);
 
-			string title = "Wishlist for holidays";
-			string text = "peace, happiness, freedom and something";
+		// Assert
+		Assert.IsFalse(string.IsNullOrEmpty(noteTitle));
+		Assert.AreEqual(title, noteTitle);
+		Assert.AreNotSame(noteSecret.audalfData, noteSecretCopy.audalfData, "AUDALF byte arrays should be in different memory locations");
+		CollectionAssert.AreEqual(noteSecret.keyIdentifier, noteSecretCopy.keyIdentifier);
+		Assert.AreNotSame(noteSecret.keyIdentifier, noteSecretCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
+		Assert.AreEqual(noteSecret.checksum, noteSecretCopy.checksum);
+	}
 
-			Note note = new Note(title, text);
+	[Test]
+	public void GetNoteTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			NoteSecret noteSecretCopy = new NoteSecret(noteSecret);
-			string? noteTitle = noteSecretCopy.GetNoteTitle(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsFalse(string.IsNullOrEmpty(noteTitle));
-			Assert.AreEqual(title, noteTitle);
-			Assert.AreNotSame(noteSecret.audalfData, noteSecretCopy.audalfData, "AUDALF byte arrays should be in different memory locations");
-			CollectionAssert.AreEqual(noteSecret.keyIdentifier, noteSecretCopy.keyIdentifier);
-			Assert.AreNotSame(noteSecret.keyIdentifier, noteSecretCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
-			Assert.AreEqual(noteSecret.checksum, noteSecretCopy.checksum);
-		}
+		string title = "Wishlist for holidays";
+		string text = "peace, happiness, freedom";
 
-		[Test]
-		public void GetNoteTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		Note note = new Note(title, text);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		Note noteCopy = noteSecret.GetNote(derivedKey);
 
-			string title = "Wishlist for holidays";
-			string text = "peace, happiness, freedom";
+		NoteSecret noteSecretInvalid = new NoteSecret(noteSecret);
+		noteSecretInvalid.audalfData[0] = (byte)(255 - noteSecretInvalid.audalfData[0]);
 
-			Note note = new Note(title, text);
+		// Assert
+		Assert.IsTrue(ComparisonHelper.AreNotesEqual(note, noteCopy));
+		Assert.AreEqual(note.creationTime, noteCopy.creationTime);
+		Assert.AreEqual(note.modificationTime, noteCopy.modificationTime);
 
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+		Assert.Throws<ArgumentNullException>(() => noteSecret.GetNote(null!));
+		Assert.Throws<ArgumentException>(() => noteSecretInvalid.GetNote(derivedKey));
+	}
 
-			// Act
-			Note noteCopy = noteSecret.GetNote(derivedKey);
+	[Test]
+	public void GetWithInvalidKeyTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 90, 10, 11, 12, 13, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0x10, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		
+		byte[] derivedKeyInvalid = Mutator.CreateMutatedByteArray(derivedKey);
 
-			NoteSecret noteSecretInvalid = new NoteSecret(noteSecret);
-			noteSecretInvalid.audalfData[0] = (byte)(255 - noteSecretInvalid.audalfData[0]);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Assert
-			Assert.IsTrue(ComparisonHelper.AreNotesEqual(note, noteCopy));
-			Assert.AreEqual(note.creationTime, noteCopy.creationTime);
-			Assert.AreEqual(note.modificationTime, noteCopy.modificationTime);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			Assert.Throws<ArgumentNullException>(() => noteSecret.GetNote(null!));
-			Assert.Throws<ArgumentException>(() => noteSecretInvalid.GetNote(derivedKey));
-		}
+		string title = "Wishlist for holidays";
+		string text = "peace, happiness, freedom";
 
-		[Test]
-		public void GetWithInvalidKeyTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 90, 10, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0x10, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
-			
-			byte[] derivedKeyInvalid = Mutator.CreateMutatedByteArray(derivedKey);
+		Note note = new Note(title, text);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
 
-			string title = "Wishlist for holidays";
-			string text = "peace, happiness, freedom";
+		// Assert
+		Assert.Throws<ArgumentNullException>(() => noteSecret.GetNoteTitle(null!));
+		Assert.Throws<ArgumentException>(() => noteSecret.GetNoteTitle(derivedKeyInvalid));
+	}
 
-			Note note = new Note(title, text);
 
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+	[Test]
+	public void GetNoteTitleTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			// Act
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Assert
-			Assert.Throws<ArgumentNullException>(() => noteSecret.GetNoteTitle(null!));
-			Assert.Throws<ArgumentException>(() => noteSecret.GetNoteTitle(derivedKeyInvalid));
-		}
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
+		string title = "Wishlist for holidays";
+		string text = "peace, happiness, freedom";
 
-		[Test]
-		public void GetNoteTitleTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		Note note = new Note(title, text);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		string? noteTitle = noteSecret.GetNoteTitle(derivedKey);
 
-			string title = "Wishlist for holidays";
-			string text = "peace, happiness, freedom";
+		// Assert
+		Assert.IsNotNull(noteTitle);
+		Assert.AreEqual(title, noteTitle);
+	}
 
-			Note note = new Note(title, text);
+	[Test]
+	public void GetNoteTextTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 15, 200, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xf3, 0xff };
 
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			string? noteTitle = noteSecret.GetNoteTitle(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(noteTitle);
-			Assert.AreEqual(title, noteTitle);
-		}
+		string title = "Wishlist for holidays";
+		string text = "peace, happiness, freedom";
 
-		[Test]
-		public void GetNoteTextTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 15, 200, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xf3, 0xff };
+		Note note = new Note(title, text);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		string? noteText = noteSecret.GetNoteText(derivedKey);
 
-			string title = "Wishlist for holidays";
-			string text = "peace, happiness, freedom";
+		// Assert
+		Assert.IsNotNull(noteText);
+		Assert.AreEqual(text, noteText);
+	}
 
-			Note note = new Note(title, text);
+	[Test]
+	public void GetCreationTimeTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 68, 78, 83, 9, 110, 211, 128, 213, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xc5, 0xd6, 0xbb, 0xf8, 0x19, 0x11, 0xfb, 0x33, 0xfd, 0xfe, 0xff };
 
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			string? noteText = noteSecret.GetNoteText(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(noteText);
-			Assert.AreEqual(text, noteText);
-		}
+		string title = "Wishlist for coding";
+		string text = "peace, happiness, freedom, good editor";
 
-		[Test]
-		public void GetCreationTimeTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 68, 78, 83, 9, 110, 211, 128, 213, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xaa, 0xc5, 0xd6, 0xbb, 0xf8, 0x19, 0x11, 0xfb, 0x33, 0xfd, 0xfe, 0xff };
+		Note note = new Note(title, text);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		DateTimeOffset? noteCreationTime = noteSecret.GetCreationTime(derivedKey);
 
-			string title = "Wishlist for coding";
-			string text = "peace, happiness, freedom, good editor";
+		// Assert
+		Assert.AreEqual(note.GetCreationTime(), noteCreationTime);
+	}
 
-			Note note = new Note(title, text);
+	[Test]
+	public void GetModificationTimeTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 15, 200, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xf3, 0xff };
 
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			DateTimeOffset? noteCreationTime = noteSecret.GetCreationTime(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.AreEqual(note.GetCreationTime(), noteCreationTime);
-		}
+		string title = "Wishlist for holidays";
+		string text = "peace, happiness, freedom";
 
-		[Test]
-		public void GetModificationTimeTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 15, 200, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xf3, 0xff };
+		Note note = new Note(title, text);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+		
+		// Act
+		DateTimeOffset? modificationTime1 = noteSecret.GetModificationTime(derivedKey);
+		Thread.Sleep(1100);
+		noteSecret.SetNoteTitle("1234567", derivedKey);
+		DateTimeOffset? modificationTime2 = noteSecret.GetModificationTime(derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Assert
+		Assert.IsNotNull(modificationTime1);
+		Assert.IsNotNull(modificationTime2);
+		Assert.Greater(modificationTime2!.Value, modificationTime1!.Value);
+	}
 
-			string title = "Wishlist for holidays";
-			string text = "peace, happiness, freedom";
+	[Test]
+	public void GetKeyIdentifierTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 75, 168, 78, 83, 91, 110, 221, 18, 213, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x59, 0x15, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
 
-			Note note = new Note(title, text);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
-			
-			// Act
-			DateTimeOffset? modificationTime1 = noteSecret.GetModificationTime(derivedKey);
-			Thread.Sleep(1100);
-			noteSecret.SetNoteTitle("1234567", derivedKey);
-			DateTimeOffset? modificationTime2 = noteSecret.GetModificationTime(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(modificationTime1);
-			Assert.IsNotNull(modificationTime2);
-			Assert.Greater(modificationTime2!.Value, modificationTime1!.Value);
-		}
+		string keyIdentifier = "primary";
 
-		[Test]
-		public void GetKeyIdentifierTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 75, 168, 78, 83, 91, 110, 221, 18, 213, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x59, 0x15, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
+		string title = "Wishlist for holidays, eh";
+		string text = "peace, happiness, freedom, faster";
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		Note note = new Note(title, text);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+		// Act
+		NoteSecret noteSecret = new NoteSecret(note, keyIdentifier, skaAES_CTR, derivedKey);
 
-			string keyIdentifier = "primary";
+		// Assert
+		Assert.AreEqual(keyIdentifier, noteSecret.GetKeyIdentifier());
+	}
 
-			string title = "Wishlist for holidays, eh";
-			string text = "peace, happiness, freedom, faster";
+	[Test]
+	public void CanBeDecryptedWithDerivedPasswordTest()
+	{
+		byte[] derivedKey1 = new byte[16] { 11, 222, 31, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 16 };
+		byte[] derivedKey2 = new byte[16] { 11, 222, 31, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 15 };
+		byte[] initialCounter = new byte[] { 0xa7, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x51, 0x95, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
 
-			Note note = new Note(title, text);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			NoteSecret noteSecret = new NoteSecret(note, keyIdentifier, skaAES_CTR, derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
 
-			// Assert
-			Assert.AreEqual(keyIdentifier, noteSecret.GetKeyIdentifier());
-		}
+		string keyIdentifier = "primary";
 
-		[Test]
-		public void CanBeDecryptedWithDerivedPasswordTest()
-		{
-			byte[] derivedKey1 = new byte[16] { 11, 222, 31, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 16 };
-			byte[] derivedKey2 = new byte[16] { 11, 222, 31, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 15 };
-			byte[] initialCounter = new byte[] { 0xa7, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x51, 0x95, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
+		string title = "Wishlist for holidays, eh";
+		string text = "peace, happiness, freedom, faster";
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		Note note = new Note(title, text);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+		// Act
+		NoteSecret noteSecret = new NoteSecret(note, keyIdentifier, skaAES_CTR, derivedKey1);
 
-			string keyIdentifier = "primary";
+		// Assert
+		Assert.IsTrue(noteSecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
+		Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(null!));
+		Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(new byte[] {}));
+		Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(derivedKey2));
+	}
 
-			string title = "Wishlist for holidays, eh";
-			string text = "peace, happiness, freedom, faster";
+	[Test]
+	public void SetNoteTitleTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
 
-			Note note = new Note(title, text);
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
 
-			// Act
-			NoteSecret noteSecret = new NoteSecret(note, keyIdentifier, skaAES_CTR, derivedKey1);
+		string title = "Wishlist for holidays part IV";
+		string text = "peace, happiness, freedom and something...";
 
-			// Assert
-			Assert.IsTrue(noteSecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(null!));
-			Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(new byte[] {}));
-			Assert.IsFalse(noteSecret.CanBeDecryptedWithDerivedPassword(derivedKey2));
-		}
+		Note note = new Note(title, text);
 
-		[Test]
-		public void SetNoteTitleTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+		NoteSecret noteSecret = new NoteSecret(note, "does not matter", ska, derivedKey);
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+		string noteTitle1 = "future text that is happy and joyful for all holiday purposes...";
 
-			string title = "Wishlist for holidays part IV";
-			string text = "peace, happiness, freedom and something...";
+		// Act
+		bool shouldBeTrue = noteSecret.SetNoteTitle(noteTitle1, derivedKey);
+		string? noteTitle2 = noteSecret.GetNoteTitle(derivedKey);
+		bool shouldBeFalse = noteSecret.SetNoteTitle(noteTitle1,  new byte[] { 1, 2, 3 });
 
-			Note note = new Note(title, text);
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
+		Assert.IsFalse(string.IsNullOrEmpty(noteTitle2));
+		Assert.AreEqual(noteTitle1, noteTitle2);
+	}
 
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", ska, derivedKey);
+	[Test]
+	public void SetNoteTextTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
 
-			string noteTitle1 = "future text that is happy and joyful for all holiday purposes...";
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
 
-			// Act
-			bool shouldBeTrue = noteSecret.SetNoteTitle(noteTitle1, derivedKey);
-			string? noteTitle2 = noteSecret.GetNoteTitle(derivedKey);
-			bool shouldBeFalse = noteSecret.SetNoteTitle(noteTitle1,  new byte[] { 1, 2, 3 });
+		string title = "Top three";
+		string text = "Another long and super boring text for testing purposes.";
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-			Assert.IsFalse(string.IsNullOrEmpty(noteTitle2));
-			Assert.AreEqual(noteTitle1, noteTitle2);
-		}
+		Note note = new Note(title, text);
 
-		[Test]
-		public void SetNoteTextTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+		NoteSecret noteSecret = new NoteSecret(note, "does not matter", ska, derivedKey);
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+		string noteText1 = "Not so boring but still bit something text for test case";
 
-			string title = "Top three";
-			string text = "Another long and super boring text for testing purposes.";
+		// Act
+		bool shouldBeTrue = noteSecret.SetNoteText(noteText1, derivedKey);
+		string? noteText2 = noteSecret.GetNoteText(derivedKey);
+		bool shouldBeFalse = noteSecret.SetNoteText(noteText1,  new byte[] { 1, 2, 3 });
 
-			Note note = new Note(title, text);
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
+		Assert.IsFalse(string.IsNullOrEmpty(noteText2));
+		Assert.AreEqual(noteText1, noteText2);
+	}
 
-			NoteSecret noteSecret = new NoteSecret(note, "does not matter", ska, derivedKey);
+	[Test]
+	public void ChecksumSurvivesRoundtripTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 15, 200, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xf3, 0xff };
 
-			string noteText1 = "Not so boring but still bit something text for test case";
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			bool shouldBeTrue = noteSecret.SetNoteText(noteText1, derivedKey);
-			string? noteText2 = noteSecret.GetNoteText(derivedKey);
-			bool shouldBeFalse = noteSecret.SetNoteText(noteText1,  new byte[] { 1, 2, 3 });
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-			Assert.IsFalse(string.IsNullOrEmpty(noteText2));
-			Assert.AreEqual(noteText1, noteText2);
-		}
+		string title = "Wishlist for holidays";
+		string text = "peace, happiness, freedom";
 
-		[Test]
-		public void ChecksumSurvivesRoundtripTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 15, 200, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xf3, 0xff };
+		Note note = new Note(title, text);
+		NoteSecret noteSecret1 = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
+		string checksum1 = noteSecret1.GetChecksumAsHex();
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		string json = JsonConvert.SerializeObject(noteSecret1, Formatting.Indented);
 
-			string title = "Wishlist for holidays";
-			string text = "peace, happiness, freedom";
+		NoteSecret? noteSecret2 = JsonConvert.DeserializeObject<NoteSecret>(json);
 
-			Note note = new Note(title, text);
-			NoteSecret noteSecret1 = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
+		// Assert
+		Assert.IsNotNull(noteSecret2);
+		Assert.AreEqual(64, checksum1.Length);
+		Assert.AreEqual(checksum1, noteSecret2!.GetChecksumAsHex());
+	}
 
-			// Act
-			string checksum1 = noteSecret1.GetChecksumAsHex();
+	[Test]
+	public void CheckIfChecksumMatchesContentTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 56, 2, 3, 4, 55, 76, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0x00, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			string json = JsonConvert.SerializeObject(noteSecret1, Formatting.Indented);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			NoteSecret? noteSecret2 = JsonConvert.DeserializeObject<NoteSecret>(json);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(noteSecret2);
-			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, noteSecret2!.GetChecksumAsHex());
-		}
+		string title = "Wishlist for holidays";
+		string text = "peace, happiness, freedom";
 
-		[Test]
-		public void CheckIfChecksumMatchesContentTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 56, 2, 3, 4, 55, 76, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0x00, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		Note note = new Note(title, text);
+		NoteSecret noteSecret1 = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
+		bool shouldBeTrue = noteSecret1.CheckIfChecksumMatchesContent();
+		noteSecret1.checksum = noteSecret1.checksum.Remove(0, 1);
+		bool shouldBeFalse = noteSecret1.CheckIfChecksumMatchesContent();
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
-
-			string title = "Wishlist for holidays";
-			string text = "peace, happiness, freedom";
-
-			Note note = new Note(title, text);
-			NoteSecret noteSecret1 = new NoteSecret(note, "does not matter", skaAES_CTR, derivedKey);
-
-			// Act
-			bool shouldBeTrue = noteSecret1.CheckIfChecksumMatchesContent();
-			noteSecret1.checksum = noteSecret1.checksum.Remove(0, 1);
-			bool shouldBeFalse = noteSecret1.CheckIfChecksumMatchesContent();
-
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-		}
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
 	}
 }
 

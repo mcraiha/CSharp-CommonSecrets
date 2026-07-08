@@ -10,179 +10,178 @@ using Newtonsoft.Json;
 
 using System.Threading.Tasks;
 
-namespace Tests
+namespace Tests;
+
+public class FileEntryAsyncTests
 {
-	public class FileEntryAsyncTests
+	[SetUp]
+	public void Setup()
 	{
-		[SetUp]
-		public void Setup()
-		{
-			
-		}
-
-		[Test]
-		public async Task ConstructorAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
-
-			FileEntry fe1 = new FileEntry();
-			FileEntry fe2 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
-
-			// Act
-
-			// Assert
-			Assert.IsNotNull(fe1);
-			Assert.IsNotNull(fe2);
-		}
-
-		[Test]
-		public async Task GetValuesAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
-
-			string filename = "notnice.doc";
-			byte[] contentForFile = Encoding.UTF8.GetBytes("👺 is evil!");
-			FileEntry fe = await FileEntry.CreateFileEntryAsync(filename, contentForFile, securityAsyncFunctions);
-
-			// Act
-
-			// Assert
-			Assert.AreEqual(filename, fe.GetFilename());
-			Assert.AreEqual(contentForFile.LongLength, fe.GetFileContentLengthInBytes());
-			CollectionAssert.AreEqual(contentForFile, fe.fileContent);
-		}
-
-		[Test]
-		public async Task ModificationUpdateTimestampAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
-
-			FileEntry fe = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
-
-			// Act
-			var modificationTime1 = fe.modificationTime;
-			System.Threading.Thread.Sleep(1100);
-			await fe.UpdateFileEntryAsync(fe.GetFilename(), new byte[] { }, securityAsyncFunctions);
-			var modificationTime2 = fe.modificationTime;
-
-			// Assert
-			Assert.AreNotEqual(modificationTime1, modificationTime2);
-		}
 		
-		[Test]
-		public async Task ChecksumChangesAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+	}
 
-			DateTimeOffset dto = DateTimeOffset.UtcNow;
-			FileEntry fe1 = new FileEntry();
-			FileEntry fe2 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto, securityAsyncFunctions);
-			FileEntry fe3 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto, securityAsyncFunctions);
+	[Test]
+	public async Task ConstructorAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			// Act
-			string checksum1 = fe1.GetChecksumAsHex();
-			string checksum2 = fe2.GetChecksumAsHex();
-			string checksum3 = fe3.GetChecksumAsHex();
+		FileEntry fe1 = new FileEntry();
+		FileEntry fe2 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
 
-			byte[] newContent = new byte[fe3.fileContent.Length];
-			Array.Copy(fe3.fileContent, newContent, fe3.fileContent.Length);
-			newContent[0] = 127;
-			await fe3.UpdateFileEntryAsync(fe3.GetFilename(), newContent, securityAsyncFunctions);
-			string checksum4 = fe3.GetChecksumAsHex();
+		// Act
 
-			// Assert
-			Assert.AreNotEqual(checksum1, checksum2);
-			Assert.AreEqual(checksum3, checksum2);
-			Assert.AreNotEqual(checksum3, checksum4);
-		}
+		// Assert
+		Assert.IsNotNull(fe1);
+		Assert.IsNotNull(fe2);
+	}
 
-		[Test]
-		public async Task ShallowCopyAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+	[Test]
+	public async Task GetValuesAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			FileEntry fe1 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
+		string filename = "notnice.doc";
+		byte[] contentForFile = Encoding.UTF8.GetBytes("👺 is evil!");
+		FileEntry fe = await FileEntry.CreateFileEntryAsync(filename, contentForFile, securityAsyncFunctions);
 
-			// Act
-			FileEntry fe2 = fe1.ShallowCopy();
+		// Act
 
-			string checksum1 = fe1.GetChecksumAsHex();
-			string checksum2 = fe2.GetChecksumAsHex();
+		// Assert
+		Assert.AreEqual(filename, fe.GetFilename());
+		Assert.AreEqual(contentForFile.LongLength, fe.GetFileContentLengthInBytes());
+		CollectionAssert.AreEqual(contentForFile, fe.fileContent);
+	}
 
-			// Assert
-			Assert.IsNotNull(fe2);
-			Assert.AreEqual(checksum1, checksum2);
-		}
+	[Test]
+	public async Task ModificationUpdateTimestampAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-		[Test]
-		public async Task DeepCopyAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+		FileEntry fe = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
 
-			string filename = "sometext.txt";
-			string fileContent = "Some text here, yes. And even more";
-			FileEntry fe1 = await FileEntry.CreateFileEntryAsync(filename, Encoding.UTF8.GetBytes(fileContent), securityAsyncFunctions);
+		// Act
+		var modificationTime1 = fe.modificationTime;
+		System.Threading.Thread.Sleep(1100);
+		await fe.UpdateFileEntryAsync(fe.GetFilename(), new byte[] { }, securityAsyncFunctions);
+		var modificationTime2 = fe.modificationTime;
 
-			// Act
-			FileEntry fe2 = new FileEntry(fe1);
+		// Assert
+		Assert.AreNotEqual(modificationTime1, modificationTime2);
+	}
+	
+	[Test]
+	public async Task ChecksumChangesAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			// Assert
-			Assert.AreNotSame(fe1.filename, fe2.filename);
-			CollectionAssert.AreEqual(fe1.filename, fe2.filename);
+		DateTimeOffset dto = DateTimeOffset.UtcNow;
+		FileEntry fe1 = new FileEntry();
+		FileEntry fe2 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto, securityAsyncFunctions);
+		FileEntry fe3 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto, securityAsyncFunctions);
 
-			Assert.AreNotSame(fe1.fileContent, fe2.fileContent);
-			CollectionAssert.AreEqual(fe1.fileContent, fe2.fileContent);
+		// Act
+		string checksum1 = fe1.GetChecksumAsHex();
+		string checksum2 = fe2.GetChecksumAsHex();
+		string checksum3 = fe3.GetChecksumAsHex();
 
-			Assert.AreEqual(fe1.modificationTime, fe2.modificationTime);
-			Assert.AreEqual(fe1.creationTime, fe2.creationTime);
+		byte[] newContent = new byte[fe3.fileContent.Length];
+		Array.Copy(fe3.fileContent, newContent, fe3.fileContent.Length);
+		newContent[0] = 127;
+		await fe3.UpdateFileEntryAsync(fe3.GetFilename(), newContent, securityAsyncFunctions);
+		string checksum4 = fe3.GetChecksumAsHex();
 
-			Assert.AreEqual(fe1.checksum, fe2.checksum);
-		}
+		// Assert
+		Assert.AreNotEqual(checksum1, checksum2);
+		Assert.AreEqual(checksum3, checksum2);
+		Assert.AreNotEqual(checksum3, checksum4);
+	}
 
-		[Test]
-		public async Task ChecksumSurvivesRoundtripAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+	[Test]
+	public async Task ShallowCopyAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			FileEntry fe1 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
+		FileEntry fe1 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
 
-			// Act
-			string checksum1 = fe1.GetChecksumAsHex();
+		// Act
+		FileEntry fe2 = fe1.ShallowCopy();
 
-			string json = JsonConvert.SerializeObject(fe1, Formatting.Indented);
+		string checksum1 = fe1.GetChecksumAsHex();
+		string checksum2 = fe2.GetChecksumAsHex();
 
-			FileEntry? fe2 = JsonConvert.DeserializeObject<FileEntry>(json);
+		// Assert
+		Assert.IsNotNull(fe2);
+		Assert.AreEqual(checksum1, checksum2);
+	}
 
-			// Assert
-			Assert.AreEqual(64, checksum1.Length);
-			Assert.IsNotNull(fe2);
-			Assert.AreEqual(checksum1, fe2!.GetChecksumAsHex());
-		}
+	[Test]
+	public async Task DeepCopyAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-		[Test]
-		public async Task CheckIfChecksumMatchesContentAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+		string filename = "sometext.txt";
+		string fileContent = "Some text here, yes. And even more";
+		FileEntry fe1 = await FileEntry.CreateFileEntryAsync(filename, Encoding.UTF8.GetBytes(fileContent), securityAsyncFunctions);
 
-			FileEntry fe1 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
+		// Act
+		FileEntry fe2 = new FileEntry(fe1);
 
-			// Act
-			bool shouldBeTrue = await fe1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
-			fe1.checksum = fe1.checksum.Remove(0, 1);
-			bool shouldBeFalse = await fe1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+		// Assert
+		Assert.AreNotSame(fe1.filename, fe2.filename);
+		CollectionAssert.AreEqual(fe1.filename, fe2.filename);
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-		}
+		Assert.AreNotSame(fe1.fileContent, fe2.fileContent);
+		CollectionAssert.AreEqual(fe1.fileContent, fe2.fileContent);
+
+		Assert.AreEqual(fe1.modificationTime, fe2.modificationTime);
+		Assert.AreEqual(fe1.creationTime, fe2.creationTime);
+
+		Assert.AreEqual(fe1.checksum, fe2.checksum);
+	}
+
+	[Test]
+	public async Task ChecksumSurvivesRoundtripAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+		FileEntry fe1 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
+
+		// Act
+		string checksum1 = fe1.GetChecksumAsHex();
+
+		string json = JsonConvert.SerializeObject(fe1, Formatting.Indented);
+
+		FileEntry? fe2 = JsonConvert.DeserializeObject<FileEntry>(json);
+
+		// Assert
+		Assert.AreEqual(64, checksum1.Length);
+		Assert.IsNotNull(fe2);
+		Assert.AreEqual(checksum1, fe2!.GetChecksumAsHex());
+	}
+
+	[Test]
+	public async Task CheckIfChecksumMatchesContentAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+		FileEntry fe1 = await FileEntry.CreateFileEntryAsync("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), securityAsyncFunctions);
+
+		// Act
+		bool shouldBeTrue = await fe1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+		fe1.checksum = fe1.checksum.Remove(0, 1);
+		bool shouldBeFalse = await fe1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
 	}
 }
 

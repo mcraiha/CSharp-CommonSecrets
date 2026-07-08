@@ -8,140 +8,139 @@ using System;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Tests
+namespace Tests;
+
+public class HistorySyncTests
 {
-	public class HistorySyncTests
+	[SetUp]
+	public void Setup()
 	{
-		[SetUp]
-		public void Setup()
-		{
-			
-		}
-
-		[Test]
-		public void ConstructorTest()
-		{
-			// Arrange
-			History history1 = new History() { eventType= "" }; // Do NOT use this code in your own projects!!!
-			History history2 = new History(HistoryEventType.Delete, "No meaning");
-
-			// Act
-
-			// Assert
-			Assert.IsNotNull(history1);
-			Assert.IsNotNull(history2);
-		}
-
-		[Test]
-		public void GetValuesTest()
-		{
-			// Arrange
-			HistoryEventType historyEventType = HistoryEventType.Read;
-			string description = "Dragon copied the password";
-			History history = new History(historyEventType, description);
-
-			// Act
-
-			// Assert
-			Assert.AreEqual(historyEventType, history.GetEventType());
-			Assert.AreEqual(description, history.GetDescription());
-		}
 		
-		[Test]
-		public void ChecksumChangesTest()
-		{
-			// Arrange
-			DateTimeOffset dto = DateTimeOffset.UtcNow;
-			History history1 = new History() { eventType= "" }; // Do NOT use this code in your own projects!!!
-			History history2 = new History(HistoryEventType.Update, "Some text here, yes.", dto);
-			History history3 = new History(HistoryEventType.Update, "Some text here, yes.", dto);
+	}
 
-			// Act
-			string checksum1 = history1.GetChecksumAsHex();
-			string checksum2 = history2.GetChecksumAsHex();
-			string checksum3 = history3.GetChecksumAsHex();
+	[Test]
+	public void ConstructorTest()
+	{
+		// Arrange
+		History history1 = new History() { eventType= "" }; // Do NOT use this code in your own projects!!!
+		History history2 = new History(HistoryEventType.Delete, "No meaning");
 
-			history3.UpdateHistory(HistoryEventType.Update, "Some text here, yes." + "a", dto);
-			string checksum4 = history3.GetChecksumAsHex();
+		// Act
 
-			// Assert
-			Assert.AreNotEqual(checksum1, checksum2);
-			Assert.AreEqual(checksum3, checksum2);
-			Assert.AreNotEqual(checksum3, checksum4);
-		}
+		// Assert
+		Assert.IsNotNull(history1);
+		Assert.IsNotNull(history2);
+	}
 
-		[Test]
-		public void ShallowCopyTest()
-		{
-			// Arrange
-			History history1 = new History(HistoryEventType.Create, "Some text here, yes.");
+	[Test]
+	public void GetValuesTest()
+	{
+		// Arrange
+		HistoryEventType historyEventType = HistoryEventType.Read;
+		string description = "Dragon copied the password";
+		History history = new History(historyEventType, description);
 
-			// Act
-			History history2 = history1.ShallowCopy();
+		// Act
 
-			string checksum1 = history1.GetChecksumAsHex();
-			string checksum2 = history2.GetChecksumAsHex();
+		// Assert
+		Assert.AreEqual(historyEventType, history.GetEventType());
+		Assert.AreEqual(description, history.GetDescription());
+	}
+	
+	[Test]
+	public void ChecksumChangesTest()
+	{
+		// Arrange
+		DateTimeOffset dto = DateTimeOffset.UtcNow;
+		History history1 = new History() { eventType= "" }; // Do NOT use this code in your own projects!!!
+		History history2 = new History(HistoryEventType.Update, "Some text here, yes.", dto);
+		History history3 = new History(HistoryEventType.Update, "Some text here, yes.", dto);
 
-			// Assert
-			Assert.IsNotNull(history2);
-			Assert.AreEqual(checksum1, checksum2);
-		}
+		// Act
+		string checksum1 = history1.GetChecksumAsHex();
+		string checksum2 = history2.GetChecksumAsHex();
+		string checksum3 = history3.GetChecksumAsHex();
 
-		[Test]
-		public void DeepCopyTest()
-		{
-			// Arrange
-			History history1 = new History(HistoryEventType.Create, "Some text here, yes.");
+		history3.UpdateHistory(HistoryEventType.Update, "Some text here, yes." + "a", dto);
+		string checksum4 = history3.GetChecksumAsHex();
 
-			// Act
-			History history2 = new History(history1);
+		// Assert
+		Assert.AreNotEqual(checksum1, checksum2);
+		Assert.AreEqual(checksum3, checksum2);
+		Assert.AreNotEqual(checksum3, checksum4);
+	}
 
-			// Assert
-			Assert.AreNotSame(history1.eventType, history2.eventType);
-			Assert.AreEqual(history1.eventType, history2.eventType);
+	[Test]
+	public void ShallowCopyTest()
+	{
+		// Arrange
+		History history1 = new History(HistoryEventType.Create, "Some text here, yes.");
 
-			Assert.AreNotSame(history1.descriptionText, history2.descriptionText);
-			CollectionAssert.AreEqual(history1.descriptionText, history2.descriptionText);
+		// Act
+		History history2 = history1.ShallowCopy();
 
-			Assert.AreEqual(history1.occurenceTime, history2.occurenceTime);
+		string checksum1 = history1.GetChecksumAsHex();
+		string checksum2 = history2.GetChecksumAsHex();
 
-			Assert.AreEqual(history1.checksum, history2.checksum);
-		}
+		// Assert
+		Assert.IsNotNull(history2);
+		Assert.AreEqual(checksum1, checksum2);
+	}
 
-		[Test]
-		public void ChecksumSurvivesRoundtripTest()
-		{
-			// Arrange
-			History history1 = new History(HistoryEventType.Create, "Some text here, yes.");
+	[Test]
+	public void DeepCopyTest()
+	{
+		// Arrange
+		History history1 = new History(HistoryEventType.Create, "Some text here, yes.");
 
-			// Act
-			string checksum1 = history1.GetChecksumAsHex();
+		// Act
+		History history2 = new History(history1);
 
-			string json = JsonConvert.SerializeObject(history1, Formatting.Indented);
+		// Assert
+		Assert.AreNotSame(history1.eventType, history2.eventType);
+		Assert.AreEqual(history1.eventType, history2.eventType);
 
-			History? history2 = JsonConvert.DeserializeObject<History>(json);
+		Assert.AreNotSame(history1.descriptionText, history2.descriptionText);
+		CollectionAssert.AreEqual(history1.descriptionText, history2.descriptionText);
 
-			// Assert
-			Assert.IsNotNull(history2);
-			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, history2!.GetChecksumAsHex());
-		}
+		Assert.AreEqual(history1.occurenceTime, history2.occurenceTime);
 
-		[Test]
-		public void CheckIfChecksumMatchesContentTest()
-		{
-			// Arrange
-			History history1 = new History(HistoryEventType.Create, "Some text here, yes.");
+		Assert.AreEqual(history1.checksum, history2.checksum);
+	}
 
-			// Act
-			bool shouldBeTrue = history1.CheckIfChecksumMatchesContent();
-			history1.checksum = history1.checksum.Remove(0, 1);
-			bool shouldBeFalse = history1.CheckIfChecksumMatchesContent();
+	[Test]
+	public void ChecksumSurvivesRoundtripTest()
+	{
+		// Arrange
+		History history1 = new History(HistoryEventType.Create, "Some text here, yes.");
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-		}
+		// Act
+		string checksum1 = history1.GetChecksumAsHex();
+
+		string json = JsonConvert.SerializeObject(history1, Formatting.Indented);
+
+		History? history2 = JsonConvert.DeserializeObject<History>(json);
+
+		// Assert
+		Assert.IsNotNull(history2);
+		Assert.AreEqual(64, checksum1.Length);
+		Assert.AreEqual(checksum1, history2!.GetChecksumAsHex());
+	}
+
+	[Test]
+	public void CheckIfChecksumMatchesContentTest()
+	{
+		// Arrange
+		History history1 = new History(HistoryEventType.Create, "Some text here, yes.");
+
+		// Act
+		bool shouldBeTrue = history1.CheckIfChecksumMatchesContent();
+		history1.checksum = history1.checksum.Remove(0, 1);
+		bool shouldBeFalse = history1.CheckIfChecksumMatchesContent();
+
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
 	}
 }
 

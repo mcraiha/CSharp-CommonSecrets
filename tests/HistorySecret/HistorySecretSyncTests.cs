@@ -6,372 +6,370 @@ using CollectionAssert = NUnit.Framework.Legacy.ClassicAssert;
 using CSCommonSecrets;
 using System;
 using System.Text;
-using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Tests
+namespace Tests;
+
+public class HistorySecretSyncTests
 {
-	public class HistorySecretSyncTests
+	[SetUp]
+	public void Setup()
 	{
-		[SetUp]
-		public void Setup()
+		
+	}
+
+	[Test]
+	public void ConstructorTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+		Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 		{
-			
-		}
+			{ History.descriptionTextKey, "Very boring description"u8.ToArray() }
+		};
 
-		[Test]
-		public void ConstructorTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		HistorySecret historySecret = new HistorySecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Assert
+		Assert.IsNotNull(historySecret);
+		Assert.IsNotNull(historySecret.audalfData);
+	}
 
-			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
-			{
-				{ History.descriptionTextKey, "Very boring description"u8.ToArray() }
-			};
+	[Test]
+	public void DeepCopyTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 1, 82, 93, 102, 112, 120, 103, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0x13, 0xaa, 0xf5, 0x36, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			HistorySecret historySecret = new HistorySecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(historySecret);
-			Assert.IsNotNull(historySecret.audalfData);
-		}
+		string description = "Some text here, yes.";
+		History history1 = new History(HistoryEventType.Create, description);
 
-		[Test]
-		public void DeepCopyTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 1, 82, 93, 102, 112, 120, 103, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0x13, 0xaa, 0xf5, 0x36, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		HistorySecret historySecret = new HistorySecret(history1, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
+		HistorySecret historySecretCopy = new HistorySecret(historySecret);
+		string? descriptionInCopy = historySecretCopy.GetDescription(derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Assert
+		Assert.IsFalse(string.IsNullOrEmpty(descriptionInCopy));
+		Assert.AreEqual(description, descriptionInCopy);
+		Assert.AreNotSame(historySecret.audalfData, historySecretCopy.audalfData, "AUDALF byte arrays should be in different memory locations");
+		CollectionAssert.AreEqual(historySecret.keyIdentifier, historySecretCopy.keyIdentifier);
+		Assert.AreNotSame(historySecret.keyIdentifier, historySecretCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
+		Assert.AreEqual(historySecret.checksum, historySecretCopy.checksum);
+	}
 
-			string description = "Some text here, yes.";
-			History history1 = new History(HistoryEventType.Create, description);
+	[Test]
+	public void GetHistoryTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			HistorySecret historySecret = new HistorySecret(history1, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			HistorySecret historySecretCopy = new HistorySecret(historySecret);
-			string? descriptionInCopy = historySecretCopy.GetDescription(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsFalse(string.IsNullOrEmpty(descriptionInCopy));
-			Assert.AreEqual(description, descriptionInCopy);
-			Assert.AreNotSame(historySecret.audalfData, historySecretCopy.audalfData, "AUDALF byte arrays should be in different memory locations");
-			CollectionAssert.AreEqual(historySecret.keyIdentifier, historySecretCopy.keyIdentifier);
-			Assert.AreNotSame(historySecret.keyIdentifier, historySecretCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
-			Assert.AreEqual(historySecret.checksum, historySecretCopy.checksum);
-		}
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-		[Test]
-		public void GetHistoryTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		History history = new History(historyEventType, description);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		History historyCopy = historySecret.GetHistory(derivedKey);
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+		HistorySecret historySecretInvalid = new HistorySecret(historySecret);
+		historySecretInvalid.audalfData[0] = (byte)(255 - historySecretInvalid.audalfData[0]);
 
-			History history = new History(historyEventType, description);
+		// Assert
+		Assert.AreEqual(history.occurenceTime, historyCopy.occurenceTime);
+		Assert.Throws<ArgumentNullException>(() => historySecret.GetHistory(null!));
+		Assert.Throws<ArgumentException>(() => historySecretInvalid.GetHistory(derivedKey));
+	}
 
-			HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
+	[Test]
+	public void GetWithInvalidKeyTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 90, 10, 11, 12, 13, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0x10, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		
+		byte[] derivedKeyInvalid = Mutator.CreateMutatedByteArray(derivedKey);
 
-			// Act
-			History historyCopy = historySecret.GetHistory(derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			HistorySecret historySecretInvalid = new HistorySecret(historySecret);
-			historySecretInvalid.audalfData[0] = (byte)(255 - historySecretInvalid.audalfData[0]);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.AreEqual(history.occurenceTime, historyCopy.occurenceTime);
-			Assert.Throws<ArgumentNullException>(() => historySecret.GetHistory(null!));
-			Assert.Throws<ArgumentException>(() => historySecretInvalid.GetHistory(derivedKey));
-		}
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-		[Test]
-		public void GetWithInvalidKeyTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 90, 10, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0x10, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
-			
-			byte[] derivedKeyInvalid = Mutator.CreateMutatedByteArray(derivedKey);
+		History history = new History(historyEventType, description);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+		// Assert
+		Assert.Throws<ArgumentNullException>(() => historySecret.GetDescription(null!));
+		Assert.Throws<ArgumentException>(() => historySecret.GetDescription(derivedKeyInvalid));
+	}
 
-			History history = new History(historyEventType, description);
+	[Test]
+	public void GetHistoryEventTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.Throws<ArgumentNullException>(() => historySecret.GetDescription(null!));
-			Assert.Throws<ArgumentException>(() => historySecret.GetDescription(derivedKeyInvalid));
-		}
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-		[Test]
-		public void GetHistoryEventTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		History history = new History(historyEventType, description);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		HistoryEventType? rtHistoryEventType = historySecret.GetEventType(derivedKey);
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+		// Assert
+		Assert.IsNotNull(rtHistoryEventType);
+		Assert.AreEqual(historyEventType, rtHistoryEventType);
+	}
 
-			History history = new History(historyEventType, description);
+	[Test]
+	public void GetDescriptionTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			HistoryEventType? rtHistoryEventType = historySecret.GetEventType(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(rtHistoryEventType);
-			Assert.AreEqual(historyEventType, rtHistoryEventType);
-		}
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-		[Test]
-		public void GetDescriptionTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		History history = new History(historyEventType, description);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		string? rtDescription = historySecret.GetDescription(derivedKey);
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+		// Assert
+		Assert.IsNotNull(rtDescription);
+		Assert.AreEqual(description, rtDescription);
+	}
 
-			History history = new History(historyEventType, description);
+	[Test]
+	public void GetOccurenceTimeTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			string? rtDescription = historySecret.GetDescription(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(rtDescription);
-			Assert.AreEqual(description, rtDescription);
-		}
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-		[Test]
-		public void GetOccurenceTimeTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		History history = new History(historyEventType, description);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		DateTimeOffset? historyOccurenceTime = historySecret.GetOccurenceTime(derivedKey);
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+		// Assert
+		Assert.IsNotNull(historyOccurenceTime);
+		Assert.AreEqual(history.GetOccurenceTime(), historyOccurenceTime);
+	}
 
-			History history = new History(historyEventType, description);
+	[Test]
+	public void GetKeyIdentifierTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 25, 138, 78, 83, 111, 110, 221, 18, 213, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0x13, 0xb5, 0x58, 0x59, 0x13, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
 
-			HistorySecret historySecret = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			DateTimeOffset? historyOccurenceTime = historySecret.GetOccurenceTime(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(historyOccurenceTime);
-			Assert.AreEqual(history.GetOccurenceTime(), historyOccurenceTime);
-		}
+		string keyIdentifier = "primary";
 
-		[Test]
-		public void GetKeyIdentifierTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 25, 138, 78, 83, 111, 110, 221, 18, 213, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0x13, 0xb5, 0x58, 0x59, 0x13, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		History history = new History(historyEventType, description);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+		// Act
+		HistorySecret historySecret = new HistorySecret(history, keyIdentifier, skaAES_CTR, derivedKey);
 
-			string keyIdentifier = "primary";
+		// Assert
+		Assert.AreEqual(keyIdentifier, historySecret.GetKeyIdentifier());
+	}
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+	[Test]
+	public void CanBeDecryptedWithDerivedPasswordTest()
+	{
+		byte[] derivedKey1 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 16 };
+		byte[] derivedKey2 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 15 };
+		byte[] initialCounter = new byte[] { 0xa7, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x51, 0x95, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
 
-			History history = new History(historyEventType, description);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			HistorySecret historySecret = new HistorySecret(history, keyIdentifier, skaAES_CTR, derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
 
-			// Assert
-			Assert.AreEqual(keyIdentifier, historySecret.GetKeyIdentifier());
-		}
+		string keyIdentifier = "primary";
 
-		[Test]
-		public void CanBeDecryptedWithDerivedPasswordTest()
-		{
-			byte[] derivedKey1 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 16 };
-			byte[] derivedKey2 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 15 };
-			byte[] initialCounter = new byte[] { 0xa7, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x51, 0x95, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		History history = new History(historyEventType, description);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+		// Act
+		HistorySecret historySecret = new HistorySecret(history, keyIdentifier, skaAES_CTR, derivedKey1);
 
-			string keyIdentifier = "primary";
+		// Assert
+		Assert.IsTrue(historySecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
+		Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(null!));
+		Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(new byte[] {}));
+		Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(derivedKey2));
+	}
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+	[Test]
+	public void SetEventTypeTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
 
-			History history = new History(historyEventType, description);
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
 
-			// Act
-			HistorySecret historySecret = new HistorySecret(history, keyIdentifier, skaAES_CTR, derivedKey1);
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-			// Assert
-			Assert.IsTrue(historySecret.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(null!));
-			Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(new byte[] {}));
-			Assert.IsFalse(historySecret.CanBeDecryptedWithDerivedPassword(derivedKey2));
-		}
+		History history = new History(historyEventType, description);
 
-		[Test]
-		public void SetEventTypeTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
+		HistorySecret historySecret = new HistorySecret(history, "does not matter", ska, derivedKey);
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+		// Act
+		bool shouldBeTrue = historySecret.SetEventType(historyEventType, derivedKey);
+		HistoryEventType? historyEventType2 = historySecret.GetEventType(derivedKey);
+		bool shouldBeFalse = historySecret.SetEventType(historyEventType,  new byte[] { 1, 2, 3 });
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
+		Assert.IsNotNull(historyEventType2);
+		Assert.AreEqual(historyEventType, historyEventType2);
+	}
 
-			History history = new History(historyEventType, description);
+	[Test]
+	public void SetDescriptionTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
 
-			HistorySecret historySecret = new HistorySecret(history, "does not matter", ska, derivedKey);
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
 
-			// Act
-			bool shouldBeTrue = historySecret.SetEventType(historyEventType, derivedKey);
-			HistoryEventType? historyEventType2 = historySecret.GetEventType(derivedKey);
-			bool shouldBeFalse = historySecret.SetEventType(historyEventType,  new byte[] { 1, 2, 3 });
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-			Assert.IsNotNull(historyEventType2);
-			Assert.AreEqual(historyEventType, historyEventType2);
-		}
+		History history = new History(historyEventType, description);
 
-		[Test]
-		public void SetDescriptionTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
+		HistorySecret historySecret = new HistorySecret(history, "does not matter", ska, derivedKey);
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+		// Act
+		bool shouldBeTrue = historySecret.SetDescription(description, derivedKey);
+		string? description2 = historySecret.GetDescription(derivedKey);
+		bool shouldBeFalse = historySecret.SetDescription(description,  new byte[] { 1, 2, 3 });
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
+		Assert.IsNotNull(description2);
+		CollectionAssert.AreEqual(description, description2);
+	}
 
-			History history = new History(historyEventType, description);
+	[Test]
+	public void ChecksumSurvivesRoundtripTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			HistorySecret historySecret = new HistorySecret(history, "does not matter", ska, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			bool shouldBeTrue = historySecret.SetDescription(description, derivedKey);
-			string? description2 = historySecret.GetDescription(derivedKey);
-			bool shouldBeFalse = historySecret.SetDescription(description,  new byte[] { 1, 2, 3 });
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-			Assert.IsNotNull(description2);
-			CollectionAssert.AreEqual(description, description2);
-		}
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-		[Test]
-		public void ChecksumSurvivesRoundtripTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		History history = new History(historyEventType, description);
+		HistorySecret fes1 = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
+		string checksum1 = fes1.GetChecksumAsHex();
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		string json = JsonConvert.SerializeObject(fes1, Formatting.Indented);
 
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
+		HistorySecret? fes2 = JsonConvert.DeserializeObject<HistorySecret>(json);
 
-			History history = new History(historyEventType, description);
-			HistorySecret fes1 = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
+		// Assert
+		Assert.AreEqual(64, checksum1.Length);
+		Assert.IsNotNull(fes2);
+		Assert.AreEqual(checksum1, fes2!.GetChecksumAsHex());
+	}
 
-			// Act
-			string checksum1 = fes1.GetChecksumAsHex();
+	[Test]
+	public void CheckIfChecksumMatchesContentTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 56, 2, 3, 4, 55, 76, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0x00, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			string json = JsonConvert.SerializeObject(fes1, Formatting.Indented);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			HistorySecret? fes2 = JsonConvert.DeserializeObject<HistorySecret>(json);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.AreEqual(64, checksum1.Length);
-			Assert.IsNotNull(fes2);
-			Assert.AreEqual(checksum1, fes2!.GetChecksumAsHex());
-		}
+		HistoryEventType historyEventType = HistoryEventType.Update;
+		string description = "Some text here, yes.";
 
-		[Test]
-		public void CheckIfChecksumMatchesContentTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 56, 2, 3, 4, 55, 76, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0x00, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		History history = new History(historyEventType, description);
+		HistorySecret fes1 = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
+		bool shouldBeTrue = fes1.CheckIfChecksumMatchesContent();
+		fes1.checksum = fes1.checksum.Remove(0, 1);
+		bool shouldBeFalse = fes1.CheckIfChecksumMatchesContent();
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
-
-			HistoryEventType historyEventType = HistoryEventType.Update;
-			string description = "Some text here, yes.";
-
-			History history = new History(historyEventType, description);
-			HistorySecret fes1 = new HistorySecret(history, "does not matter", skaAES_CTR, derivedKey);
-
-			// Act
-			bool shouldBeTrue = fes1.CheckIfChecksumMatchesContent();
-			fes1.checksum = fes1.checksum.Remove(0, 1);
-			bool shouldBeFalse = fes1.CheckIfChecksumMatchesContent();
-
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-		}
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
 	}
 }
 

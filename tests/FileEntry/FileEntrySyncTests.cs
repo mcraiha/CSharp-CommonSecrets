@@ -8,163 +8,162 @@ using System;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Tests
+namespace Tests;
+
+public class FileEntrySyncTests
 {
-	public class FileEntrySyncTests
+	[SetUp]
+	public void Setup()
 	{
-		[SetUp]
-		public void Setup()
-		{
-			
-		}
-
-		[Test]
-		public void ConstructorTest()
-		{
-			// Arrange
-			FileEntry fe1 = new FileEntry();
-			FileEntry fe2 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
-
-			// Act
-
-			// Assert
-			Assert.IsNotNull(fe1);
-			Assert.IsNotNull(fe2);
-		}
-
-		[Test]
-		public void GetValuesTest()
-		{
-			// Arrange
-			string filename = "notnice.doc";
-			byte[] contentForFile = Encoding.UTF8.GetBytes("👺 is evil!");
-			FileEntry fe = new FileEntry(filename, contentForFile);
-
-			// Act
-
-			// Assert
-			Assert.AreEqual(filename, fe.GetFilename());
-			Assert.AreEqual(contentForFile.LongLength, fe.GetFileContentLengthInBytes());
-			CollectionAssert.AreEqual(contentForFile, fe.fileContent);
-		}
-
-		[Test]
-		public void ModificationUpdateTimestampTest()
-		{
-			// Arrange
-			FileEntry fe = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
-
-			// Act
-			var modificationTime1 = fe.GetModificationTime();
-			System.Threading.Thread.Sleep(1100);
-			fe.UpdateFileEntry(fe.GetFilename(), new byte[] { });
-			var modificationTime2 = fe.GetModificationTime();
-
-			// Assert
-			Assert.AreNotEqual(modificationTime1, modificationTime2);
-		}
 		
-		[Test]
-		public void ChecksumChangesTest()
-		{
-			// Arrange
-			DateTimeOffset dto = DateTimeOffset.UtcNow;
-			FileEntry fe1 = new FileEntry();
-			FileEntry fe2 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto);
-			FileEntry fe3 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto);
+	}
 
-			// Act
-			string checksum1 = fe1.GetChecksumAsHex();
-			string checksum2 = fe2.GetChecksumAsHex();
-			string checksum3 = fe3.GetChecksumAsHex();
+	[Test]
+	public void ConstructorTest()
+	{
+		// Arrange
+		FileEntry fe1 = new FileEntry();
+		FileEntry fe2 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
 
-			byte[] newContent = new byte[fe3.fileContent.Length];
-			Array.Copy(fe3.fileContent, newContent, fe3.fileContent.Length);
-			newContent[0] = 127;
-			fe3.UpdateFileEntry(fe3.GetFilename(), newContent);
-			string checksum4 = fe3.GetChecksumAsHex();
+		// Act
 
-			// Assert
-			Assert.AreNotEqual(checksum1, checksum2);
-			Assert.AreEqual(checksum3, checksum2);
-			Assert.AreNotEqual(checksum3, checksum4);
-		}
+		// Assert
+		Assert.IsNotNull(fe1);
+		Assert.IsNotNull(fe2);
+	}
 
-		[Test]
-		public void ShallowCopyTest()
-		{
-			// Arrange
-			FileEntry fe1 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
+	[Test]
+	public void GetValuesTest()
+	{
+		// Arrange
+		string filename = "notnice.doc";
+		byte[] contentForFile = Encoding.UTF8.GetBytes("👺 is evil!");
+		FileEntry fe = new FileEntry(filename, contentForFile);
 
-			// Act
-			FileEntry fe2 = fe1.ShallowCopy();
+		// Act
 
-			string checksum1 = fe1.GetChecksumAsHex();
-			string checksum2 = fe2.GetChecksumAsHex();
+		// Assert
+		Assert.AreEqual(filename, fe.GetFilename());
+		Assert.AreEqual(contentForFile.LongLength, fe.GetFileContentLengthInBytes());
+		CollectionAssert.AreEqual(contentForFile, fe.fileContent);
+	}
 
-			// Assert
-			Assert.IsNotNull(fe2);
-			Assert.AreEqual(checksum1, checksum2);
-		}
+	[Test]
+	public void ModificationUpdateTimestampTest()
+	{
+		// Arrange
+		FileEntry fe = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
 
-		[Test]
-		public void DeepCopyTest()
-		{
-			// Arrange
-			string filename = "sometext.txt";
-			string fileContent = "Some text here, yes. And even more";
-			FileEntry fe1 = new FileEntry(filename, Encoding.UTF8.GetBytes(fileContent));
+		// Act
+		var modificationTime1 = fe.GetModificationTime();
+		System.Threading.Thread.Sleep(1100);
+		fe.UpdateFileEntry(fe.GetFilename(), new byte[] { });
+		var modificationTime2 = fe.GetModificationTime();
 
-			// Act
-			FileEntry fe2 = new FileEntry(fe1);
+		// Assert
+		Assert.AreNotEqual(modificationTime1, modificationTime2);
+	}
+	
+	[Test]
+	public void ChecksumChangesTest()
+	{
+		// Arrange
+		DateTimeOffset dto = DateTimeOffset.UtcNow;
+		FileEntry fe1 = new FileEntry();
+		FileEntry fe2 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto);
+		FileEntry fe3 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."), dto);
 
-			// Assert
-			Assert.AreNotSame(fe1.filename, fe2.filename);
-			CollectionAssert.AreEqual(fe1.filename, fe2.filename);
+		// Act
+		string checksum1 = fe1.GetChecksumAsHex();
+		string checksum2 = fe2.GetChecksumAsHex();
+		string checksum3 = fe3.GetChecksumAsHex();
 
-			Assert.AreNotSame(fe1.fileContent, fe2.fileContent);
-			CollectionAssert.AreEqual(fe1.fileContent, fe2.fileContent);
+		byte[] newContent = new byte[fe3.fileContent.Length];
+		Array.Copy(fe3.fileContent, newContent, fe3.fileContent.Length);
+		newContent[0] = 127;
+		fe3.UpdateFileEntry(fe3.GetFilename(), newContent);
+		string checksum4 = fe3.GetChecksumAsHex();
 
-			Assert.AreEqual(fe1.modificationTime, fe2.modificationTime);
-			Assert.AreEqual(fe1.creationTime, fe2.creationTime);
+		// Assert
+		Assert.AreNotEqual(checksum1, checksum2);
+		Assert.AreEqual(checksum3, checksum2);
+		Assert.AreNotEqual(checksum3, checksum4);
+	}
 
-			Assert.AreEqual(fe1.checksum, fe2.checksum);
-		}
+	[Test]
+	public void ShallowCopyTest()
+	{
+		// Arrange
+		FileEntry fe1 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
 
-		[Test]
-		public void ChecksumSurvivesRoundtripTest()
-		{
-			// Arrange
-			FileEntry fe1 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
+		// Act
+		FileEntry fe2 = fe1.ShallowCopy();
 
-			// Act
-			string checksum1 = fe1.GetChecksumAsHex();
+		string checksum1 = fe1.GetChecksumAsHex();
+		string checksum2 = fe2.GetChecksumAsHex();
 
-			string json = JsonConvert.SerializeObject(fe1, Formatting.Indented);
+		// Assert
+		Assert.IsNotNull(fe2);
+		Assert.AreEqual(checksum1, checksum2);
+	}
 
-			FileEntry? fe2 = JsonConvert.DeserializeObject<FileEntry>(json);
+	[Test]
+	public void DeepCopyTest()
+	{
+		// Arrange
+		string filename = "sometext.txt";
+		string fileContent = "Some text here, yes. And even more";
+		FileEntry fe1 = new FileEntry(filename, Encoding.UTF8.GetBytes(fileContent));
 
-			// Assert
-			Assert.IsNotNull(fe2);
-			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, fe2!.GetChecksumAsHex());
-		}
+		// Act
+		FileEntry fe2 = new FileEntry(fe1);
 
-		[Test]
-		public void CheckIfChecksumMatchesContentTest()
-		{
-			// Arrange
-			FileEntry fe1 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
+		// Assert
+		Assert.AreNotSame(fe1.filename, fe2.filename);
+		CollectionAssert.AreEqual(fe1.filename, fe2.filename);
 
-			// Act
-			bool shouldBeTrue = fe1.CheckIfChecksumMatchesContent();
-			fe1.checksum = fe1.checksum.Remove(0, 1);
-			bool shouldBeFalse = fe1.CheckIfChecksumMatchesContent();
+		Assert.AreNotSame(fe1.fileContent, fe2.fileContent);
+		CollectionAssert.AreEqual(fe1.fileContent, fe2.fileContent);
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-		}
+		Assert.AreEqual(fe1.modificationTime, fe2.modificationTime);
+		Assert.AreEqual(fe1.creationTime, fe2.creationTime);
+
+		Assert.AreEqual(fe1.checksum, fe2.checksum);
+	}
+
+	[Test]
+	public void ChecksumSurvivesRoundtripTest()
+	{
+		// Arrange
+		FileEntry fe1 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
+
+		// Act
+		string checksum1 = fe1.GetChecksumAsHex();
+
+		string json = JsonConvert.SerializeObject(fe1, Formatting.Indented);
+
+		FileEntry? fe2 = JsonConvert.DeserializeObject<FileEntry>(json);
+
+		// Assert
+		Assert.IsNotNull(fe2);
+		Assert.AreEqual(64, checksum1.Length);
+		Assert.AreEqual(checksum1, fe2!.GetChecksumAsHex());
+	}
+
+	[Test]
+	public void CheckIfChecksumMatchesContentTest()
+	{
+		// Arrange
+		FileEntry fe1 = new FileEntry("sometext.txt", Encoding.UTF8.GetBytes("Some text here, yes."));
+
+		// Act
+		bool shouldBeTrue = fe1.CheckIfChecksumMatchesContent();
+		fe1.checksum = fe1.checksum.Remove(0, 1);
+		bool shouldBeFalse = fe1.CheckIfChecksumMatchesContent();
+
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
 	}
 }
 

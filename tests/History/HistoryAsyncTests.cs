@@ -10,155 +10,154 @@ using Newtonsoft.Json;
 
 using System.Threading.Tasks;
 
-namespace Tests
+namespace Tests;
+
+public class HistoryAsyncTests
 {
-	public class HistoryAsyncTests
+	[SetUp]
+	public void Setup()
 	{
-		[SetUp]
-		public void Setup()
-		{
-			
-		}
-
-		[Test]
-		public async Task ConstructorAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
-
-			History history1 = new History() { eventType= "" }; // Do NOT use this code in your own projects!!!
-			History history2 = await History.CreateHistoryAsync(HistoryEventType.Delete, "No meaning", securityAsyncFunctions);
-
-			// Act
-
-			// Assert
-			Assert.IsNotNull(history1);
-			Assert.IsNotNull(history2);
-		}
-
-		[Test]
-		public async Task GetValuesAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
-
-			HistoryEventType historyEventType = HistoryEventType.Read;
-			string description = "Dragon copied the password";
-			History history = await History.CreateHistoryAsync(historyEventType, description, securityAsyncFunctions);
-
-			// Act
-
-			// Assert
-			Assert.AreEqual(historyEventType, history.GetEventType());
-			Assert.AreEqual(description, history.GetDescription());
-		}
-
 		
-		[Test]
-		public async Task ChecksumChangesAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+	}
 
-			DateTimeOffset dto = DateTimeOffset.UtcNow;
-			History history1 = new History() { eventType= "" }; // Do NOT use this code in your own projects!!!
-			History history2 = await History.CreateHistoryAsync(HistoryEventType.Update, "Some text here, yes.", dto, securityAsyncFunctions);
-			History history3 = await History.CreateHistoryAsync(HistoryEventType.Update, "Some text here, yes.", dto, securityAsyncFunctions);
+	[Test]
+	public async Task ConstructorAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			// Act
-			string checksum1 = history1.GetChecksumAsHex();
-			string checksum2 = history2.GetChecksumAsHex();
-			string checksum3 = history3.GetChecksumAsHex();
+		History history1 = new History() { eventType= "" }; // Do NOT use this code in your own projects!!!
+		History history2 = await History.CreateHistoryAsync(HistoryEventType.Delete, "No meaning", securityAsyncFunctions);
 
-			await history3.UpdateHistoryAsync(HistoryEventType.Update, "Some text here, yes." + "a", dto, securityAsyncFunctions);
-			string checksum4 = history3.GetChecksumAsHex();
+		// Act
 
-			// Assert
-			Assert.AreNotEqual(checksum1, checksum2);
-			Assert.AreEqual(checksum3, checksum2);
-			Assert.AreNotEqual(checksum3, checksum4);
-		}
+		// Assert
+		Assert.IsNotNull(history1);
+		Assert.IsNotNull(history2);
+	}
 
-		[Test]
-		public async Task ShallowCopyAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+	[Test]
+	public async Task GetValuesAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			History history1 = await History.CreateHistoryAsync(HistoryEventType.Create, "Some text here, yes.", securityAsyncFunctions);
+		HistoryEventType historyEventType = HistoryEventType.Read;
+		string description = "Dragon copied the password";
+		History history = await History.CreateHistoryAsync(historyEventType, description, securityAsyncFunctions);
 
-			// Act
-			History history2 = history1.ShallowCopy();
+		// Act
 
-			string checksum1 = history1.GetChecksumAsHex();
-			string checksum2 = history2.GetChecksumAsHex();
+		// Assert
+		Assert.AreEqual(historyEventType, history.GetEventType());
+		Assert.AreEqual(description, history.GetDescription());
+	}
 
-			// Assert
-			Assert.IsNotNull(history2);
-			Assert.AreEqual(checksum1, checksum2);
-		}
+	
+	[Test]
+	public async Task ChecksumChangesAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-		[Test]
-		public async Task DeepCopyAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+		DateTimeOffset dto = DateTimeOffset.UtcNow;
+		History history1 = new History() { eventType= "" }; // Do NOT use this code in your own projects!!!
+		History history2 = await History.CreateHistoryAsync(HistoryEventType.Update, "Some text here, yes.", dto, securityAsyncFunctions);
+		History history3 = await History.CreateHistoryAsync(HistoryEventType.Update, "Some text here, yes.", dto, securityAsyncFunctions);
 
-			History history1 = await History.CreateHistoryAsync(HistoryEventType.Create, "Some text here, yes.", securityAsyncFunctions);
+		// Act
+		string checksum1 = history1.GetChecksumAsHex();
+		string checksum2 = history2.GetChecksumAsHex();
+		string checksum3 = history3.GetChecksumAsHex();
 
-			// Act
-			History history2 = new History(history1);
+		await history3.UpdateHistoryAsync(HistoryEventType.Update, "Some text here, yes." + "a", dto, securityAsyncFunctions);
+		string checksum4 = history3.GetChecksumAsHex();
 
-			// Assert
-			Assert.AreNotSame(history1.eventType, history2.eventType);
-			Assert.AreEqual(history1.eventType, history2.eventType);
+		// Assert
+		Assert.AreNotEqual(checksum1, checksum2);
+		Assert.AreEqual(checksum3, checksum2);
+		Assert.AreNotEqual(checksum3, checksum4);
+	}
 
-			Assert.AreNotSame(history1.descriptionText, history2.descriptionText);
-			CollectionAssert.AreEqual(history1.descriptionText, history2.descriptionText);
+	[Test]
+	public async Task ShallowCopyAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			Assert.AreEqual(history1.occurenceTime, history2.occurenceTime);
+		History history1 = await History.CreateHistoryAsync(HistoryEventType.Create, "Some text here, yes.", securityAsyncFunctions);
 
-			Assert.AreEqual(history1.checksum, history2.checksum);
-		}
+		// Act
+		History history2 = history1.ShallowCopy();
 
-		[Test]
-		public async Task ChecksumSurvivesRoundtripAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+		string checksum1 = history1.GetChecksumAsHex();
+		string checksum2 = history2.GetChecksumAsHex();
 
-			History history1 = await History.CreateHistoryAsync(HistoryEventType.Create, "Some text here, yes.", securityAsyncFunctions);
+		// Assert
+		Assert.IsNotNull(history2);
+		Assert.AreEqual(checksum1, checksum2);
+	}
 
-			// Act
-			string checksum1 = history1.GetChecksumAsHex();
+	[Test]
+	public async Task DeepCopyAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
 
-			string json = JsonConvert.SerializeObject(history1, Formatting.Indented);
+		History history1 = await History.CreateHistoryAsync(HistoryEventType.Create, "Some text here, yes.", securityAsyncFunctions);
 
-			History? history2 = JsonConvert.DeserializeObject<History>(json);
+		// Act
+		History history2 = new History(history1);
 
-			// Assert
-			Assert.AreEqual(64, checksum1.Length);
-			Assert.IsNotNull(history2);
-			Assert.AreEqual(checksum1, history2!.GetChecksumAsHex());
-		}
+		// Assert
+		Assert.AreNotSame(history1.eventType, history2.eventType);
+		Assert.AreEqual(history1.eventType, history2.eventType);
 
-		[Test]
-		public async Task CheckIfChecksumMatchesContentAsyncTest()
-		{
-			// Arrange
-			ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+		Assert.AreNotSame(history1.descriptionText, history2.descriptionText);
+		CollectionAssert.AreEqual(history1.descriptionText, history2.descriptionText);
 
-			History history1 = await History.CreateHistoryAsync(HistoryEventType.Create, "Some text here, yes.", securityAsyncFunctions);
+		Assert.AreEqual(history1.occurenceTime, history2.occurenceTime);
 
-			// Act
-			bool shouldBeTrue = await history1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
-			history1.checksum = history1.checksum.Remove(0, 1);
-			bool shouldBeFalse = await history1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+		Assert.AreEqual(history1.checksum, history2.checksum);
+	}
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-		}
+	[Test]
+	public async Task ChecksumSurvivesRoundtripAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+		History history1 = await History.CreateHistoryAsync(HistoryEventType.Create, "Some text here, yes.", securityAsyncFunctions);
+
+		// Act
+		string checksum1 = history1.GetChecksumAsHex();
+
+		string json = JsonConvert.SerializeObject(history1, Formatting.Indented);
+
+		History? history2 = JsonConvert.DeserializeObject<History>(json);
+
+		// Assert
+		Assert.AreEqual(64, checksum1.Length);
+		Assert.IsNotNull(history2);
+		Assert.AreEqual(checksum1, history2!.GetChecksumAsHex());
+	}
+
+	[Test]
+	public async Task CheckIfChecksumMatchesContentAsyncTest()
+	{
+		// Arrange
+		ISecurityAsyncFunctions securityAsyncFunctions = new SecurityAsyncFunctions();
+
+		History history1 = await History.CreateHistoryAsync(HistoryEventType.Create, "Some text here, yes.", securityAsyncFunctions);
+
+		// Act
+		bool shouldBeTrue = await history1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+		history1.checksum = history1.checksum.Remove(0, 1);
+		bool shouldBeFalse = await history1.CheckIfChecksumMatchesContentAsync(securityAsyncFunctions);
+
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
 	}
 }
 

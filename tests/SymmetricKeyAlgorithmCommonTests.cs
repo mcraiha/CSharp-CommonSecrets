@@ -1,30 +1,29 @@
 using NUnit.Framework;
 using CSCommonSecrets;
 
-namespace Tests
+namespace Tests;
+
+public class SymmetricKeyAlgorithmCommonTests
 {
-	public class SymmetricKeyAlgorithmCommonTests
+	[SetUp]
+	public void Setup()
 	{
-		[SetUp]
-		public void Setup()
-		{
-			
-		}
 		
-		[Test]
-		public void InvalidValuesTest()
+	}
+	
+	[Test]
+	public void InvalidValuesTest()
+	{
+		// Arrange
+		string invalidValue = "invalid";
+		SymmetricKeyAlgorithm symmetricKeyAlgorithm = new SymmetricKeyAlgorithm()
 		{
-			// Arrange
-			string invalidValue = "invalid";
-			SymmetricKeyAlgorithm symmetricKeyAlgorithm = new SymmetricKeyAlgorithm()
-			{
-				algorithm = invalidValue
-			};
+			algorithm = invalidValue
+		};
 
-			// Act
+		// Act
 
-			// Assert
-			Assert.Throws<System.Exception>(() => symmetricKeyAlgorithm.GetSymmetricEncryptionAlgorithm());
-		}
+		// Assert
+		Assert.Throws<System.Exception>(() => symmetricKeyAlgorithm.GetSymmetricEncryptionAlgorithm());
 	}
 }

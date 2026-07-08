@@ -10,431 +10,430 @@ using System.Threading;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Tests
+namespace Tests;
+
+public class FileEntrySecretSyncTests
 {
-	public class FileEntrySecretSyncTests
+	[SetUp]
+	public void Setup()
 	{
-		[SetUp]
-		public void Setup()
+		
+	}
+
+	[Test]
+	public void ConstructorTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+
+		Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
 		{
-			
-		}
+			{ FileEntry.filenameKey, "filename.txt"}
+		};
 
-		[Test]
-		public void ConstructorTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntrySecret fes = new FileEntrySecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Assert
+		Assert.IsNotNull(fes);
+		Assert.IsNotNull(fes.audalfData);
+	}
 
-			Dictionary<string, object?> testDictionary = new Dictionary<string, object?>()
-			{
-				{ FileEntry.filenameKey, "filename.txt"}
-			};
+	[Test]
+	public void DeepCopyTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 1, 82, 93, 102, 112, 120, 103, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0x13, 0xaa, 0xf5, 0x36, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			FileEntrySecret fes = new FileEntrySecret(testDictionary, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(fes);
-			Assert.IsNotNull(fes.audalfData);
-		}
+		string filename = "nic2e.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0, 23, 34, 33, 22, 222, 111 };
 
-		[Test]
-		public void DeepCopyTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 1, 82, 93, 102, 112, 120, 103, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xfb, 0x13, 0xaa, 0xf5, 0x36, 0xbb, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		FileEntrySecret fesCopy = new FileEntrySecret(fes);
+		string? filenameInCopy = fesCopy.GetFilename(derivedKey);
 
-			string filename = "nic2e.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0, 23, 34, 33, 22, 222, 111 };
+		// Assert
+		Assert.IsFalse(string.IsNullOrEmpty(filenameInCopy));
+		Assert.AreEqual(filename, filenameInCopy);
+		Assert.AreNotSame(fes.audalfData, fesCopy.audalfData, "AUDALF byte arrays should be in different memory locations");
+		CollectionAssert.AreEqual(fes.keyIdentifier, fesCopy.keyIdentifier);
+		Assert.AreNotSame(fes.keyIdentifier, fesCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
+		Assert.AreEqual(fes.checksum, fesCopy.checksum);
+	}
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+	[Test]
+	public void GetFileEntryTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			FileEntrySecret fesCopy = new FileEntrySecret(fes);
-			string? filenameInCopy = fesCopy.GetFilename(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsFalse(string.IsNullOrEmpty(filenameInCopy));
-			Assert.AreEqual(filename, filenameInCopy);
-			Assert.AreNotSame(fes.audalfData, fesCopy.audalfData, "AUDALF byte arrays should be in different memory locations");
-			CollectionAssert.AreEqual(fes.keyIdentifier, fesCopy.keyIdentifier);
-			Assert.AreNotSame(fes.keyIdentifier, fesCopy.keyIdentifier, "Key identifier byte arrays should be in different memory locations");
-			Assert.AreEqual(fes.checksum, fesCopy.checksum);
-		}
+		string filename = "ni12ce.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 32, 11, 2, byte.MaxValue, 0, 0, 2, 34, 45, 0, 0, 0, 0};
 
-		[Test]
-		public void GetFileEntryTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		FileEntry feCopy = fes.GetFileEntry(derivedKey);
 
-			string filename = "ni12ce.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 32, 11, 2, byte.MaxValue, 0, 0, 2, 34, 45, 0, 0, 0, 0};
+		FileEntrySecret fesInvalid = new FileEntrySecret(fes);
+		fesInvalid.audalfData[0] = (byte)(255 - fesInvalid.audalfData[0]);
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+		// Assert
+		Assert.IsTrue(ComparisonHelper.AreFileEntriesEqual(fe, feCopy));
+		Assert.AreEqual(fe.creationTime, feCopy.creationTime);
+		Assert.AreEqual(fe.modificationTime, feCopy.modificationTime);
+		Assert.Throws<ArgumentNullException>(() => fes.GetFileEntry(null!));
+		Assert.Throws<ArgumentException>(() => fesInvalid.GetFileEntry(derivedKey));
+	}
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+	[Test]
+	public void GetWithInvalidKeyTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 90, 10, 11, 12, 13, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0x10, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		
+		byte[] derivedKeyInvalid = Mutator.CreateMutatedByteArray(derivedKey);
 
-			// Act
-			FileEntry feCopy = fes.GetFileEntry(derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			FileEntrySecret fesInvalid = new FileEntrySecret(fes);
-			fesInvalid.audalfData[0] = (byte)(255 - fesInvalid.audalfData[0]);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsTrue(ComparisonHelper.AreFileEntriesEqual(fe, feCopy));
-			Assert.AreEqual(fe.creationTime, feCopy.creationTime);
-			Assert.AreEqual(fe.modificationTime, feCopy.modificationTime);
-			Assert.Throws<ArgumentNullException>(() => fes.GetFileEntry(null!));
-			Assert.Throws<ArgumentException>(() => fesInvalid.GetFileEntry(derivedKey));
-		}
+		string filename = "nice.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-		[Test]
-		public void GetWithInvalidKeyTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 90, 10, 11, 12, 13, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0x10, 0xf1, 0xfb, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
-			
-			byte[] derivedKeyInvalid = Mutator.CreateMutatedByteArray(derivedKey);
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
 
-			string filename = "nice.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+		// Assert
+		Assert.Throws<ArgumentNullException>(() => fes.GetFilename(null!));
+		Assert.Throws<ArgumentException>(() => fes.GetFilename(derivedKeyInvalid));
+	}
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+	[Test]
+	public void GetFilenameTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.Throws<ArgumentNullException>(() => fes.GetFilename(null!));
-			Assert.Throws<ArgumentException>(() => fes.GetFilename(derivedKeyInvalid));
-		}
+		string filename = "nice.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-		[Test]
-		public void GetFilenameTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		string? rtFilename = fes.GetFilename(derivedKey);
 
-			string filename = "nice.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+		// Assert
+		Assert.IsNotNull(rtFilename);
+		Assert.AreEqual(filename, rtFilename);
+	}
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+	[Test]
+	public void GetFileContentTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			string? rtFilename = fes.GetFilename(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(rtFilename);
-			Assert.AreEqual(filename, rtFilename);
-		}
+		string filename = "nice.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-		[Test]
-		public void GetFileContentTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		byte[]? rtFileContent = fes.GetFileContent(derivedKey);
 
-			string filename = "nice.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+		// Assert
+		Assert.IsNotNull(rtFileContent);
+		CollectionAssert.AreEqual(fileContent, rtFileContent);
+	}
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+	[Test]
+	public void GetFileContentLengthInBytes()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0x40, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0x38, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			byte[]? rtFileContent = fes.GetFileContent(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(rtFileContent);
-			CollectionAssert.AreEqual(fileContent, rtFileContent);
-		}
+		string filename = "nice232fwf.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0, 4, 5, 6, 7, 8, 9, 33, 44, 55, 66, 77};
 
-		[Test]
-		public void GetFileContentLengthInBytes()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0x40, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0x38, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		long fileContentLength = fes.GetFileContentLengthInBytes(derivedKey);
 
-			string filename = "nice232fwf.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0, 4, 5, 6, 7, 8, 9, 33, 44, 55, 66, 77};
+		// Assert
+		Assert.AreEqual(fileContent.LongLength, fileContentLength);
+	}
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+	[Test]
+	public void GetCreationTimeTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			long fileContentLength = fes.GetFileContentLengthInBytes(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.AreEqual(fileContent.LongLength, fileContentLength);
-		}
+		string filename = "nice.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-		[Test]
-		public void GetCreationTimeTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		DateTimeOffset? fileEntryCreationTime = fes.GetCreationTime(derivedKey);
 
-			string filename = "nice.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+		// Assert
+		Assert.IsNotNull(fileEntryCreationTime);
+		Assert.AreEqual(fe.GetCreationTime(), fileEntryCreationTime);
+	}
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+	[Test]
+	public void GetModificationTimeTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			DateTimeOffset? fileEntryCreationTime = fes.GetCreationTime(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(fileEntryCreationTime);
-			Assert.AreEqual(fe.GetCreationTime(), fileEntryCreationTime);
-		}
+		string filename = "nice.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-		[Test]
-		public void GetModificationTimeTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		// Act
+		DateTimeOffset? fileEntryModificationTime1 = fes.GetModificationTime(derivedKey);
+		Thread.Sleep(1100);
+		fes.SetFilename("much_nicer.pdf", derivedKey);
+		DateTimeOffset? fileEntryModificationTime2 = fes.GetModificationTime(derivedKey);
 
-			string filename = "nice.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+		// Assert
+		Assert.IsNotNull(fileEntryModificationTime1);
+		Assert.IsNotNull(fileEntryModificationTime2);
+		Assert.Greater(fileEntryModificationTime2!, fileEntryModificationTime1!);
+	}
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+	[Test]
+	public void GetKeyIdentifierTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 25, 138, 78, 83, 111, 110, 221, 18, 213, 104, 15, 16 };
+		byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0x13, 0xb5, 0x58, 0x59, 0x13, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
 
-			FileEntrySecret fes = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			DateTimeOffset? fileEntryModificationTime1 = fes.GetModificationTime(derivedKey);
-			Thread.Sleep(1100);
-			fes.SetFilename("much_nicer.pdf", derivedKey);
-			DateTimeOffset? fileEntryModificationTime2 = fes.GetModificationTime(derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(fileEntryModificationTime1);
-			Assert.IsNotNull(fileEntryModificationTime2);
-			Assert.Greater(fileEntryModificationTime2!, fileEntryModificationTime1!);
-		}
+		string keyIdentifier = "primary";
 
-		[Test]
-		public void GetKeyIdentifierTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 47, 25, 138, 78, 83, 111, 110, 221, 18, 213, 104, 15, 16 };
-			byte[] initialCounter = new byte[] { 0xa0, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0x13, 0xb5, 0x58, 0x59, 0x13, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
+		string filename = "nice.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+		// Act
+		FileEntrySecret fes = new FileEntrySecret(fe, keyIdentifier, skaAES_CTR, derivedKey);
 
-			string keyIdentifier = "primary";
+		// Assert
+		Assert.AreEqual(keyIdentifier, fes.GetKeyIdentifier());
+	}
 
-			string filename = "nice.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+	[Test]
+	public void CanBeDecryptedWithDerivedPasswordTest()
+	{
+		byte[] derivedKey1 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 16 };
+		byte[] derivedKey2 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 15 };
+		byte[] initialCounter = new byte[] { 0xa7, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x51, 0x95, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			FileEntrySecret fes = new FileEntrySecret(fe, keyIdentifier, skaAES_CTR, derivedKey);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
 
-			// Assert
-			Assert.AreEqual(keyIdentifier, fes.GetKeyIdentifier());
-		}
+		string keyIdentifier = "primary";
 
-		[Test]
-		public void CanBeDecryptedWithDerivedPasswordTest()
-		{
-			byte[] derivedKey1 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 16 };
-			byte[] derivedKey2 = new byte[16] { 111, 222, 36, 47, 75, 168, 78, 13, 61, 118, 221, 18, 213, 104, 15, 15 };
-			byte[] initialCounter = new byte[] { 0xa7, 0xb1, 0xcb, 0xcd, 0xaa, 0xc5, 0xd3, 0xb5, 0x58, 0x51, 0x95, 0x2b, 0x33, 0xfd, 0xfe, 0xff };
+		string filename = "nice.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 100, 222, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		FileEntry fe = new FileEntry(filename, fileContent);
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 256, settingsAES_CTR);
+		// Act
+		FileEntrySecret fes = new FileEntrySecret(fe, keyIdentifier, skaAES_CTR, derivedKey1);
 
-			string keyIdentifier = "primary";
+		// Assert
+		Assert.IsTrue(fes.CanBeDecryptedWithDerivedPassword(derivedKey1));
+		Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(null!));
+		Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(new byte[] {}));
+		Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(derivedKey2));
+	}
 
-			string filename = "nice.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 100, 222, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+	[Test]
+	public void SetFilenameTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
 
-			FileEntry fe = new FileEntry(filename, fileContent);
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
 
-			// Act
-			FileEntrySecret fes = new FileEntrySecret(fe, keyIdentifier, skaAES_CTR, derivedKey1);
+		string filename = "backup.zip";
+		byte[] fileContent = Encoding.UTF8.GetBytes("peace, happiness, freedom and something...");
 
-			// Assert
-			Assert.IsTrue(fes.CanBeDecryptedWithDerivedPassword(derivedKey1));
-			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(null!));
-			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(new byte[] {}));
-			Assert.IsFalse(fes.CanBeDecryptedWithDerivedPassword(derivedKey2));
-		}
+		FileEntry fileEntry = new FileEntry(filename, fileContent);
 
-		[Test]
-		public void SetFilenameTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
+		FileEntrySecret fes = new FileEntrySecret(fileEntry, "does not matter", ska, derivedKey);
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+		string filename1 = "another_backup.zip";
 
-			string filename = "backup.zip";
-			byte[] fileContent = Encoding.UTF8.GetBytes("peace, happiness, freedom and something...");
+		// Act
+		bool shouldBeTrue = fes.SetFilename(filename1, derivedKey);
+		string? filename2 = fes.GetFilename(derivedKey);
+		bool shouldBeFalse = fes.SetFilename(filename1,  new byte[] { 1, 2, 3 });
 
-			FileEntry fileEntry = new FileEntry(filename, fileContent);
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
+		Assert.IsFalse(string.IsNullOrEmpty(filename2));
+		Assert.AreEqual(filename1, filename2);
+	}
 
-			FileEntrySecret fes = new FileEntrySecret(fileEntry, "does not matter", ska, derivedKey);
+	[Test]
+	public void SetFileContentTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
 
-			string filename1 = "another_backup.zip";
+		SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
 
-			// Act
-			bool shouldBeTrue = fes.SetFilename(filename1, derivedKey);
-			string? filename2 = fes.GetFilename(derivedKey);
-			bool shouldBeFalse = fes.SetFilename(filename1,  new byte[] { 1, 2, 3 });
+		string filename = "backup.zip";
+		byte[] fileContent = Encoding.UTF8.GetBytes("peace, happiness, freedom and something...");
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-			Assert.IsFalse(string.IsNullOrEmpty(filename2));
-			Assert.AreEqual(filename1, filename2);
-		}
+		FileEntry fileEntry = new FileEntry(filename, fileContent);
 
-		[Test]
-		public void SetFileContentTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 111, 222, 31, 4, 5, 6, 7, 8, 98, 10, 11, 12, 131, 104, 15, 16 };
+		FileEntrySecret fes = new FileEntrySecret(fileEntry, "does not matter", ska, derivedKey);
 
-			SymmetricKeyAlgorithm ska = SymmetricKeyAlgorithm.GenerateNew(SymmetricEncryptionAlgorithm.AES_CTR);
+		byte[] fileContent1 = Encoding.UTF8.GetBytes("this is a wrong backup for this situation");
 
-			string filename = "backup.zip";
-			byte[] fileContent = Encoding.UTF8.GetBytes("peace, happiness, freedom and something...");
+		// Act
+		bool shouldBeTrue = fes.SetFileContent(fileContent1, derivedKey);
+		byte[]? fileContent2 = fes.GetFileContent(derivedKey);
+		bool shouldBeFalse = fes.SetFileContent(fileContent1,  new byte[] { 1, 2, 3 });
 
-			FileEntry fileEntry = new FileEntry(filename, fileContent);
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
+		Assert.IsNotNull(fileContent2);
+		CollectionAssert.AreEqual(fileContent1, fileContent2);
+	}
 
-			FileEntrySecret fes = new FileEntrySecret(fileEntry, "does not matter", ska, derivedKey);
+	[Test]
+	public void ChecksumSurvivesRoundtripTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			byte[] fileContent1 = Encoding.UTF8.GetBytes("this is a wrong backup for this situation");
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			// Act
-			bool shouldBeTrue = fes.SetFileContent(fileContent1, derivedKey);
-			byte[]? fileContent2 = fes.GetFileContent(derivedKey);
-			bool shouldBeFalse = fes.SetFileContent(fileContent1,  new byte[] { 1, 2, 3 });
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-			Assert.IsNotNull(fileContent2);
-			CollectionAssert.AreEqual(fileContent1, fileContent2);
-		}
+		string filename = "nice.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-		[Test]
-		public void ChecksumSurvivesRoundtripTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0xf0, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntry fe = new FileEntry(filename, fileContent);
+		FileEntrySecret fes1 = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
+		string checksum1 = fes1.GetChecksumAsHex();
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
+		string json = JsonConvert.SerializeObject(fes1, Formatting.Indented);
 
-			string filename = "nice.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
+		FileEntrySecret? fes2 = JsonConvert.DeserializeObject<FileEntrySecret>(json);
 
-			FileEntry fe = new FileEntry(filename, fileContent);
-			FileEntrySecret fes1 = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
+		// Assert
+		Assert.IsNotNull(fes2);
+		Assert.AreEqual(64, checksum1.Length);
+		Assert.AreEqual(checksum1, fes2!.GetChecksumAsHex());
+	}
 
-			// Act
-			string checksum1 = fes1.GetChecksumAsHex();
+	[Test]
+	public void CheckIfChecksumMatchesContentTest()
+	{
+		// Arrange
+		byte[] derivedKey = new byte[16] { 56, 2, 3, 4, 55, 76, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
+		byte[] initialCounter = new byte[] { 0x00, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
 
-			string json = JsonConvert.SerializeObject(fes1, Formatting.Indented);
+		SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
 
-			FileEntrySecret? fes2 = JsonConvert.DeserializeObject<FileEntrySecret>(json);
+		SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
 
-			// Assert
-			Assert.IsNotNull(fes2);
-			Assert.AreEqual(64, checksum1.Length);
-			Assert.AreEqual(checksum1, fes2!.GetChecksumAsHex());
-		}
+		string filename = "nice.pdf";
+		byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
 
-		[Test]
-		public void CheckIfChecksumMatchesContentTest()
-		{
-			// Arrange
-			byte[] derivedKey = new byte[16] { 56, 2, 3, 4, 55, 76, 7, 8, 9, 10, 11, 12, 13, 14, 15, 255 };
-			byte[] initialCounter = new byte[] { 0x00, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa, 0xfb, 0xfc, 0xfd, 0xfe, 0xff };
+		FileEntry fe = new FileEntry(filename, fileContent);
+		FileEntrySecret fes1 = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
 
-			SettingsAES_CTR settingsAES_CTR = new SettingsAES_CTR(initialCounter);
+		// Act
+		bool shouldBeTrue = fes1.CheckIfChecksumMatchesContent();
+		fes1.checksum = fes1.checksum.Remove(0, 1);
+		bool shouldBeFalse = fes1.CheckIfChecksumMatchesContent();
 
-			SymmetricKeyAlgorithm skaAES_CTR = new SymmetricKeyAlgorithm(SymmetricEncryptionAlgorithm.AES_CTR, 128, settingsAES_CTR);
-
-			string filename = "nice.pdf";
-			byte[] fileContent = new byte[] { 1, 2, 3, 1, 2, byte.MaxValue, 0, 0, 0, 0, 0, 0};
-
-			FileEntry fe = new FileEntry(filename, fileContent);
-			FileEntrySecret fes1 = new FileEntrySecret(fe, "does not matter", skaAES_CTR, derivedKey);
-
-			// Act
-			bool shouldBeTrue = fes1.CheckIfChecksumMatchesContent();
-			fes1.checksum = fes1.checksum.Remove(0, 1);
-			bool shouldBeFalse = fes1.CheckIfChecksumMatchesContent();
-
-			// Assert
-			Assert.IsTrue(shouldBeTrue);
-			Assert.IsFalse(shouldBeFalse);
-		}
+		// Assert
+		Assert.IsTrue(shouldBeTrue);
+		Assert.IsFalse(shouldBeFalse);
 	}
 }
 
